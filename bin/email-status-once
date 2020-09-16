@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+service=email-fetcher
+
+queued=$(ls -1 /home/jb55/.msmtp.queue | grep \.mail | wc -l)
+
+time=$(journalctl --user -n1 --no-pager --output=short-iso -u $service | tail -n1  | cut -d " " -f1 | xargs -I{} date -d {} '+%F %R')
+
+diff=$(datediff --format="%Hh:%Mm" "$time" "$(date '+%F %R')")
+
+last_email=$(notmuch search --format=json --limit=1 --sort=newest-first date:today | jq -r '.[0].date_relative')
+
+printf "last email $last_email | fetched $diff ago | $queued queued | "
+journalctl --user -n1 --no-pager --output=cat -u $service

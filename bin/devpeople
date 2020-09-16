@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+peeps=$(cat <<EOP
+Australia/Adelaide,rusty
+Europe/Malta,adamback
+Europe/Zurich,cdecker
+Europe/Rome,lawrence
+Europe/Rome,alekos,10:00,18:00
+EOP
+)
+
+(printf "name	time	start	end	pt_start	pt_end\n";
+while IFS=, read -r tz person start end
+do
+  d=$(TZ="$tz" date +'%a %F  %R')
+  start_local=""
+  end_local=""
+  if [[ -n $start ]]; then
+    start_local=$(date --date 'TZ="'$tz'" '$start +%R)
+    end_local=$(date --date 'TZ="'$tz'" '$end +%R)
+  fi
+  printf "$person	$d	$start	$end	$start_local	$end_local\n"
+done <<<"$peeps") | column -t -s $'\t'

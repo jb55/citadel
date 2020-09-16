@@ -1,0 +1,2 @@
+#!/usr/bin/env sh
+PATH="$(npm bin):$PATH" "$@"

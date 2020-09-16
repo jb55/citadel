@@ -1,0 +1,2 @@
+#!/usr/bin/env sh
+bcli getrawtransaction "$1" 2

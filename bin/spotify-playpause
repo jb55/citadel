@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+dbus-send --print-reply --dest="$(spotify-service)" /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause

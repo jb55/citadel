@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+usage () {
+  printf 'usage: zoom-uri https://zoom.us/j/123456\n'
+  exit 1
+}
+
+if [ -z "$1" ]; then
+  usage
+fi
+
+exec sed -E 's,https://([a-zA-Z]+\.)?zoom.us/j/([[:digit:]]+),zoommtg://zoom.us/?action=join\&confno=\2,' <<<"$1"

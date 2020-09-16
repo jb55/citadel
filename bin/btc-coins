@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+WALLETS=${WALLETS:-$(bcli listwallets | jq -r '.[]' | paste -sd" " )}
+
+(for wallet in $WALLETS
+do
+  bcli -rpcwallet="$wallet" "$@" listaddressgroupings \
+      | jq -r -c ".[][] | select(.[1] != 0) | [\"$wallet\"] + . | @tsv"
+done) \
+  | column -t -s $'\t'

@@ -1,0 +1,2 @@
+#!/bin/sh
+msmtpq --read-envelope-from -C /home/jb55/.msmtprc -t

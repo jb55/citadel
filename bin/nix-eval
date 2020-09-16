@@ -1,0 +1,37 @@
+#/usr/bin/env bash
+
+usage () {
+  echo "nix-eval [--nixpkgs|-n] <expr>"
+  echo ""
+  echo "  examples"
+  echo ""
+  echo "    \$ nix-eval '1+1'"
+  echo "    2"
+  echo ""
+  echo "    \$ nix-eval -n '\"\${pkgs.xlibs.xset}\"'"
+  echo "    \"/nix/store/6n5f894ndps4rnrvdx8z95sw4pmd1989-xset-1.2.3\""
+  echo ""
+  exit 1
+}
+
+prelude=""
+
+[ "$#" -eq 0 ] && usage
+
+while [ "$#" -gt 1 ]; do
+    i="$1"; shift 1
+    case "$i" in
+      --help)
+        usage
+        ;;
+      --nixpkgs|-n)
+        prelude="with import <nixpkgs> {}; "
+        ;;
+      *)
+        echo "$0: unknown option \`$i'"
+        exit 1
+        ;;
+    esac
+done
+
+nix-instantiate --eval --expr "${prelude}$@"

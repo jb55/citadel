@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+exec sacc gopher://gopher.black/1/moku-pona

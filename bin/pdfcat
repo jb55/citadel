@@ -1,0 +1,3 @@
+#!/bin/sh
+printf 'writing to out.pdf\n' 1>&2
+exec gs -dNOPAUSE -sDEVICE=pdfwrite -sOUTPUTFILE=out.pdf -dBATCH "$@"

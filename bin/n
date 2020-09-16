@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+out="$("$@" 2>&1)"
+printf "%s\n" "$out"
+exec notify-send "$out"

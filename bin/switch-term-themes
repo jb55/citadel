@@ -1,0 +1,13 @@
+#! /usr/bin/env nix-shell
+#! nix-shell -i python -p python
+
+import os
+import sys
+import subprocess
+
+theme = sys.argv[1]
+pts = os.listdir('/dev/pts/')
+for each_pts in pts:
+  if each_pts.isdigit():
+    subprocess.call('echo "`~/.dynamic-colors/bin/dynamic-colors switch {0}`" > /dev/pts/{1}'.format(theme,each_pts), shell=True)
+

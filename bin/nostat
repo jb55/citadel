@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+
+services="home-email-notifier work-email-notifier email-notify-switcher"
+
+export SYSTEMD_COLORS=1
+
+ctl () {
+    printf "%s-ing %s email notifier\n" "$1" "$2" >&2
+}
+
+if [ $# -eq 0 ]
+then
+    printf "nostat [ARGS].. - ARGS: {+,-}h, +start, -stop\n" >&2
+fi
+
+for var in "$@"
+do
+    case $var in
+        +h)
+            ctl start email-fetcher
+            touch ~/var/notify/home
+            ;;
+        -h)
+            ctl stop email-fetcher
+            rm -f ~/var/notify/home
+            ;;
+     esac
+done
+
+printf '\n' >&2
+
+res=$(ls -1 ~/var/notify)
+if [ -z "$res" ]
+then
+    res=off
+fi
+
+printf '%s\n' "$res"

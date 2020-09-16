@@ -1,0 +1,3 @@
+#!/bin/sh
+
+xargs printf "\\'%s\\'\n" | paste -sd, | xargs printf "(%s)\n"

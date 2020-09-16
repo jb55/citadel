@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+bcli scantxoutset start '["'"$1"'"]'

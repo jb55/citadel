@@ -1,0 +1,44 @@
+#!/usr/bin/env python
+
+import dbus
+import datetime
+import gobject
+import os
+from dbus.mainloop.glib import DBusGMainLoop
+
+def start_work():
+  print("starting work notifier")
+  os.system("systemctl stop  --user home-email-notifier")
+  os.system("systemctl start --user work-email-notifier")
+
+def start_home():
+  print("starting home notifier")
+  os.system("systemctl stop  --user work-email-notifier")
+  os.system("systemctl start --user home-email-notifier")
+
+def check():
+  now = datetime.datetime.now()
+  if now.isoweekday() > 5:
+    start_home()
+  else:
+    if now.hour > 17 or now.hour < 9:
+      start_home()
+    else:
+      start_work()
+
+def handle_sleep_callback(sleeping):
+  if not sleeping:
+    # awoke from sleep
+    check()
+
+DBusGMainLoop(set_as_default=True) # integrate into main loob
+bus = dbus.SystemBus()             # connect to dbus system wide
+bus.add_signal_receiver(           # defince the signal to listen to
+    handle_sleep_callback,            # name of callback function
+    'PrepareForSleep',                 # signal name
+    'org.freedesktop.login1.Manager',   # interface
+    'org.freedesktop.login1'            # bus name
+)
+
+loop = gobject.MainLoop()          # define mainloop
+loop.run()

@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+[[ -z $1 ]] && exit 1
+path="$(spath $1)"
+if [[ ! -e "$path" ]]; then
+  printf "$1 not found\n" 1>&2
+  exit 2
+fi
+shift
+$EDITOR "$@" "$path"
+

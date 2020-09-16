@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+export RUST_CHANNEL=${RUST_CHANNEL:-stable}
+export RUST_SRC_PATH="$(nix-build '<nixpkgs>' --no-out-link -A rustChannels.$RUST_CHANNEL.rust-src)"/lib/rustlib/src/rust/src
+export LD_LIBRARY_PATH="$(nix-build '<nixpkgs>' --no-out-link -A rustChannels.$RUST_CHANNEL.rustc)"/lib:$LD_LIBRARY_PATH
+# texlive.combined.scheme-full \
+
+#export LIBCLANG_PATH="$(nix-build '<nixpkgs>' --no-out-link -A llvmPackages.libclang)/lib"
+
+#     cargo-bloat \
+
+# secp256k1 \
+     #librsvg \
+
+exec nix-shell -p \
+     rustChannels.$RUST_CHANNEL.clippy-preview \
+     rustChannels.$RUST_CHANNEL.rust \
+     rustracer \
+     "$@"

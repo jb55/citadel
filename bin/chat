@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+
+HOST=$(hostname)
+CHATFILE=/home/jb55/famchat
+
+if [ "$HOST" = "monad" ]; then
+  USER=will
+elif [ "$HOST" = "quiver" ]; then
+  USER=will
+else
+  USER=vanessa
+fi
+
+update () {
+  scp jb55@192.168.86.26:bin/chat "$HOME/bin/chat"
+}
+
+if [ "$USER" = "vanessa" ]; then
+  update
+fi
+
+out () {
+  if [ "$HOST" = "monad" ]; then
+    cat >> "$CHATFILE" && tail -n100 "$CHATFILE"
+  elif [ "$HOST" = "quiver" ]; then
+    ssh 172.24.242.111 "cat >> $CHATFILE && tail -n100 $CHATFILE"
+  else
+    ssh jb55@192.168.86.26 "cat >> $CHATFILE && tail -n100 $CHATFILE"
+  fi
+}
+
+show () {
+  if [ "$HOST" = "monad" ]; then
+    tail -n100 "$CHATFILE"
+  elif [ "$HOST" = "quiver" ]; then
+    ssh 172.24.242.111 "tail -n100 $CHATFILE"
+  else
+    ssh jb55@192.168.86.26 "tail -n100 $CHATFILE"
+  fi
+}
+
+if [ -n "$1" ]; then
+  printf "$(date +'%F %R') | %s\n%s\n\n" "$USER" "$*" | out
+else
+  show
+fi
+

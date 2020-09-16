@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+vpn chromium --profile-directory=stealthium

@@ -1,0 +1,2 @@
+#!/bin/sh
+sudo $HOME/bin/brent switch -s /usr/local/stow $@

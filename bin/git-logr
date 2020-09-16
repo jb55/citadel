@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+ancestor=${1:-HEAD}
+descendent=${2:-origin/master}
+shift
+shift
+exec git log --graph --oneline ^$ancestor^ $descendent --ancestry-path "$@"

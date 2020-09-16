@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+lcli listnodes | jq ".nodes[] | select(.nodeid == \"$1\")"

@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+DIR=${XTHEMEDIR:-"$HOME/.Xresources.d/themes"}
+
+[ -z "$1" ] && printf "usage: termcolor <dark|light>\n" && exit 1
+
+rm -f "$DIR/current"
+ln -s "$DIR/$1" "$DIR/current"
+
+xrdb -load "$HOME/.Xresources"
+
+[ "$2" == "kill" ] && pkill urxvt

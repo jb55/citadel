@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+set -e
+
+usage () {
+  printf "usage: gh-clone <owner>[/]<repo>\n" >&2
+  exit 1
+}
+
+already_exists () {
+  printf "%s\n" "$2"
+  exit 2
+}
+
+root=${GITHUB_ROOT:-"$HOME/dev/github"}
+owner="$1"
+
+shift
+
+[ -z "$owner" ] && usage
+
+IFS='/' read -ra parsed <<< "$owner"
+owner="${parsed[0]}"
+repo="${parsed[1]}"
+if [ -z "$owner" ] || [ -z "$repo" ]; then
+    usage
+fi
+
+dest="$root/$owner"
+dir="$dest/$repo"
+
+[ -d "$dir" ] && already_exists "$owner/$repo" "$dir"
+
+mkdir -p "$dest"
+cd "$dest"
+git clone "$@" "gh:$owner/$repo"
+
+git config \
+    --file="$dir/.git/config" \
+    --add remote.origin.fetch '+refs/pull/*/head:refs/pull/origin/*'
+
+git config \
+    --file="$dir/.git/config" \
+    --add remote.origin.fetch '+refs/pull/*/merge:refs/merge/origin/*'
+
+printf "%s\n" "$dest/$repo"

@@ -1,0 +1,12 @@
+#!/bin/sh
+
+[ -z "$1" ] && \
+  printf "usage: cmd | %s txt\n" "$(basename "$0")" 1>&2 && \
+  exit 1
+
+TMP="$(mktemp).$1"
+cat > "$TMP"
+
+hashshare "$TMP"
+
+rm -f "$TMP"

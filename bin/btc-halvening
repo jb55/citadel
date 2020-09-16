@@ -1,0 +1,11 @@
+#!/usr/bin/env sh
+past=${1:-50}
+blocks=$(bcli getblockcount)
+blockstogo=$((210000 - ($blocks % 210000)))
+blocktimes=$(btc-blocktimes $past)
+countdown=$(qalc -t "$blocktimes seconds * $blockstogo")
+blocktimes=$(qalc -t "$blocktimes seconds")
+estimate=$(qalc -t "now + $countdown" | tr -d '"')
+
+printf "blocks\t%d\nblocks to go\t%d\naverage block time (past $past blocks)\t%s\ntime until halvening\t%s\nestimate\t%s\n" \
+  "$blocks" "$blockstogo" "$blocktimes" "$countdown" "$estimate" | ct

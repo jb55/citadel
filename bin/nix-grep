@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+if [ ! -f $HOME/.nixenv.cache ]; then
+  >&2 echo "cache not found, generating..."
+  nix-build-cache
+  >&2 echo "done"
+  >&2 echo ""
+fi
+
+grep -i $@ $HOME/.nixenv.cache

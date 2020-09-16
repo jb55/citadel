@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+exec curl -s gopher://jb55.com/0/bips/bip-$(printf "%04d" $1).txt | less

@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+set -e
+
+if [ -z "$1" ]; then
+  printf 'usage: dmenup <prompt> <command> [cmdargs...]\n' >&2
+  exit 1
+fi
+
+prompt="$1"
+shift
+
+out=$(dmenu -noinput -p "$prompt")
+
+"$@" $out

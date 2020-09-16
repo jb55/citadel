@@ -1,0 +1,3 @@
+#!/bin/sh
+awk 'FNR == NR { oldfile[$0]=1; };
+     FNR != NR { if(oldfile[$0]==0) print; }'

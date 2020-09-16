@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+usage () {
+  printf "usage: git prlog <pr>\n" >&2
+  exit 1
+}
+[ -z "$1" ] && usage
+
+ref="$1"
+shift
+exec git log --reverse "$@" "refs/merge/origin/$ref^..refs/pull/origin/$ref"

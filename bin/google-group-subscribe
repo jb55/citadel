@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+[ -z "$1" ] && printf "usage: $(basename $0) list-name\n" 1>&2 && exit 1
+
+sendmail -t <<EOF
+From: William Casarin <jb55@jb55.com>
+To: $1+subscribe@googlegroups.com
+EOF

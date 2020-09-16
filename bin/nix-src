@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+nix-instantiate --eval --expr "with import <nixpkgs> {}; pkgs.$1.src.urls" \
+  | sed 's,\[ ",,;s," \]$,,'

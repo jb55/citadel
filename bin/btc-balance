@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+btc coins | awk '{print $3}' | xargs printf '%.8f * 100000000\n' | bc -l | xargs printf '%.0f\n' | paste -sd+ | bc -l | xargs printf '%s sats to btc\n' | bcalc -n
+
+if [ -n "$1" ]; then
+  FIAT=$(printf '%s sats to fiat\n' "$SATS" | bcalc --price "$1")
+  printf 'fiat\t%s\n' "$FIAT"
+fi

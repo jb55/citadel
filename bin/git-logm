@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+commit=${1:-HEAD}
+
+shift
+
+exec git log "$@" ${commit}^1..${commit}^2

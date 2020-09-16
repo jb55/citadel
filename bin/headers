@@ -1,0 +1,2 @@
+#!/bin/sh
+head -n1 "${1:-/dev/stdin}" | csv-delim | tr '\t' '\n' | cat -n

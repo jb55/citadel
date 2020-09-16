@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+commit=$(git rev-parse ${1:-HEAD})
+git commit --fixup=$commit
+GIT_EDITOR=: git rebase -i --autosquash ${commit}^

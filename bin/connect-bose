@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+bluetoothctl <<<"connect 00:0C:8A:70:43:60"

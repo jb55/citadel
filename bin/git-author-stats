@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+script=$(cat << 'EOF'
+NF == 1 { name = $1; commits[name] += 1 }
+NF == 3 { plus[name] += $1; minus[name] += $2 }
+
+END {
+  for (name in plus) {
+    print name "\t+" plus[name] "\t-" minus[name] "\t" commits[name]
+  }
+}
+
+EOF
+)
+
+REVERSE=r
+
+if [ -z $ASTATS_REVERSE ]; then
+    REVERSE=""
+fi
+
+
+(printf $'name\tadded\tremoved\tcommits\n';
+
+git log --numstat --pretty=$'%aN' "$@" \
+    | awk -F$'\t' "$script" \
+    | sort --field-separator=$'\t' -k${ASTATS_SORT_COLUMN:-2} -g${REVERSE}
+) > /tmp/git-author-stats
+
+column -t -s $'\t' /tmp/git-author-stats
+rm /tmp/git-author-stats

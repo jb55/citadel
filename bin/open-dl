@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+set -e
+
+cd "${1:-$HOME/Downloads}"
+
+out=$(find . -maxdepth 1 -name "*.${2:-pdf}" -type f -printf "%T@ %Tc %p\n" \
+  | sort -nr \
+  | cut -f2- -d" " \
+  | dmenu -p docs -l 30 \
+  | cut -f3- -d" ")
+
+if [ -z "$out" ]; then
+    exit 1
+fi
+
+open "$out"

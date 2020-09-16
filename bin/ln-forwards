@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+lcli listforwards | jq -c -r '.forwards[] | [.status,.failreason,.in_msatoshi,.fee,.in_channel,.out_channel] | @tsv' | columnt

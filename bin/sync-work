@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+rsync -avz --no-perms --no-owner --no-group archer:Dropbox/doc/monstercat/ $HOME/Dropbox/doc/monstercat/

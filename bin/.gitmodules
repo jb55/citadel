@@ -1,0 +1,6 @@
+[submodule "curlpaste"]
+	path = curlpaste
+	url = git://github.com/Kiwi/curlpaste.git
+[submodule "nix-config"]
+	path = nix-config
+	url = gh:jb55/nix-config

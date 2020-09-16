@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+spend=$1
+low=$2
+high=$3
+
+if [ -z "$spend" ] || [ -z "$low" ] || [ -z "$high" ]
+then
+  printf 'usage: btc-returns <spend> <low> <high>\n'
+  exit 1
+fi
+
+cad=$(curl -sL 'https://api.quadrigacx.com/v2/ticker' | jq -r .last &)
+printf 'current price %s CAD\n' "$cad"
+
+# buy
+btc=$(bcalc --price "$low" "$spend" fiat to btc)
+printf 'spend %s @ %s CAD of btc -> %s\n' "$spend" "$low" "$btc"
+
+fiat_profit=$(echo "$(bcalc -n --price "$high" "$btc" to fiat) - $low" | bc -l)
+
+btc_profit=$(bcalc --price "$high" "$fiat_profit" fiat to btc)
+
+printf '\nfiat profit %s, btc profit %s @ %s CAD/BTC\n' "$fiat_profit" \
+   "$btc_profit" "$high"
+

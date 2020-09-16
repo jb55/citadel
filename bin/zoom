@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+usage () {
+  printf 'usage: zoom https://zoom.us/j/123456\n'
+  exit 1
+}
+
+if [ -z "$1" ]; then
+  usage
+fi
+
+exec open $(zoom-uri "$1")

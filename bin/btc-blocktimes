@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+
+set -e
+
+BITCOIN_RPCUSER=rpcuser
+BITCOIN_RPCPASS=rpcpass
+BITCOIN_RPCPORT=${BITCOIN_RPCPORT:-8332}
+BITCOIN_HOST=${BITCOIN_HOST:-127.0.0.1}
+
+net=${BTCNET:-mainnet}
+
+CLI="bcli -$BTCNET"
+
+blocks=$($CLI getblockcount)
+
+n=${1:-26}
+n1=$((blocks - n + 1))
+
+mkreq () {
+    (
+        printf '['
+        echo ${1#","}
+        printf ']'
+    ) > /tmp/blocktimes-req.txt
+}
+
+doreq() {
+    local host="http://${BITCOIN_HOST}:${BITCOIN_RPCPORT}"
+    mkreq "$1"
+    curl -s -u $BITCOIN_RPCUSER:$BITCOIN_RPCPASS \
+        --data-binary @/tmp/blocktimes-req.txt \
+        -H 'content-type: text/plain;' "$host"
+}
+
+heights=$(seq $n1 $blocks)
+
+blockhash_reqs=$(
+    <<<"$heights" xargs printf ',{"jsonrpc": "1.0", "id":"blocktimes", "method": "getblockhash", "params": [%d] }\n'
+)
+
+txid_reqs=$(
+    doreq "$blockhash_reqs" \
+        | jq -rc '.[].result' \
+        | xargs printf ',{"jsonrpc": "1.0", "id":"blocktimes", "method": "getblock", "params": ["%s", 1] }\n'
+)
+
+doreq "$txid_reqs" \
+  | jq -rc '.[].result.time' \
+  | sed '$!N;s/\n/,/' \
+  | tee /tmp/blocktimes \
+  | sed -e 's/\(.*\),\(.*\)/datediff -f %S @\1 @\2/g' \
+  | sh \
+  | paste -d, <(<<<"$heights" sed 'N;s/\n/,/') /dev/stdin \
+  | cut -d, -f3 | awk '{ total += $1 } END { print (total/NR) }'
+

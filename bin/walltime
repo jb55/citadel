@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+exec ps -p "$(pgrep "$1")" -o etime

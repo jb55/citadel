@@ -1,0 +1,2 @@
+#!/bin/sh
+loginctl list-sessions | awk 'NR==2 { print $1 }' | xargs loginctl kill-session

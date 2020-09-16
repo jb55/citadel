@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+[ -z "$1" ] && printf "usage: %s <url> [curl_opts...] < jsondata\n" $(basename $0) && exit 1
+
+url="$1"
+shift
+
+curl -sL -X POST -H 'Content-Type: application/json' -d @- "$@" "$url"

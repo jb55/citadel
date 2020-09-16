@@ -1,0 +1,4 @@
+#!/bin/sh
+FIFO=${1:-"/tmp/cmds"}
+mkfifo $FIFO &> /dev/null
+while :; do bash < $FIFO && echo "== OK ==" || echo "!! ERR !!"; done

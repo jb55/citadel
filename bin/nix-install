@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+exec nix-env -f $NIXPKGS -Q --max-jobs 4 -k -iA "$@"

@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+colorize () {
+  chroma -f terminal "$1" | less -R
+}
+
+usage () {
+  printf "usage: lessp file.txt\n" >&2
+  printf "       lessp txt < file.txt\n" >&2
+  exit 1
+}
+
+[ $# -eq 0 ] && usage
+
+if [ -t 0 ]; then
+  [ $# -eq 0 ] && usage
+  colorize "$1"
+else
+  [ $# -eq 0 ] && usage
+  ext="$1"
+  tmp="$(mktemp).$ext"
+  cat > "$tmp"
+  colorize "$tmp"
+  rm -f "$tmp"
+fi

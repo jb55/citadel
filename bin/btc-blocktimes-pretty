@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+btc-blocktimes "$@" | xargs printf '%s seconds\n' | xargs qalc -t

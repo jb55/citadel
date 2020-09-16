@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+set -e
+
+usage() {
+    printf "usage: git-checkout-remote <remote> <branch>\n"
+    exit 1
+}
+
+REMOTE="$1"
+BRANCH="$2"
+
+if [ -z "$REMOTE" ] || [ -z "$BRANCH" ]; then
+    usage
+fi
+
+shift
+shift
+
+git fetch "$REMOTE" "$BRANCH" "$@"
+
+exec git checkout -b "$BRANCH" FETCH_HEAD

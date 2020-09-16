@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+bluetoothctl << EOF
+power on
+agent on
+default-agent
+trust 84:17:66:BB:F2:4D
+connect 84:17:66:BB:F2:4D
+#trust 30:0E:D5:80:AA:89
+#connect 30:0E:D5:80:AA:89
+EOF

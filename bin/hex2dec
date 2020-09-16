@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+if [ ! -z "$1" ]; then
+  hash="$1"
+else
+  read -r hash
+fi
+
+<<<"$hash" exec tr '[:lower:]' '[:upper:]' | xargs printf 'ibase=16; %s\n' | bc 

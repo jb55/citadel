@@ -1,0 +1,2 @@
+#!/usr/bin/env sh
+date -d @$(bcli getblock $(bcli getblockhash $(bcli getblockcount)) | jq .time)

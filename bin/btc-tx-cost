@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+usage () {
+  printf "usage: %s <inputs> <outputs> <sat/b>" "$0"
+  exit 1
+}
+
+[ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ] && usage
+
+inputs="$1"
+outputs="$2"
+satsb="$3"
+
+
+btc=$(printf "(%d * 180 + %d * 34 + 10) * %d * 0.00000001 \n" \
+       "$inputs" "$outputs" "$satsb" | bc -l)
+
+mbtc=$(printf "%f * 1000\n" "$btc" | bc -l)
+
+price=$(btc)
+cad=$(printf "%f * %f\n" "$btc" "$price" | bc -l)
+
+printf "%f BTC\n%f mBTC\n%f CAD (@ ${price}/btc)\n" "$btc" "$mbtc" "$cad"

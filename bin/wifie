@@ -1,0 +1,2 @@
+#!/bin/sh
+exec sudoedit /etc/wpa_supplicant.conf

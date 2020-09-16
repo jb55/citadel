@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+printf "building cache of nixpkgs\n" >&2
+nix-env -f $NIXPKGS -qaP \* > /tmp/search1 &
+printf "building cache of haskellPackages\n" >&2
+nix-env -f $NIXPKGS -qaPA haskellPackages > /tmp/search2 &
+wait
+cat /tmp/search1 /tmp/search2 | sort > ~/.nixenv.cache
+rm -f /tmp/search1 /tmp/search2

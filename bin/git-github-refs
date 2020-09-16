@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+set -e
+
+git config --add remote.origin.fetch '+refs/pull/*/head:refs/pull/origin/*'
+git config --add remote.origin.fetch '+refs/pull/*/merge:refs/merge/origin/*'
+
+

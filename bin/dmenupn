@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+out="$(dmenup "$@")"
+
+xclip <<<"$out"
+notify-send "$out"

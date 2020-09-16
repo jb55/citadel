@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+fmt="--rfc-3339=seconds"
+past=${1:-50}
+times=$(btc-blocktimes $past)
+blocks=$(bcli getblockcount)
+prev=$(bc <<<"$blocks % 2016")
+prevblock=$((blocks - prev))
+prevdate=$(bcli getblockhash $prevblock | xargs bcli getblock | jq .time | xargs -I{} date $fmt -d@{})
+next=$((2016 - prev))
+timesnext=$(bc <<<"$times * $next")
+timesnext=${timesnext%.*}
+nextdate="$(date -d "now + $timesnext seconds" $fmt)"
+now="$(date --rfc-3339=seconds)"
+nexttime=$(datediff -f '%dd %Hh' "$now" "$nextdate")
+prevtime=$(datediff -f '%dd %Hh' "$now" "$prevdate")
+times=$(qalc -t "$times seconds")
+printf "prev\t%s\t%s\t%s\nnext\t%s\t %s\t%s\nblocktimes($past)\t%s\n" \
+       "$prev" \
+       "$prevtime" \
+       "$prevdate" \
+       "$next" \
+       "$nexttime" \
+       "$nextdate" \
+       "$times" | column -t -s $'\t'

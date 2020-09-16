@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+set -e
+
+REMOTE="$1"
+BRANCH="$2"
+BASE=${BASE_BRANCH:-${3:-master}}
+DIR="patches/${4:-$BRANCH}"
+
+usage() {
+    printf "git-review <remote> <branch> [remote-base-branch (def: master)] [patch-dir-name]\n"
+    exit 1
+}
+
+if [ -z "$2" ]; then
+   usage
+fi
+
+
+git fetch origin $BASE
+git fetch "$REMOTE" "$BRANCH"
+
+rm -rf "$DIR"
+mkdir -p "$DIR"
+
+printf "git format-patch origin/%s..FETCH_HEAD -o %s\n" "$BASE" "$DIR"
+git format-patch origin/$BASE..FETCH_HEAD -o "$DIR"
+
+printf "$DIR\n"
+
+read -p "Press enter to review."
+
+bats "$DIR"/*.patch

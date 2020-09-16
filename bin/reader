@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+exec urxvtc -fn 'xft:Inconsolata:size=18' -e "$@"

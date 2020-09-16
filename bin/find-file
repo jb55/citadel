@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+NAME="$1"
+shift
+find . -name "$NAME" -type f "$@"

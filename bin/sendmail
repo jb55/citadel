@@ -1,0 +1,11 @@
+#! /usr/bin/env sh
+
+export EMAIL_CUSTOM_CONN_TEST=/home/jb55/bin/email-conn-test
+export EMAIL_CONN_TEST=c
+
+# pass all params to msmtpq & redirect output
+msmtpq "$@" >> /tmp/msmtp.log 2> /tmp/msmtp.err
+
+# always succeed, even on connection/mail failure
+# we'll simply queue the mail in our outbox
+exit 0

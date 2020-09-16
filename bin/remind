@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+usage () {
+  printf "usage: remind 'reminder' 14:25\n" 1>&2
+  exit 1
+}
+
+[ -z "$2" ] || [ -z "$1" ] && usage
+
+echo "notify-send -u critical \"$1\"" | at "$2"

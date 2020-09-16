@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+for controller in /sys/class/power_supply/sony_controller_battery*; do
+  capacity=$(<"$controller/capacity" tr '\n' '%')
+  status=$(cat "$controller/status")
+  echo -n "$capacity"
+  [[ "$status" = "Charging" ]] && echo -n "+" || echo -n "-"
+done
+

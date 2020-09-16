@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+notmuchcmd () {
+  echo "notmuch" "$@"
+  $(/home/jb55/bin/notmuch-work "$@")
+}
+
+# util
+notmuchcmd tag +to-me to:bill@monstercat.com and tag:inbox and not tag:to-me
+notmuchcmd tag +from-me from:bill@monstercat.com and tag:inbox and not tag:from-me
+
+# labels
+notmuchcmd tag +filed +royalties '(from:royalties@monstercat.com or to:royalties@monstercat.com)' and tag:inbox and not tag:royalties
+
+# noise
+notmuchcmd tag +events +noise to:events@monstercat.com and tag:inbox and not tag:events
+notmuchcmd tag +sentry +noise +error from:noreply@md.getsentry.com and tag:inbox and not tag:sentry
+notmuchcmd tag +bugsnag +noise +error from:bugsnag.com and tag:inbox and not tag:bugsnag
+notmuchcmd tag +slack +update +noise from:feedback@slack.com and tag:inbox and not tag:slack
+notmuchcmd tag +sendgrid +update +noise from:sendgrid.com and tag:inbox and not tag:sendgrid
+notmuchcmd tag +dev +clubhouse +update from:robot@clubhouse.io and tag:inbox and not tag:clubhouse
+notmuchcmd tag +noise +update from:"Clubhouse" and tag:inbox and not tag:clubhouse
+notmuchcmd tag +itunes +noise +update subject:"iTunes Weekly Upload Report" and tag:inbox and not tag:itunes
+notmuchcmd tag +noise subject:"spam report"
+
+# important stuff
+notmuchcmd tag +error from:systemd and subject:Failed and not tag:systemd and tag:inbox
+notmuchcmd tag +dev +github from:notifications@github.com and tag:inbox and not tag:github
+notmuchcmd tag +internal from:monstercat.com and not tag:internal and tag:inbox
+
+# notmuchcmd tag +flagged \
+#       tag:internal and \
+#       tag:to-me    and \
+#   not tag:flagged  and \
+#   not tag:noise    and \
+#   not tag:from-me  and tag:inbox
+
+# alerts
+notmuchcmd tag +flagged from:UPS or \(from:ari and from:monstercat\)

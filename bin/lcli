@@ -1,0 +1,2 @@
+#!/usr/bin/env sh
+exec $HOME/dev/github/ElementsProject/lightning/cli/lightning-cli --lightning-dir $HOME/.lightning-bitcoin "$@"

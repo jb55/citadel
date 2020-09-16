@@ -1,0 +1,3 @@
+#! /usr/bin/env nix-shell
+#! nix-shell -i bash -p libxslt bash
+xsltproc $HOME/bin/xml2sexp.xsl ${1:-/dev/stdin} | prettysexp

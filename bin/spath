@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+[[ -z $1 ]] && exit 1
+prog=$(which $1 2>/dev/null)
+[[ $? -ne 0 ]] && exit 2
+line="$(<$prog grep -- $1-wrapped)"
+
+if [[ ! -z "$line" ]]; then 
+  <<<"$line" cut -d" " -f4 | sed 's/^"//;s/"$//'
+else
+  echo $prog
+fi

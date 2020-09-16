@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+DIR="$1"
+GRP="$2"
+if [ -z "$DIR" ] || [ -z "$GRP" ]; then
+  echo "usage: $(basename $0) <dir> <group>"
+  exit 1
+fi
+
+chgrp -R "$GRP" "$DIR"
+chmod -R g+w "$DIR"
+find "$DIR" -type d -exec chmod 2775 {} \;
+find "$DIR" -type f -exec chmod ug+rw {} \;

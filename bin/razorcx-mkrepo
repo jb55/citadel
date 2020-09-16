@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+QUOTE_ARGS=''
+for ARG in "$@"
+do
+  ARG=$(printf "%q" "$ARG")
+  QUOTE_ARGS="${QUOTE_ARGS} $ARG"
+done
+
+exec ssh razorcx "/var/git/mkrepo $QUOTE_ARGS"

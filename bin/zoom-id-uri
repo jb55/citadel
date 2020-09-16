@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+printf 'zoommtg://zoom.us/?action=join&confno=%d\n' "$1"

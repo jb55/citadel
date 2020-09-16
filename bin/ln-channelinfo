@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+lcli listpeers | jq -r ".peers[] | . as \$peer | .channels[] | select(.short_channel_id == \"$1\") as \$channel | \$peer"

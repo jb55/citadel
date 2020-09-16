@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+script=$(cat <<'EOF'
+s,--,\n,g;
+s,\t[ ]\+,\t,g;
+s,ESSID:,,g;
+s,",,g;
+s,Encryption key:\([^\t]\+\),\1,g;
+s,Bit Rates:,,g;
+s,^[ ]\+,,g;
+s,;,\t,g
+EOF
+)
+
+sudo iwlist wlp4s0 scan \
+    | grep -A6 -i -e key \
+    | tr '\n' $'\t' \
+    | sed "$script" \
+    | sort -u \
+    | columnt "$@" \
+    | less -R -S
+
+
+

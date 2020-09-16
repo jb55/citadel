@@ -1,0 +1,2 @@
+#!/usr/bin/env sh
+exec nc -w 1 -vz jb55.com 12566

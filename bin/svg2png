@@ -1,0 +1,12 @@
+#! /usr/bin/env nix-shell
+#! nix-shell -i bash -p inkscape
+
+usage () {
+  printf "usage: svg2png file.svg <width> [height]\n"
+  exit 1
+}
+
+png="${1%.svg}.png"
+[ -z "$1" ] || [ -z "$2" ] && usage
+height=${3:-$2}
+inkscape -z -e "$png" -w "$2" -h "$height" "$1"

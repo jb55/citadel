@@ -1,0 +1,4 @@
+#! /usr/bin/env nix-shell
+#! nix-shell -i bash -p libcgroup
+
+cgexec --sticky -g net_cls:pia $@

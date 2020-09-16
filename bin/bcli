@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+ssh 172.24.242.111 /home/jb55/bin/bcli "$@"

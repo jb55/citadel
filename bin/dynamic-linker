@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+cat $(nix-eval -n '"${stdenv.cc}/nix-support/dynamic-linker"' | sed 's/"//g')

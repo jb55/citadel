@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+sysctlu restart "$1" && jctlu -fu "$1"

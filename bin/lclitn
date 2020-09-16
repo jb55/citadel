@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+lightning-cli --rpc-file=/home/jb55/.lightning-testnet-rpc "$@"

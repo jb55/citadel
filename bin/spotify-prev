@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotifyd /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous

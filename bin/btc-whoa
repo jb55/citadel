@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+while true
+do
+    if bcli waitfornewblock; then
+      block=$(bcli getblockcount)
+      notify-send -u critical "$(btc-halvening)"
+      if [ "$block" -eq 630000 ]; then
+        notify-send -u critical 'Happy Halvening!'
+        play /home/jb55/var/audio/whoa.ogg
+      fi
+    fi
+done

@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+grep r:sha256 | cut -d" " -f 7 | sed 's,^‘,,;s,’$,,' | tr -d '\n' | tee | xclip

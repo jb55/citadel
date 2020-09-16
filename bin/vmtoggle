@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+VM=razoredge
+
+control () {
+  VBoxManage controlvm $VM "$1" && notify-send "$VM ${1}d"
+}
+
+control pause || control resume
+

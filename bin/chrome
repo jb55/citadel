@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+OPTS=""
+HOST="$(hostname)"
+
+if [ "$HOST" == "quiver" ]; then
+    OPTS="--force-device-scale-factor=1.25"
+fi
+
+exec chromium "$OPTS" "$@"

@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+castnow --command "$1" --exit && printf "chromecast $2\n"

@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+picked=$(colorpicker --one-shot --short)
+
+<<<"$picked" tr -d "\n$" | xclip
+notify-send "$picked"

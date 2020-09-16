@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+exec cp -vr --no-clobber $HOME/dotfiles/skeletons/$1/. .

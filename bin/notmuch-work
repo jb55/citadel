@@ -1,0 +1,2 @@
+#!/bin/sh
+exec notmuch --config "$HOME/.notmuch-config-work" "$@"

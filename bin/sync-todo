@@ -1,0 +1,47 @@
+#!/usr/bin/env python
+
+from subprocess import call, PIPE
+import os
+import socket
+import sys
+
+remotes = {
+  'quiver': "172.24.129.211",
+  'monad': "172.24.242.111"
+};
+
+DEVNULL = open(os.devnull, 'w')
+
+def process(frm, to, file):
+  hostname = socket.gethostname()
+  dest = remotes.get(to)
+  src  = remotes.get(frm)
+
+  if dest is None or src is None:
+    return 1
+
+  if frm == hostname:
+    cmd = "scp {} {}:{}".format(file, dest, file).split(" ")
+  else:
+    cmd = "scp {}:{} {}".format(src, file, file).split(" ")
+  return call(cmd, stdout=DEVNULL, stderr=DEVNULL)
+
+argc = len(sys.argv)
+
+if argc != 3:
+  exit(1)
+
+frm = sys.argv[1]
+to = sys.argv[2]
+file = "/home/jb55/projects/razorcx/doc/org/todo.org"
+
+[_,bn] = os.path.split(file)
+
+ret = process(frm, to, file)
+
+if ret != 0:
+  print("failed sync {}, {} -> {}".format(bn, frm, to))
+else:
+  print("sync success {}, {} -> {}".format(bn, frm, to))
+
+exit(ret)

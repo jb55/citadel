@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+exec awk -v FS=$'\t' -v OFS=$'\t' "$@"

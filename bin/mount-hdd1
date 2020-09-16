@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+mkdir -p "$HOME/var/razorcx-hdd1"
+exec sudo mount /dev/disk/by-uuid/4828-3568 "$HOME/var/razorcx-hdd1"

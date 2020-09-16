@@ -1,0 +1,239 @@
+#!/usr/bin/env sh
+
+notmuchcmd () {
+  echo "notmuch" "$@"
+  $(notmuch "$@")
+}
+
+# sent
+notmuchcmd tag +sent tag:inbox and not tag:sent and folder:".Sent"
+
+# youtube
+notmuchcmd tag +youtube tag:inbox and not tag:youtube and folder:".YouTube"
+notmuchcmd tag +talk from:"Talks at Google" and tag:youtube and tag:inbox and not tag:talk
+notmuchcmd tag +lecture from:"Khan Academy" and tag:youtube and tag:inbox and not tag:lecture
+
+# lobsters, ycombinator
+notmuchcmd tag +lobsters +rss +tech +busy tag:inbox and not tag:lobsters and folder:".Lists.lobsters"
+notmuchcmd tag +hn +rss +tech +busy tag:inbox and not tag:hn and folder:".HackerNews"
+
+
+# promote from busy if its interesting
+notmuchcmd tag -busy +haskell tag:inbox and not tag:haskell and '(tag:lobsters or tag:hn)' and subject:haskell
+notmuchcmd tag -busy +icn tag:inbox and not tag:icn and '(tag:lobsters or tag:hn)' and subject:icn
+notmuchcmd tag -busy +ndn tag:inbox and not tag:ndn and '(tag:lobsters or tag:hn)' and subject:ndn
+notmuchcmd tag -busy +ccnx tag:inbox and not tag:ccnx and '(tag:lobsters or tag:hn)' and subject:ccnx
+notmuchcmd tag -busy +cicn tag:inbox and not tag:cicn and '(tag:lobsters or tag:hn)' and subject:cicn
+notmuchcmd tag -busy +nix tag:inbox and not tag:nix and '(tag:lobsters or tag:hn)' and subject:nix
+notmuchcmd tag -busy +spacemacs tag:inbox and not tag:spacemacs and '(tag:lobsters or tag:hn)' and subject:spacemacs
+notmuchcmd tag +list tag:inbox and to:"groups.io"
+notmuchcmd tag +pony +pl tag:inbox and to:"pony.groups.io"
+notmuchcmd tag +emacs +emacs-dev +list tag:inbox and folder:".Lists.emacs"
+notmuchcmd tag +guix +list tag:inbox and folder:".Lists.guix"
+notmuchcmd tag +arxiv +busy tag:inbox and not tag:arxiv and folder:".Arxiv"
+notmuchcmd tag +ml tag:inbox and not tag:ml and tag:arxiv and subject:"stat.ML"
+
+# notmuch stuff
+notmuchcmd tag +francesc from:elies@posteo.net or from:francesc.elies@gmail.com and not tag:francesc
+notmuchcmd tag +notmuch +list to:notmuch and tag:inbox and not tag:notmuch
+
+# rss
+notmuchcmd tag +rss tag:inbox and not tag:rss and folder:".RSS"
+notmuchcmd tag +rss +reddit +busy tag:inbox and not tag:reddit and folder:".Reddit"
+notmuchcmd tag +best +haskell \
+  tag:inbox and \
+  from:"A Neighborhood of Infinity" or \
+  from:"Haskell for all" or \
+  from:"Shtetl-Optimized" or \
+  from:"Lost in Technopolis"
+
+notmuchcmd tag +baez +best from:"John Baez" or from:Baez_J and not tag:baez
+notmuchcmd tag +best +arxiv from:"ArXiv Query" and not tag:best and tag:inbox
+notmuchcmd tag +best +tech from:"Technology Review" and not tag:best
+notmuchcmd tag +best +physics +compsci from:from:"Shtetl-Optimized" and not tag:best
+notmuchcmd tag +best +haskell +oleg from:"okmij" and not tag:best
+notmuchcmd tag +best +edge from:"edge_manager" and not tag:best
+
+notmuchcmd tag +nix \
+  tag:inbox and \
+  not tag:nix and \
+  from:"Newest questions tagged nix - Stack Overflow" or \
+  from:"Thoughts about computer technologies" or \
+  from:"NixOS Planet"
+
+notmuchcmd tag +busy +emacs +so +question \
+  tag:inbox and \
+  not tag:emacs and \
+  from:"Emacs Stack Exchange"
+
+notmuchcmd tag +busy +bitcoin +so +question \
+           tag:inbox and \
+           not tag:so and \
+           from:"Bitcoin Stack Exchange"
+
+notmuchcmd tag +best -busy -filed \
+           tag:inbox and \
+           not tag:best and \
+           \(from:"Pieter Wuille" or \
+             from:"Peter Todd" or \
+             from:"Adam Back" or \
+             from:"Gregory Maxwell" or \
+             from:roconnor \
+           \)
+
+notmuchcmd tag +elm \
+  tag:inbox and \
+  not tag:elm and \
+  from:"Newest questions tagged elm"
+
+notmuchcmd tag +rust \
+  tag:inbox and \
+  not tag:rust and \
+  from:rust
+
+notmuchcmd tag +emacs \
+  tag:inbox and \
+  not tag:emacs and \
+  from:emacs
+
+notmuchcmd tag +busy +question +so \
+  tag:inbox and \
+  not tag:so and \
+  from:"Stack Overflow"
+
+notmuchcmd tag +elec +busy tag:inbox and not tag:elec and from:"Adafruit Industries"
+notmuchcmd tag +python tag:inbox and not tag:python and from:"Neopythonic"
+notmuchcmd tag +physics \
+  tag:inbox and \
+  not tag:physics and \
+  from:"Physics and cake" or \
+  from:"symmetry magazine"
+
+notmuchcmd tag +ml +best -busy tag:inbox and not tag:ml and from:"Andrej Karpathy"
+notmuchcmd tag +ml tag:inbox and not tag:ml and from:"Machine Learning"
+
+notmuchcmd tag +haskell \
+  tag:inbox and \
+  not tag:haskell and \
+  from:"Bartosz Milewski" or \
+  from:"Haskell" or \
+  from:"Declarative Languages Blog"
+
+notmuchcmd tag +gamedev                    tag:inbox and not tag:gamedev   and from:"Unity Technologies Blog"
+notmuchcmd tag +prog +lisp                 tag:inbox and not tag:prog      and from:"Peter Norvig"
+notmuchcmd tag +startup                    tag:inbox and not tag:startup   and from:"Paul Graham"
+notmuchcmd tag +talk                       tag:inbox and not tag:talk      and from:"Video Lectures"
+notmuchcmd tag +js                         tag:inbox and not tag:js        and from:"Vjeux"
+notmuchcmd tag +cli +tips                  tag:inbox and not tag:cli       and from:"UNIX Command Line"
+notmuchcmd tag +go                         tag:inbox and not tag:go        and from:"Planet 5"
+notmuchcmd tag +busy +hack                 tag:inbox and not tag:hack      and from:"Hackaday"
+notmuchcmd tag +vim                        tag:inbox and not tag:hack      and from:"Vimcasts"
+notmuchcmd tag +comic                      tag:inbox and not tag:comic     and from:"xkcd"
+notmuchcmd tag +lesswrong +rationality     tag:inbox and not tag:lesswrong and from:"Less Wrong"
+notmuchcmd tag +rationality                tag:inbox and \(from:"Slate Star Codex" \
+                                                        or from:"Overcoming Bias" \
+                                                        or from:"Information Processing"\)
+
+# me
+notmuchcmd tag +to-me not tag:to-me and not tag:rss and tag:inbox and to:jackbox55@gmail.com
+notmuchcmd tag +to-me not tag:to-me and not tag:rss and tag:inbox and to:jb55@jb55.com
+notmuchcmd tag +to-me not tag:to-me and not tag:rss and tag:inbox and to:jb@jb55.com
+notmuchcmd tag +to-me not tag:to-me and not tag:rss and tag:inbox and to:bill@monstercat.com
+notmuchcmd tag +to-me not tag:to-me and not tag:rss and tag:inbox and to:bill@monster.cat
+notmuchcmd tag +to-me not tag:to-me and not tag:rss and tag:inbox and to:bill@casarin.me
+notmuchcmd tag +to-me not tag:to-me and not tag:rss and tag:inbox and to:bill@casarin.ca
+notmuchcmd tag +to-me not tag:to-me and not tag:rss and tag:inbox and to:will@casarin.ca
+notmuchcmd tag +to-me not tag:to-me and not tag:rss and tag:inbox and to:will@casarin.me
+notmuchcmd tag +to-me not tag:to-me and not tag:rss and tag:inbox and to:william@casarin.ca
+notmuchcmd tag +to-me not tag:to-me and not tag:rss and tag:inbox and to:william@casarin.me
+
+notmuchcmd tag +flagged tag:inbox and not tag:flagged and to:jackbox55+star@gmail.com
+notmuchcmd tag +flagged tag:inbox and not tag:flagged and to:jackbox55+s@gmail.com
+
+# annoying
+notmuchcmd tag +alert tag:inbox and folder:".Alerts"
+notmuchcmd tag +update tag:inbox and folder:".Update"
+notmuchcmd tag +alert +circleci tag:inbox and from:builds@circleci.com
+notmuchcmd tag +alert +trello tag:inbox and from:trello
+notmuchcmd tag +alert +sentry tag:inbox and from:noreply@md.getsentry.com or from:noreply@outbound.getsentry.com
+
+# work
+notmuchcmd tag +monstercat tag:inbox and to:bill@monstercat.com
+notmuchcmd tag +monstercat +connect tag:inbox and to:monstercat/connect
+
+
+# forums
+notmuchcmd tag +patchwork +list to:patchwork@lists.ozlabs.org and tag:inbox
+notmuchcmd tag +wayland +list to:wayland-devel and tag:inbox and not tag:wayland
+notmuchcmd tag +suckless +list to:suckless.org and tag:inbox and not tag:suckless
+notmuchcmd tag +ats +list to:ats-lang-users and tag:inbox
+notmuchcmd tag +bitcoin +list folder:".Lists.bitcoin" and tag:inbox
+notmuchcmd tag +bitcoin +libbitcoin +list to:libbitcoin@lists.dyne.org and tag:inbox
+notmuchcmd tag +bitcoin +core +busy to:bitcoin@noreply.github.com and tag:inbox
+notmuchcmd tag +lightning +list to:lightning-dev@lists.inuxfoundation.org and tag:inbox
+notmuchcmd tag +lightning to:"lightningnetwork/" and tag:inbox
+notmuchcmd tag +lightning +clightning to:"ElementsProject/lightning" and tag:inbox
+notmuchcmd tag +cabal2nix +nix +list to:NixOS/cabal2nix and tag:inbox
+notmuchcmd tag +cicn +icn +list to:cicn and tag:inbox
+notmuchcmd tag +component +list to:componentjs.googlegroups.com and tag:inbox
+notmuchcmd tag +craigslist +list to:reply.craigslist.org and tag:inbox
+notmuchcmd tag +crypto +list to:cryptography.metzdowd.com and tag:inbox
+notmuchcmd tag +elm +list folder:".Lists.elm" and tag:inbox
+notmuchcmd tag +github +list folder:".GitHub" and tag:inbox
+notmuchcmd tag +haskell +cabal-dev +list to:cabal-devel.haskell.org and tag:inbox
+notmuchcmd tag +haskell +commercial-haskell +list to:commercialhaskell.googlegroups.com and tag:inbox
+notmuchcmd tag +haskell +ghc-devs +list to:ghc-devs.haskell.org and tag:inbox
+notmuchcmd tag +haskell +haskell-cafe +list to:haskell-cafe.haskell.org and tag:inbox
+notmuchcmd tag +haskell +haskell-libraries +list to:libraries.haskell.org or to:libraries@haskell.org and tag:inbox
+notmuchcmd tag +haskell +list to:haskell.haskell.org and tag:inbox
+notmuchcmd tag +haskell +pipes +list to:haskell-pipes.googlegroups.com and tag:inbox
+notmuchcmd tag +haskell +streaming to:streaming-haskell.googlegroups.com and tag:inbox
+notmuchcmd tag +icn +list folder:".Lists.icn" and tag:inbox
+notmuchcmd tag +ndn +list to:ndn-interest and tag:inbox
+notmuchcmd tag +nix-dev +nix +list \(to:nix-dev@lists.science.uu.nl OR to:nix-dev@cs.uu.nl OR to:nix-devel@googlegroups.com\) and tag:inbox
+notmuchcmd tag +nixpkgs +nix +busy +list to:nixpkgs@noreply.github.com and tag:inbox
+notmuchcmd tag +nixpm +nix +list to:nix@noreply.github.com and tag:inbox
+notmuchcmd tag +hydra +nix +list to:hydra@noreply.github.com and tag:inbox
+notmuchcmd tag +otr +list to:otr-users.lists.cypherpunks.ca and tag:inbox
+notmuchcmd tag +redo +list to:redo-list.googlegroups.com and tag:inbox
+notmuchcmd tag +shen +list to:qilang and tag:inbox
+notmuchcmd tag +spacemacs +busy +list to:spacemacs@noreply.github.com and tag:inbox
+notmuchcmd tag +webvr +vr +list to:web-vr-discuss and tag:inbox
+
+
+# except if someone mentions me
+notmuchcmd tag +flagged -busy tag:inbox and tag:list and \(jb55 or tag:to-me\)
+
+# filed
+notmuchcmd tag +filed '(tag:list or tag:rss or tag:busy)' and not tag:filed and not tag:best and not tag:flagged and tag:inbox
+
+# remove annoying from inbox, should be last in file
+notmuchcmd tag -inbox tag:inbox and tag:alert or tag:update
+
+notmuchcmd tag -inbox +newsletter \
+  tag:inbox and \
+  from:newsletters.microsoft.com or \
+  from:freescale
+
+notmuchcmd tag -inbox \
+  tag:inbox and \
+  from:philphys.phil.elte.hu or \
+  from:everything-list.googlegroups.com or \
+  from:codesite-noreply@google.com or \
+  from:getsatisfaction.com or \
+  from:post@tinyportal.net or \
+  from:yahoo.com.hk
+
+notmuchcmd tag -inbox +brandalliance tag:inbox and from:mail@brandalliancelounge.com
+notmuchcmd tag -inbox +spam tag:inbox and folder:".Spam"
+
+# k9mail
+notmuchcmd tag -inbox tag:inbox and folder:".Archive"
+
+# thunderbird I guess?
+notmuchcmd tag -inbox tag:inbox and folder:".Archives.2017"
+
+# remove to-me from rss items
+notmuchcmd tag -to-me tag:inbox and tag:rss and tag:to-me
+
+printf "notmuch tagging done.\n"

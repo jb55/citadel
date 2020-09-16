@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+
+usage () {
+  printf 'Usage: ud <term> [# results]\n'
+  printf '\nurban dictionary search\n\n'
+  exit 1
+}
+
+if [ -z "$1" ]; then
+  usage
+  exit 1
+fi
+
+term="$1"
+n=${2:-1}
+
+BOLD='\u001b[1m'
+RESET='\u001b[0m'
+
+if [[ $n -gt 1 ]]; then
+    format='---------------------------\n'
+else
+    format=""
+fi
+
+format+=$(cat <<EOS
+${BOLD}Definition${RESET}
+
+    \\(.definition | sub("\\n";"\\n    "))
+
+${BOLD}Example${RESET}
+
+    \\(.example | sub("\\n";"\\n    "))
+EOS
+)
+
+curl -GsL 'https://api.urbandictionary.com/v0/define' --data-urlencode "term=$term" | \
+  jq -C -r 'limit('"$n"';.list[]) | "'"$format"'"'

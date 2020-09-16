@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+PR="$1"
+
+exec git checkout -b pr${PR} refs/pull/origin/${PR}

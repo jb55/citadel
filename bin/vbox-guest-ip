@@ -1,0 +1,3 @@
+#!/bin/sh
+# requires: sedcut, virtualbox
+VBoxManage guestproperty enumerate "$1" | grep -Ee 'Net.*IP' | sedcut 'value: \([0-9\.]\+\)'

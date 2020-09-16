@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+usage () {
+  printf "%s <file> <process-script>\n\n" "$0" >&2
+  printf "splits a file into chunks and process it line by line in parallel\n" >&2
+  exit 1
+}
+
+if [ -z "$1" ]; then
+  usage
+fi
+
+outfile="$1"
+shift
+
+blocksize=$(bc <<<"$(stat -c %s "$outfile") / $(nproc)")
+printf 'parallel with %s chunks...\n' "$(numfmt --to=iec "$blocksize")" >&2
+exec parallel -k --pipepart --block "$blocksize" -a "$outfile" "$@"

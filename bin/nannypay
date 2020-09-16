@@ -1,0 +1,129 @@
+#!/usr/bin/env bash
+
+set -e
+
+if [ -z "$NANNY" ]; then
+    printf "set NANNY (and make sure PAY is correct)\n"
+    exit 1
+fi
+
+if [ "$NANNY" == "lisbeth" ]; then
+    pay=18
+fi
+
+if [ "$NANNY" == "diana" ]; then
+    pay=17
+fi
+
+if [ -z $pay ]; then
+    printf "unknown pay for %s\n" "$NANNY"
+    exit 1
+fi
+
+
+CSV="${NANNYPAY_CSV:-$HOME/.local/share/nannypay/${NANNY}.txt}"
+mkdir -p "$(dirname "$CSV")"
+if [ ! -f "$CSV" ]; then
+    touch "$CSV"
+fi
+
+deps() {
+    printf "looks like 'ratio' is broken fam\n" 1>&2
+    exit 3
+}
+
+ratio <<<"0" >/dev/null || deps
+
+cmd="$3"
+
+usage () {
+    printf "usage: nannypay <start-time> <end-time> [r|p]\n" 1>&2
+    show_entries
+    exit 1
+}
+
+duplicate () {
+    printf "there is a already an entry for %s\n" "$1" 1>&2
+    show_entries
+    exit 2
+}
+
+show_entries () {
+    n=${1:-12}
+    printf "\nlast %d entries:\n" "$n" 1>&2
+    (printf "date\tamount\tstart\tend\tminutes\thour_rate\tpaid?\n"; tail -n "$n" "$CSV") | column -t -s $'\t' 1>&2
+    printf "\n%s to be paid\n" "$(to_pay_amt)" 1>&2
+}
+
+
+do_pay () {
+    sed -i"" "/\*$/! s,$,\t\*,g" "$CSV"
+}
+
+
+
+to_pay_amt () {
+    dates=${1:-$(grep -v '\*$' "$CSV")}
+    <<<"$dates" \
+      cut -d $'\t' -f2 \
+    | paste -sd+ \
+    | ratio \
+    | bc -l \
+    | xargs printf "%.02f\n"
+}
+
+pay() {
+    dates=$(grep -v '\*$' "$CSV")
+    amt=$(to_pay_amt "$dates")
+
+    if [ "$amt" = "0.00" ]; then
+        printf "nothing to pay!\n" 1>&2
+    else
+        printf "paying amt %s from dates:\n%s\ncontinue? (y/n)\n" "$amt" "$dates" 1>&2
+
+        read -r confirm
+
+        if [ "$confirm" = "y" ]; then
+            do_pay "$amt"
+        else
+            printf "cancelled.\n" 1>&2
+        fi
+    fi
+}
+
+if [ -z "$1" ] && [ -z "$2" ]
+then
+    usage
+fi
+
+get_minutes() {
+    datediff "$1" "$2" -f %M
+}
+
+get_amt() {
+     <<<"$1" xargs printf "%s/(60/$pay)\n" | ratio
+}
+
+if [ "$cmd" = "r" ]; then
+    start="$1"
+    end="$2"
+    minutes=$(get_minutes "$start" "$end")
+    amt=$(get_amt "$minutes")
+    day=${4:-$(date +%F)}
+    start="$1"
+    end="$2"
+
+    printf "%s\n" "$amt"
+    #grep "$day" "$CSV" >/dev/null && duplicate "$day"
+    printf "%s\t%s\t%s\t%s\t%s\t%s\n" "$day" "$amt" "$start" "$end" "$minutes" "$pay" >> "$CSV"
+elif [ "$1" = "p" ] || [ "$cmd" = "p" ]; then
+    pay
+elif [ "$1" = "e" ]; then
+    "$EDITOR" "$CSV"
+else
+    minutes=$(get_minutes "$1" "$2")
+    amt=$(get_amt "$minutes")
+    printf "%s\n" "$amt"
+fi
+
+show_entries

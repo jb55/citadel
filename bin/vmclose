@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+VM=${1:-razoredge}
+
+# pause vms
+if type VBoxManage > /dev/null; then
+    if VBoxManage controlvm "$VM" savestate
+    then
+        notify-send "$VM saved"
+    else
+        notify-send "$VM already saved"
+    fi
+fi
+
+sleep 5
+pkill VirtualBox

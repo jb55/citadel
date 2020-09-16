@@ -1,0 +1,2 @@
+#!/bin/sh
+all-dev --run 'emacs & disown'

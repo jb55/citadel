@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+files=(readme.md README.md)
+
+for f in "${files[@]}"; do
+  if [ -f "$f" ]; then
+    exec mandown "$f"
+    exit 0
+  fi
+done
+
+if [ -f README ]; then
+  exec less README
+fi
+
+exit 1

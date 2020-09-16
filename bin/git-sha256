@@ -1,0 +1,4 @@
+#!/usr/bin/env nix-shell
+#!nix-shell -i bash -p nix-prefetch-scripts jq
+
+nix-prefetch-git --url "$1" "$@" 2>/dev/null | jq -r .sha256

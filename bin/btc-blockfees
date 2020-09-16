@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+
+# required:
+
+set -e
+
+BITCOIN_RPCUSER=${BITCOIN_RPCUSER:-rpcuser}
+BITCOIN_RPCPASS=${BITCOIN_RPCPASS:-rpcpass}
+BITCOIN_RPCPORT=${BITCOIN_RPCPORT:-8332}
+
+calc_block_subsidy() {
+    local halvings=$(($1 / 210000))
+    if [ $halvings -gt 63 ]; then
+        printf "0\n"
+    fi
+
+    local subsidy=$((50 * 100000000))
+    printf "%s\n" $((subsidy >> halvings));
+}
+
+mkreq () {
+  (
+    printf '['
+    echo ${1#","}
+    printf ']'
+  ) > /tmp/req.txt
+}
+
+doreq() {
+  mkreq "$1"
+  curl -s -u $BITCOIN_RPCUSER:$BITCOIN_RPCPASS \
+    --data-binary @/tmp/req.txt -H 'content-type: text/plain;' "http://127.0.0.1:${BITCOIN_RPCPORT}"
+}
+
+nblocks=${1:-100}
+count=$(btc blocks)
+
+heights=$(seq $((count - $nblocks + 1)) $count)
+# heights=$(seq 10 20)
+
+blockhash_reqs=$(
+    <<<"$heights" xargs printf ',{"jsonrpc": "1.0", "id":"blockfees", "method": "getblockhash", "params": [%d] }\n'
+)
+
+txid_reqs=$(
+  doreq "$blockhash_reqs" \
+      | jq -rc '.[].result' \
+      | xargs printf ',{"jsonrpc": "1.0", "id":"blockfees", "method": "getblock", "params": ["%s"] }\n'
+)
+
+tx_reqs=$(
+    doreq "$txid_reqs" \
+        | jq -rc '.[].result.tx[0]' \
+        | xargs printf ',{"jsonrpc": "1.0", "id":"blockfees", "method": "getrawtransaction", "params": ["%s", 1] }\n'
+)
+
+vals=$(doreq "$tx_reqs" | jq -rc '.[].result.vout[0].value')
+
+paste -d, <(cat <<<"$heights") <(cat <<<"$vals") | \
+while IFS=, read -r height val
+do
+    subsidy=$(calc_block_subsidy $height)
+    printf '%s-(%s/100000000)\n' "$val" "$subsidy"
+done | bc -l
