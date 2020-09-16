@@ -31,6 +31,11 @@ extra:
   services.mysql.enable = true;
   services.mysql.package = pkgs.mariadb;
 
+  services.xserver.screenSection = ''
+    Option "metamodes" "1920x1080 +0+0"
+    Option "dpi" "96 x 96"
+  '';
+
   services.xinetd.enable = true;
   services.xinetd.services = [
     { name = "gopher";

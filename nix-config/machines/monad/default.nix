@@ -224,6 +224,11 @@ in
   services.nix-serve.bindAddress = nix-serve.bindAddress;
   services.nix-serve.port = nix-serve.port;
 
+  services.xserver.screenSection = ''
+    Option "metamodes" "1920x1080_144 +0+0"
+    Option "dpi" "96 x 96"
+  '';
+
   services.nginx.enable = if extra.is-minimal then false else true;
   services.nginx.httpConfig = ''
       server {

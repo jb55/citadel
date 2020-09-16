@@ -4,7 +4,7 @@
 
 { config, pkgs, ... }:
 
-let machine = "quiver";
+let machine = private.machine;
     isDesktop = true;
     machinePath = p: let m = "/" + machine;
                      in ./machines + m + p;

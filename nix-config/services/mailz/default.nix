@@ -182,13 +182,12 @@ in
     services.opensmtpd = {
       enable = true;
       serverConfiguration = ''
-        filter smtp connect check-rdns reject "550 you need a reverse DNS"
-        filter smtp ehlo check-rdns reject "550 your HELO hostname and rDNS mismatch"
-
         filter filter-pause pause
         filter filter-regex regex "${files.regex}"
         filter filter-spamassassin spamassassin "-s accept"
         filter filter-dkim-signer dkim-signer "-d ${cfg.domain}" "-p${cfg.dkimDirectory}/${cfg.domain}/default.private"
+        filter in chain filter-regex filter-spamassassin
+        filter out chain filter-dkim-signer
 
         pki ${cfg.domain} certificate "/var/lib/acme/${cfg.domain}/fullchain.pem"
         pki ${cfg.domain} key "/var/lib/acme/${cfg.domain}/key.pem"
