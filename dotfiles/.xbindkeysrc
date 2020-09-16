@@ -1,0 +1,24 @@
+"lock"
+  XF86Display
+
+"lock"
+  Pause
+
+"cmdtree"
+  Mod4 + u
+
+"cmdtree"
+  Mod4 + grave
+
+"env TZ='America/New_York' n date '+%a | %b %d | %H:%M:%S | %F'"
+  Mod4 + Control + F5
+
+"xbacklight -dec 5"
+  XF86MonBrightnessDown
+
+"xbacklight -inc 5"
+  XF86MonBrightnessUp
+
+"snap"
+  Control + Print
+

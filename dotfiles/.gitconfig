@@ -1,0 +1,93 @@
+[user]
+  name = William Casarin
+  email = jb55@jb55.com
+  signingkey = 0xE02D3FD4EB4585A63531C1D0E1BFCB90A1FF7A1C
+[color]
+  diff = auto
+  status = auto
+[core]
+  excludesfile = /Users/jb55/.gitignore_global
+	editor = nvim
+[sendemail]
+  smtpServer=/home/jb55/bin/sendmail
+[url "git@github.com:"]
+  insteadOf = gh:
+[url "git@gl.blockstream.io:blockstream/"]
+  insteadOf = gl:
+[url "git@gitlab.com:"]
+  insteadOf = gitlab:
+[url "jb55.com:git/"]
+  insteadOf = dev:
+[url "ssh://git@phabricator.monstercat.com/diffusion/"]
+  insteadOf = phab:
+[url "http://git.monster.cat/"]
+  insteadOf = mcat:
+[url "http://git.zero.jb55.com/"]
+  insteadOf = zero:
+[url "http://git.razorcx.com/"]
+  insteadOf = razor:
+[gui]
+  recentrepo = /Users/jb55/src/js/titania
+[alias]
+  a = add
+  au = add -u
+  f = fetch -p
+  br = symbolic-ref --short HEAD
+  ca = commit --amend
+  c = commit
+  cloner = clone --recursive
+  d = diff
+  default = !git config branch.master.remote origin && git config branch.master.merge refs/heads/master
+  ds = diff --staged
+  ff = merge --ff-only
+  hash = !"git rev-parse HEAD | tr -d '\n' | xclip"
+  lg1 = log --graph --branches --tags --remotes --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %s %C(bold)— %an%C(reset)%C(bold yellow)%d%C(reset)' --abbrev-commit --date=relative
+  lgl = log --format='%h  %cr  %s'
+  lg2 = log --no-merges --topo-order --date=relative --pretty=format:'%C(auto,yellow)%h%C(auto,magenta)%  %C(auto,blue)%>(12,trunc)%ad %C(auto,green) %C(auto,reset)%s%C(reset)% %C(bold) — %an%C(reset)%C(bold yellow)%d%C(reset)'
+  lg3 = log --graph --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %s %C(bold)— %an%C(reset)%C(bold yellow)%d%C(reset)' --abbrev-commit --date=relative
+  lg = !"git lg1"
+  lgrep = log --grep
+  line = log --oneline
+  lineg = log --oneline --graph
+  l = log
+  muff = merge --no-ff
+  prs = log --no-merges --date=local --author-date-order --glob='pull/origin/*'
+  prs-merged = log --merges --date=local --author-date-order --glob='pull/origin/*'
+  puff = pull --ff-only
+  rc = rebase --continue
+  rv = remote -v
+  refl = reflog --date=relative
+  r = rebase
+  serve = !git daemon --reuseaddr --verbose --base-path=. --export-all ./.git
+  s = status
+  stat2 = log --stat --pretty=format:'%C(auto,yellow)%h%C(auto,magenta)% G? %C(auto,blue)%>(12,trunc)%cr %C(auto,green)%aN %C(auto,red)%D %n%n   %C(auto,reset)%s%n'
+  st = status -sb
+  tagd = !"git tag --format='%(creatordate:short)%09%(refname:strip=2)' | sort"
+  tg = log --date-order --tags --simplify-by-decoration --pretty=format:'%ai %h %d'
+  try = merge --no-commit --no-ff
+  co = checkout
+  fixes = show -s --pretty='format:Fixes: %h (\"%s\")'
+[rebase]
+  autosquash = true
+[pull]
+	rebase = true
+[diff]
+	colorMoved = dimmed-zebra
+	colorMovedWs = allow-indentation-change
+[push]
+	default = simple
+[rerere]
+	enabled = false
+	autoupdate = false
+[http "https://git.monstercat.com"]
+	sslCAInfo = /home/jb55/.flynn/ca-certs/default.pem
+[credential "https://git.monstercat.com"]
+	helper = /home/jb55/bin/flynn git-credentials
+[gpg]
+	program = /home/jb55/bin/ots-git
+[magit]
+	hideCampaign = true
+[github]
+	user = jb55
+[commit]
+	template = /home/jb55/.git-template

@@ -1,0 +1,170 @@
+
+# fd - cd to selected directory
+fd() {
+  local dir
+  dir=$(find ${1:-.} -path '*/\.*' -prune \
+                  -o -type d -print 2> /dev/null | fzf +m) &&
+  cd "$dir"
+}
+
+nma() {
+  if [ ! -e ~/.notmuch-address-cache ]; then
+    (notmuch-personal address \*; notmuch address \*) | sort -u > ~/.notmuch-address-cache
+  fi
+  fzy < ~/.notmuch-address-cache | tee /dev/tty | xclip
+}
+
+# fda - including hidden directories
+fda() {
+  local dir
+  dir=$(find ${1:-.} -type d 2> /dev/null | fzf +m) && cd "$dir"
+}
+
+flp () {
+  id="$(lpass ls | fzf | grep -P '\d+' -o)"
+  [ ! -z "$id" ] && lpass show "$id"
+}
+
+# fz - cd to directories known to z
+fz() {
+  local dir=$(z | fzcmd "$1") && cd "$dir"
+}
+
+findlt () {
+  local all=$(find . -maxdepth "$1" -type "${2:-f}" -printf "%T@ %Tc %p\n" | sort -nr | cut -f2- -d" " | fzf +s)
+  <<<"$all" cut -f3- -d" "
+}
+
+ftd() {
+  local res="$(findlt ${1:-1} d)"
+  cd "$res"
+}
+
+ft() {
+  local res=$(findlt ${1:-1} f)
+  <<<$res xclip
+  printf "%s\n" "$res"
+}
+
+fto() {
+  open "$(findlt ${1:-1} f)"
+}
+
+fte() {
+  edit "$(findlt ${1:-1} f)"
+}
+
+# fzt - cd to most recently accessed dirs
+fzt() {
+  local dir=$(z -et | fzcmd) && cd "$dir"
+}
+
+fze() {
+  fzcmd | xargs edit
+}
+
+# fz helper
+fzcmd() {
+  awk '{ print $2 }' | fzf --query="$1" --tac +s
+}
+
+# fn - nix packages
+fn() {
+  fzf < ~/.nix-grep-cache
+}
+
+# fni - nix install
+fni() {
+  local pkg
+  pkg=$(<$HOME/.nix-grep-cache fzf) && \
+  nix-install $(echo $pkg | awk '{ print $1 }')
+}
+
+# fns - nix shell
+fns() {
+  local pkg
+  pkg=$(<$HOME/.nixenv.cache fzf) && \
+  nix-shell -p $(echo $pkg | awk '{ print $1 }')
+}
+
+# fdr - cd to selected parent directory
+fdr() {
+  local declare dirs=()
+  get_parent_dirs() {
+    if [[ -d "${1}" ]]; then dirs+=("$1"); else return; fi
+    if [[ "${1}" == '/' ]]; then
+      for _dir in "${dirs[@]}"; do echo $_dir; done
+    else
+      get_parent_dirs $(dirname "$1")
+    fi
+  }
+  local DIR=$(get_parent_dirs $(realpath "${1:-$(pwd)}") | fzf --tac)
+  cd "$DIR"
+}
+
+# cdf - cd into the directory of the selected file
+cdf() {
+  local file
+  local dir
+  file=$(fzf +m -q "$1") && dir=$(dirname "$file") && cd "$dir"
+}
+
+# fh - repeat history, assumes zsh
+fh() {
+  print -z $( ([ -n "$ZSH_NAME" ] && fc -l 1 || history) | fzf +s --tac | sed 's/ *[0-9]* *//')
+}
+
+fo() {
+  local out file key
+  out=$(fzf --query="$1" --exit-0 --expect=ctrl-o,ctrl-e)
+  key=$(head -1 <<< "$out")
+  file=$(head -2 <<< "$out" | tail -1)
+  if [ -n "$file" ]; then
+      [ "$key" = ctrl-o ] && open "$file" || edit "$file"
+  fi
+}
+
+#
+# GIT
+#
+
+fshow() {
+  git log --graph --color=always \
+      --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" |
+  fzf --ansi --no-sort --reverse --tiebreak=index --bind=ctrl-s:toggle-sort \
+      --bind "ctrl-m:execute:
+                (grep -o '[a-f0-9]\{7\}' | head -1 |
+                xargs -I % sh -c 'git show --color=always % | less -R') << 'FZF-EOF'
+                {}
+FZF-EOF"
+}
+
+fenv() {
+  local out
+  out=$(env | fzf)
+  echo $(echo $out | cut -d= -f2)
+}
+
+fstash() {
+    local out q k sha
+    while out=$(
+            git stash list --pretty="%C(yellow)%h %>(14)%Cgreen%cr %C(blue)%gs" |
+                fzf --ansi --no-sort --query="$q" --print-query \
+                    --expect=ctrl-d,ctrl-b);
+    do
+        mapfile -t out <<< "$out"
+        q="${out[0]}"
+        k="${out[1]}"
+        sha="${out[-1]}"
+        sha="${sha%% *}"
+        [[ -z "$sha" ]] && continue
+        if [[ "$k" == 'ctrl-d' ]]; then
+            git diff $sha
+        elif [[ "$k" == 'ctrl-b' ]]; then
+            git stash branch "stash-$sha" $sha
+            break;
+        else
+            git stash show -p $sha
+        fi
+    done
+}
