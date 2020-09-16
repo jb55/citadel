@@ -36,6 +36,8 @@ in
 
   hardware.steam-hardware.enable = true;
 
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+
   services.prometheus.enable = false;
   # services.prometheus.dataDir = "/zbig/data/prometheus";
   services.grafana.enable = false;

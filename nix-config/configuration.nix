@@ -4,7 +4,7 @@
 
 { config, pkgs, ... }:
 
-let machine = private.machine;
+let machine = extra.private.machine;
     isDesktop = true;
     machinePath = p: let m = "/" + machine;
                      in ./machines + m + p;
@@ -94,8 +94,6 @@ in {
   i18n.consoleUseXkbConfig = true;
 
   programs.zsh.enable = true;
-
-  boot.kernelPackages = pkgs.linuxPackages_latest;
 
   # boot.kernelPatches = [{
   #   name = "nintendo-hid";
