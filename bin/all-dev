@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-
-export RUST_CHANNEL=stable
-#export RUST_SRC_PATH="$(nix-build '<nixpkgs>' --no-out-link -A rustChannels.$RUST_CHANNEL.rust-src)"/lib/rustlib/src/rust/src
-#export LD_LIBRARY_PATH="$(nix-build '<nixpkgs>' --no-out-link -A rustChannels.$RUST_CHANNEL.rustc)"/lib:$LD_LIBRARY_PATH
-
-exec nix-shell -p hello "$@"
