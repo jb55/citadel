@@ -26,9 +26,9 @@ in {
     };
 
 
-    msmtp = pkgs.lib.overrideDerivation super.msmtp (attrs: {
-      patches = [ /home/jb55/dev/msmtp-1.8.3/msmtpq-custom-conn-test.patch ];
-    });
+    #msmtp = pkgs.lib.overrideDerivation super.msmtp (attrs: {
+    #  patches = [ /home/jb55/dev/msmtp-1.8.3/msmtpq-custom-conn-test.patch ];
+    #});
 
     weechat = super.weechat.override {configure = {availablePlugins, ...}: {
         scripts = with super.weechatScripts; [ wee-slack ];
