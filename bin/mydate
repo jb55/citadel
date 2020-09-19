@@ -1,2 +1,2 @@
 #!/bin/sh
-exec date "$@" '+%a | %b %d | %H:%M:%S | %F'
+exec date "$@" '+%a | %b %d | %H:%M:%S | %F | Week %V/53'
