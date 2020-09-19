@@ -1,15 +1,22 @@
 #!/usr/bin/env bash
 #exec chrome "$@"
 
+set -e
+
+#BROWSER=chromium
+BROWSER=qutebrowser
+BROWSER_ARGS="--enable-webengine-inspector"
+
 kill_browser () {
-  exec pkill qutebrowser
-  #exec pkill --oldest chromium
+  #exec pkill qutebrowser
+  pkill --oldest "$BROWSER"
+  exit 0
 }
 
-if [ "$1" == "kill" ]; then
-  kill_browser
+if [ "$1" = "kill" ]; then
+    kill_browser
 fi
 
-#exec chrome "$@"
-qutebrowser --enable-webengine-inspector "$@"
-exec wmctrl -a qutebrowser
+"$BROWSER" "$BROWSER_ARGS" "$@"
+#qutebrowser --enable-webengine-inspector "$@"
+exec wmctrl -a "$BROWSER"
