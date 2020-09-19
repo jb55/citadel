@@ -27,6 +27,9 @@ in
   services.trezord.enable = if extra.is-minimal then false else true;
 
   services.avahi.enable = true;
+  services.avahi.publish.enable = true;
+  services.avahi.publish.userServices = true;
+
   services.spotifyd.enable = if extra.is-minimal then false else false;
   services.spotifyd.config = ''
     [global]
