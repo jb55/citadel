@@ -238,7 +238,6 @@ class GeminiClient(cmd.Cmd):
         self.no_cert_prompt = "\x1b[38;5;76m" + "AV-98" + "\x1b[38;5;255m" + "> " + "\x1b[0m"
         self.cert_prompt = "\x1b[38;5;202m" + "AV-98" + "\x1b[38;5;255m" + "+cert> " + "\x1b[0m"
         self.prompt = self.no_cert_prompt
-        self.always_less = False
         self.gi = None
         self.history = []
         self.hist_index = 0
@@ -573,8 +572,6 @@ Slow internet connection?  Use 'set timeout' to be more patient.""")
         self._log_visit(gi, address, size)
         if update_hist:
             self._update_history(gi)
-        if self.always_less:
-            self.do_less()
 
     def _send_request(self, gi):
         """Send a selector to a given host and port.
@@ -1518,7 +1515,6 @@ def main():
     parser.add_argument('--tls-cert', metavar='FILE', help='TLS client certificate file')
     parser.add_argument('--tls-key', metavar='FILE', help='TLS client certificate private key file')
     parser.add_argument('--restricted', action="store_true", help='Disallow shell, add, and save commands')
-    parser.add_argument('--always-less', action="store_true", help='Always open less after navigation')
     parser.add_argument('--version', action='store_true',
                         help='display version information and quit')
     parser.add_argument('url', metavar='URL', nargs='*',
@@ -1555,8 +1551,6 @@ def main():
     if args.restricted:
         print("Restricted mode engaged!")
     print("Enjoy your patrol through Geminispace...")
-
-    gc.always_less = args.always_less
 
     # Act on args
     if args.tls_cert:
