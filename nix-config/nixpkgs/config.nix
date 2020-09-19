@@ -25,10 +25,14 @@ in {
       inherit pkgs;
     };
 
-
-    #msmtp = pkgs.lib.overrideDerivation super.msmtp (attrs: {
-    #  patches = [ /home/jb55/dev/msmtp-1.8.3/msmtpq-custom-conn-test.patch ];
-    #});
+    msmtp = pkgs.lib.overrideDerivation super.msmtp (attrs: {
+      patches = [
+        (super.fetchurl {
+          url = "https://jb55.com/s/msmtpq-custom-conn-test.patch";
+          sha256 = "4d342ea9e757fe5f3fd939479c4b619dcc9630ba9d0bdacf5ccfec9b5b67b861";
+        })
+      ];
+    });
 
     weechat = super.weechat.override {configure = {availablePlugins, ...}: {
         scripts = with super.weechatScripts; [ wee-slack ];
