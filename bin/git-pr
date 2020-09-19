@@ -8,4 +8,6 @@ usage () {
 
 ref="$1"
 shift
-exec git log --reverse "$@" "refs/merge/origin/$ref^..refs/pull/origin/$ref"
+upstream="${1:-origin}"
+shift
+exec git log --reverse "$@" "refs/merge/$upstream/$ref^..refs/pull/$upstream/$ref"
