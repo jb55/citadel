@@ -1,2 +1,7 @@
-#!/usr/bin/env sh
-exec slock
+#!/usr/bin/env bash
+
+lockmac &
+
+slock &
+
+wait
