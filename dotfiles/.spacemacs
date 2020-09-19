@@ -106,7 +106,7 @@
                     jb55/base-layers))
 
 
-(setq jb55/excluded-packages (let ((base-excluded '(org-bullets vi-tilde-fringe anaconda-mode)))
+(setq jb55/excluded-packages (let ((base-excluded '(org-bullets org-superstar vi-tilde-fringe anaconda-mode)))
                                (if (not (is-mac))
                                    (cons 'exec-path-from-shell base-excluded)
                                  base-excluded)
