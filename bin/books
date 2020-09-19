@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-BOOKS_DIR="$HOME/docs/books"
+BOOKS_DIR="${1:-$HOME/docs/books}"
 
 find "$BOOKS_DIR" -name '*.txt' -type f -printf "%f\n" |
   fzf |
