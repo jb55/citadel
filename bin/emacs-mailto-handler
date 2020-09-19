@@ -16,7 +16,7 @@ mailto="${mailto#mailto:}"
 mailto=$(printf '%s\n' "$mailto" | sed -e 's/[\"]/\\&/g')
 
 #elisp_expr="(compose-mail \"$mailto\")"
-elisp_expr="(notmuch-compose-mail \"$mailto\")"
+elisp_expr="(compose-mail \"$mailto\")"
 
 ## This version re-uses an existing window.
 #emacsclient -n --eval "$elisp_expr"
