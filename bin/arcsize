@@ -1,0 +1,2 @@
+#!/usr/bin/env sh
+cat /proc/spl/kstat/zfs/arcstats | grep -E ^size | awk '{print $3}'

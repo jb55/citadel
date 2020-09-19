@@ -1,0 +1,252 @@
+#!/usr/bin/env python3
+
+import argparse
+import mimetypes
+import os
+import shlex
+import subprocess
+import socket
+import socketserver
+import ssl
+import sys
+import tempfile
+import urllib.parse
+
+try:
+    import chardet
+    _HAS_CHARDET = True
+except ImportError:
+    _HAS_CHARDET = False
+
+HOST, PORT = "0.0.0.0", 1965
+
+class AgenaHandler(socketserver.BaseRequestHandler):
+
+    def setup(self):
+        """
+        Wrap socket in SSL session.
+        """
+        self.request = context.wrap_socket(self.request, server_side=True)
+
+    def handle(self):
+        # Parse request URL, make sure it's for a Gopher resource
+        self.parse_request()
+        if self.request_scheme != "gopher":
+            self.send_gemini_header(50, "Agena only proxies to gopher resources.")
+            return
+        # Try to do a Gopher transaction with the remote host
+        try:
+            filename = self.download_gopher_resource()
+        except UnicodeError:
+            self.send_gemini_header(43, "Remote gopher host served content in an unrecognisable character encoding.")
+            return
+        except:
+            self.send_gemini_header(43, "Couldn't connect to remote gopher host.")
+            return
+        # Handle what we received based on item type
+        if self.gopher_itemtype == "0":
+            self.handle_text(filename)
+        elif self.gopher_itemtype == "1":
+            self.handle_menu(filename)
+        elif self.gopher_itemtype == "h":
+            self.handle_html(filename)
+        elif self.gopher_itemtype in ("9", "g", "I", "s"):
+            self.handle_binary(filename)
+        # Clean up
+        self.request.close()
+        os.unlink(filename)
+
+    def send_gemini_header(self, status, meta):
+        """
+        Send a Gemini header, and close the connection if the status code does
+        not indicate success.
+        """
+        self.request.send("{} {}\r\n".format(status, meta).encode("UTF-8"))
+        if status / 10 != 2:
+            self.request.close()
+
+    def parse_request(self):
+        """
+        Read a URL from the Gemini client and parse it up into parts,
+        including separating out the Gopher item type.
+        """
+        requested_url = self.request.recv(1024).decode("UTF-8").strip()
+        if "://" not in requested_url:
+            requested_url = "gemini://" + requested_url
+        parsed =  urllib.parse.urlparse(requested_url)
+        self.request_scheme = parsed.scheme
+        self.gopher_host = parsed.hostname
+        self.gopher_port = parsed.port or 70
+        if parsed.path and parsed.path[0] == '/' and len(parsed.path) > 1:
+            self.gopher_itemtype = parsed.path[1]
+            self.gopher_selector = parsed.path[2:]
+        else:
+            # Use item type 1 for top-level selector
+            self.gopher_itemtype = "1"
+            self.gopher_selector = parsed.path
+        self.gopher_query = parsed.query
+
+    def download_gopher_resource(self):
+        """
+        Download the requested Gopher resource to a temporary file.
+        """
+        print("Requesting {} from {}...".format(self.gopher_selector, self.gopher_host), end="")
+
+        # Send request and read response
+        s = socket.create_connection((self.gopher_host, self.gopher_port))
+        if self.gopher_query:
+            request = self.gopher_selector + '\t' + self.gopher_query
+        else:
+            request = self.gopher_selector
+        request += '\r\n'
+        s.sendall(request.encode("UTF-8"))
+        response= s.makefile("rb").read()
+
+        # Transcode text responses into UTF-8
+        if self.gopher_itemtype in ("0", "1", "h"):
+            # Try some common encodings
+            for encoding in ("UTF-8", "ISO-8859-1"):
+                try:
+                    response = response.decode("UTF-8")
+                    break
+                except UnicodeDecodeError:
+                    pass
+            else:
+                # If we didn't break out of the loop above, none of the
+                # common encodings worked.  If we have chardet installed,
+                # try to autodetect.
+                if _HAS_CHARDET:
+                    detected = chardet.detect(response)
+                    response = response.decode(detected["encoding"])
+                else:
+                    # Surrender.
+                    raise UnicodeDecodeError
+            # Re-encode as God-fearing UTF-8
+            response = response.encode("UTF-8")
+
+        # Write gopher response to temp file
+        tmpf = tempfile.NamedTemporaryFile("wb", delete=False)
+        size = tmpf.write(response)
+        tmpf.close()
+        print("wrote {} bytes to {}...".format(size, tmpf.name))
+        return tmpf.name
+
+    def handle_text(self, filename):
+        """
+        Send a Gemini response for a downloaded Gopher resource whose item
+        type indicates it should be plain text.
+        """
+        self._serve_file("text/plain", filename)
+
+    def handle_menu(self, filename):
+        """
+        Send a Gemini response for a downloaded Gopher resource whose item
+        type indicates it should be a menu.
+        """
+        self.send_gemini_header(20, "text/gemini")
+        with open(filename,"r") as fp:
+            for line in fp:
+                if line.strip() == ".":
+                    continue
+                elif line.startswith("i"):
+                    # This is an "info" line.  Just strip off the item type
+                    # and send the item name, ignorin the dummy selector, etc.
+                    self.request.send((line[1:].split("\t")[0]+"\r\n").encode("UTF-8"))
+                else:
+                    # This is an actual link to a Gopher resource
+                    gemini_link = self.gopher_link_to_gemini_link(line)
+                    self.request.send(gemini_link.encode("UTF-8"))
+
+    def gopher_link_to_gemini_link(self, line):
+        """
+        Convert one line of a Gopher menu to one line of a Geminimap.
+        """
+
+        # Code below pinched from VF-1
+
+        # Split on tabs.  Strip final element after splitting,
+        # since if we split first we loose empty elements.
+        parts = line.split("\t")
+        parts[-1] = parts[-1].strip()
+        # Discard Gopher+ noise
+        if parts[-1] == "+":
+            parts = parts[:-1]
+
+        # Attempt to assign variables.  This may fail.
+        # It's up to the caller to catch the Exception.
+        name, path, host, port = parts
+        itemtype = name[0]
+        name = name[1:]
+        port = int(port)
+        if itemtype == "h" and path.startswith("URL:"):
+            url = path[4:]
+        else:
+            url = "gopher://%s%s/%s%s" % (
+                host,
+                "" if port == 70 else ":%d" % port,
+                itemtype,
+                path
+            )
+
+        return "=> {} {}\r\n".format(url, name)
+
+    def handle_html(self, filename):
+        """
+        Send a Gemini response for a downloaded Gopher resource whose item
+        type indicates it should be HTML.
+        """
+        self._serve_file("text/html", filename)
+
+    def handle_binary(self, filename):
+        """
+        Send a Gemini response for a downloaded Gopher resource whose item
+        type indicates it should be a binary file.  Uses file(1) to sniff MIME
+        types.
+        """
+        # Detect MIME type
+        out = subprocess.check_output(
+            shlex.split("file --brief --mime-type %s" % filename)
+        )
+        mimetype = out.decode("UTF-8").strip()
+        self._serve_file(mimetype, filename)
+
+    def _serve_file(self, mime, filename):
+        """
+        Send a Gemini response with a given MIME type whose body is the
+        contents of the specified file.
+        """
+        self.send_gemini_header(20, mime)
+        with open(filename,"rb") as fp:
+            self.request.send(fp.read())
+
+if __name__ == "__main__":
+
+    parser = argparse.ArgumentParser(description=
+"""Agena is a simple Gemini-to-Gopher designed to be run locally to
+let you seamlessly access Gopherspace from inside a Gemini client.""")
+    parser.add_argument('--cert', type=str, nargs="?", default="cert.pem",
+                        help='TLS certificate file.')
+    parser.add_argument('--key', type=str, nargs="?", default="key.pem",
+                        help='TLS private key file.')
+    parser.add_argument('--port', type=int, nargs="?", default=PORT,
+                        help='TCP port to serve on.')
+    parser.add_argument('--host', type=str, nargs="?", default=HOST,
+                        help='TCP host to serve on.')
+    args = parser.parse_args()
+    print(args)
+
+    if not (os.path.exists(args.cert) and os.path.exists(args.key)):
+        print("Couldn't find cert.pem and/or key.pem. :(")
+        sys.exit(1)
+
+    context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
+    context.load_cert_chain(certfile=args.cert, keyfile=args.key)
+
+    socketserver.TCPServer.allow_reuse_address = True
+    agena = socketserver.TCPServer((args.host, args.port), AgenaHandler)
+    try:
+        agena.serve_forever()
+    except KeyboardInterrupt:
+        agena.shutdown()
+        agena.server_close()
+

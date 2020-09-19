@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+dir=$(dirname "$1")
+base=$(basename "$1")
+
+export LESSHISTFILE="$dir/.$base.hst"
+
+exec less "$@"

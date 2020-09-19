@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+procmem | awk '{print $2}' | paste -sd+ | bc

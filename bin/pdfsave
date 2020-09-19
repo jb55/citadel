@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+#PANDOC='pandoc --metadata=fontfamily:libertine'
+PANDOC='pandoc --pdf-engine=xelatex --metadata=fontfamily:libertine -V geometry:margin=1.2in --variable urlcolor=cyan'
+#PANDOC='pandoc -V geometry:margin=1.2in --variable urlcolor=cyan'
+
+usage () {
+  printf "usage: pdfsave file.md out.pdf OR <file.md pdfsave out.pdf [markdown]\n" >&2
+  exit 1
+}
+
+if [ -t 0 ]; then
+  [ $# -eq 0 ] && usage
+  outfile=${2:-"$(mktemp)".pdf}
+  $PANDOC "$1" -o "$outfile"
+else
+  outfile=${1:-"$(mktemp)".pdf}
+  ext="${2:-markdown}"
+  $PANDOC -f "$ext" -o "$outfile"
+fi

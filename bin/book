@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+BOOKS_DIR="$HOME/docs/books"
+
+find "$BOOKS_DIR" -name '*.txt' -type f -printf "%f\n" | 
+  fzf | 
+  xargs -I{} lessr $BOOKS_DIR/{}
