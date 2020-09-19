@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+usage () {
+    printf "usage: undefined-symbols lib.a\n\n"
+    printf "  print external undefined symbols in an archive\n\n"
+    exit 1
+}
+
+[ -z "$1" ] && usage
+
+exec comm -13 \
+ <(nm "$1" | egrep ' [BDTW] ' | sed -e 's/.* [BDTW] //' | sort -u) \
+ <(nm "$1" | grep ' U ' | sed -e 's/.* U //' | sort -u) \
+    | grep -v '^_' \
+    | less
