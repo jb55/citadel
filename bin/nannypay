@@ -110,8 +110,6 @@ if [ "$cmd" = "r" ]; then
     minutes=$(get_minutes "$start" "$end")
     amt=$(get_amt "$minutes")
     day=${4:-$(date +%F)}
-    start="$1"
-    end="$2"
 
     printf "%s\n" "$amt"
     #grep "$day" "$CSV" >/dev/null && duplicate "$day"
