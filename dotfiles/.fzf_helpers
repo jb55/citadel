@@ -40,6 +40,11 @@ ftd() {
   cd "$res"
 }
 
+# ctags less jumper
+fct() {
+  <tags sed -En '/^!/d;s,^([^\t]+).*,\1,p' | fzf | xargs -I{} less -t{}
+}
+
 ft() {
   local res=$(findlt ${1:-1} f)
   <<<$res xclip
