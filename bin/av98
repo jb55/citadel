@@ -267,7 +267,7 @@ class GeminiClient(cmd.Cmd):
             "timeout" : 10,
             "width" : 80,
             "auto_follow_redirects" : True,
-            "gopher_proxy" : None,
+            "gopher_proxy" : "localhost:1965",
             "tls_mode" : "tofu",
         }
 
