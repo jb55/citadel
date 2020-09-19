@@ -3,7 +3,8 @@
 # generic stuff for non-interactive shells
 
 # sharefile
-export PAGER="lessc"
+export PAGER="less"
+export LESS="-cix8JRM --save-marks"
 export RADV_PERFTEST=aco
 export BAT_STYLE=plain
 export BAT_THEME=base16
