@@ -52,11 +52,14 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
       htop
       imagemagick
       jq
+      lesspipe
       libbitcoin-explorer
       libqalculate
       linuxPackages.bpftrace
+      linuxPackages.perf
       lsof
       manpages
+      mdcat
       minisign
       neovim
       network-tools
@@ -75,6 +78,7 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
       shellcheck
       unixtools.xxd
       unzip
+      universal-ctags
       weechat
       wget
       zip
