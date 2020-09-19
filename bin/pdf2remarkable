@@ -145,7 +145,7 @@ mkdir "${tmpdir}/${uuid}.thumbnails"
 # or 72x72, segment length 16, precision 8, frames 3
 #
 # The following will look nice only for PDFs that are higher than about 32mm.
-#convert -limit thread 1 -density 300 "$pdfname"'[0]' -colorspace Gray -separate -average -shave 5%x5% -resize 280x374 "${tmpdir}/${uuid}.thumbnails/0.jpg"
+convert -limit thread 1 -density 300 "$pdfname"'[0]' -colorspace Gray -separate -average -shave 5%x5% -resize 280x374 "${tmpdir}/${uuid}.thumbnails/0.jpg"
 
 # Transfer files
 echo "Transferring $pdfname$ as $uuid$"
