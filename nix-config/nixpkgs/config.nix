@@ -14,11 +14,6 @@ in {
   allowBroken = false;
   zathura.useMupdf = true;
 
-  #firefox = #{
-  #   enableGoogleTalkPlugin = false;
-  #   enableAdobeFlash = false;
-  # };
-
   packageOverrides = super: rec {
 
     # /run/current-system/sw/bin/ls $HOME/.emacs.d/elpa | sed 's/-[[:digit:]].*//g;s/\+$/-plus/g' | sort -u
@@ -116,10 +111,6 @@ in {
     #    ];
     #});
 
-    #ical2org = super.callPackage ./scripts/ical2org { };
-
-    #footswitch = super.callPackage ./scripts/footswitch { };
-
     ds4ctl = super.callPackage ./scripts/ds4ctl { };
 
     haskellEnvHoogle = haskellEnvFun {
@@ -161,22 +152,6 @@ in {
         oraclejdk
       ];
     };
-
-    # mk-rust-env = name: rustVer: pkgs.buildEnv {
-    #   name = "rust-dev-${name}";
-    #   paths = with pkgs; with rustVer; [
-    #     clang
-    #     rustracer
-    #     rustracerd
-    #     rust
-    #     #cargo-edit
-    #     #rustfmt
-    #     rust-bindgen
-    #   ];
-    # };
-
-    #rust-dev-env-nightly = mk-rust-env "nightly" pkgs.rustChannels.nightly;
-    #rust-dev-env-beta = mk-rust-env "beta" pkgs.rustChannels.beta;
 
     gaming-env = pkgs.buildEnv {
       name = "gaming";
