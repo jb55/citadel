@@ -80,13 +80,13 @@ _ABBREVS = {
 }
 
 _MIME_HANDLERS = {
-    "application/pdf":      "xpdf %s",
+    "application/pdf":      "zathura %s",
     "audio/mpeg":           "mpg123 %s",
     "audio/ogg":            "ogg123 %s",
-    "image/*":              "feh %s",
+    "image/*":              "sxiv %s",
     "text/html":            "lynx -dump -force_html %s",
-    "text/plain":           "cat %s",
-    "text/gemini":          "cat %s",
+    "text/plain":           "less %s",
+    "text/gemini":          "less %s",
 }
 
 # monkey-patch Gemini support in urllib.parse
