@@ -1,2 +1,2 @@
 #!/bin/sh
-exec stat -c %s "$1"
+exec stat -c %s "$@"
