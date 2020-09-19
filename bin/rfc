@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+if [ -z $1 ]
+then
+  printf "usage: rfc <rfc#>\n"
+  exit 1
+fi
+
+RFC_DIR="$HOME/docs/rfc"
+
+mkdir -p $RFC_DIR
+cd "$RFC_DIR"
+
+rfc_file="$RFC_DIR/rfc${1}.txt"
+
+if [ ! -f "$rfc_file" ]
+then
+  url="https://tools.ietf.org/rfc/rfc${1}.txt" 
+  curl --fail --compressed -s "$url" > "$rfc_file" || (rm -f "$rfc_file" && exit 1)
+fi
+
+exec lessr "$rfc_file"
