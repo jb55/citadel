@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-files=(readme.md README.md)
+files=(readme.md README.md README.rst readme.rst)
 
 for f in "${files[@]}"; do
   if [ -f "$f" ]; then
