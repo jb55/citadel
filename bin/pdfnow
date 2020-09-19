@@ -1,23 +1,21 @@
 #!/usr/bin/env bash
 
-#PANDOC='pandoc --metadata=fontfamily:libertine'
-PANDOC='pandoc --metadata=fontfamily:libertine -V geometry:margin=1.2in --variable urlcolor=cyan'
-
 usage () {
-  printf "usage: pdfnow file.md OR <file.md pdfnow markdown\n" >&2
+  printf "usage: pdfnow file.md OR <file.md pdfnow [markdown]\n" >&2
   exit 1
 }
 
-[ $# -eq 0 ] && usage
+outfile=${1:-"$(mktemp)".pdf}
 
 if [ -t 0 ]; then
   [ $# -eq 0 ] && usage
-  $PANDOC "$@" -o /tmp/out.pdf
+  /home/jb55/bin/pdfsave "$1" "$outfile"
 else
-  [ $# -eq 0 ] && usage
-  ext="$1"
-  shift
-  $PANDOC "$@" -f "$ext" -o /tmp/out.pdf
+  outfile="$(mktemp)".pdf
+  ext="${1:-markdown}"
+  /home/jb55/bin/pdfsave "$outfile" "$ext"
 fi
 
-zathura /tmp/out.pdf &>/dev/null
+zathura "$outfile" &>/dev/null
+
+rm "$outfile"
