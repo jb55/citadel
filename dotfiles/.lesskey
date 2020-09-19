@@ -5,4 +5,5 @@ K prev-file
 f forw-screen-force
 F back-screen 
 V forw-forever
-^X shell rm "%"\n
+" set-mark
+^X shell rm "%"
