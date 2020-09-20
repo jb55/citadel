@@ -6,4 +6,4 @@ base=$(basename "$1")
 export LESSHISTFILE="$dir/.$base.hst"
 
 # export LESS="-cix8JRM --save-marks"
-exec less "$@"
+exec less --save-marks "$@"
