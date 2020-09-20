@@ -1,2 +1,2 @@
 #!/usr/bin/env sh
-exec books $HOME/docs/rfc
+exec books $HOME/docs/rfcs
