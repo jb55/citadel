@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+if [ -z "$2" ]; then
+  printf "usage: plainweb <url> <out.txt>\n"
+  exit 1
+fi
+
+curl -s "$1" | pandoc -f html -t plain - -o "$2"
+
+exec lessr "$2"
