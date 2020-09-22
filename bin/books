@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-BOOKS_DIR="${1:-$HOME/docs/books}"
+BOOKS_DIR="${1:-$HOME/docs}"
 
-find "$BOOKS_DIR" -name '*.txt' -type f -printf "%f\n" |
+find "$BOOKS_DIR" -name '*.txt' -type f -printf '%f\t%p\n' |
   fzf |
-  xargs -I{} lessr "$BOOKS_DIR"/{}
+  awkt '{print $2}' |
+  xargs lessr
