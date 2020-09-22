@@ -1,0 +1,3 @@
+#!/usr/bin/env sh
+gpg --encrypt -r 0xDC6893B47083300CB7A47A76A7441FAF7C898CAB > /tmp/alert 
+</tmp/alert nc -uw0 monad.jb55.com 55000
