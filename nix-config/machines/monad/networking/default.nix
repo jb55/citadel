@@ -18,15 +18,25 @@ let
     lightning = 9735;
     lightningt = 9736;
     dns = 53;
+    http = 80;
     wireguard = 51820;
+    inherit (extra.private) notify-port;
   };
 in
 {
   networking.hostId = extra.machine.hostId;
 
   #networking.firewall.trustedInterfaces = ["wg0"];
-  networking.firewall.allowedTCPPorts = with ports; [ lightning lightningt synergy ];
+  networking.firewall.allowedTCPPorts = with ports; [ lightning lightningt synergy http ];
   networking.firewall.allowedUDPPorts = [ ports.dns ports.wireguard ];
+
+  networking.firewall.extraCommands = ''
+    iptables -A nixos-fw -s 10.100.0.1/24,45.79.91.128 -p udp --dport ${toString ports.notify-port} -j nixos-fw-accept
+  '';
+
+  networking.firewall.extraStopCommands = ''
+    iptables -D nixos-fw -s 10.100.0.1/24,45.79.91.128 -p udp --dport ${toString ports.notify-port} -j nixos-fw-accept || true
+  '';
 
   networking.nat.enable = true;
   networking.nat.externalInterface = "eth0";
