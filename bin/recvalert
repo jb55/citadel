@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+gpg --decrypt | xargs -I{} notify-send -u critical "{}"

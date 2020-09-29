@@ -37,6 +37,7 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
       aspellDicts.en
       aspellDicts.en-computers
       aspellDicts.en-science
+      awscli
       bat
       bc
       binutils
@@ -47,6 +48,7 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
       fzf
       git-tools
       gnupg
+      gnumake
       groff
       haskellPackages.una
       htop
