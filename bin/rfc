@@ -6,7 +6,7 @@ then
   exit 1
 fi
 
-RFC_DIR="$HOME/docs/rfc"
+RFC_DIR="$HOME/docs/rfcs"
 
 mkdir -p $RFC_DIR
 cd "$RFC_DIR"
