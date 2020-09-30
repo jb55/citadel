@@ -37,15 +37,11 @@ in
       peers = [
         # For a client configuration, one peer entry for the server will suffice.
         {
-          # Public key of the server (not a file path).
           publicKey = "TbGgpOqD6teLon0ksZKS8zvvjHtkOGKNWPpHZxhVFWA=";
-
           allowedIPs = [ "10.100.0.1/32" ];
-
-          # Set this to the server IP and port.
+          #endpoint = "127.0.0.1:3333";
           endpoint = "24.84.152.187:53";
 
-          # Send keepalives every 25 seconds. Important to keep NAT tables alive.
           persistentKeepalive = 25;
         }
         {
