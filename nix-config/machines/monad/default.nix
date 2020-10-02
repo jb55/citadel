@@ -54,22 +54,28 @@ in
   services.synergy.server.enable = if extra.is-minimal then false else true;
   services.synergy.server.autoStart = true;
   services.synergy.server.screenName = "desktop";
-  services.synergy.server.configFile = pkgs.writeText "synergy-cfg" ''
+  services.synergy.server.configFile = pkgs.writeText "barrier-cfg" ''
     section: screens
       desktop:
       mac:
+      win:
     end
     section: aliases
         desktop:
           192.168.86.26
         mac:
           192.168.86.232
+        win:
+          192.168.122.218
     end
     section: links
       desktop:
           left = mac
+          right = win
       mac:
           right = desktop
+      win:
+          left = desktop
     end
     section: options
       keystroke(alt+control+h) = switchInDirection(left)
