@@ -5,11 +5,11 @@
  ;; If there is more than one, they won't work right.
  '(Linum-format "%7i ")
  '(ac-ispell-requires 4 t)
- '(ahs-case-fold-search nil t)
- '(ahs-default-range 'ahs-range-whole-buffer t)
- '(ahs-idle-interval 0.25 t)
+ '(ahs-case-fold-search nil)
+ '(ahs-default-range 'ahs-range-whole-buffer)
+ '(ahs-idle-interval 0.25)
  '(ahs-idle-timer 0 t)
- '(ahs-inhibit-face-list nil t)
+ '(ahs-inhibit-face-list nil)
  '(ansi-color-faces-vector
    [default bold shadow italic underline bold bold-italic bold])
  '(ansi-color-names-vector
@@ -42,8 +42,8 @@
  '(evil-want-Y-yank-to-eol t)
  '(expand-region-contract-fast-key "V")
  '(expand-region-reset-fast-key "r")
- '(fci-rule-character-color "#202020")
- '(fci-rule-color "#202020")
+ '(fci-rule-character-color "#202020" t)
+ '(fci-rule-color "#202020" t)
  '(fill-column 70)
  '(flycheck-clang-include-path '("deps"))
  '(flycheck-clang-language-standard nil)
@@ -52,15 +52,15 @@
  '(flycheck-ghc-args '("-isrc"))
  '(flycheck-hlint-ignore-rules '("Eta reduce"))
  '(flycheck-pos-tip-timeout 2)
- '(flycheck-standard-error-navigation t t)
+ '(flycheck-standard-error-navigation t)
  '(fringe-mode '(1 . 1) nil (fringe))
  '(global-hl-line-mode t)
  '(gnus-select-method '(nntp "nntp.lore.kernel.org"))
  '(grep-find-ignored-directories
    '("SCCS" "RCS" "CVS" "MCVS" ".svn" ".git" ".hg" ".bzr" "_MTN" "_darcs" "{arch}" "node_modules"))
  '(haskell-font-lock-symbols nil)
- '(haskell-hoogle-command nil)
- '(haskell-hoogle-url "http://localhost:8080/?hoogle=%s")
+ '(haskell-hoogle-command nil t)
+ '(haskell-hoogle-url "http://localhost:8080/?hoogle=%s" t)
  '(haskell-indentation-indent-leftmost t)
  '(haskell-interactive-mode-scroll-to-bottom t)
  '(haskell-interactive-popup-error nil t)
@@ -76,7 +76,7 @@
  '(haskell-process-type 'ghci)
  '(haskell-stylish-on-save nil t)
  '(haskell-tags-on-save nil)
- '(helm-echo-input-in-header-line nil t)
+ '(helm-echo-input-in-header-line nil)
  '(helm-ff-skip-boring-files t)
  '(highlight-changes-colors '("#d33682" "#6c71c4"))
  '(highlight-symbol-colors
@@ -132,7 +132,7 @@
  '(magit-log-margin '(nil age magit-log-margin-width nil 18))
  '(magit-refresh-status-buffer nil)
  '(magit-revision-insert-related-refs nil)
- '(magit-revision-show-gravatars nil t)
+ '(magit-revision-show-gravatars nil)
  '(magit-revision-use-hash-sections 'quickest)
  '(mail-envelope-from 'header)
  '(mail-specify-envelope-from nil)
@@ -183,25 +183,38 @@
      (:name "2-day" :query "date:yesterday.. and tag:inbox" :key "2")
      (:name "work" :query "tag:inbox and tag:work" :key "w" :sort-order subject-ascending)))
  '(notmuch-search-line-faces
-   (quote
-    (("unread" . notmuch-search-unread-face)
-     ("flagged" . notmuch-search-flagged-face))))
+   '(("unread" . notmuch-search-unread-face)
+     ("flagged" . notmuch-search-flagged-face)))
  '(notmuch-search-oldest-first nil)
- '(notmuch-search-sort-order (quote newest-first))
+ '(notmuch-search-sort-order 'newest-first)
  '(notmuch-show-all-tags-list t)
  '(notmuch-show-insert-text/plain-hook
-   (quote
-    (notmuch-wash-convert-inline-patch-to-part notmuch-wash-wrap-long-lines notmuch-wash-tidy-citations notmuch-wash-elide-blank-lines notmuch-wash-excerpt-citations)))
+   '(notmuch-wash-convert-inline-patch-to-part notmuch-wash-wrap-long-lines notmuch-wash-tidy-citations notmuch-wash-elide-blank-lines notmuch-wash-excerpt-citations))
  '(notmuch-tag-formats
-   (quote
-    (("unread" "?"
-      (propertize tag
-                  (quote face)
-                  (quote notmuch-tag-unread)))
+   '(("unread" "?"
+      (propertize tag 'face 'notmuch-tag-unread))
      ("flagged"
       #("*" 0 1
         (face
          ((:foreground "gold")
+          (:foreground "gold")
+          (:foreground "gold")
+          (:foreground "gold")
+          (:foreground "gold")
+          (:foreground "gold")
+          (:foreground "gold")
+          (:foreground "gold")
+          (:foreground "gold")
+          (:foreground "gold")
+          (:foreground "gold")
+          (:foreground "gold")
+          (:foreground "gold")
+          (:foreground "gold")
+          (:foreground "gold")
+          (:foreground "gold")
+          (:foreground "gold")
+          (:foreground "gold")
+          (:foreground "gold")
           (:foreground "gold"))))
       (notmuch-apply-face tag
                           '(:foreground "gold")))
@@ -269,7 +282,7 @@
      ""
      (800 1000 1200 1400 1600 1800 2000)))
  '(org-archive-location "archive/%s_archive::")
- '(org-directory "~/docs/org" t)
+ '(org-directory "~/docs/org")
  '(org-duration-format '((special . h:mm)))
  '(org-export-headline-levels 2)
  '(org-export-with-section-numbers nil)
@@ -283,7 +296,7 @@
  '(org-refile-targets '((org-agenda-files :maxlevel . 1)))
  '(org-use-sub-superscripts '{})
  '(package-selected-packages
-   '(lsp-pyright tracking treemacs-projectile spaceline rjsx-mode prettier-js gntp org-cliplink meson-mode lsp-haskell hierarchy json-snatcher json-reformat js2-mode window-purpose imenu-list epc ctable concurrent prop-menu htmlize parent-mode haml-mode project eldoc xref emacsql-sqlite flx evil-textobj-line evil-ledger evil-ediff elm-test-runner lcr csharp-mode counsel swiper ivy deferred web-completion-data rtags company-quickhelp pos-tip nixos-options lua-mode irony go-mode anaconda-mode pythonic company lsp-mode spinner ht dash-functional markdown-mode rust-mode blacken yasnippet packed auctex flycheck f s pkg-info epl avy auto-complete popup org-plus-contrib hydra lv evil bind-map bind-key notmuch neuron-mode projectile haskell-mode reformatter helm helm-core iedit paredit goto-chg undo-tree anzu smartparens magit git-commit async with-editor transient ghub treepy emacsql multiple-cursors skewer-mode simple-httpd treemacs magit-popup sml-mode alert log4e org-category-capture purescript-mode test-simple loc-changes load-relative powerline all-the-icons memoize pfuture visual-fill-column treemacs-persp treemacs-icons-dired ron-mode org-superstar magit-section dash lsp-ivy flycheck-elsa emr list-utils graphql-mode swift-mode company-tabnine unicode-escape names lsp-ui lsp-treemacs lsp-python-ms cquery company-lsp ccls github-search github-clone git-gutter-fringe+ git-gutter-fringe fringe-helper gist gh marshal logito confluence git-gutter+ git-gutter pcache diff-hl xml-rpc browse-at-remote direnv writeroom-mode treemacs-evil typescript-mode symbol-overlay realgud olivetti eglot flymake jsonrpc forge closql flycheck-package package-lint let-alist auctex-latexmk github-review treemacs-magit nodejs-repl flycheck-ycmd devdocs cpp-auto-include company-ycmd ycmd request-deferred company-reftex attrap hybrid-mode elpher protobuf-mode ini-mode vi-tilde-fringe org-bullets helm-xref helm-themes helm-swoop helm-purpose helm-projectile helm-mode-manager helm-flx helm-descbinds helm-ag ace-jump-helm-line yasnippet-snippets yapfify yaml-mode ws-butler winum which-key wgrep weechat web-mode web-beautify w3m volatile-highlights uuidgen use-package twittering-mode toml-mode toc-org tide tagedit symon string-inflection sql-indent spotify spaceline-all-the-icons smex smeargle slim-mode shen-mode shen-elisp scss-mode sass-mode restart-emacs request rainbow-delimiters racket-mode racer pyvenv pytest pyenv-mode py-isort pug-mode psci psc-ide powershell popwin pippel pipenv pip-requirements persp-mode pcre2el password-generator paradox overseer orgit org-projectile org-present org-pomodoro org-mime org-download org-clock-csv org-brain open-junk-file omnisharp ob-sml nix-mode neotree nameless mvn move-text mmm-mode meghanada maven-test-mode mastodon markdown-toc magit-svn magit-gitflow macrostep lorem-ipsum livid-mode live-py-mode link-hint ledger-mode json-navigator json-mode js2-refactor js-doc jade-mode ivy-yasnippet ivy-xref ivy-rtags ivy-purpose ivy-hydra intero insert-shebang indent-guide importmagic impatient-mode idris-mode hungry-delete hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-pages helm-make haskell-snippets groovy-mode groovy-imports graphviz-dot-mode gradle-mode google-translate google-c-style golden-ratio godoctor go-tag go-rename go-impl go-guru go-gen-test go-fill-struct go-eldoc gnuplot gnu-apl-mode glsl-mode gitignore-templates gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md ggtags fuzzy fsharp-mode font-lock+ flycheck-rust flycheck-rtags flycheck-pos-tip flycheck-ledger flycheck-haskell flycheck-elm flycheck-bashate flx-ido fish-mode fill-column-indicator fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-cleverparens evil-args evil-anzu eval-sexp-fu ereader ensime emojify emoji-cheat-sheet-plus emmet-mode elm-mode elisp-slime-nav editorconfig dumb-jump dotenv-mode disaster diminish define-word dante cython-mode csv-mode counsel-projectile counsel-notmuch counsel-gtags counsel-css company-web company-tern company-statistics company-shell company-rtags company-nixos-options company-lua company-irony company-go company-ghci company-ghc company-emoji company-emacs-eclim company-cabal company-c-headers company-auctex company-anaconda column-enforce-mode cmm-mode clean-aindent-mode clang-format centered-cursor-mode cargo bison-mode base16-theme auto-yasnippet auto-highlight-symbol auto-compile aggressive-indent ace-window ace-link ac-ispell))
+   '(org-kanban lsp-pyright tracking treemacs-projectile spaceline rjsx-mode prettier-js gntp org-cliplink meson-mode lsp-haskell hierarchy json-snatcher json-reformat js2-mode window-purpose imenu-list epc ctable concurrent prop-menu htmlize parent-mode haml-mode project eldoc xref emacsql-sqlite flx evil-textobj-line evil-ledger evil-ediff elm-test-runner lcr csharp-mode counsel swiper ivy deferred web-completion-data rtags company-quickhelp pos-tip nixos-options lua-mode irony go-mode anaconda-mode pythonic company lsp-mode spinner ht dash-functional markdown-mode rust-mode blacken yasnippet packed auctex flycheck f s pkg-info epl avy auto-complete popup org-plus-contrib hydra lv evil bind-map bind-key notmuch neuron-mode projectile haskell-mode reformatter helm helm-core iedit paredit goto-chg undo-tree anzu smartparens magit git-commit async with-editor transient ghub treepy emacsql multiple-cursors skewer-mode simple-httpd treemacs magit-popup sml-mode alert log4e org-category-capture purescript-mode test-simple loc-changes load-relative powerline all-the-icons memoize pfuture visual-fill-column treemacs-persp treemacs-icons-dired ron-mode org-superstar magit-section dash lsp-ivy flycheck-elsa emr list-utils graphql-mode swift-mode company-tabnine unicode-escape names lsp-ui lsp-treemacs lsp-python-ms cquery company-lsp ccls github-search github-clone git-gutter-fringe+ git-gutter-fringe fringe-helper gist gh marshal logito confluence git-gutter+ git-gutter pcache diff-hl xml-rpc browse-at-remote direnv writeroom-mode treemacs-evil typescript-mode symbol-overlay realgud olivetti eglot flymake jsonrpc forge closql flycheck-package package-lint let-alist auctex-latexmk github-review treemacs-magit nodejs-repl flycheck-ycmd devdocs cpp-auto-include company-ycmd ycmd request-deferred company-reftex attrap hybrid-mode elpher protobuf-mode ini-mode vi-tilde-fringe org-bullets helm-xref helm-themes helm-swoop helm-purpose helm-projectile helm-mode-manager helm-flx helm-descbinds helm-ag ace-jump-helm-line yasnippet-snippets yapfify yaml-mode ws-butler winum which-key wgrep weechat web-mode web-beautify w3m volatile-highlights uuidgen use-package twittering-mode toml-mode toc-org tide tagedit symon string-inflection sql-indent spotify spaceline-all-the-icons smex smeargle slim-mode shen-mode shen-elisp scss-mode sass-mode restart-emacs request rainbow-delimiters racket-mode racer pyvenv pytest pyenv-mode py-isort pug-mode psci psc-ide powershell popwin pippel pipenv pip-requirements persp-mode pcre2el password-generator paradox overseer orgit org-projectile org-present org-pomodoro org-mime org-download org-clock-csv org-brain open-junk-file omnisharp ob-sml nix-mode neotree nameless mvn move-text mmm-mode meghanada maven-test-mode mastodon markdown-toc magit-svn magit-gitflow macrostep lorem-ipsum livid-mode live-py-mode link-hint ledger-mode json-navigator json-mode js2-refactor js-doc jade-mode ivy-yasnippet ivy-xref ivy-rtags ivy-purpose ivy-hydra intero insert-shebang indent-guide importmagic impatient-mode idris-mode hungry-delete hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-pages helm-make haskell-snippets groovy-mode groovy-imports graphviz-dot-mode gradle-mode google-translate google-c-style golden-ratio godoctor go-tag go-rename go-impl go-guru go-gen-test go-fill-struct go-eldoc gnuplot gnu-apl-mode glsl-mode gitignore-templates gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md ggtags fuzzy fsharp-mode font-lock+ flycheck-rust flycheck-rtags flycheck-pos-tip flycheck-ledger flycheck-haskell flycheck-elm flycheck-bashate flx-ido fish-mode fill-column-indicator fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-cleverparens evil-args evil-anzu eval-sexp-fu ereader ensime emojify emoji-cheat-sheet-plus emmet-mode elm-mode elisp-slime-nav editorconfig dumb-jump dotenv-mode disaster diminish define-word dante cython-mode csv-mode counsel-projectile counsel-notmuch counsel-gtags counsel-css company-web company-tern company-statistics company-shell company-rtags company-nixos-options company-lua company-irony company-go company-ghci company-ghc company-emoji company-emacs-eclim company-cabal company-c-headers company-auctex company-anaconda column-enforce-mode cmm-mode clean-aindent-mode clang-format centered-cursor-mode cargo bison-mode base16-theme auto-yasnippet auto-highlight-symbol auto-compile aggressive-indent ace-window ace-link ac-ispell))
  '(pdf-view-midnight-colors '("#655370" . "#fbf8ef"))
  '(powerline-color1 "#1E1E1E")
  '(powerline-color2 "#111111")
@@ -315,7 +328,7 @@
  '(smerge-command-prefix "m")
  '(smtpmail-smtp-server "smtp.jb55.com")
  '(smtpmail-smtp-service 587)
- '(sql-port 5444)
+ '(sql-port 5432)
  '(standard-indent 4)
  '(tab-width 4)
  '(url-handler-mode nil)
@@ -327,7 +340,7 @@
    '("monstercat.#general" "monstercat.#payments" "monstercat.#code"))
  '(weechat-auto-monitor-new-buffers t)
  '(weechat-modules '(weechat-button weechat-image weechat-complete))
- '(yas-snippet-dirs '("/home/jb55/.emacs.d/private/snippets/") t))
+ '(yas-snippet-dirs '("/home/jb55/.emacs.d/private/snippets/")))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
