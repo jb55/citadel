@@ -76,6 +76,7 @@
      meson-mode
      olivetti
      org-brain
+     org-kanban
      org-clock-csv
      protobuf-mode
      shen-mode
