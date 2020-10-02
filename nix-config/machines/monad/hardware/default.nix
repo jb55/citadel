@@ -10,9 +10,17 @@
   #     fsType = "zfs";
   #nixos-generate-config --root /mnt   };
 
-  boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usbhid" "sd_mod" ];
-  boot.kernelParams = [ "amdgpu.gpu_recovery=1" ];
-  boot.kernelModules = [ "kvm-amd" ];
+  boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usbhid" "sd_mod" "amdgpu" "vfio-pci" ];
+  boot.initrd.preDeviceCommands = ''
+     DEVS="0000:27:00.0 0000:27:00.1"
+     for DEV in $DEVS; do
+       echo "vfio-pci" > /sys/bus/pci/devices/$DEV/driver_override
+     done
+     modprobe -i vfio-pci
+  '';
+
+  boot.kernelParams = [ "amdgpu.gpu_recovery=1" "amd_iommu=on" "pcie_aspm=off" ];
+  boot.kernelModules = [ "kvm-amd" "kvm-intel" ];
   boot.loader.grub.copyKernels = true;
   boot.extraModulePackages = [ ];
 

@@ -95,14 +95,4 @@ in {
 
   programs.zsh.enable = true;
 
-  # boot.kernelPatches = [{
-  #   name = "nintendo-hid";
-  #   patch = (pkgs.fetchurl {
-  #             url = "https://jb55.com/s/2020-03-24-HID-nintendo-add-nintendo-switch-controller-driver.patch";
-  #             sha256 = "660302c88b797df6a89e5e715388ab22144dedfc0174597221a03a987a496a2e";
-  #           });
-  #   extraConfig = ''
-  #     NINTENDO_FF y
-  #   '';
-  # }];
 }
