@@ -19,7 +19,7 @@ let sites = [ ];
     gitCfg = extra.git-server { inherit config pkgs; extra = extra // gitExtra; };
     razornetGit = extra.git-server { inherit config pkgs; extra = extra // razornetExtra; };
 in {
-  services.logrotate.config = ''
+  services.logrotate.extraConfig = ''
     ${logDir}/*.log {
       daily
       missingok
