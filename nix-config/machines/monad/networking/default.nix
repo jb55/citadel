@@ -22,6 +22,19 @@ let
     wireguard = 51820;
     inherit (extra.private) notify-port;
   };
+
+  firewallRules = [
+    "nixos-fw -s 10.100.0.1/24,45.79.91.128,192.168.86.0/24 -p udp --dport ${toString ports.notify-port} -j nixos-fw-accept"
+    "nixos-fw -s 192.168.122.0/24 -p udp --dport 137 -j nixos-fw-accept"
+    "nixos-fw -s 192.168.122.0/24 -p udp --dport 138 -j nixos-fw-accept"
+    "nixos-fw -s 192.168.122.0/24 -p tcp --dport 139 -j nixos-fw-accept"
+    "nixos-fw -s 192.168.122.0/24 -p tcp --dport 445 -j nixos-fw-accept"
+  ];
+
+  addRule = rule: "iptables -A ${rule}";
+  rmRule = rule: "iptables -D ${rule} || true";
+  extraCommands = lib.concatStringsSep "\n" (map addRule firewallRules);
+  extraStopCommands = lib.concatStringsSep "\n" (map rmRule firewallRules);
 in
 {
   networking.hostId = extra.machine.hostId;
@@ -30,13 +43,8 @@ in
   networking.firewall.allowedTCPPorts = with ports; [ lightning lightningt synergy http ];
   networking.firewall.allowedUDPPorts = [ ports.dns ports.wireguard ];
 
-  networking.firewall.extraCommands = ''
-    iptables -A nixos-fw -s 10.100.0.1/24,45.79.91.128 -p udp --dport ${toString ports.notify-port} -j nixos-fw-accept
-  '';
-
-  networking.firewall.extraStopCommands = ''
-    iptables -D nixos-fw -s 10.100.0.1/24,45.79.91.128 -p udp --dport ${toString ports.notify-port} -j nixos-fw-accept || true
-  '';
+  networking.firewall.extraCommands = extraCommands;
+  networking.firewall.extraStopCommands = extraStopCommands;
 
   networking.nat.enable = true;
   networking.nat.externalInterface = "eth0";
@@ -48,24 +56,16 @@ in
       # Determines the IP address and subnet of the server's end of the tunnel interface.
       ips = [ "10.100.0.1/24" ];
 
-      # The port that Wireguard listens to. Must be accessible by the client.
       listenPort = ports.wireguard;
 
       postSetup = ''
         ${pkgs.iptables}/bin/iptables -t nat -A POSTROUTING -s 10.100.0.0/24 -o enp30s0 -j MASQUERADE
       '';
 
-      # This undoes the above command
       postShutdown = ''
         ${pkgs.iptables}/bin/iptables -t nat -D POSTROUTING -s 10.100.0.0/24 -o enp30s0 -j MASQUERADE
       '';
 
-
-      # Path to the private key file.
-      #
-      # Note: The private key can also be included inline via the privateKey option,
-      # but this makes the private key world-readable; thus, using privateKeyFile is
-      # recommended.
       privateKeyFile = "/home/jb55/.wg/private";
 
       peers = [
