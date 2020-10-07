@@ -4,8 +4,12 @@
 
 # sharefile
 export PAGER="less"
-export LESS="-cix8JRM --save-marks"
+export LESS="-cix8RM --save-marks"
+
+# mesa
 export RADV_PERFTEST=aco
+export AMD_DEBUG=nodma
+
 export BAT_STYLE=plain
 export BAT_THEME=base16
 export LPASS_HOME="$HOME/.config/lpass"

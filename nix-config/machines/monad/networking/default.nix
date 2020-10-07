@@ -25,10 +25,10 @@ let
 
   firewallRules = [
     "nixos-fw -s 10.100.0.1/24,45.79.91.128,192.168.86.0/24 -p udp --dport ${toString ports.notify-port} -j nixos-fw-accept"
-    "nixos-fw -s 192.168.122.0/24 -p udp --dport 137 -j nixos-fw-accept"
-    "nixos-fw -s 192.168.122.0/24 -p udp --dport 138 -j nixos-fw-accept"
-    "nixos-fw -s 192.168.122.0/24 -p tcp --dport 139 -j nixos-fw-accept"
-    "nixos-fw -s 192.168.122.0/24 -p tcp --dport 445 -j nixos-fw-accept"
+    "nixos-fw -s 192.168.122.218 -p udp --dport 137 -j nixos-fw-accept"
+    "nixos-fw -s 192.168.122.218 -p udp --dport 138 -j nixos-fw-accept"
+    "nixos-fw -s 192.168.122.218 -p tcp --dport 139 -j nixos-fw-accept"
+    "nixos-fw -s 192.168.122.218 -p tcp --dport 445 -j nixos-fw-accept"
   ];
 
   addRule = rule: "iptables -A ${rule}";
@@ -79,6 +79,26 @@ in
           allowedIPs = [ "10.100.0.4/32" ];
         }
       ];
+    };
+
+    rcx0 = {
+     # Determines the IP address and subnet of the server's end of the tunnel interface.
+     ips = [ "10.200.0.2/32" ];
+
+     privateKeyFile = "/home/jb55/.wg/rcx/private";
+
+     peers = [
+       { publicKey = "wC+mEE9/PJDuIfr7DFZWnM8HbQz5fSOFHmmzQRxULzM="; # server
+         allowedIPs = [ "10.200.0.1/32" ];
+         endpoint = "159.89.143.225:53";
+         persistentKeepalive = 25;
+       }
+       { publicKey = "vrKDdLPXAXAPP7XuuQl/dsD+z3dV/Z0uhgc+yjJ4Nys="; # winvm
+         allowedIPs = [ "10.200.0.3/32" ];
+         endpoint = "192.168.122.218:51820";
+         persistentKeepalive = 25;
+       }
+     ];
     };
   };
 
