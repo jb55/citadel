@@ -54,22 +54,28 @@ in
   services.synergy.server.enable = if extra.is-minimal then false else true;
   services.synergy.server.autoStart = true;
   services.synergy.server.screenName = "desktop";
-  services.synergy.server.configFile = pkgs.writeText "synergy-cfg" ''
+  services.synergy.server.configFile = pkgs.writeText "barrier-cfg" ''
     section: screens
       desktop:
       mac:
+      win:
     end
     section: aliases
         desktop:
           192.168.86.26
         mac:
           192.168.86.232
+        win:
+          192.168.122.218
     end
     section: links
       desktop:
           left = mac
+          right = win
       mac:
           right = desktop
+      win:
+          left = desktop
     end
     section: options
       keystroke(alt+control+h) = switchInDirection(left)
@@ -197,10 +203,69 @@ in
   };
 
   virtualisation.docker.enable = if extra.is-minimal then false else true;
+
+  boot.kernelPatches = [
+    {
+      name = "nintendo-hid";
+      patch = (pkgs.fetchurl {
+                url = "https://jb55.com/s/2020-03-24-HID-nintendo-add-nintendo-switch-controller-driver.patch";
+                sha256 = "660302c88b797df6a89e5e715388ab22144dedfc0174597221a03a987a496a2e";
+              });
+      extraConfig = ''
+        NINTENDO_FF y
+      '';
+    }
+    { # pci acs hack, not really safe or a good idea
+      name = "acs-overrides";
+      patch = pkgs.fetchurl {
+        url = "https://aur.archlinux.org/cgit/aur.git/plain/add-acs-overrides.patch?h=linux-vfio";
+        sha256 = "1b1qjlqkbwpv82aja48pj9vpi9p6jggc8g92p4rg7zjjjs2ldp24";
+      };
+    }
+  ];
+  boot.kernelParams = [ "pcie_acs_override=downstream" ];
+
+  virtualisation.libvirtd.enable = true;
+  virtualisation.libvirtd.qemuOvmf = true;
+  virtualisation.libvirtd.qemuVerbatimConfig = ''
+    user = "jb55"
+    group = "kvm"
+    cgroup_device_acl = [
+      "/dev/input/by-id/usb-Topre_Corporation_Realforce-event-kbd",
+      "/dev/input/by-id/usb-Razer_Razer_DeathAdder_2013-event-mouse",
+      "/dev/null", "/dev/full", "/dev/zero",
+      "/dev/random", "/dev/urandom",
+      "/dev/ptmx", "/dev/kvm", "/dev/kqemu",
+      "/dev/rtc","/dev/hpet", "/dev/sev"
+    ]
+  '';
+
+  services.samba = {
+  };
+
+  systemd.tmpfiles.rules = [
+    "f /dev/shm/looking-glass 0660 jb55 qemu-libvirtd -"
+    "f /dev/shm/scream 0660 jb55 qemu-libvirtd -"
+  ];
+
+  systemd.user.services.scream-ivshmem = {
+    enable = true;
+    description = "Scream IVSHMEM";
+    serviceConfig = {
+      ExecStart = "${pkgs.scream-receivers}/bin/scream-ivshmem-pulse /dev/shm/scream";
+      Restart = "always";
+    };
+    wantedBy = [ "multi-user.target" ];
+    requires = [ "pulseaudio.service" ];
+  };
+
+  environment.systemPackages = [ pkgs.virt-manager ];
+
   virtualisation.virtualbox.host.enable = false;#if extra.is-minimal then false else true;
   virtualisation.virtualbox.host.enableHardening = false;
   #virtualization.virtualbox.host.enableExtensionPack = true;
-  users.extraUsers.jb55.extraGroups = [ "vboxusers" "bitcoin" ];
+
+  users.extraUsers.jb55.extraGroups = [ "vboxusers" "bitcoin" "kvm" "input" ];
 
   services.xserver.videoDrivers = [ ];
 

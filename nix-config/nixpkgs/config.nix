@@ -14,7 +14,15 @@ in {
   allowBroken = false;
   zathura.useMupdf = true;
 
+
   packageOverrides = super: rec {
+    qemu = super.qemu.override {
+      smbdSupport = true;
+    };
+
+    scream-receivers = super.scream-receivers.override {
+      pulseSupport = true;
+    };
 
     # /run/current-system/sw/bin/ls $HOME/.emacs.d/elpa | sed 's/-[[:digit:]].*//g;s/\+$/-plus/g' | sort -u
     #emacs = super.emacsHead;

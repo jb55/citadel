@@ -45,7 +45,7 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
       slock
       spotify
       sxiv
-      texlive.combined.scheme-basic
+      texlive.combined.scheme-full
       userConfig
       vlc
       w3m

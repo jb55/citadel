@@ -40,7 +40,8 @@
     markdown
     nixos
     notmuch
-    (org :variables org-want-todo-bindings t)
+    (org :variables org-want-todo-bindings t
+                    org-enable-trello-support t)
     purescript
     python
     racket
@@ -61,7 +62,7 @@
   '( company-irony
      base16-theme
      bison-mode
-     direnv
+     envrc
      editor-config
      emojify
      forge
@@ -76,6 +77,7 @@
      meson-mode
      olivetti
      org-brain
+     org-kanban
      org-clock-csv
      protobuf-mode
      shen-mode
@@ -392,11 +394,13 @@ Put your configuration code here, except for variables that should be set
 before packages are loaded."
   (setq jb55/org-path "~/docs/org")
 
-  (use-package direnv
-    ;; Ensures that external dependencies are available before they are called.
-    :config
-    (add-to-list 'direnv-non-file-modes 'vterm-mode)
-    (direnv-mode 1))
+  (envrc-global-mode)
+
+  ;;(use-package direnv
+  ;;  ;; Ensures that external dependencies are available before they are called.
+  ;;  :config
+  ;;  (add-to-list 'direnv-non-file-modes 'vterm-mode)
+  ;;  (direnv-mode 1))
 
   ;; fix really annoying clipboard race issue
   (fset 'evil-visual-update-x-selection 'ignore)

@@ -6,6 +6,13 @@ usage () {
   exit 1
 }
 
+PLAIN=0
+
+if [ "$1" = -plain ]; then
+  PLAIN=1
+  shift
+fi
+
 if [ -z "$1" ]; then
   usage
   exit 1
@@ -14,8 +21,10 @@ fi
 term="$1"
 n=${2:-1}
 
-BOLD='\u001b[1m'
-RESET='\u001b[0m'
+if [ $PLAIN -eq 0 ]; then
+  BOLD='\u001b[1m'
+  RESET='\u001b[0m'
+fi
 
 if [[ $n -gt 1 ]]; then
     format='---------------------------\n'
