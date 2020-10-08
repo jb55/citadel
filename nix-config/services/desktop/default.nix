@@ -99,6 +99,19 @@ in
     };
   };
 
+  systemd.user.services.udp-notify-daemon = {
+    enable = true;
+    description = "udp notification daemon";
+    wantedBy = [ "default.target" ];
+    after    = [ "default.target" ];
+
+    path = with pkgs; [ bash gnupg libnotify ];
+
+    serviceConfig.ExecStart = util.writeBash "notify-daemon" ''
+      exec ${pkgs.socat}/bin/socat -d -d udp4-recvfrom:${toString extra.private.notify-port},reuseaddr,fork exec:/home/jb55/bin/recvalert
+    '';
+  };
+
   systemd.user.services.kindle-sync3 = {
     enable = false;
     description = "sync kindle";
