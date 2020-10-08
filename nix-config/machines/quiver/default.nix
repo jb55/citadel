@@ -133,13 +133,13 @@ extra:
       do
           percent=$(acpi -b | sed -E -n 's/.* ([0-9]+)%.*/\1/p')
 
-          if [ $percent -lt $limit ] && [ "$state" != "heartbeat" ]
+          if ! acpi -b | grep Charging && [ $percent -lt $limit ] && [ "$state" != "heartbeat" ]
           then
               printf "battery %d%% < %d%%, setting heartbeat trigger\n" "$percent" "$limit" >&2
               echo heartbeat > "$LED"/trigger
               echo heartbeat > "$LED2"/trigger
               state="heartbeat"
-          elif [ $percent -ge $limit ] && [ "$state" = "heartbeat" ]
+          elif acpi -b | grep Charging || [ $percent -ge $limit ] && [ "$state" = "heartbeat" ]
           then
               printf "battery %d%% >= %d%%, resetting led trigger\n" "$percent" "$limit" >&2
               echo none > "$LED"/trigger
