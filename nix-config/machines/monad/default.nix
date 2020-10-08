@@ -152,7 +152,7 @@ in
     wantedBy = [ "default.target" ];
     after    = [ "default.target" ];
 
-    path = with pkgs; [ bash gnupg libnotify ];
+    path = with pkgs; [ bash gnupg libnotify netcat nettools ];
 
     serviceConfig.ExecStart = util.writeBash "notify-daemon" ''
       exec ${pkgs.socat}/bin/socat -d -d udp4-recvfrom:${toString extra.private.notify-port},reuseaddr,fork exec:/home/jb55/bin/recvalert
