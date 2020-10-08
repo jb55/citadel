@@ -1,3 +1,15 @@
 #!/usr/bin/env bash
 
-gpg --decrypt | xargs -I{} notify-send -u critical "{}"
+set -e
+
+PAYLOAD=$(gpg --decrypt)
+
+# relay to laptop
+if [ $(hostname) == "monad" ]; then
+  printf "sending to laptop\n"
+  tmp=$(mktemp)
+  <<<"$PAYLOAD" gpg --encrypt -r quiver > "$tmp"
+  <"$tmp" nc -uw0 10.100.0.2 55000
+  rm -f "$tmp"
+fi
+<<<"$PAYLOAD" xargs -I{} notify-send -u critical "{}"
