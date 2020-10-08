@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+curl -s 'https://ip-ranges.amazonaws.com/ip-ranges.json' |
+jq -rc '.prefixes[].ip_prefix | {"jsonrpc": "1.0", "id":"aws-banscript", method: "setban", "params": [., "add", 3600]}' |
+jq -s  |
+curl -s -u rpcuser:rpcpass --data-binary @/dev/stdin -H 'content-type: text/plain' 127.0.0.1:8332
