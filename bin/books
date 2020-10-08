@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 BOOKS_DIR="${1:-$HOME/docs}"
 
-find "$BOOKS_DIR" -name '*.txt' -type f -printf '%f\t%p\n' |
+find "$BOOKS_DIR" -name '*.txt' -type f -printf '%T@\t%f\t%p\n' |
+  sort -rn |
+  cutt -f2- |
   fzf |
   awkt '{print $2}' |
   xargs lessr
