@@ -20,38 +20,43 @@ let
 #    down = writeBash "openvpn-pia-stop" config.services.openvpn.servers.pia.down;
   };
 
+  ports = {
+    notify = extra.private.notify-port;
+  };
+
+  hasVPN = builtins.hasAttr "services" config.services.openvpn && config.services.openvpn.services.pia != null;
+
+  firewallRules = [
+    "nixos-fw -s 10.100.0.1/24,45.79.91.128 -p udp --dport ${toString ports.notify} -j nixos-fw-accept"
+  ] ++ lib.optional hasVPN [
+    "OUTPUT -t mangle   -m cgroup --cgroup 11 -j MARK --set-mark 11"
+    "POSTROUTING -t nat -m cgroup --cgroup 11 -o tun0 -j MASQUERADE"
+  ];
+
+  addRule = rule: "iptables -A ${rule}";
+  rmRule = rule: "iptables -D ${rule} || true";
+  extraCommands = lib.concatStringsSep "\n" (map addRule firewallRules);
+  extraStopCommands = lib.concatStringsSep "\n" (map rmRule firewallRules);
 in
 {
-  #networking.nameservers = [ "1.1.1.1" "8.8.8.8" ];
-
   networking.firewall.extraCommands =
     # openvpn stuff, we only want to do this once
-    if builtins.hasAttr "services" config.services.openvpn && config.services.openvpn.services.pia != null then ''
-      # mangle packets in cgroup with a mark
-      iptables -t mangle -A OUTPUT -m cgroup --cgroup 11 -j MARK --set-mark 11
-
-      # NAT packets in cgroup through VPN tun interface
-      iptables -t nat -A POSTROUTING -m cgroup --cgroup 11 -o tun0 -j MASQUERADE
-
+    (if hasVPN then ''
       # create separate routing table
       ${ipr} rule add fwmark 11 table ${vpn.table}
 
       # add fallback route that blocks traffic, should the VPN go down
       ${ipr} route add blackhole default metric 2 table ${vpn.table}
-    '' else "";
+
+    '' else "") + extraCommands;
 
   networking.firewall.extraStopCommands =
-    if builtins.hasAttr "services" config.services.openvpn && config.services.openvpn.services.pia != null then ''
-        # mangle packets in cgroup with a mark
-        iptables -t mangle -D OUTPUT -m cgroup --cgroup 11 -j MARK --set-mark 11 || true
-
-        # NAT packets in cgroup through VPN tun interface
-        iptables -t nat -D POSTROUTING -m cgroup --cgroup 11 -o tun0 -j MASQUERADE || true
-
+    (if hasVPN then ''
         # remove separate routing table
         ${ipr} rule del fwmark 11 table ${vpn.table} || true
         ${ipr} route del blackhole default metric 2 table ${vpn.table} || true
-    '' else "";
+
+    '' else "") + extraStopCommands;
 
   users.extraGroups.vpn-pia.members = [ "jb55" "transmission" ];
   users.extraGroups.tor.members = [ "jb55" ];
