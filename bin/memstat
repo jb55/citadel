@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+printf "hogs\n\n"
+procmem | tail -n10 | nfmt
+all=$(procmemall)
+arc=$(arcsize)
+total=$(($all + $arc))
+printf "\nproc   %s" "$(nfmt <<<$all)"
+printf "\narc    %s" "$(nfmt <<<$arc)"
+printf "\ntotal  %s\n" "$(nfmt <<<$total)"
