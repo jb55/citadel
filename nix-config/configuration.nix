@@ -91,7 +91,7 @@ in {
   users.defaultUserShell = zsh;
   users.mutableUsers = true;
 
-  i18n.consoleUseXkbConfig = true;
+  console.useXkbConfig = true;
 
   programs.zsh.enable = true;
 
