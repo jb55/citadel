@@ -13,6 +13,14 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
       class "GtkMenuShell" binding "gtk-binding-menu"
     '';
 
+    df = pkgs.dwarf-fortress-packages.dwarf-fortress-full.override {
+       #dfVersion = "0.44.11";
+       enableIntro = false;
+       enableFPS = false;
+       enableDFHack = false;
+       enableTextMode = true;
+    };
+
     mypkgs = with pkgs; [
       aerc
       clipmenu
@@ -60,7 +68,10 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
       xlibs.xset
       zathura
       zoom-us
+
+      df
     ];
+
 in {
 
   # latest emacs overlay
