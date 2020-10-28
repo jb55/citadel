@@ -92,7 +92,7 @@ with extra; {
               if [ -f ~/var/notify/home ]; then
                 ${pkgs.libnotify}/bin/notify-send -i email-new "Fetching new mail..."
               fi
-              muchsync -C ~/.notmuch-config-personal notmuch
+              muchsync -C /home/jb55/.notmuch-config-personal notmuch
               notify
             ) 200>/tmp/email-notify.lock
           '';
