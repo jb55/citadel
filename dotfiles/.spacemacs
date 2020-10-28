@@ -301,6 +301,9 @@ It should only modify the values of Spacemacs settings."
   (load custom-file)
   )
 
+(defun notmuch-always-bcc-sender ()
+  (message-add-header (concat "Bcc: " (message-fetch-field "From"))))
+
 (defun dotspacemacs/user-init ()
   "Initialization for user code:
 This function is called immediately after `dotspacemacs/init', before layer
@@ -319,6 +322,7 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
             (if (= (user-uid) 0) " # " " $ ")))
 
   (load "~/src/elisp/notmuch/notmuch-github.el")
+  (add-hook 'message-send-hook 'notmuch-always-bcc-sender)
   ;; (load "~/src/elisp/overlays/overlays.el")
 
   (defun cd-repo ()
