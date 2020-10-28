@@ -11,6 +11,10 @@ if [ "$NANNY" == "lisbeth" ]; then
     pay=18
 fi
 
+if [ "$NANNY" == "maribel" ]; then
+    pay=18
+fi
+
 if [ "$NANNY" == "diana" ]; then
     pay=17
 fi
