@@ -246,6 +246,21 @@ in
     requires = [ "pulseaudio.service" ];
   };
 
+  systemd.user.services.btc-ban-aws = {
+    enable   = if extra.is-minimal then false else true;
+    description = "Ban Bitcoin EC2 nodes";
+    wantedBy = [ "bitcoind-mainnet.service" ];
+    after    = [ "bitcoind-mainnet.service" ];
+    serviceConfig.ExecStart = util.writeBash "btc-ban-ec2" ''
+      # lets chill for a bit before we do this
+      ${pkgs.curl}/bin/curl -s 'https://ip-ranges.amazonaws.com/ip-ranges.json' |
+      ${pkgs.jq}/bin/jq -rc '.prefixes[].ip_prefix | {"jsonrpc": "1.0", "id":"aws-banscript", method: "setban", "params": [., "add", 3450]}' |
+      ${pkgs.jq}/bin/jq -s  |
+      ${pkgs.curl}/bin/curl -s -u ${extra.private.btc-user}:${extra.private.btc-pass} --data-binary @/dev/stdin -H 'content-type: text/plain' ${extra.private.btc-rpc-host}:${extra.private.btc-rpc-port}
+    '';
+    startAt = "*-*-* *:00:00"; #hourly
+  };
+
   environment.systemPackages = [ pkgs.virt-manager ];
 
   virtualisation.virtualbox.host.enable = false;#if extra.is-minimal then false else true;
