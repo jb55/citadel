@@ -139,7 +139,6 @@ in
 
 
   services.bitlbee.plugins = with pkgs; [
-    bitlbee-discord
     bitlbee-mastodon
   ];
 
