@@ -24,6 +24,7 @@ let
   };
 
   firewallRules = [
+    "nixos-fw -s 10.100.0.1/24,192.168.86.1/24 -p tcp --dport 8080 -j nixos-fw-accept" # dev
     "nixos-fw -s 192.168.122.218 -p udp --dport 137 -j nixos-fw-accept"
     "nixos-fw -s 192.168.122.218 -p udp --dport 138 -j nixos-fw-accept"
     "nixos-fw -s 192.168.122.218 -p tcp --dport 139 -j nixos-fw-accept"
