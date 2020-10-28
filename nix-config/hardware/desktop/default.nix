@@ -99,13 +99,16 @@ in
       options = kindle-opts;
     };
 
+
+  hardware.pulseaudio.enable = true;
+  hardware.pulseaudio.support32Bit = true;
+  hardware.pulseaudio.package = if extra.is-minimal then pkgs.pulseaudio else pkgs.pulseaudioFull;
+  hardware.pulseaudio.daemon.config = {
+    default-sample-rate = "48000";
+  };
+
   hardware = {
     bluetooth.enable = true;
-    pulseaudio = {
-      package = if extra.is-minimal then pkgs.pulseaudio else pkgs.pulseaudioFull;
-      enable = true;
-      support32Bit = true;
-    };
     opengl.driSupport32Bit = true;
     opengl.driSupport = true;
   };
