@@ -2,8 +2,9 @@ extra:
 { config, lib, pkgs, ... }:
 {
   imports = [
-    # ./footswitch
-    # ./fail-notifier
+    #./footswitch
+    #./fail-notifier
+    ./mailz
   ];
 
   #services.mongodb.enable = true;
