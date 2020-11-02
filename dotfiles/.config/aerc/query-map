@@ -1,0 +1,13 @@
+inbox=tag:inbox and not tag:filed and not tag:noise
+lightning=tag:inbox and tag:lightning
+bitcoin=tag:core and tag:inbox and subject:bitcoin/bitcoin
+best=tag:best and tag:inbox
+inbox=tag:inbox and not tag:filed and not tag:noise
+nixpkgs=tag:nixpkgs and tag:inbox
+notmuch=tag:notmuch and tag:inbox
+list=tag:list and not tag:github and tag:inbox and not tag:busy
+github=tag:github and not tag:busy and tag:inbox
+today=date:today
+rss=tag:rss and tag:inbox and not tag:busy
+rss-busy=tag:rss and tag:inbox and tag:busy
+2-day=date:yesterday.. and tag:inbox
