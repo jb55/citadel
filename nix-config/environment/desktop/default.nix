@@ -58,6 +58,7 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
       vlc
       w3m
       wine
+      steam
       wmctrl
       xautolock
       xbindkeys
