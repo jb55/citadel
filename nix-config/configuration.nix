@@ -5,7 +5,7 @@
 { config, pkgs, ... }:
 
 let machine = extra.private.machine;
-    isDesktop = true;
+    isDesktop = machine != "charon";
     machinePath = p: let m = "/" + machine;
                      in ./machines + m + p;
     machineConfig = import (machinePath "/config") pkgs;
@@ -68,7 +68,7 @@ in {
 
   # Use the GRUB 2 boot loader.
   boot.loader.grub.enable = true;
-  environment.ld-linux = false;
+  #environment.ld-linux = false;
   systemd.extraConfig = ''
     DefaultTimeoutStopSec=10s
     DefaultTimeoutStartSec=20s
