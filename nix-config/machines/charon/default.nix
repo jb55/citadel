@@ -16,6 +16,19 @@ let gitExtra = {
       rev    = "bef839a95736588ec40c917fa63d490cd736f307";
       sha256 = "1j2xclgcmz9hbf47k4ygyzmiradfg9q30m8bzr1i2x91kz1ck946";
     }) {}).package;
+
+    gaufre = (import (pkgs.fetchFromGitHub {
+      owner  = "jb55";
+      repo   = "gaufre";
+      rev    = "fe9d3cb3a6e4616d1f2f95607cea3a0582db4872";
+      sha256 = "091lbcijfzbbr3sm4nxqzz5pdgwqlhhxsa6qy0svmk44q3nd6zvh";
+    }) {}).package;
+
+    pgpkeys = pkgs.fetchurl {
+      url = "https://jb55.com/s/pgpkey.pub";
+      sha256 = "d264cec5342a647964f0882e444f61272768e2a885a28ba67b6a44e14d9dab28";
+    };
+
     gitCfg = extra.git-server { inherit config pkgs; extra = extra // gitExtra; };
     hearpress = (import <jb55pkgs> { nixpkgs = pkgs; }).hearpress;
     myemail = "jb55@jb55.com";
@@ -88,7 +101,7 @@ in
     ./networking
     ./hardware
     (import ./nginx extra)
-    (import ./sheetzen extra)
+    #(import ./sheetzen extra)
     #(import ./vidstats extra)
   ];
 
@@ -151,16 +164,18 @@ in
     webroot = "/var/www/challenges";
     group = "jb55cert";
     allowKeysForGroup = true;
-    postRun = "systemctl restart prosody";
-    email = myemail;
-  };
-
-  security.acme.certs."coretto.io" = {
-    webroot = "/var/www/challenges";
+    #postRun = "systemctl restart prosody";
     email = myemail;
   };
 
   security.acme.certs."git.jb55.com" = {
+    webroot = "/var/www/challenges";
+    group = "jb55cert";
+    allowKeysForGroup = true;
+    email = myemail;
+  };
+
+  security.acme.certs."openpgpkey.jb55.com" = {
     webroot = "/var/www/challenges";
     group = "jb55cert";
     allowKeysForGroup = true;
@@ -172,7 +187,7 @@ in
     email = myemail;
   };
 
-  security.acme.certs."hearpress.com" = {
+  security.acme.certs."bitcoinwizard.net" = {
     webroot = "/var/www/challenges";
     email = myemail;
   };
@@ -192,13 +207,13 @@ in
   };
 
   users.extraUsers.prosody.extraGroups = [ "jb55cert" ];
-  services.prosody.enable = true;
+  services.prosody.enable = false;
   services.prosody.admins = [ "jb55@jb55.com" ];
   services.prosody.allowRegistration = false;
   services.prosody.extraModules = [
     # "cloud_notify"
     # "smacks"
-    # "carbons"
+    "carbons"
     # "http_upload"
   ];
   services.prosody.extraConfig = ''
@@ -220,7 +235,7 @@ in
   services.postgresql = {
     dataDir = "/var/db/postgresql/9.5";
     package = pkgs.postgresql95;
-    enable = true;
+    enable = false;
     enableTCPIP = true;
     authentication = ''
       # type db  user address        method
@@ -242,55 +257,14 @@ in
     serviceConfig.ExecStart = "${npmrepo}/bin/npm-repo-proxy";
   };
 
-  systemd.user.services.rss2email = {
-    description = "run rss2email";
-    path = with pkgs; [ rss2email ];
-    wantedBy = [ "default.target" ];
-    serviceConfig.ExecStart = "${pkgs.rss2email}/bin/r2e run";
+  systemd.services.gaufre = {
+    description = "personal gopher proxy";
+
+    wantedBy = [ "multi-user.target" ];
+
+    serviceConfig.Type = "simple";
+    serviceConfig.ExecStart = "${gaufre}/bin/gaufre 7070";
   };
-
-  systemd.user.services.backup-rss2email = {
-    description = "backup rss2email";
-    wantedBy = [ "default.target" ];
-    serviceConfig.ExecStart = pkgs.writeScript "backup-rss2email" ''
-      #!${pkgs.bash}/bin/bash
-      BACKUP_DIR=/home/jb55/backups/rss2email
-      cp /home/jb55/.config/rss2email.cfg $BACKUP_DIR
-      cp /home/jb55/.local/share/rss2email.json $BACKUP_DIR
-      cd $BACKUP_DIR
-      ${pkgs.git}/bin/git add -u
-      ${pkgs.git}/bin/git commit -m "bump"
-      ${pkgs.git}/bin/git push
-    '';
-  };
-
-  systemd.user.timers.backup-rss2email = {
-    wantedBy = [ "timers.target" ];
-    timerConfig.OnCalendar = "daily";
-  };
-
-  systemd.user.timers.rss2email = {
-    wantedBy = [ "timers.target" ];
-    timerConfig.OnCalendar = "hourly";
-  };
-
-  # systemd.services.hearpress = {
-  #   description = "Hearpress server";
-  #   wantedBy = [ "multi-user.target" ];
-  #   after = [ "postgresql.service" ];
-
-  #   environment = {
-  #     PG_CS = "postgresql://jb55@localhost/hearpress";
-  #     AWS_ACCESS_KEY_ID = extra.private.aws.access_key;
-  #     AWS_SECRET_ACCESS_KEY = extra.private.aws.secret_key;
-  #   };
-
-  #   serviceConfig.Type = "simple";
-  #   serviceConfig.ExecStart = "${hearpress}/bin/hearpressd";
-  # };
-
-
-  security.setuidPrograms = [ "sendmail" ];
 
   services.fcgiwrap.enable = true;
 
@@ -299,12 +273,12 @@ in
 
     server {
       listen 443 ssl;
-      server_name coretto.io;
+      server_name bitcoinwizard.net;
       root /home/jb55/www/coretto.io;
       index index.html;
 
-      ssl_certificate /var/lib/acme/coretto.io/fullchain.pem;
-      ssl_certificate_key /var/lib/acme/coretto.io/key.pem;
+      ssl_certificate /var/lib/acme/bitcoinwizard.net/fullchain.pem;
+      ssl_certificate_key /var/lib/acme/bitcoinwizard.net/key.pem;
 
       location / {
         try_files $uri $uri/ =404;
@@ -315,7 +289,7 @@ in
         # fcgiwrap is set up to listen on this host:port
         fastcgi_pass                  unix:${config.services.fcgiwrap.socketAddress};
         include                       ${pkgs.nginx}/conf/fastcgi_params;
-        fastcgi_param SCRIPT_FILENAME /home/jb55/www/coretto.io/email.py;
+        fastcgi_param SCRIPT_FILENAME /home/jb55/www/coretto.io/emailform.py;
 
         client_max_body_size 512;
 
@@ -328,22 +302,22 @@ in
     }
 
     server {
+      listen 443 ssl;
+      server_name www.bitcoinwizard.net;
+      return 301 https://bitcoinwizard.net$request_uri;
+    }
+
+    server {
       listen 80;
-      server_name coretto.io www.coretto.io;
+      server_name bitcoinwizard.net www.bitcoinwizard.net;
 
       location /.well-known/acme-challenge {
         root /var/www/challenges;
       }
 
       location / {
-        return 301 https://coretto.io$uri;
+        return 301 https://bitcoinwizard.net$request_uri;
       }
-    }
-
-    server {
-      listen 443 ssl;
-      server_name www.coretto.io;
-      return 301 https://coretto.io$request_uri;
     }
 
     server {
@@ -354,20 +328,44 @@ in
         root /var/www/challenges;
       }
 
-      location / {
-        return 301 https://git.jb55.com$request_uri;
+      root /var/git-public/stagit;
+      index index.html index.htm;
+
+      # location / {
+      #   return 301 https://git.jb55.com$request_uri;
+      # }
+    }
+
+    # server {
+    #   listen       443 ssl;
+    #   server_name  git.jb55.com;
+
+    #   root /var/git-public/stagit;
+    #   index index.html index.htm;
+
+    #   ssl_certificate /var/lib/acme/git.jb55.com/fullchain.pem;
+    #   ssl_certificate_key /var/lib/acme/git.jb55.com/key.pem;
+    # }
+
+    server {
+      listen 80;
+      server_name openpgpkey.jb55.com;
+
+      location /.well-known/acme-challenge {
+        root /var/www/challenges;
       }
     }
 
     server {
-      listen       443 ssl;
-      server_name  git.jb55.com;
+      listen 443 ssl;
+      server_name openpgpkey.jb55.com;
 
-      root /var/git-public/stagit;
-      index index.html index.htm;
+      ssl_certificate /var/lib/acme/openpgpkey.jb55.com/fullchain.pem;
+      ssl_certificate_key /var/lib/acme/openpgpkey.jb55.com/key.pem;
 
-      ssl_certificate /var/lib/acme/git.jb55.com/fullchain.pem;
-      ssl_certificate_key /var/lib/acme/git.jb55.com/key.pem;
+      location /.well-known/openpgpkey/jb55.com/hu/9adqqiba8jxrhu5wf18bfapmnwjk5ybo {
+        alias ${pgpkeys};
+      }
     }
 
     server {
@@ -383,11 +381,28 @@ in
       rewrite ^/pkgs/?$ https://github.com/jb55/jb55pkgs/archive/master.tar.gz permanent;
 
       location / {
+        gzip on;
+        gzip_types application/json;
+
         error_page 418 = @jb55activity;
 
         if ( $http_accept ~ "application/activity\+json" ) { return 418; }
 
         try_files $uri $uri/ =404;
+      }
+
+      location ~ ^/[01] {
+        proxy_pass  http://localhost:7070;
+        proxy_next_upstream error timeout invalid_header http_500 http_502 http_503 http_504;
+        proxy_redirect off;
+        proxy_buffering off;
+        proxy_set_header        Host            $host;
+        proxy_set_header        X-Real-IP       $remote_addr;
+        proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+      }
+
+      location /phlog {
+        autoindex on;
       }
 
       location @jb55activity {
@@ -408,17 +423,6 @@ in
          try_files ${webfinger} =404;
       }
 
-      location /paste/ {
-        proxy_max_temp_file_size 0;
-        client_max_body_size 0;
-        proxy_request_buffering off;
-        proxy_buffering off;
-        proxy_http_version 1.1;
-        proxy_pass http://127.0.0.1:${httpipePort}/;
-
-        add_header X-Content-Type-Options nosniff;
-      }
-
       location /cal/ {
         proxy_pass        http://127.0.0.1:5232/;
         proxy_set_header  X-Script-Name /cal;
@@ -436,6 +440,16 @@ in
 
       location /.well-known/acme-challenge {
         root /var/www/challenges;
+      }
+
+      location ~ ^/[01] {
+        proxy_pass  http://localhost:7070;
+        proxy_next_upstream error timeout invalid_header http_500 http_502 http_503 http_504;
+        proxy_redirect off;
+        proxy_buffering off;
+        proxy_set_header        Host            $host;
+        proxy_set_header        X-Real-IP       $remote_addr;
+        proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
       }
 
       location / {
