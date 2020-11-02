@@ -4,6 +4,8 @@ J next-file
 K prev-file
 f forw-screen-force
 F back-screen 
+d forw-screen-force
+u back-screen
 V forw-forever
 " set-mark
 ^X shell rm "%"
