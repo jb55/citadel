@@ -8,7 +8,7 @@ if [ -z "$NANNY" ]; then
 fi
 
 if [ "$NANNY" == "lisbeth" ]; then
-    pay=18
+    pay=20
 fi
 
 if [ "$NANNY" == "maribel" ]; then
@@ -17,6 +17,10 @@ fi
 
 if [ "$NANNY" == "diana" ]; then
     pay=17
+fi
+
+if [ "$NANNY" == "laura" ]; then
+    pay=20
 fi
 
 if [ -z $pay ]; then
