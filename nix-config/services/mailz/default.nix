@@ -5,6 +5,7 @@ with lib;
 
 let
   cfg = config.services.mailz;
+
   mailbox = name: ''
     mailbox ${name} {
       auto = subscribe
@@ -154,15 +155,8 @@ in
     };
   };
 
-  config = mkIf (cfg.enable && cfg.users != { }) {
-    nixpkgs.config.packageOverrides = pkgs: {
-      opensmtpd = pkgs.callPackage ./opensmtpd.nix { };
-      opensmtpd-extras = pkgs.opensmtpd-extras.override {
-        # Needed to have PRNG working in chroot (for dkim-signer)
-        openssl = pkgs.libressl;
-      };
-    };
-
+  config = mkIf (cfg.enable && cfg.users != { })
+  {
     system.activationScripts.mailz = ''
       # Make sure SpamAssassin database is present
       if ! [ -d /etc/spamassassin ]; then
@@ -182,25 +176,24 @@ in
     services.opensmtpd = {
       enable = true;
       serverConfiguration = ''
-        filter filter-pause pause
-        filter filter-regex regex "${files.regex}"
-        filter filter-spamassassin spamassassin "-s accept"
-        filter filter-dkim-signer dkim-signer "-d ${cfg.domain}" "-p${cfg.dkimDirectory}/${cfg.domain}/default.private"
-        filter in chain filter-regex filter-spamassassin
-        filter out chain filter-dkim-signer
-
-        pki ${cfg.domain} certificate "/var/lib/acme/${cfg.domain}/fullchain.pem"
+        pki ${cfg.domain} cert "/var/lib/acme/${cfg.domain}/fullchain.pem"
         pki ${cfg.domain} key "/var/lib/acme/${cfg.domain}/key.pem"
 
         table credentials file:${files.credentials}
         table recipients file:${files.recipients}
         table aliases file:${files.aliases}
 
-        listen on 0.0.0.0 port 25 hostname ${cfg.domain} filter in tls pki ${cfg.domain}
-        listen on 0.0.0.0 port 12566 hostname ${cfg.domain} filter out tls-require pki ${cfg.domain} auth <credentials>
+        listen on 0.0.0.0 port 25 hostname ${cfg.domain} tls pki ${cfg.domain}
+        listen on 0.0.0.0 port 12566 hostname ${cfg.domain} tls-require pki ${cfg.domain} auth <credentials>
 
-        accept from any for domain "${cfg.domain}" recipient <recipients> alias <aliases> deliver to lmtp localhost:24
-        accept from local for any relay
+        action "local_mail" lmtp localhost:24 alias <aliases>
+        action "outbound" relay helo "${cfg.domain}"
+
+        match from any for domain "${cfg.domain}" action "local_mail"
+        match for local action "local_mail"
+
+        match from any auth for any action "outbound"
+        match for any action "outbound"
       '';
       procPackages = [ pkgs.opensmtpd-extras ];
     };
@@ -229,6 +222,10 @@ in
             address = 127.0.0.1 ::1
             port = 24
           }
+        }
+  
+        service imap {
+          vsz_limit = 1024 M
         }
 
         service imap-login {
