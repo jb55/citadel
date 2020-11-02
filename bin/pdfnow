@@ -5,13 +5,12 @@ usage () {
   exit 1
 }
 
-outfile=${1:-"$(mktemp)".pdf}
+outfile="$(mktemp)".pdf
 
 if [ -t 0 ]; then
   [ $# -eq 0 ] && usage
   /home/jb55/bin/pdfsave "$1" "$outfile"
 else
-  outfile="$(mktemp)".pdf
   ext="${1:-markdown}"
   /home/jb55/bin/pdfsave "$outfile" "$ext"
 fi
