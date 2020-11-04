@@ -16,14 +16,12 @@ extra:
 
   services.atd.enable = true;
 
-  services.logrotate = {
-    enable = true;
-    config = ''
-      dateext
-      dateformat %Y-%m-%d.
-      compresscmd ${pkgs.xz.bin}/bin/xz
-      uncompresscmd ${pkgs.xz.bin}/bin/unxz
-      compressext .xz
-    '';
-  };
+  services.logrotate.enable = true;
+  services.logrotate.extraConfig = ''
+    dateext
+    dateformat %Y-%m-%d.
+    compresscmd ${pkgs.xz.bin}/bin/xz
+    uncompresscmd ${pkgs.xz.bin}/bin/unxz
+    compressext .xz
+  '';
 }
