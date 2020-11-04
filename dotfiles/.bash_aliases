@@ -139,7 +139,7 @@ pcsv () {
 }
 
 pcsvt () {
-  zebra | columnt "$@" | cat -n | less -R -S
+  columnt "$@" | cat -n | less -R -S
 }
 
 header() {
