@@ -1,2 +1,7 @@
 #!/usr/bin/env sh
+if [ ! -f /proc/spl/kstat/zfs/arcstats ]
+then
+	echo 0
+	exit 0
+fi
 cat /proc/spl/kstat/zfs/arcstats | grep -E ^size | awk '{print $3}'
