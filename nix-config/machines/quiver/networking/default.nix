@@ -63,8 +63,7 @@ in
     };
   };
 
-
-  networking.wireless.userControlled.enable = true;
+  networking.wireless.userControlled.enable = false;
 
   networking.firewall.enable = true;
   networking.firewall.extraCommands = ''
