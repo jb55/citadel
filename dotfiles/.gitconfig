@@ -13,8 +13,8 @@
   smtpServer=/home/jb55/bin/sendmail
 [url "git@github.com:"]
   insteadOf = gh:
-[url "git@gl.blockstream.io:blockstream/"]
-  insteadOf = gl:
+[url "git@git.sr.ht:~"]
+  insteadOf = srht:
 [url "git@gitlab.com:"]
   insteadOf = gitlab:
 [url "jb55.com:git/"]
