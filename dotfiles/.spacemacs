@@ -461,6 +461,10 @@ before packages are loaded."
 
   (setq-default olivetti-body-width 80)
 
+  (load "view.el")
+  (define-key evil-motion-state-map (kbd "C-d") 'View-scroll-page-forward)
+  (define-key evil-motion-state-map (kbd "C-u") 'View-scroll-page-backward)
+
   (spacemacs/set-leader-keys
     "Ju" 'jb55/unhighlight-line
     "J]" 'jb55/forward-page-recenter-top
