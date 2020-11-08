@@ -32,8 +32,8 @@
     gtags
     html
     react
-    idris
-    ivy
+    ;idris
+    ;ivy
     javascript
     latex
     lua
@@ -47,7 +47,7 @@
     racket
     rust
     shell-scripts
-    sml
+    ;sml
     spacemacs-layouts
     sql
     syntax-checking
@@ -68,10 +68,10 @@
      forge
      github-review
      glsl-mode
-     gnu-apl-mode
+     ;gnu-apl-mode
      graphviz-dot-mode
      helm-pages
-     jade-mode
+     ;jade-mode
      markdown-mode
      mastodon
      meson-mode
@@ -80,7 +80,7 @@
      org-kanban
      org-clock-csv
      protobuf-mode
-     shen-mode
+     ;shen-mode
      w3m
      weechat
 
