@@ -8,8 +8,8 @@ filetype plugin indent on
 set modeline
 set modelines=1
 set nocp
-set ts=2
-set shiftwidth=2
+set tabstop=8
+set shiftwidth=8
 set expandtab
 set ai
 set hlsearch
