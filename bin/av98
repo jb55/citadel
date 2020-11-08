@@ -85,8 +85,8 @@ _MIME_HANDLERS = {
     "audio/ogg":            "ogg123 %s",
     "image/*":              "sxiv %s",
     "text/html":            "lynx -dump -force_html %s",
-    "text/plain":           "less %s",
-    "text/gemini":          "less %s",
+    "text/plain":           "less --quit-if-one-screen %s",
+    "text/gemini":          "less --quit-if-one-screen %s",
 }
 
 # monkey-patch Gemini support in urllib.parse
