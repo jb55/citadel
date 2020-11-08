@@ -80,8 +80,8 @@ ghclone () {
   cd "$(gh-clone "$@")"
 }
 
-glclone () {
-  cd "$(gl-clone "$@")"
+srhtclone () {
+  cd "$(srht-clone "$@")"
 }
 
 cdnp () {
