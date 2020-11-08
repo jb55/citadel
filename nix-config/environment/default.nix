@@ -20,6 +20,11 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
        sharefile
        snap
        btcs
+       cmdtree
+       zoom-link-opener
+       zebra
+       viscal
+       datefmt
     ];
     myHaskellPackages = with pkgs.haskellPackages; [
       #skeletons
