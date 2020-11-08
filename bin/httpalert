@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+awk '/67e43f8b407c53e6c5a7aaa38a1ec8e9/ { OK=1 } /^$/ { if (OK == 1) GO=1 } GO==1 { print $0 }' | 
+  jq -r '.payload | "circleci - \(.workflows.job_name) - \(.reponame) - \(.outcome)"' | 
+  /home/jb55/bin/sendalert 
+
+printf 'HTTP/1.0 200\n'
+printf 'Content-Type: text/plain\n'
+printf 'Content-Length: 0\n'
+printf '\n'
