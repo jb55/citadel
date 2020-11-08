@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-exec sacc gopher://gopher.black/1/moku-pona
+exec $GOPHERCLIENT gopher://gopher.black/1/moku-pona
