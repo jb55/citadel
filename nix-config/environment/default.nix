@@ -10,22 +10,22 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
     nixify = pkgs.nur.repos.kampka.nixify;
     myPackages = with jb55pkgs; [
        bcalc
+       btcs
+       cmdtree
        csv-delim
        csv-scripts
+       datefmt
        dbopen
        extname
        kindle-send
        mandown
+       ratio
        samp
        sharefile
        snap
-       btcs
-       cmdtree
-       zoom-link-opener
-       zebra
        viscal
-       datefmt
-       ratio
+       zebra
+       zoom-link-opener
     ];
     myHaskellPackages = with pkgs.haskellPackages; [
       #skeletons
