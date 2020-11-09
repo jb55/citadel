@@ -5,6 +5,6 @@ if [ -z "$2" ]; then
   exit 1
 fi
 
-curl -s "$1" | pandoc -f html -t plain - -o "$2"
+curl -sL "$1" | pandoc -f html -t plain - -o "$2"
 
 exec lessr "$2"
