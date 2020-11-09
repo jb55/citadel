@@ -25,6 +25,7 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
        zebra
        viscal
        datefmt
+       ratio
     ];
     myHaskellPackages = with pkgs.haskellPackages; [
       #skeletons
