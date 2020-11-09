@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+exec zoom-link-opener $(cat ~/var/steamoji-zoom-standup)
