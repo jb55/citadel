@@ -105,6 +105,7 @@ config.set('url.searchengines', {
   'bgg': 'http://www.boardgamegeek.com/metasearch.php?searchtype=game&search={}',
   'pgp': 'http://pgp.mit.edu/pks/lookup?search={}&op=index',
   'gh': 'https://github.com/{}',
+  'srht': 'https://sr.ht/~{}',
   'cd': 'https://docs.rs/{}/latest',
   'crate': 'https://crates.io/crates/{}',
   'repo': 'http://npmrepo.com/{}',
