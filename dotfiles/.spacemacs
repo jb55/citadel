@@ -33,7 +33,7 @@
     html
     react
     ;idris
-    ;ivy
+    ivy
     javascript
     latex
     lua
