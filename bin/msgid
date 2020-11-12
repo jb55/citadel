@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+ts=$(date +'%s.%N')
+printf "<%s-jb55@jb55.com>\n" "$ts"
