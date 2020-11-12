@@ -92,3 +92,5 @@
 	user = jb55
 [commit]
 	template = /home/jb55/.git-template
+[grep]
+	lineNumber = true
