@@ -59,6 +59,7 @@
  '(flycheck-pos-tip-timeout 2)
  '(flycheck-standard-error-navigation t)
  '(fringe-mode '(1 . 1) nil (fringe))
+ '(global-display-fill-column-indicator-mode t)
  '(global-hl-line-mode t)
  '(gnus-select-method '(nntp "nntp.lore.kernel.org"))
  '(grep-find-ignored-directories
