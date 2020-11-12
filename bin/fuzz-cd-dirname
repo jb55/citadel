@@ -1,2 +1,2 @@
-#!/usr/bin/env sh
-exec fuzz dirname
+#!/usr/bin/env bash
+file="$(fuzz dirname)" && echo "cd \"$file\""

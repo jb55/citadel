@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-file=$(cutt -f3 $HOME/dotfiles/commands | $FUZZER) && sedit "$file"
+file=$(cutt -f3 $HOME/dotfiles/commands | $FUZZER) && echo "sedit $file"

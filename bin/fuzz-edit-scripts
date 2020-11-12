@@ -2,4 +2,4 @@
 # TODO: edit any script in path
 set -e
 file="$(ls -1 $HOME/bin | $FUZZER)"
-$EDITOR "$HOME/bin/$file" 
+echo $EDITOR "$HOME/bin/$file" 

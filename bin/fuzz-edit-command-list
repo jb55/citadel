@@ -1,2 +1,2 @@
 #!/usr/bin/env sh
-exec $EDITOR $HOME/dotfiles/commands
+echo $EDITOR $HOME/dotfiles/commands

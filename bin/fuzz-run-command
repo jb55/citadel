@@ -1,9 +1,19 @@
 #!/usr/bin/env bash
-res=$($FUZZER -q ^ < $HOME/dotfiles/commands) &&
-cmd=$(cutt -f3 <<<"$res")
-after=$(cutt -f4 <<<"$res")
-if [ -z "$after" ]; then
-  $cmd
-else
-  $after $($cmd)
-fi
+
+function runner() {
+  local res
+  local get_cmd
+  local fhist
+  local cmd
+  res=$($FUZZER --select-1 --exit-0 -q ^"$@" < $HOME/dotfiles/commands) &&
+  get_cmd=$(cutt -f3 <<<"$res") || return
+  fhist="$HOME/.fuzzhist"
+  touch "$fhist"
+  cmd="$($get_cmd)"
+  if [ -n "$cmd" ]; then
+    echo "$cmd" >> "$fhist"
+    eval $cmd
+  fi
+}
+
+runner "$@"

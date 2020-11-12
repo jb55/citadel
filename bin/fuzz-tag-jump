@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+<tags sed -En '/^!/d;s,^([^\t]+).*,\1,p' | sort -u | $FUZZER

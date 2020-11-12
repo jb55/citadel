@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+set -e
+file=$(rg --files | $FUZZER | xargs readlink -f) 
+echo $EDITOR \"$file\"
