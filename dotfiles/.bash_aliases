@@ -38,6 +38,7 @@ md () {
 
 alias e="edit -n"
 alias g=git
+alias c=cmdtree
 alias vim=nvim
 alias feh="feh --conversion-timeout 2"
 alias info="info --vi-keys"
