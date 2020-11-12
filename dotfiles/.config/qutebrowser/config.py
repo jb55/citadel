@@ -52,8 +52,8 @@ c.bindings.key_mappings = {'<Ctrl+6>': '<Ctrl+^>', '<Ctrl+Enter>': '<Ctrl+Return
 # Bindings for normal mode
 config.unbind('r')
 config.bind(')', 'zoom 150')
-config.bind('d', 'scroll-page 0 1')
-config.bind('u', 'scroll-page 0 -1')
+config.bind('d', 'scroll-page 0 0.9')
+config.bind('u', 'scroll-page 0 -0.9')
 #config.bind('<Ctrl-d>', 'scroll-page 0 1')
 #config.bind('<Ctrl-u>', 'scroll-page 0 -1')
 #config.bind('d', 'repeat 10 scroll down')
