@@ -1,4 +1,15 @@
 
+fze() {
+  local file
+  file=$(git ls-files | fzf) && edit "$file"
+}
+
+# ctags jumper
+fte() {
+  <tags sed -En '/^!/d;s,^([^\t]+).*,\1,p'
+  ctags_list | fzf
+}
+
 # fd - cd to selected directory
 fd() {
   local dir
@@ -40,9 +51,13 @@ ftd() {
   cd "$res"
 }
 
+ctags_list() {
+	<tags sed -En '/^!/d;s,^([^\t]+).*,\1,p'
+}
+
 # ctags less jumper
 fct() {
-  <tags sed -En '/^!/d;s,^([^\t]+).*,\1,p' | fzf | xargs -I{} less -t{}
+   ctags_list | fzf | xargs -I{} less -t{}
 }
 
 ft() {
@@ -55,17 +70,9 @@ fto() {
   open "$(findlt ${1:-1} f)"
 }
 
-fte() {
-  edit "$(findlt ${1:-1} f)"
-}
-
 # fzt - cd to most recently accessed dirs
 fzt() {
   local dir=$(z -et | fzcmd) && cd "$dir"
-}
-
-fze() {
-  fzcmd | xargs edit
 }
 
 # fz helper
