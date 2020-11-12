@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# TODO: edit any script in path
+set -e
+file="$(ls -1 $HOME/bin | $FUZZER)"
+$EDITOR "$HOME/bin/$file" 

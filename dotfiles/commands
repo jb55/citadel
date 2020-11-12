@@ -1,0 +1,4 @@
+cd	find directory	fuzz-cd-dirname	cd
+efcl	edit fuzz command list	fuzz-edit-command-list
+efc	edit fuzz command	fuzz-edit-command
+ec	edit commands	fuzz-edit-scripts
