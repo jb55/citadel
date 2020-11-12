@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-echo "magnet:?xt=urn:btih:$1" 
+echo "magnet:?xt=urn:${2:-btih}:$1"
