@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
 
+email=${1:-"jb55@jb55.com"}
 ts=$(date +'%s.%N')
-printf "<%s-jb55@jb55.com>\n" "$ts"
+printf "<%s-%s>\n" "$ts" "$email"
