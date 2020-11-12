@@ -325,10 +325,16 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
   (add-hook 'message-send-hook 'notmuch-always-bcc-sender)
   ;; (load "~/src/elisp/overlays/overlays.el")
 
+  (defun cd-gh (&optional repo)
+    (interactive)
+    (let ((rep (or repo (read-string "cd github owner/repo: "))))
+      (when (not (eq 0 (length rep)))
+        (cd (concat "/home/jb55/dev/github/" rep)))))
+
   (defun cd-repo ()
     (interactive)
     (let ((repo (notmuch-repo-from-message)))
-      (cd (concat "/home/jb55/dev/github/" repo))))
+      (cd-gh repo)))
 
   (defun colorize-compilation-buffer ()
     (toggle-read-only)
