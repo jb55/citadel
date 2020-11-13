@@ -3,7 +3,6 @@ inoremap <special> fd <Esc>
 
 set tabstop=8
 set shiftwidth=8
-set expandtab
 set ai
 set hlsearch
 set colorcolumn=80
