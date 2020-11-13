@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+set -e
+
+res=$(notmuch-inbox | $FUZZER +m)
+
+thread=$(awk '{print $1}' <<<"$res")
+
+echo notmuch show --format=mbox $thread \| less 

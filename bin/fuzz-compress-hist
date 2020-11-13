@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+touch $HOME/.fuzzhist
+tac $HOME/.fuzzhist | awk '!visited[$0]++' | tac > $HOME/.fuzzhist.2
+mv $HOME/.fuzzhist.2 $HOME/.fuzzhist

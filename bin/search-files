@@ -1,9 +1,12 @@
 #!/usr/bin/env bash
 set -e
-export INITIAL_QUERY="${INITIAL_QUERY:-$@}"
+INITIAL_QUERY=""
+if [ -n "$1" ]; then
+        INITIAL_QUERY="${@: -1}"
+fi
 export RG_PREFIX="rg --column --line-number --no-heading --color=always --smart-case "
-export FZF_DEFAULT_COMMAND="$RG_PREFIX '$INITIAL_QUERY'"
-res=$(fzf --bind "change:reload:$RG_PREFIX {q} || true" --exit-0 --ansi --phony --query "$INITIAL_QUERY")
+export FZF_DEFAULT_COMMAND="$RG_PREFIX $@"
+res=$(fzf --bind "change:reload:$RG_PREFIX {q} || true" --ansi --phony --query "$INITIAL_QUERY")
 file=$(readlink -f $(cut -d: -f1 <<<"$res"))
 line=$(cut -d: -f2 <<<"$res")
 
