@@ -26,8 +26,8 @@ in rec {
 
   cmdtree = fetch {
     repo = "cmdtree";
-    rev  = "d74cc76349bcd42eda425041543883066e4a7217"; # use my config
-    sha256 = "0xsakwl6qbbq1ig2f21mg45ygwizdfadm52yj5dvgnlmgligpcfm";
+    rev  = "cb735b87a79b4b98018afa88e22bba000e091e6d"; # use my config
+    sha256 = "1i32dysk3a505k9y9phrrl04yv53llxn6mxcdl7789d9c8dqfkyl";
   };
 
   zoom-link-opener = fetch {
