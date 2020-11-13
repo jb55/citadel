@@ -10,13 +10,13 @@ function runner() {
     prefix="$1"
     shift
   fi
-  res=$($FUZZER +i --select-1 --exit-0 -q ^"$prefix" < $HOME/dotfiles/commands) &&
+  res=$($FUZZER +i --select-1 --exit-0 -q ^$prefix < $HOME/dotfiles/commands) &&
   get_cmd=$(cutt -f3 <<<"$res") || return
   fhist="$HOME/.fuzzhist"
   touch "$fhist"
   export ORIG_OPTS="$FZF_DEFAULT_OPTS"
   export INITIAL_QUERY="$@"
-  if [ "$@" ]; then
+  if [ -n "$@" ]; then
     export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS -q '$@'"
   fi
   cmd="$(eval $get_cmd)"
