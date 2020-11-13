@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+set -eou pipefail
+
+threads=$(notmuch-inbox | $FUZZER -m | awk '{print $1}')
+
+echo notmuch tag -inbox $threads

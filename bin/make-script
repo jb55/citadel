@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -e
+name=$1
+if [ -z "$name" ]; then
+	printf 'make ~/bin/'
+	read name
+fi
+
+if [ -z "$name" ]; then
+	exit 1
+fi
+
+$EDITOR ~/bin/$name
+if [ -f ~/bin/$name ]; then
+	chmod +x ~/bin/$name
+fi

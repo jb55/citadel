@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+set -eou pipefail
+
+if [ ! -f .build-result ]; then
+	printf "no build result found\n" >&2
+	exit 1
+fi
+
+<.build-result grep : | fuzzer "$@" | file-jump

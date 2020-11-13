@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+arg=$1
+
+if [ -n "$arg" ]; then
+	env FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --exit-0 --select-1 -q '$arg'" $FUZZER
+else
+	$FUZZER
+fi

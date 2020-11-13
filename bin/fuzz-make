@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+set -eou pipefail
+
+cmd=$(grep '^[^#[:space:]].*:' Makefile | grep -v PHONY | cut -d: -f1 | sort | fuzzer "$@")
+
+echo make $cmd
