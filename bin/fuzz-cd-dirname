@@ -1,2 +1,8 @@
 #!/usr/bin/env bash
-file="$(fuzz dirname)" && echo "cd \"$file\""
+set -e
+ROOT="$PWD"
+if [ -n "$1" ]; then
+	cd "$1"
+	ROOT="$1"
+fi
+file="$(fuzz dirname)" && echo "cd \"$ROOT/$file\""
