@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
+FUZZ_HISTSIZE=${FUZZ_HISTSIZE:-10000}
 touch $HOME/.fuzzhist
-<$HOME/.fuzzhist uniq | tail -n 10000 > $HOME/.fuzzhist.2
+tail -n $FUZZ_HISTSIZE | tac $HOME/.fuzzhist | awk '!visited[$0]++' | tac > $HOME/.fuzzhist.2
 mv $HOME/.fuzzhist.2 $HOME/.fuzzhist
 cmd=$(<$HOME/.fuzzhist $FUZZER --tac) && 
 echo $cmd
