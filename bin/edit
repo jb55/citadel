@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
+exec nvim "$@"
 
-if [ -t 0 ]; then
-	exec nvim "$@"
-else
-	exec urxvtc -e nvim "$@"
-fi
+#jif [ -t 0 ]; then
+#jelse
+#j	exec urxvtc -e nvim "$@"
+#jfi
