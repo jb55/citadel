@@ -2,4 +2,4 @@
 
 set -eou pipefail
 
-sed -n 's,^[[:space:]]*\([^:]\+\):\([0-9]\+\).*,edit "\1" +\2,p'
+exec sed -n 's,^[[:space:]]*\([^:]\+\):\([0-9]\+\).*,edit "\1" +\2,p'
