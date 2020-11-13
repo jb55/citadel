@@ -31,6 +31,7 @@
   recentrepo = /Users/jb55/src/js/titania
 [alias]
   a = add
+  b = branch
   au = add -u
   f = fetch -p
   br = symbolic-ref --short HEAD

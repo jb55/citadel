@@ -11,3 +11,4 @@ Ss	systemd start	fuzz-systemd-start
 SS	systemd stop	fuzz-systemd-stop
 h	run fuzz hist	fuzz-run-hist
 tj	tag jump	fuzz-tag-jump
+gb	git branches	echo git-bvr
