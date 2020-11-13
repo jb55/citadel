@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+set -e
+service=$(systemctl list-units --user --type=service | awk '{print $1}' | sort -u | $FUZZER)
+echo systemctl start --user -u "$service"

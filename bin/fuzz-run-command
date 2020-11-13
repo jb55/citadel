@@ -1,19 +1,30 @@
 #!/usr/bin/env bash
 
 function runner() {
+  local prefix
   local res
   local get_cmd
   local fhist
   local cmd
-  res=$($FUZZER --select-1 --exit-0 -q ^"$@" < $HOME/dotfiles/commands) &&
+  if [ -n "$1" ]; then
+    prefix="$1"
+    shift
+  fi
+  res=$($FUZZER +i --select-1 --exit-0 -q ^"$prefix" < $HOME/dotfiles/commands) &&
   get_cmd=$(cutt -f3 <<<"$res") || return
   fhist="$HOME/.fuzzhist"
   touch "$fhist"
-  cmd="$($get_cmd)"
+  export ORIG_OPTS="$FZF_DEFAULT_OPTS"
+  export INITIAL_QUERY="$@"
+  if [ "$@" ]; then
+    export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS -q '$@'"
+  fi
+  cmd="$(eval $get_cmd)"
   if [ -n "$cmd" ]; then
     echo "$cmd" >> "$fhist"
     eval $cmd
   fi
+  export FZF_DEFAULT_OPTS="$ORIG_OPTS"
 }
 
 runner "$@"

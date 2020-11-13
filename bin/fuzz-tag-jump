@@ -1,2 +1,6 @@
 #!/usr/bin/env bash
-<tags sed -En '/^!/d;s,^([^\t]+).*,\1,p' | sort -u | $FUZZER
+set -e
+if [ -f tags ]; then
+  file="$(<tags sed -En '/^!/d;s,^([^\t]+).*,\1,p' | sort -u | $FUZZER)"
+  echo $EDITOR \"$(readlink -f "$file")\"
+fi

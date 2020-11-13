@@ -1,5 +1,13 @@
-cd	find directory	fuzz-cd-dirname	cd
-efcl	edit fuzz command list	fuzz-edit-command-list
-efc	edit fuzz command	fuzz-edit-command
+cd	find directory	fuzz-cd-dirname
+ef	edit file	fuzz-edit-file
+eFl	edit fuzz command list	fuzz-edit-command-list
+eFc	edit fuzz command	fuzz-edit-command
+sFc	show fuzz command	fuzz-show-fuzz-command
 ec	edit commands	fuzz-edit-scripts
 sc	show command	fuzz-show-script
+sf	search files	fuzz-search-files
+Sr	systemd restart	fuzz-systemd-restart
+Ss	systemd start	fuzz-systemd-start
+SS	systemd stop	fuzz-systemd-stop
+h	run fuzz hist	fuzz-run-hist
+tj	tag jump	fuzz-tag-jump

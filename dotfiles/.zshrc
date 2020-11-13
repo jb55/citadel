@@ -21,8 +21,8 @@ zstyle ':completion:*:directory-stack' list-colors '=(#b) #([0-9]#)*( *)==95=38;
 # short ESC delay
 export KEYTIMEOUT=1
 
+
 bindkey "^R" history-incremental-search-backward
-bindkey "^F" history-incremental-search-forward
 
 # history settings
 export HISTSIZE=50000
@@ -87,6 +87,13 @@ export BARI=$HOME/Dropbox/shared/bari
 
 ALIASES="$HOME/.bash_aliases"
 [ -e "$ALIASES" ] && source "$ALIASES"
+
+runthefuzzyo_hist () { f h }
+runthefuzzyo () { f "$@" }
+zle -N runthefuzzyo
+zle -N runthefuzzyo_hist
+bindkey "^F" runthefuzzyo
+bindkey "^H" runthefuzzyo_hist
 
 DIRCOLORS="$HOME/.dircolors"
 [ -e "$DIRCOLORS" ] && eval "$(dircolors -b "$DIRCOLORS")"

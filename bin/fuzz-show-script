@@ -1,2 +1,4 @@
 #!/usr/bin/env sh
-file="$(ls -1 "$HOME/bin" | $FUZZER)" && cat "$HOME/bin/$file" 
+set -e
+file="$(ls -1 "$HOME/bin" | $FUZZER)"
+echo cat \"$HOME/bin/$file\"

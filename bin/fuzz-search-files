@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+set -e
+res="$(search-files)"
+echo $EDITOR $res
