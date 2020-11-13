@@ -15,17 +15,11 @@ function runner() {
   get_cmd="$get_cmd $@"
   fhist="$HOME/.fuzzhist"
   touch "$fhist"
-  export ORIG_OPTS="$FZF_DEFAULT_OPTS"
-  export INITIAL_QUERY="$@"
-  if [ -n "$@" ]; then
-    export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS -q '$@'"
-  fi
   cmd="$(eval $get_cmd)"
   if [ -n "$cmd" ]; then
     echo "$cmd" >> "$fhist"
     eval $cmd
   fi
-  export FZF_DEFAULT_OPTS="$ORIG_OPTS"
 }
 
 runner "$@"

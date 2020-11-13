@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 set -e
-file=$(rg --files "$1" | $FUZZER)
+file=$(rg --files "${1:-.}" | $FUZZER)
 echo $EDITOR \"$(readlink -f $file)\"
