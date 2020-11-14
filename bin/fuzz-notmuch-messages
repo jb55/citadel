@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+set -eou pipefail
+
+search_id=$(fuzz-notmuch-query-messages)
+
+rest="notmuch-show-pretty | less"
+id=$(eval "$search_id")
+fuzz-record-command "$search_id | xargs notmuch show | $rest"
+
+echo "notmuch show $id | $rest"

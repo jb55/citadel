@@ -1,5 +1,6 @@
 cd	change directory	fuzz-cd-dirname
-ef	edit file	fuzz-edit-file
+pf	edit file	fuzz-edit-file
+rf	recent files	fuzz-recent-files
 eFl	edit fuzz command list	fuzz-edit-command-list
 eFc	edit fuzz command	fuzz-edit-command
 sFc	show fuzz command	fuzz-show-fuzz-command
@@ -11,7 +12,7 @@ cr	compile repeat	fuzz-compile-repeat
 ce	compile error	fuzz-compile-error
 cs	compile show build	echo cat .build-result
 m	make	fuzz-make
-sf	search files	fuzz-search-files
+sp	search project	fuzz-search-files
 Sr	systemd restart	fuzz-systemd-restart
 Ss	systemd start	fuzz-systemd-start
 SS	systemd stop	fuzz-systemd-stop
@@ -19,5 +20,8 @@ h	run fuzz hist	fuzz-run-hist
 H	get fuzz hist	fuzz-get-hist
 tj	tag jump	fuzz-tag-jump
 gb	git branches	echo git-bvr
-ni	notmuch inbox	fuzz-notmuch-inbox
-na	notmuch archive	fuzz-notmuch-archive
+nt	notmuch threads	fuzz-notmuch-threads
+nm	notmuch messages	fuzz-notmuch-messages
+nat	notmuch archive threads	fuzz-notmuch-archive
+nam	notmuch archive messages	fuzz-notmuch-archive-messages
+nq	notmuch query	fuzz-notmuch-query

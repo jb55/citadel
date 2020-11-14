@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 set -e
-res=$(<$HOME/dotfiles/commands $FUZZER)
+res=$(<$HOME/dotfiles/commands fuzzer "$@")
 echo sedit "$(cutt -f3 <<<$res)"

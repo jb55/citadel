@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+set -eou pipefail
+query=$(notmuch queries | $FUZZER)
+echo notmuch search "$@" "$query"

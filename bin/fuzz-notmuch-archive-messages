@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+set -eou pipefail
+
+ids=$(eval "$(fuzz-notmuch-query-messages)")
+
+echo notmuch tag -inbox $ids

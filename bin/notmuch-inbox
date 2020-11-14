@@ -1,2 +1,0 @@
-#!/usr/bin/env bash
-exec notmuch search "$@" tag:inbox and not tag:filed

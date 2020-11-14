@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 set -e
 fuzz-compress-hist
-cmd=$(<$HOME/.fuzzhist $FUZZER --tac)
-echo echo \"$cmd\"
+cmd_=$(<$HOME/.fuzzhist $FUZZER --tac)
+printf "echo \"%s\"\n" "$cmd_"

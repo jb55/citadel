@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -eou pipefail
+fhist="$HOME/.fuzzhist"
+touch "$fhist"
+cmd="$@"
+if [ -n "$cmd" ]; then
+  echo "$cmd" >> "$fhist"
+fi

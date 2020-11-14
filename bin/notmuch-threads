@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+set -eou pipefail
+
+notmuch query | $FUZZER
+<<<"$threads" $FUZZER +m | awk '{print $1}'

@@ -2,6 +2,9 @@
 
 set -eou pipefail
 
-threads=$(notmuch-inbox | $FUZZER -m | awk '{print $1}')
+thread_search=$(fuzz-notmuch-query-thread)
+
+threads=$(eval "$thread_search")
+fuzz-record-command "$thread_search | xargs notmuch tag -inbox"
 
 echo notmuch tag -inbox $threads

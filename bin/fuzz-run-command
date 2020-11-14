@@ -13,11 +13,9 @@ function runner() {
   res=$($FUZZER +i --select-1 --exit-0 -q ^$prefix < $HOME/dotfiles/commands) &&
   get_cmd=$(cutt -f3 <<<"$res") || return
   get_cmd="$get_cmd $@"
-  fhist="$HOME/.fuzzhist"
-  touch "$fhist"
   cmd="$(eval $get_cmd)"
+  fuzz-record-command "$cmd"
   if [ -n "$cmd" ]; then
-    echo "$cmd" >> "$fhist"
     eval $cmd
   fi
 }
