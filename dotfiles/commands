@@ -20,8 +20,7 @@ h	run fuzz hist	fuzz-run-hist
 H	get fuzz hist	fuzz-get-hist
 tj	tag jump	fuzz-tag-jump
 gb	git branches	echo git-bvr
+ni	notmuch inbox	fuzz-notmuch-inbox
 nt	notmuch threads	fuzz-notmuch-threads
-nm	notmuch messages	fuzz-notmuch-messages
-nat	notmuch archive threads	fuzz-notmuch-archive
-nam	notmuch archive messages	fuzz-notmuch-archive-messages
+na	notmuch archive threads	fuzz-notmuch-archive
 nq	notmuch query	fuzz-notmuch-query
