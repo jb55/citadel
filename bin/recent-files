@@ -1,2 +1,2 @@
 #!/usr/bin/env sh
-exec grep ^edit ~/.fuzzhist
+grep ^edit ~/.fuzzhist | tac

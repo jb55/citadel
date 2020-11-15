@@ -6,5 +6,5 @@ thread_search=$(fuzz-notmuch-query-thread)
 
 rest="notmuch-show-pretty | less"
 thread=$(eval "$thread_search")
-fuzz-record-command "res=\$($thread_search) && <<<\$res xargs notmuch show | $rest"
+fuzz-record-command "res=\$($thread_search) && notmuch show \$res | $rest"
 echo "notmuch show $thread | $rest"

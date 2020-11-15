@@ -2,4 +2,4 @@
 set -eou pipefail
 
 search_query=$(fuzz-notmuch-query --output=summary --format=json)
-echo "$search_query | jq -rcC '.[] | [.date_relative,.subject,.authors,.query[0]] | @tsv' | $FUZZER -m | cutt -f4"
+echo "$search_query | notmuch-thread-table | $FUZZER -m | cutt -f4"

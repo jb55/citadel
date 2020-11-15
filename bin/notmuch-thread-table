@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+exec jq -rcC '.[] | [.date_relative,.subject,.authors,.thread] | @tsv'

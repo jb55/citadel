@@ -5,6 +5,6 @@ set -eou pipefail
 thread_search=$(fuzz-notmuch-query-thread)
 
 threads=$(eval "$thread_search")
-fuzz-record-command "$thread_search | xargs notmuch tag -inbox"
+fuzz-record-command "res=\$($thread_search) && notmuch tag -inbox \$res"
 
 echo notmuch tag -inbox $threads
