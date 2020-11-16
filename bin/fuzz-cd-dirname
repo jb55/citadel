@@ -1,8 +1,14 @@
 #!/usr/bin/env bash
-set -e
+set -eou pipefail
+
+ARG=${1:-""}
 ROOT="$PWD"
-if [ -n "$1" ]; then
-	cd "$1"
-	ROOT="$1"
+if [ -n "$ARG" ]; then
+	cd "$ARG"
+	ROOT="$ARG"
 fi
-file="$(fuzz dirname)" && echo "cd \"$ROOT/$file\""
+
+file="$($FUZZER)"
+file="$(dirname "$file")"
+
+echo cd \"$ROOT/$file\"

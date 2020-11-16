@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+set -eou pipefail
+threads_cmd="notmuch search --format=json ${@:-query:inbox} | $(fuzz-notmuch-select-threads)"
+threads=$(eval "$threads_cmd")
+fuzz-record-command "threads=\$($threads_cmd) && notmuch tag -inbox \$threads"
+echo notmuch tag -inbox $threads

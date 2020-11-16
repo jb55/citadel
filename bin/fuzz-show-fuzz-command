@@ -1,2 +1,4 @@
 #!/usr/bin/env bash
-file=$(cutt -f3 $HOME/dotfiles/commands | $FUZZER) && dog "$file"
+set -eou pipefail
+file=$(cutt -f3 $HOME/dotfiles/commands | $FUZZER)
+echo dog "$file"

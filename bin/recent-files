@@ -1,2 +1,3 @@
 #!/usr/bin/env sh
+fuzz-compress-hist
 grep ^edit ~/.fuzzhist | tac
