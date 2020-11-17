@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 set -eou pipefail
-threads_cmd="notmuch search --format=json ${@:-query:inbox} | $(fuzz-notmuch-select-threads)"
-threads=$(eval "$threads_cmd")
-rest="notmuch-show-pretty | less"
-fuzz-record-command "threads=\$($threads_cmd) && notmuch show \$threads | $rest"
-echo "notmuch show $threads | $rest"
+thread_cmd="notmuch search --format=json ${@:-query:inbox} | $(fuzz-notmuch-select-threads)"
+thread=$(eval "$thread_cmd")
+fuzz-record-command "thread=\$($thread_cmd) && notmuch-thread-reader \$thread"
+echo "notmuch-thread-reader $thread"

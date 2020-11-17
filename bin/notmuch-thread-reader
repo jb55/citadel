@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -eo pipefail
+if [ -z $1 ]; then
+	printf "usage: notmuch-thread-reader <thread-id>\n"
+	exit 1
+fi
+notmuch show $1 | notmuch-show-pretty > /tmp/$1
+lessr /tmp/$1
