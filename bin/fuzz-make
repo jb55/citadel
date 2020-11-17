@@ -2,6 +2,7 @@
 
 set -eou pipefail
 
-cmd=$(grep '^[^#[:space:]].*:' Makefile | grep -v PHONY | cut -d: -f1 | sort | fuzzer "$@")
+cmd=$(grep '^[^#[:space:]].*:' Makefile | grep -v PHONY | cut -d: -f1 | sort | 
+	env FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --select-1 --exit-0" fuzzer "$@")
 
 echo make $cmd

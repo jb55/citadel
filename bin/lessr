@@ -4,9 +4,10 @@ dir=$(dirname "$1")
 base=$(basename "$1")
 
 export LESSHISTFILE="$dir/.$base.hst"
+touch $ESSHISTFILE || :
 
 # use a fallback dir if it's not writable
-if [[ ! -w "$LESSHISTFILE" ]]
+if [ ! -w "$LESSHISTFILE" ]
 then
     dir="$HOME/var/marks"
     mkdir -p "$dir"

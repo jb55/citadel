@@ -1,5 +1,7 @@
 # Setup fzf
 # ---------
+export FZF_DEFAULT_OPTS="-e --no-sort"
+
 if [[ ! "$PATH" == */home/jb55/.fzf/bin* ]]; then
   export PATH="$PATH:/home/jb55/.fzf/bin"
 fi

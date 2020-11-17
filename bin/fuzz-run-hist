@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 set -e
 fuzz-compress-hist
-cmd=$(<$HOME/.fuzzhist $FUZZER --tac)
+cmd=$(<$HOME/.fuzzhist $FUZZER --tac --no-sort)
 echo $cmd

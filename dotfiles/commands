@@ -26,3 +26,4 @@ nt	notmuch threads	fuzz-notmuch-threads
 na	notmuch archive	fuzz-notmuch-archive
 nai	notmuch archive inbox	fuzz-notmuch-archive-inbox
 nq	notmuch query	fuzz-notmuch-query
+z	fz	echo fz
