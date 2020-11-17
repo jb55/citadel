@@ -4,7 +4,7 @@ dir=$(dirname "$1")
 base=$(basename "$1")
 
 export LESSHISTFILE="$dir/.$base.hst"
-touch $ESSHISTFILE || :
+touch $LESSHISTFILE || :
 
 # use a fallback dir if it's not writable
 if [ ! -w "$LESSHISTFILE" ]
