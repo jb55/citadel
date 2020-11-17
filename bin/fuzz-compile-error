@@ -7,4 +7,10 @@ if [ ! -f .build-result ]; then
 	exit 1
 fi
 
-<.build-result grep : | fuzzer "$@" | file-jump
+# todo: determine project language
+LANG=rust
+ERR_OPTS="--exit-0 --preview 'grep -A20 {} .build-result | bat -l $LANG --color=always --highlight-line 1' --preview-window=:wrap:60%"
+
+<.build-result grep -E '[[:space:]]*[^: ]+:[0-9]+.*' | 
+env FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS $ERR_OPTS" fuzzer "$@" | 
+file-jump
