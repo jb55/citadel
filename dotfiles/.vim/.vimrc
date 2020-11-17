@@ -9,7 +9,7 @@ set modeline
 set modelines=1
 set nocp
 set tabstop=8
-set shiftwidth=2
+set shiftwidth=8
 set expandtab
 set ai
 set hlsearch
