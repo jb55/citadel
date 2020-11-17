@@ -40,6 +40,7 @@ let
 
   firewallRules = [
     "nixos-fw -s 10.100.0.1/24,192.168.86.1/24 -p tcp --dport 8080 -j nixos-fw-accept" # dev
+    "nixos-fw -s 10.100.0.1/24 -p tcp --dport 80 -j nixos-fw-accept"
     "nixos-fw -s 192.168.122.218 -p udp --dport 137 -j nixos-fw-accept"
     "nixos-fw -s 192.168.122.218 -p udp --dport 138 -j nixos-fw-accept"
     "nixos-fw -s 192.168.122.218 -p tcp --dport 139 -j nixos-fw-accept"
@@ -94,6 +95,9 @@ in
         }
         { publicKey = "Dp8Df75X8Kh9gd33e+CWyyhOvT4mT0X9ToPwBUEBU1k="; # macos
           allowedIPs = [ "10.100.0.4/32" ];
+        }
+        { publicKey = "N4bIpjNL/IzV59y5KWHiR54n0rAKYcr3/BkVLzCmBBA="; # old-mac
+          allowedIPs = [ "10.100.0.5/32" ];
         }
       ];
     };
