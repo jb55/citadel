@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+notmuch show from:verification@steamoji.com and date:today |
+grep -e '^Your verification' -e ^Date |
+head -n2
