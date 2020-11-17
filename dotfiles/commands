@@ -23,7 +23,7 @@ tj	tag jump	fuzz-tag-jump
 gb	git branches	echo git-bvr
 ni	notmuch inbox	fuzz-notmuch-inbox
 nt	notmuch threads	fuzz-notmuch-threads
-na	notmuch archive	fuzz-notmuch-archive
+nat	notmuch archive	fuzz-notmuch-archive
 nai	notmuch archive inbox	fuzz-notmuch-archive-inbox
 nq	notmuch query	fuzz-notmuch-query
 z	fz	echo fz

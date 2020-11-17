@@ -2,7 +2,7 @@
 
 set -eou pipefail
 
-thread_search=$(fuzz-notmuch-query-thread)
+thread_search=$(fuzz-notmuch-query-thread "$@")
 
 threads=$(eval "$thread_search")
 fuzz-record-command "res=\$($thread_search) && notmuch tag -inbox \$res"

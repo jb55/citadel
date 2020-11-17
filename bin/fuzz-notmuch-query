@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -eou pipefail
 
-query=$(notmuch queries | fuzzer "^query:")
+FUZZ_QUERY=${FUZZ_QUERY:-""}
+query=$(notmuch queries | fuzzer "^query:$FUZZ_QUERY")
 echo notmuch search "$@" "$query"
