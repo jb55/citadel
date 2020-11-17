@@ -41,22 +41,17 @@ export NIX_PATH="dotfiles=$HOME/dotfiles:$NIX_PATH"
 
 # Customize to your needs...
 
-[ -e $HOME/.profile ] && source $HOME/.profile
-
 # other
 export EDITOR="edit"
-export VISUAL="edit-visual"
-export BROWSER="qbrowser"
+export VISUAL="edit"
+export BROWSER="browser"
 export PAGER=less
-export LESS="-R"
 
 # go
 
 export GOPATH=$HOME/dev/gocode
-export RUBYBIN=$HOME/.ruby/1.8/gems/bin
 export PATH=$HOME/bin:$PATH
 export PATH=$HOME/.local/bin:$PATH
-export PATH=$RUBYBIN:$HOME/.npm/bin:$GOPATH/bin:$PATH
 export PATH=$RUBYBIN:$HOME/.npm/bin:$GOPATH/bin:$PATH
 
 # alias
@@ -82,9 +77,6 @@ export GEM_PATH="$GEM_HOME"
 # z
 source "$HOME/bin/z.sh"
 
-export BARI=$HOME/Dropbox/shared/bari
-
-
 ALIASES="$HOME/.bash_aliases"
 [ -e "$ALIASES" ] && source "$ALIASES"
 
@@ -97,8 +89,6 @@ bindkey "^H" runthefuzzyo_hist
 
 DIRCOLORS="$HOME/.dircolors"
 [ -e "$DIRCOLORS" ] && eval "$(dircolors -b "$DIRCOLORS")"
-
-export FZF_DEFAULT_OPTS="--color=light"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
