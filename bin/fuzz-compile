@@ -2,5 +2,5 @@
 
 set -eou pipefail
 
-#make_cmd=$(fuzz-make "$@")
-echo make -j \2\>\&\1\| tee .build-result
+make_target=$(fuzz-make "$@")
+echo make -j $make_target \2\>\&\1\| tee .build-result

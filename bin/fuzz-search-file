@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -eou pipefail
+file=$(rg --files | fuzzer "$@")
+file=$(readlink -f "$file")
+batcmd="bat --color=always \"$file\" | cat -n | $FUZZER --ansi --tac | awk '{print \$1}'"
+fuzz-record-command "$batcmd | xargs -I{} $EDITOR \"$file\" +\{\}"
+line=$(eval $batcmd)
+echo $EDITOR \"$file\" +$line

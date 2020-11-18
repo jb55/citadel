@@ -15,6 +15,7 @@ ce	compile error	fuzz-compile-error
 cs	compile show build	echo cat .build-result
 m	make	fuzz-make
 sp	search project	fuzz-search-files
+ss	search project file	fuzz-search-file
 Sr	systemd restart	fuzz-systemd-restart
 Ss	systemd start	fuzz-systemd-start
 SS	systemd stop	fuzz-systemd-stop
