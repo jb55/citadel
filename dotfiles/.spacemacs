@@ -4,85 +4,22 @@
 ;; It must be stored in your home directory.
 
 (setq jb55/base-layers
-  '((haskell :variables
-             haskell-enable-ghc-mod-support nil
-             haskell-enable-hindent-style "chris-done")
-
-    (c-c++ :variables
-           c-c++-enable-clang-support t
-           c-c++-backend 'rtags
-           )
-
+  '(
     (auto-completion :variables auto-completion-enable-help-tooltip t)
 
 
-    csharp
-    confluence
-    react
-    csv
-    debug
-    elm
-    emacs-lisp
-    emoji
-    finance
-    fsharp
-    git
-    github
-    go
-    gtags
-    html
-    react
-    ;idris
-    ivy
-    javascript
-    latex
-    lua
-    markdown
-    nixos
     notmuch
     (org :variables org-want-todo-bindings t
                     org-enable-trello-support t)
-    purescript
-    python
-    racket
-    rust
-    shell-scripts
     ;sml
     spacemacs-layouts
-    sql
     syntax-checking
-    twitter
-    typescript
-    yaml
-    (org :variables org-want-todo-bindings t)
 
    ))
 
 (setq jb55/additional-packages
-  '( company-irony
-     base16-theme
-     bison-mode
-     envrc
+  '(  envrc
      editor-config
-     emojify
-     forge
-     github-review
-     glsl-mode
-     ;gnu-apl-mode
-     graphviz-dot-mode
-     helm-pages
-     ;jade-mode
-     markdown-mode
-     mastodon
-     meson-mode
-     olivetti
-     org-brain
-     org-kanban
-     org-clock-csv
-     protobuf-mode
-     ;shen-mode
-     w3m
-     weechat
 
      (notmuch
        :location (recipe :fetcher github
