@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+script=$(cat <<EOF
+/^X-/d;
+EOF
+)
+
+exec sed -E "$script"

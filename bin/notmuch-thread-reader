@@ -4,5 +4,6 @@ if [ -z $1 ]; then
 	printf "usage: notmuch-thread-reader <thread-id>\n"
 	exit 1
 fi
-notmuch show $1 | notmuch-show-pretty > /tmp/$1
+notmuch show --format=mbox $1 > /tmp/$1
+sortmail /tmp/$1
 lessr /tmp/$1
