@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+out=$(steamoji-code | tail -n1 | sed -E -n 's,.*([1-9]{6}),\1,p')
+xclip <<<"$out"
+echo "$out"
