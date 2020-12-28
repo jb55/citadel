@@ -21,7 +21,6 @@ zstyle ':completion:*:directory-stack' list-colors '=(#b) #([0-9]#)*( *)==95=38;
 # short ESC delay
 export KEYTIMEOUT=1
 
-
 bindkey "^R" history-incremental-search-backward
 
 # history settings
@@ -29,52 +28,12 @@ export HISTSIZE=50000
 export SAVEHIST=$HISTSIZE
 setopt hist_ignore_all_dups
 
-export NIXPKGS=$HOME/nixpkgs
-export NIX_FILES=$HOME/etc/nix-files
-
-# nix paths
-export NIX_PATH="nixpkgs=$NIXPKGS:$NIX_PATH"
-export NIX_PATH="nixos-config=$NIX_FILES:$NIX_PATH"
-export NIX_PATH="monstercatpkgs=$HOME/etc/monstercatpkgs:$NIX_PATH"
-export NIX_PATH="jb55pkgs=$HOME/etc/jb55pkgs:$NIX_PATH"
-export NIX_PATH="dotfiles=$HOME/dotfiles:$NIX_PATH"
-
-# Customize to your needs...
-
-# other
-export EDITOR="edit"
-export VISUAL="edit"
-export BROWSER="browser"
-export PAGER=less
-
-# go
-
-export GOPATH=$HOME/dev/gocode
-export PATH=$HOME/bin:$PATH
-export PATH=$HOME/.local/bin:$PATH
-export PATH=$RUBYBIN:$HOME/.npm/bin:$GOPATH/bin:$PATH
-
-# alias
-
 # fix ssh agent forwarding in screen
 FIXSSH=$HOME/bin/fixssh
 if [[ $TERM == screen* ]] && [[ -f $FIXSSH ]]; then
   source $FIXSSH
 fi
 
-
-### Added by the Heroku Toolbelt
-export PATH="/usr/local/heroku/bin:$PATH"
-
-PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
-
-export GEM_HOME="$HOME/.ruby/1.8/gems"
-export GEM_PATH="$GEM_HOME"
-
-# added by travis gem
-[ -f /Users/jb55/.travis/travis.sh ] && source /Users/jb55/.travis/travis.sh
-
-# z
 source "$HOME/bin/z.sh"
 
 ALIASES="$HOME/.bash_aliases"
@@ -96,8 +55,5 @@ DIRCOLORS="$HOME/.dircolors"
 
 # undistract-me is great
 [ -e $HOME/dotfiles/zsh/undistract-me.zsh ] && . $HOME/dotfiles/zsh/undistract-me.zsh
-
-# added by travis gem
-[ -f /home/jb55/.travis/travis.sh ] && source /home/jb55/.travis/travis.sh
 
 eval "$(direnv hook zsh)"

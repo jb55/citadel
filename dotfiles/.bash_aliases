@@ -32,13 +32,35 @@ export FZF_CTRL_R_OPTS="-e"
 export FZF_DEFAULT_OPTS="-e"
 export EMACSCLIENT=edit
 
+export NIXPKGS=$HOME/nixpkgs
+
+# nix paths
+export NIX_PATH="nixpkgs=$NIXPKGS:$NIX_PATH"
+export NIX_PATH="nixos-config=$NIX_FILES:$NIX_PATH"
+export NIX_PATH="jb55pkgs=$HOME/etc/jb55pkgs:$NIX_PATH"
+export NIX_PATH="dotfiles=$HOME/dotfiles:$NIX_PATH"
+
+# Customize to your needs...
+
+# other
+export EDITOR="edit"
+export VISUAL="edit"
+export BROWSER="browser"
+export PAGER=less
+
+# go
+
+export GOPATH=$HOME/dev/gocode
+export PATH=$HOME/bin:$PATH
+export PATH=$HOME/.local/bin:$PATH
+
 md () {
     mandown README*
 }
 
 alias e="edit -n"
 alias g=git
-alias f=". fuzz-run-command"
+alias f=fuzz-run-command
 alias vim=nvim
 alias feh="feh --conversion-timeout 2"
 alias info="info --vi-keys"

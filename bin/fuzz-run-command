@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-function runner() {
+function fuzz_runner() {
   local prefix
   local res
   local get_cmd
@@ -16,8 +16,8 @@ function runner() {
   cmd="$(eval $get_cmd)"
   fuzz-record-command "$cmd"
   if [ -n "$cmd" ]; then
-    eval $cmd
+    echo "$cmd"
   fi
 }
 
-runner "$@"
+fuzz_runner "$@"

@@ -2,4 +2,4 @@
 set -e
 fuzz-compress-hist
 cmd_=$(<$HOME/.fuzzhist $FUZZER --tac)
-echo echo -n "$cmd_"
+echo "$cmd_"
