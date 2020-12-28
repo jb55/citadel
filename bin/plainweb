@@ -1,10 +1,17 @@
 #!/usr/bin/env bash
 
-if [ -z "$2" ]; then
-  printf "usage: plainweb <url> <out.txt>\n"
+if [ -z "$1" ]; then
+  printf "usage: plainweb <url>\n"
   exit 1
 fi
 
-curl -sL "$1" | pandoc -f html -t plain - -o "$2"
+HURL="/tmp/$(sha256sum <<<"$1" | awk '{print $1}').txt"
+OUT=${2:-$HURL}
 
-exec lessr "$2"
+if [ ! -f "$HURL" ]; then
+	curl -sL "$1" | pandoc -f html -t plain - -o "$HURL"
+fi
+
+exec lessr "$HURL"
+
+
