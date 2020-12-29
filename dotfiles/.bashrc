@@ -6,8 +6,10 @@ set -o vi
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return
 
-export PS1='$(printf "\n\033[30;1m%3.*s\033[0m$ \033[33m" $? $?)'
+export PS1='$(printf "\x01\033[30;1m\x02%3.*s\x01\033[0m\x02> \x01\033[33m\x02" $? $?)'
 export PS0='\033[0m'
+
+#export PS1='$(printf "\x01\033[30;1m\x02%3.*s\x01\033[0m\x02> " $? $?)'
 
 # don't put duplicate lines in the history. See bash(1) for more options
 export HISTCONTROL=ignoredups
