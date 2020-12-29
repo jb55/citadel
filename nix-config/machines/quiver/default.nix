@@ -25,10 +25,10 @@ extra:
   # telepathy is a garbage fire
   services.telepathy.enable = false;
   services.zerotierone.enable = false;
-  services.mongodb.enable = true;
-  services.redis.enable = true;
-  services.keybase.enable = true;
-  services.mysql.enable = true;
+  services.mongodb.enable = false;
+  services.redis.enable = false;
+  services.keybase.enable = false;
+  services.mysql.enable = false;
   services.mysql.package = pkgs.mariadb;
 
   services.xserver.screenSection = ''
