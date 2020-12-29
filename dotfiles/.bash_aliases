@@ -36,6 +36,7 @@ md () {
     mandown README*
 }
 
+alias t="todo.sh"
 alias e="edit -n"
 alias g=git
 alias f=". fuzz-run-command"
