@@ -6,8 +6,13 @@ set -o vi
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return
 
+
+if [ "$USER" = "jb55" ]; then
+	export PS1='$(printf "%3.*s" $? $?) $ '
+else
+	export PS1="\u@\h$ "
+fi
  
-export PS1="\u@\h:\w\$ "
 
 # don't put duplicate lines in the history. See bash(1) for more options
 export HISTCONTROL=ignoredups
@@ -28,6 +33,8 @@ bind
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 [ -f ~/bin/z.sh ] && source ~/bin/z.sh
 [ -f "$UNDISTRACT" ] && source "$UNDISTRACT"
+
+eval "$(direnv hook bash)"
 
 # needed for the C-h binding
 bind '"\C-x\C-a": vi-movement-mode'

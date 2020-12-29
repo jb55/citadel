@@ -55,7 +55,7 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
       sxiv
       texlive.combined.scheme-full
       userConfig
-      vlc
+      mpv
       w3m
       wine
       steam

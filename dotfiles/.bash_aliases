@@ -58,9 +58,13 @@ md () {
     mandown README*
 }
 
+function run_fuzzer() {
+	eval "$(fuzz-run-command "$@")"
+}
+
 alias e="edit -n"
 alias g=git
-alias f=fuzz-run-command
+alias f=run_fuzzer
 alias vim=nvim
 alias feh="feh --conversion-timeout 2"
 alias info="info --vi-keys"
