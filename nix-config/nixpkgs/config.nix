@@ -33,6 +33,15 @@ in {
       inherit pkgs;
     };
 
+    less = pkgs.lib.overrideDerivation super.less (attrs: {
+      patches = [
+        (super.fetchurl {
+          url = "https://jb55.com/s/0001-mark-save-lastmarks.patch";
+          sha256 = "4974a406ddcdc46c2008b9a828d9eba3a04b8a46ed02ca5e5534b2f09441a709";
+	})
+      ];
+    });
+
     msmtp = pkgs.lib.overrideDerivation super.msmtp (attrs: {
       patches = [
         (super.fetchurl {
