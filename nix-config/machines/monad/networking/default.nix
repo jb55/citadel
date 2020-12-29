@@ -35,12 +35,16 @@ let
     dns = 53;
     http = 80;
     wireguard = 51820;
+    weechat = 9000;
     inherit (extra.private) notify-port;
   };
 
   firewallRules = [
     "nixos-fw -s 10.100.0.1/24,192.168.86.1/24 -p tcp --dport 8080 -j nixos-fw-accept" # dev
     "nixos-fw -s 10.100.0.1/24 -p tcp --dport 80 -j nixos-fw-accept"
+    "nixos-fw -s 10.100.0.1/24 -p tcp --dport 3000 -j nixos-fw-accept"
+    "nixos-fw -s 10.100.0.1/24 -p tcp --dport ${toString ports.weechat} -j nixos-fw-accept"
+    "nixos-fw -s 10.100.0.1/24,192.168.86.1/24 -p tcp --dport 8333 -j nixos-fw-accept" # bitcoin
     "nixos-fw -s 192.168.122.218 -p udp --dport 137 -j nixos-fw-accept"
     "nixos-fw -s 192.168.122.218 -p udp --dport 138 -j nixos-fw-accept"
     "nixos-fw -s 192.168.122.218 -p tcp --dport 139 -j nixos-fw-accept"
