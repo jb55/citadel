@@ -6,13 +6,8 @@ set -o vi
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return
 
-
-if [ "$USER" = "jb55" ]; then
-	export PS1='$(printf "%3.*s" $? $?) $ '
-else
-	export PS1="\u@\h$ "
-fi
- 
+export PS1='$(printf "\n\033[30;1m%3.*s\033[0m$ \033[33m" $? $?)'
+export PS0='\033[0m'
 
 # don't put duplicate lines in the history. See bash(1) for more options
 export HISTCONTROL=ignoredups
