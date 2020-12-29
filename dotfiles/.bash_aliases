@@ -62,6 +62,7 @@ function run_fuzzer() {
 	eval "$(fuzz-run-command "$@")"
 }
 
+alias s="general-status"
 alias t="todo.sh"
 alias e="edit -n"
 alias g=git

@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+export LESS="--quit-if-one-screen"
+
+(printf "sys: %s@%s\npwd: %s\n" \
+	"$USER" \
+	"$HOSTNAME" \
+	"$PWD"
+
+if git rev-parse --is-inside-work-tree >/dev/null 2>/dev/null; then
+	git status -s
+	git remote -v | grep \(fetch\) | column -t -s $'\t' "$@"
+	conf="-c branch.color=always -c pager.branch=false"
+	brconf="--sort=-committerdate"
+	COLUMNS=$(stty size | cut -d" " -f2)
+	git $conf branch $brconf -v
+	git $conf branch $brconf -rv
+	fi) | $PAGER
