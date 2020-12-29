@@ -1,5 +1,6 @@
 cd	change directory	fuzz-cd-dirname
-pf	project file	fuzz-edit-file
+pf	edit project file	fuzz-edit-file
+pc	cat project file	fuzz-cat-file
 rf	recent files	fuzz-recent-files
 eFl	edit fuzz command list	fuzz-edit-command-list
 eFc	edit fuzz command	fuzz-edit-command
@@ -18,12 +19,9 @@ cs	compile show build	echo cat .build-result
 m	make	fuzz-make
 sp	search project	fuzz-search-files
 ss	search project file	fuzz-search-file
-Sr	systemd restart	fuzz-systemd-restart
-Ss	systemd start	fuzz-systemd-start
-SS	systemd stop	fuzz-systemd-stop
 h	run history	fuzz-run-hist
 tj	tag jump	fuzz-tag-jump
-gb	git branches	echo git-bvr
+gb	git branches	echo git bvr
 ni	notmuch inbox	fuzz-notmuch-inbox
 nt	notmuch threads	fuzz-notmuch-threads
 nat	notmuch archive	fuzz-notmuch-archive
