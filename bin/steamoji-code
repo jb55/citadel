@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+date -u +'Now:  %a, %d %b %Y %R:%S +0000'
 notmuch show from:verification@steamoji.com and date:today |
 grep -e '^Your verification' -e ^Date |
 head -n2
