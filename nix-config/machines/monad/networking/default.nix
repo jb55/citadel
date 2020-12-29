@@ -4,7 +4,7 @@ let
   chromecastIP = "192.168.86.190";
   iptables = "iptables -A nixos-fw";
   ipr = "${pkgs.iproute}/bin/ip";
-  hasVPN = builtins.hasAttr "services" config.services.openvpn && config.services.openvpn.services.pia != null;
+  hasVPN = true;
   writeBash = extra.util.writeBash;
   transmission-dir = "/zbig/torrents";
   download-dir = "${transmission-dir}/Downloads";
@@ -35,22 +35,23 @@ let
     dns = 53;
     http = 80;
     wireguard = 51820;
+    weechat = 9000;
     inherit (extra.private) notify-port;
   };
 
   firewallRules = [
     "nixos-fw -s 10.100.0.1/24,192.168.86.1/24 -p tcp --dport 8080 -j nixos-fw-accept" # dev
     "nixos-fw -s 10.100.0.1/24 -p tcp --dport 80 -j nixos-fw-accept"
+    "nixos-fw -s 10.100.0.1/24 -p tcp --dport 3000 -j nixos-fw-accept"
+    "nixos-fw -s 10.100.0.1/24 -p tcp --dport ${toString ports.weechat} -j nixos-fw-accept"
+    "nixos-fw -s 10.100.0.1/24,192.168.86.1/24 -p tcp --dport 8333 -j nixos-fw-accept" # bitcoin
     "nixos-fw -s 192.168.122.218 -p udp --dport 137 -j nixos-fw-accept"
     "nixos-fw -s 192.168.122.218 -p udp --dport 138 -j nixos-fw-accept"
     "nixos-fw -s 192.168.122.218 -p tcp --dport 139 -j nixos-fw-accept"
     "nixos-fw -s 192.168.122.218 -p tcp --dport 445 -j nixos-fw-accept"
-  ]
-  ++ lib.optional hasVPN [
     "OUTPUT -t mangle   -m cgroup --cgroup 11 -j MARK --set-mark 11"
     "POSTROUTING -t nat -m cgroup --cgroup 11 -o tun0 -j MASQUERADE"
   ];
-
 
   addRule = rule: "iptables -A ${rule}";
   rmRule = rule: "iptables -D ${rule} || true";

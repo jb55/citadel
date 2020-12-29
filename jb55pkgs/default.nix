@@ -50,8 +50,8 @@ in rec {
 
   datefmt = fetch {
     repo = "datefmt";
-    rev  = "0.1.1";
-    sha256 = "1xjfr1lbkiy277firlb8zkg1pmj7pmiijhxx1z4bg41970dr446x";
+    rev  = "67a176de6db75fddecd0239dd6afe2659b1b1b46";
+    sha256 = "08as7m9fnsidryx9bm6bwp1hq43g59icv97x58zfrgpk68y8v785";
   };
 
   btcs = fetch {

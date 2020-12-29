@@ -1,6 +1,6 @@
 pkgs: rec {
   hostId = "d7ee0243"; # needed for zfs
-  ztip = "172.24.172.111";
+  ztip = "10.100.0.1";
   nix-serve = {
     port = 10845;
     bindAddress = ztip;

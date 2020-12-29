@@ -7,5 +7,5 @@ do
   bcli -rpcwallet="$wallet" "$@" listtransactions '*' 2000 \
       | jq -rc '.[] | {label: .label, address: .address, category: .category, amount: .amount, blocktime: .blocktime}'
 done) \
-  | jq -src 'sort_by(.time) | .[] | [.label,.address,.category,.amount,(.blocktime | strftime("%F %R"))] | @tsv'
+  | jq -src 'sort_by(.blocktime) | .[] | [.label,.address,.category,.amount,.blocktime] | @tsv'
 

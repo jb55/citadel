@@ -74,14 +74,16 @@ with extra; {
             set -e
             export HOME=/home/jb55
             export DATABASEDIR=$HOME/mail/personal
+	    EVAR=/home/jb55/var/notify
+	    LAST_COUNT=$EVAR/last-email-count
 
             notify() {
               local c=$(notmuch --config /home/jb55/.notmuch-config-personal count 'tag:inbox and not tag:filed and not tag:noise')
               local lc=$c
-              if [ -f /tmp/last-email-count ]; then
-                lc=$(</tmp/last-email-count)
+              if [ -f $LAST_COUNT ]; then
+                lc=$(<$LAST_COUNT)
               fi
-              echo "$c" > /tmp/last-email-count
+              echo "$c" > $LAST_COUNT
               if [ -f ~/var/notify/home ] && [ $c -ne $lc ]; then
                 ${pkgs.libnotify}/bin/notify-send -i email-new "You Got Mail (inbox $c)"
               fi

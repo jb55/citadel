@@ -12,11 +12,11 @@ if [ "$NANNY" == "lisbeth" ]; then
 fi
 
 if [ "$NANNY" == "maribel" ]; then
-    pay=18
+    pay=20
 fi
 
 if [ "$NANNY" == "diana" ]; then
-    pay=17
+    pay=20
 fi
 
 if [ "$NANNY" == "laura" ]; then
