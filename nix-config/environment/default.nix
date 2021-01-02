@@ -7,7 +7,6 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
       rev = "0.2.1";
       sha256 = "0xd86s2smjvlc7rlb6rkgx2hj3c3sbcz3gs8rf93x69jqdvwb6rr";
     }) {};
-    nixify = pkgs.nur.repos.kampka.nixify;
     myPackages = with jb55pkgs; [
        bcalc
        btcs
@@ -26,6 +25,7 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
        viscal
        zebra
        zoom-link-opener
+       define
     ];
     myHaskellPackages = with pkgs.haskellPackages; [
       #skeletons
@@ -71,7 +71,6 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
       minisign
       neovim
       network-tools
-      nixify
       nodejs
       opentimestamps-client
       par
@@ -79,7 +78,6 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
       patchelf
       pv
       python
-      ranger
       ripgrep
       rsync
       screen
