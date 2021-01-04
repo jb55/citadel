@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
-queued=$(ls -1 /home/jb55/.msmtp.queue/*.mail | wc -l)
+queued=$(ls -1 /home/jb55/.msmtp.queue/*.mail 2>/dev/null | wc -l)
 if [ $queued -gt 0 ]; then
 	printf "%d queued emails\n" "$queued"
 fi
-out=$(jctlu -n1 -u email-fetcher | tail -n1)
-printf "$out\n"
+jctlu -n1000 -u email-fetcher | less +G
