@@ -1,0 +1,18 @@
+export TODO_DIR="$HOME/docs/todo"
+export TODO_FILE="$TODO_DIR/todo.txt"
+export DONE_FILE="$TODO_DIR/done.txt"
+export REPORT_FILE="$TODO_DIR/report.txt"
+
+export PRI_A=$RED        # color for A priority
+export PRI_B=$YELLOW         # color for B priority
+export PRI_C=$LIGHT_GREEN    # color for C priority
+
+# There is highlighting for tasks that have been done,
+# but haven't been archived yet.
+#
+export COLOR_DONE=$GREEN
+
+export COLOR_PROJECT=$BLUE
+export COLOR_CONTEXT=$GREEN
+export COLOR_DATE=$PURPLE
+export COLOR_NUMBER=$LIGHT_GREY
