@@ -28,4 +28,5 @@ nt	notmuch threads	fuzz-notmuch-threads
 nat	notmuch archive	fuzz-notmuch-archive
 nai	notmuch archive inbox	fuzz-notmuch-archive-inbox
 nq	notmuch query	fuzz-notmuch-query
+es	email status	echo email-status-once
 z	fz	echo fz
