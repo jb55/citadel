@@ -18,6 +18,8 @@ in rec {
   sharefile   = callPackage ./pkgs/sharefile { };
   samp        = callPackage ./pkgs/samp { };
 
+  define = callPackage ./pkgs/define { };
+
   ratio = fetch-srht {
     repo = "ratio";
     rev  = "4eb820fb362c554baa73e244dae29aa62ec2d9d5";

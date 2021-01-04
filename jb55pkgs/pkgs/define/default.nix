@@ -1,12 +1,6 @@
-{ stdenv
-, fetchurl
-, zstd
-, bash
-, less
-, sdcv
-, gnutar
-, writeScript
-}:
+{ pkgs ? import <nixpkgs> {}, stdenv ? pkgs.stdenv, fetchurl ? pkgs.fetchurl, 
+  bash ? pkgs.bash, less ? pkgs.less, sdcv ? pkgs.sdcv, gnutar ? pkgs.gnutar, 
+  writeScript ? pkgs.writeScript }:
 let
   dictd = stdenv.mkDerivation rec {
     pname = "define-dict";
