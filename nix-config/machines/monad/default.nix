@@ -295,7 +295,7 @@ in
   services.mongodb.enable = if extra.is-minimal then false else false;
 
   services.tor.enable = if extra.is-minimal then false else true;
-  #services.tor.controlPort = 9051;
+  services.tor.controlPort = 9051;
   services.tor.client.enable = true;
   services.tor.extraConfig = extra.private.tor.extraConfig;
 
