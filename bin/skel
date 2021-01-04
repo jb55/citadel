@@ -1,2 +1,10 @@
 #!/usr/bin/env bash
-exec cp -vr --no-clobber $HOME/dotfiles/skeletons/$1/. .
+SKELETON_CLOSET=${SKELETON_CLOSET:-$HOME/dotfiles/skeletons}
+if [ -z "$1" ]; then
+	printf "usage: skel <skeleton>\n\n"
+	printf "skeletons\n\n"
+	ls -1 $SKELETON_CLOSET | sed 's,^,    ,'
+	printf "\n"
+	exit 0
+fi
+exec cp -vr --no-clobber "$SKELETON_CLOSET/$1"/.
