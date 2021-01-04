@@ -1,26 +1,26 @@
 #!/usr/bin/env bash
 
-export LESS="-R -S --quit-if-one-screen"
+#export LESS="-R -S --quit-if-one-screen"
 
-(printf "sys: %s@%s\npwd: %s\n" \
+printf "sys: %s@%s\npwd: %s\n" \
 	"$USER" \
 	"$HOSTNAME" \
 	"$PWD"
 
-if git rev-parse --is-inside-work-tree >/dev/null 2>/dev/null; then
-	printf "\n"
-	conf="-c color.status=always -c color.branch=always"
-        eachreffmt='%(authordate:short) %(authorname) %(color:red)%(objectname:short) %(color:yellow)%(refname:short)%(color:reset) (%(color:green)%(committerdate:relative)%(color:reset))'
-	git $conf status -s
-	git $conf remote -v | grep \(fetch\) | column -t -s $'\t' "$@"
-	brconf="--sort=-committerdate"
-	COLUMNS=$(stty size | cut -d" " -f2)
-
-	timeout 1 git lg --color=always --simplify-by-decoration || (
-		printf "\n"
-		git for-each-ref --color=always --sort=-committerdate refs/heads/ --format="$eachreffmt"
-		printf "\n"
-		git for-each-ref --color=always --sort=-committerdate refs/remotes/ --format="$eachreffmt"
-	)
-
-fi) | less -RSF
+#if git rev-parse --is-inside-work-tree >/dev/null 2>/dev/null; then
+#	printf "\n"
+#	conf="-c color.status=always -c color.branch=always"
+#        eachreffmt='%(authordate:short) %(authorname) %(color:red)%(objectname:short) %(color:yellow)%(refname:short)%(color:reset) (%(color:green)%(committerdate:relative)%(color:reset))'
+#	git $conf status -s
+#	git $conf remote -v | grep \(fetch\) | column -t -s $'\t' "$@"
+#	brconf="--sort=-committerdate"
+#	COLUMNS=$(stty size | cut -d" " -f2)
+#
+#	timeout 1 git lg --color=always --simplify-by-decoration || (
+#		printf "\n"
+#		git for-each-ref --color=always --sort=-committerdate refs/heads/ --format="$eachreffmt"
+#		printf "\n"
+#		git for-each-ref --color=always --sort=-committerdate refs/remotes/ --format="$eachreffmt"
+#	)
+#
+#fi) | less -RSF
