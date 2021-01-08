@@ -19,6 +19,7 @@ in rec {
   samp        = callPackage ./pkgs/samp { };
 
   define = callPackage ./pkgs/define { };
+  rsslink = callPackage ./pkgs/rsslink { };
 
   ratio = fetch-srht {
     repo = "ratio";
