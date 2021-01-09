@@ -1,0 +1,1722 @@
+#!/bin/sh
+
+VERSION="0.2"
+
+TAB=$(printf "\t")
+
+###################
+## Default config #
+###################
+
+limit=20
+formatter="fold -s"
+use_pager=1
+use_color=1
+always_update=1
+sort_order=descending
+twtfile=~/twtxt.txt
+disclose_identity=0
+max_procs=50
+xargs_parallel=1
+editor=${EDITOR:-vi}
+pager=${PAGER:-less -R}
+color_nick=yellow
+color_time=blue
+color_hashtag=cyan
+color_mention=yellow
+gpg_bin=${gpg_bin:-gpg}
+sign_user=""
+sign_twtfile=0
+check_signatures=0
+ipfs_publish=0
+ipfs_wrap_with_dir=0
+ipfs_recursive=0
+ipfs_gateway=http://localhost:8080
+nick="${USER}"
+sync_followings=""
+awk=awk
+sed=sed
+# sync_followings="https://raw.githubusercontent.com/mdom/we-are-twtxt/master/we-are-twtxt.txt"
+timeout=0
+verbose=0
+force=0
+add_metadata=0
+
+http_proxy=""
+https_proxy=""
+
+ftp_user=""
+ftp_host=""
+
+sftp_over_scp=0
+scp_user=""
+scp_host=""
+
+http_backend_args=""
+
+theme="default"
+
+# this is the password for mailpipe. Mailpipe expects the first line of the
+# mail to be in the form "password $mail_password"
+mail_password=""
+
+# timestamps defaults
+last_timeline=0
+
+if [ -n "${NO_COLOR+1}" ];then
+    use_color=0
+fi
+
+######################
+## Runtime variables #
+######################
+
+program_name=${0##*/}
+config_dir="${XDG_CONFIG_HOME:-$HOME/.config}/$program_name"
+config_file="$config_dir/config"
+follow_file="$config_dir/following"
+draft_file="$config_dir/draft"
+cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}/$program_name"
+log_dir="$cache_dir/logs"
+
+#####################
+## Helper Functions #
+#####################
+
+# Description: Check if command is in path
+# Synopsis: have_cmd COMMAND
+# Returns: success if command is found; fails otherwise
+
+have_cmd () {
+	command -v "$1" >/dev/null 2>&1
+}
+
+# Description: Print error message and exit
+# Synopsis: die MESSAGE RETURN_CODE
+# Returns: nothing
+
+die () {
+	printf "%s: %s\n" "$program_name" "$1" >&2
+	exit "${2:-1}"
+}
+
+warn () {
+	printf "%s: %s\n" "$program_name" "$1" >&2
+}
+
+info () {
+	[ "$verbose" -gt 0 ] && printf "%s: %s\n" "$program_name" "$1"
+}
+
+# Description: Create dir unless it exists
+# Synopsis: create_dir DIR
+# Returns: nothing
+
+create_dir () {
+	[ -d "$1" ] || mkdir -p "$1"
+}
+
+# Description: Source configuration file if it exists
+# Synopsis: read_config
+# Returns: nothing
+
+read_config () {
+	if [ -e "$config_file" ];then
+		# shellcheck source=/dev/null
+		. "$config_file"
+	fi
+
+	if [ "$disclose_identity" -eq 1 ] && [ -n "$twturl" ];then
+		user_agent="txtnish/$VERSION (+${twturl}; @$nick)"
+	else
+		user_agent="txtnish/$VERSION (+https://github.com/mdom/txtnish)"
+	fi
+
+	[ -n "$http_proxy"  ] && export http_proxy
+	[ -n "$https_proxy" ] && export https_proxy
+}
+
+# Description: Print arguments for curl on stdout for xargs
+# Synopsis: args_for_curl NICK URL COUNTER
+# Returns: Nothing
+
+args_for_curl () {
+	if [ "$timeout" -ne 0 ];then
+		printf "%s\n" "--max-time" "$timeout"
+	fi
+	printf "\"%s\"\n" \
+		--user-agent "$user_agent" \
+		--location \
+		--stderr "$log_dir/http.log.$1" \
+		--show-error \
+		--silent \
+		--compressed \
+		--output "$cache_dir/twtfiles/$1.txt" \
+		--time-cond "$cache_dir/twtfiles/$1.txt" \
+		--write-out '%{filename_effective}\t%{http_code}\t%{num_redirects}\t%{url_effective}\n' \
+		"$2"
+}
+
+rewrite_url () {
+	if [ -z "$_ipfs_checked" ];then
+		if ! curl -s "$ipfs_gateway" > /dev/null 2>&1 ;then
+			ipfs_gateway=https://ipfs.io
+		fi
+		_ipfs_checked=1
+	fi
+
+	case $url in
+		ipns://* )
+			url=$ipfs_gateway/ipns/${url#ipns://}
+		;;
+	esac
+}
+
+maybe_update () {
+	if [ "$always_update" -eq 1 ];then
+		update "$@"
+	fi
+}
+
+format_msg_html () {
+	$awk '
+		function escape (str) {
+			gsub(/&/,"\\&amp;",str)
+			gsub(/</,"\\&lt;",str)
+			gsub(/>/,"\\&gt;",str)
+			return str
+		}
+
+		function linkify (str,   new_str, n, url, nick) {
+			while ( str ) {
+				if ( match(str,/@&lt;[^&]+&gt;/) ) {
+					new_str = new_str substr(str,1,RSTART-1)
+					n = split(substr(str,RSTART+5,RLENGTH-9),fields," ")
+					if ( n == 1 ) {
+						nick = ""
+						url = fields[1]
+					} else {
+						nick = fields[1]
+						url = fields[2]
+					}
+
+					new_str = new_str "<a href=\"" url "\">@" nick "</a>"
+					str = substr(str,RSTART+RLENGTH)
+				} else if ( match(str,/https?:\/\/[^ ]+/) ) {
+					new_str = new_str substr(str,1,RSTART-1)
+					url = substr(str,RSTART,RLENGTH)
+
+					# a trailing point or comma could be
+					# part of the url, but it is probably a
+					# punctuation mark.
+					if ( substr(url,length(url),1) ~ /[,.]/ ) {
+						url = substr(url,1,length(url)-1)
+						RSTART -= 1
+					}
+
+					new_str = new_str "<a href=\"" url "\">" url "</a>"
+					str = substr(str,RSTART+RLENGTH)
+				} else {
+					new_str = new_str str
+					str = ""
+				}
+                        }
+                        return new_str
+		}
+
+		BEGIN {
+			FS = "\t"
+			srand()
+			now = srand()
+			printf "<!doctype html>\n" \
+				"<html>" \
+					"<head>" \
+						"<meta charset=\"utf-8\">" \
+						"<style>" \
+							".nick { color: red }" \
+							"p { max-width: 60em; }" \
+						"</style>" \
+					"</head>"
+		}
+		{
+			nick=$1;url=$2;props=$3;ts=$4;msg=$5
+			seconds=now-ts
+			if ( seconds >= 172800 ) {
+				ts = int(seconds / 86400) " days ago"
+			} else if ( seconds >= 86400 ) {
+				ts = "1 day ago"
+			} else if ( seconds >= 7200 ) {
+				ts = int(seconds / 3600) " hours ago"
+			} else if ( seconds >= 3600 ) {
+				ts = "1 hour ago"
+			} else if ( seconds >= 120 ) {
+				ts = int(seconds / 60) " minutes ago"
+			} else if ( seconds >= 60 ) {
+				ts = "1 minute ago"
+			} else if ( seconds == 1 ) {
+				ts = "1 second ago"
+			} else {
+				ts = seconds " seconds ago"
+			}
+
+			nick = escape(nick)
+			msg = escape(msg)
+			msg = linkify(msg)
+
+			print "<p>* <span class=\"nick\">" nick "</span> (" ts ")<br/>" msg "</p>"
+		}
+
+		END {
+			print "</html>"
+		}
+	'
+}
+
+format_msg () {
+
+	export color_nick color_time color_hashtag color_mention use_color formatter
+	$awk -vtheme="$1" '
+		function colors_to_escape ( color,  fgc, bgc, n, c, attr ) {
+			n = split(color,c,/ /)
+			for (i=1; i<=n; i++ ) {
+				if ( match(c[i], /^on_/ ) ) {
+					bgc = bg colors[substr(c[i],4)]
+				} else if ( colors[c[i]] != "" ) {
+					fgc = fg colors[c[i]]
+				} else if ( attribs[c[i]] != "" ) {
+					if ( attr )
+						attr = attr ";" attribs[c[i]]
+					else
+						attr = ";" attribs[c[i]]
+				}
+			}
+			if ( bgc && fgc ) {
+				return csi fgc ";" bgc attr "m"
+			}
+			if ( fgc ) {
+				return csi fgc attr "m"
+			}
+		}
+
+		function colorize ( layer, color, text ) {
+			return csi layer colors[color] "m" text reset
+		}
+		BEGIN {
+			FS="\t"
+			ORS="\n\n"
+			csi = "\033["
+			reset = csi "0m"
+			fg = 3
+			bg = 4
+			colors["black"] = 0
+			colors["red"] = 1
+			colors["green"] = 2
+			colors["yellow"] = 3
+			colors["blue"] = 4
+			colors["magenta"] = 5
+			colors["cyan"] = 6
+			colors["white"] = 7
+
+			attribs["bold"] = 1
+			attribs["bright"] = 1
+			attribs["faint"] = 2
+			attribs["italic"] = 3
+			attribs["underline"] = 4
+			attribs["blink"] = 5
+			attribs["fastblink"] = 6
+			srand()
+			now=srand()
+
+			color_nick = colors_to_escape(ENVIRON["color_nick"])
+			color_time = colors_to_escape(ENVIRON["color_time"])
+			color_hashtag = colors_to_escape(ENVIRON["color_hashtag"])
+			color_mention = colors_to_escape(ENVIRON["color_mention"])
+		}
+
+	{
+		nick=$1;url=$2;props=$3;ts=$4;msg=$5
+		seconds=now-ts
+		if ( seconds >= 172800 ) {
+			ts = int(seconds / 86400) " days ago"
+		} else if ( seconds >= 86400 ) {
+			ts = "1 day ago"
+		} else if ( seconds >= 7200 ) {
+			ts = int(seconds / 3600) " hours ago"
+		} else if ( seconds >= 3600 ) {
+			ts = "1 hour ago"
+		} else if ( seconds >= 120 ) {
+			ts = int(seconds / 60) " minutes ago"
+		} else if ( seconds >= 60 ) {
+			ts = "1 minute ago"
+		} else if ( seconds == 1 ) {
+			ts = "1 second ago"
+		} else {
+			ts = seconds " seconds ago"
+		}
+
+		if ( ENVIRON["use_color"] == 1 ) {
+			n = split(props,prop_array,/,/)
+			props=""
+			for ( i in prop_array ) {
+				if ( prop_array[i] == "tls" || prop_array[i] == "gpg_trusted" ) {
+					prop_array[i] = colorize(fg,"green",prop_array[i])
+				}
+				if ( prop_array[i] == "notls" ) {
+					prop_array[i] = colorize(fg,"red",prop_array[i])
+				}
+			}
+
+			props = prop_array[1]
+			for (i = 2; i <= n; i++)
+				props = props "," prop_array[i]
+
+			nick = color_nick nick reset
+			ts = color_time ts reset
+			gsub(/#[[:alnum:]_-]+/, color_hashtag "&" reset, msg)
+			gsub(/@[[:alnum:]_-]+/, color_mention "&" reset, msg)
+		}
+		fmt = ENVIRON["formatter"]
+		if ( theme == "oneline" ) {
+			printf "* %s (%s %s)\n", nick, msg, ts
+		} else {
+			printf "* %s (%s)", nick, ts
+			if ( props )  printf " [%s]", props
+			printf "\n"
+			print msg | fmt
+			close(fmt)
+		}
+	}'
+}
+
+sort_tweets () {
+	case $sort_order in
+		ascending | descending  ) : ;;
+		* ) die "Sort order must be either ascending or descending." ;;
+	esac
+
+	$awk 'BEGIN { FS=OFS="\t" }{ split($4,a,/\./); print $0, a[0] ? a[0] :0, a[1] }' |\
+		sort -rn -k6,6 -k7,7 -t "$TAB" | \
+		limit_uniq_tweets
+}
+
+limit_uniq_tweets () {
+	$awk '
+		BEGIN {
+			FS=OFS="\t"
+			limit='"$limit"'
+			sort_order="'"$sort_order"'"
+		}
+		{
+			key = $5 $6 $7
+			NF-=2
+			if ( last != key ) {
+				lines_seen++
+				if ( sort_order == "ascending" ) {
+					lines[lines_seen] = $0
+				} else {
+					print
+				}
+				if ( limit > 0 && lines_seen >= limit )
+					exit
+			}
+			last = key
+		}
+		END {
+			if ( sort_order == "ascending" ) {
+				for ( i = lines_seen; i>0; i-- ) {
+					print lines[i]
+				}
+			}
+		}
+	'
+}
+
+maybe_pager () {
+	if [ "$use_pager" -eq 1 ];then
+		$pager
+	else
+		cat
+	fi
+}
+
+# Description: Prefixes every line in stdin with arguments
+# Synopsis: prefix column NICK URL PROPS
+
+prefix_columns () {
+	$awk 'BEGIN{OFS="\t"}{print "'"$1"'", "'"$2"'", "'"$3"'",$0}'
+}
+
+filter_tweets () {
+	$awk '
+		BEGIN {
+			FS=OFS="\t"
+			last_timeline = "'"$last_timeline"'"
+			srand()
+			now=srand()
+		}
+		function new () {
+			return $4 > last_timeline
+
+		}
+		{
+			nick=$1;url=$2;props=$3;ts=$4;msg=$5;
+			if ('"${filter_expr:-1}"') {
+				print
+			}
+		}
+	'
+}
+
+display_tweets () {
+	case $theme in
+		raw ) normalize_tweets | filter_tweets | sort_tweets ;;
+		html ) normalize_tweets | filter_tweets | sort_tweets | format_msg_html ;;
+		default ) normalize_tweets | filter_tweets | sort_tweets | collapse_mentions | format_msg| maybe_pager ;;
+		oneline ) normalize_tweets | filter_tweets | sort_tweets | collapse_mentions | format_msg "oneline" | maybe_pager ;;
+		* ) die "Unknown theme $theme." ;;
+	esac
+}
+
+normalize_tweets () {
+	$awk '
+		BEGIN{
+			FS=OFS="\t"
+			rfc3339 = "^([0-9]+)-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])[Tt]([01][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9]|60)(\\.[0-9]+)?(([Zz])|([\\+|\\-]([01][0-9]|2[0-3]):[0-5][0-9]))$"
+			srand()
+			now = srand()
+		}
+		{
+			## handle timestamps without T
+			if ( substr($4,11,1) == " " ) {
+				$4 = substr($4,1,10) "T" substr($4,12)
+			}
+
+			## handle any ws as seperator
+			sub(/[[:space:]]+/, "\t", $4)
+			$0=$0
+
+			## remove escape sequences
+			## the trailing hyphen is important:
+			## https://bugs.freebsd.org/bugzilla/show_bug.cgi?id=214783
+			gsub(/[^[:print:][:space:]-]/,"")
+
+			#normlize timestamp
+			sub(/Z$/,"+00:00",$4)
+
+			# remove leading spaces
+			sub(/^[[:space:]]*/,"",$4)
+
+			# add : to offset if missing
+			if ( match($4,/[+-][0-9]{4}$/) ) {
+				l = length($4)
+				$4 = substr($4,1,l-4) substr($4,l-3,2) ":" substr($4,l-1,2)
+			}
+
+			## add seconds if missing
+			if ( match( $4,/T[0-9]{2}:[0-9]{2}[+-]/ ) ) {
+				$4 = substr($4,1,RSTART + RLENGTH -2) ":00" substr($4,RSTART + RLENGTH -1 )
+			}
+
+			# ignore lines not matching spec
+			if ( NF != 5 || $4 !~ rfc3339 )
+				next
+
+			no_fields = split( $4, ta, /[Tt:+.-]/)
+			year = ta[1]; month  = ta[2]; day     = ta[3]
+			hour = ta[4]; minute = ta[5]; seconds = ta[6]
+
+			if ( no_fields == 9 ) {
+				offset = ta[8] * 3600 + ta[9] * 60
+				fracsecs=ta[7]
+			}
+			else {
+				offset = ta[7] * 3600 + ta[8] * 60
+				fracsecs=0
+			}
+			epoch_days = 719591
+
+			if ( month > 2 ) {
+				month++
+			} else {
+				year--
+				month+=13
+			}
+			tweet_days = (year*365)+int(year/4)-int(year/100)+int(year/400) + int(month*30.6)+ day
+
+			days_since_epoch = tweet_days - epoch_days
+
+			seconds_since_epoch = (days_since_epoch*86400)+(hour*3600)+(minute*60)+seconds
+
+			mod = substr( $4, length($4)-5, 1)
+			if ( mod == "+" ) {
+				seconds_since_epoch -= offset
+			} else {
+				seconds_since_epoch += offset
+			}
+
+			$4 = seconds_since_epoch "." fracsecs
+
+			if ( $4 > now )
+				next
+
+			print
+		}
+	'
+}
+
+gpg_verify () {
+	"$gpg_bin" --status-fd=1 --no-verbose --quiet --batch --verify "$1" 2>/dev/null
+}
+
+collapse_mentions () {
+	## TODO this *has* to be easier
+	export follow_file nick twturl
+	$awk '
+		function normalize_url (url,  host) {
+			sub(/^http:/,"https:",url)
+
+			if ( url ~ /^https:/ ) {
+				host = url
+				sub(/^https:\/\//,"", host)
+				sub(/\/.*/,"", host)
+				host = tolower(host)
+				url = "https://" host substr(url,9+length(host))
+			}
+			return url
+		}
+		BEGIN {
+			FS=" "
+			while ( (getline < ENVIRON["follow_file"] ) > 0 ) {
+				urls[normalize_url($2)] = $1
+			}
+			if ( ENVIRON["twturl"] && ENVIRON["nick"] )
+				urls[ENVIRON["twturl"]] = ENVIRON["nick"]
+			FS="\t"
+			OFS=FS
+		}
+		{
+			new_msg=""
+			while ( match($5,/@<[^>]+>/) ) {
+				new_msg = new_msg substr($5,1,RSTART-1)
+				n = split(substr($5,RSTART+2,RLENGTH-3),fields," ")
+				if ( n == 1 ) {
+					url = fields[1]
+				} else {
+					url = fields[2]
+				}
+
+				url = normalize_url(url)
+
+				if ( url in urls ) {
+					new_msg = new_msg "@" urls[url]
+				}
+				else {
+					new_msg = new_msg substr($5,RSTART,RLENGTH)
+				}
+				$5 = substr($5,RSTART+RLENGTH)
+			}
+			new_msg = new_msg $5
+			$5=new_msg
+			print
+		}
+	'
+}
+
+expand_mentions () {
+	export follow_file nick twturl
+	$awk '
+		BEGIN {
+			FS=" "
+			while ( (getline < ENVIRON["follow_file"] ) > 0 ) {
+				nicks[$1]=$2
+			}
+			if ( ENVIRON["twturl"] )
+				urls[ENVIRON["nick"]] = ENVIRON["twturl"]
+			FS="\t"
+			OFS=FS
+		}
+		{
+			expanded_line = ""
+			while ( match($2, /@[[:alnum:]_-]+/ )) {
+				expanded_line = expanded_line substr($2,1,RSTART-1)
+				nick = substr($2,RSTART+1,RLENGTH-1)
+				rest = substr($2,RSTART+RLENGTH)
+				prev = substr($2,RSTART-1,1);
+				expand = nick in nicks && (RSTART == 1 || match(prev, /[[:space:]]/))
+				if (expand) {
+					expanded_line = expanded_line "@<" nick " " nicks[nick] ">"
+				}
+				else {
+					expanded_line = expanded_line "@" nick
+				}
+				$2 = rest
+			}
+			expanded_line = expanded_line $2
+			$2 = expanded_line
+			print
+		}
+	'
+}
+
+draft_to_twtfile () {
+	[ -s "$draft_file" ] || return
+	pre_tweet_hook
+	_fracsecs=0
+	_timestamp_fmt=$(TZ=C date "+%Y-%m-%dT%H:%M:%S.%%06iZ")
+	while read -r msg;do
+		[ -n "$msg" ] || continue
+		case $msg in
+			/follow\ *|/unfollow\ * )
+				# shellcheck disable=2086
+				set -- ${msg#/}
+				if [ $# -eq 3 ]; then
+					"$@"
+					continue
+				fi
+				;;
+		esac
+		printf "$_timestamp_fmt\t%s\n" "$_fracsecs" "$msg"
+		_fracsecs=$((  _fracsecs + 1 ))
+	done < "$draft_file" | expand_mentions >> "$twtfile"
+	publish
+}
+
+cleanup () {
+	[ -e "$tempfile" ] && rm "$tempfile"
+	[ -d "$tempdir" ] && rm -r "$tempdir"
+}
+
+sync_twtfile () {
+	if [ -n "$twtfile" ] && [ -n "$twturl" ]; then
+		if ! curl -sS -o "$twtfile" "$twturl"; then
+			die "Can't sync twtfile. Aborting."
+		fi
+	else
+		die "Set twtfile and twturl to sync twtfile. Aborting.\n"
+	fi
+}
+
+pre_tweet_hook () {
+	:
+}
+
+post_tweet_hook () {
+	:
+}
+
+process_stat_log () {
+	tempfile="$follow_file.$$"
+
+	## Remove dos line endings before reading twtfiles
+	for file in "$cache_dir"/twtfiles/*.txt;do
+		sed 's/$//' "$file" > "$file~" && mv "$file~" "$file"
+	done
+
+	$awk '
+
+	function get_location (file,   line, meta) {
+		while((getline line < file) > 0 ) {
+			if ( line ~ /^#[ \t]*[^ \t=]+[ \t]*=[ \t]*[^ \t]+/ ) {
+				sub(/^#[ \t]*/,"", line)
+				split(line,meta,/[ \t]*=[ \t]*/)
+				if ( meta[1] == "url" ) {
+					return meta[2]
+				}
+			}
+		}
+		return ""
+	}
+
+	function redirect ( nick, location ) {
+		following[nick] = location
+		printf "Following %s now at %s.\n", nick, following[nick] | stderr
+		changed = 1
+	}
+
+	BEGIN {
+		tempfile="'"$tempfile"'"
+		follow_file="'"$follow_file"'"
+		file      = 1
+		code      = 2
+		redirects = 3
+		url       = 4
+		while ( (getline < follow_file ) > 0 ) {
+			following[$1] = $2
+		}
+		stderr = "cat >&2"
+	}
+	{
+		match($file, /[^\/]+.txt$/)
+		nick = substr($file,RSTART,RLENGTH - 4 )
+		location = get_location($file)
+		if ( location && following[nick] != location ) {
+			redirect( nick, location )
+		} else if ( $code == 200 || $code == 304 ) {
+			if ( $redirects > 0 ) {
+				redirect( nick, $url )
+			}
+		} else if ( $code == 410 ) {
+			delete following[nick];
+			changed=1
+		} else if ( $code == 000 ) {
+			# curl error
+		} else {
+			printf "Fetching %s at %s returned %s.\n", nick, $url, $code | stderr
+		}
+	}
+	END {
+		if ( changed ) {
+			for ( nick in following ) {
+				print nick, following[nick] > tempfile
+			}
+			system("mv " tempfile " " follow_file)
+		}
+	}'
+}
+
+read_key () {
+	_key=
+	if [ -t 0 ];then
+		if [ -z "$_stty" ];then
+			_stty=$(stty -g)
+		fi
+		stty -echo -icanon min 1
+		_key=$(dd bs=1 count=1 2>/dev/null)
+		stty "$_stty"
+	fi
+}
+
+getline () {
+	_var=${2:-_line}
+	if [ -t 0 ];then
+		if [ -n "$BASH_VERSION" ];then
+			# shellcheck disable=SC2039
+			read -erp "$1: " "$_var"
+		else
+			printf "%s: " "$1"
+			IFS= read -r "$_var"
+		fi
+	fi
+}
+
+yesno () {
+	printf "%s [yN] " "$1"
+	read_key
+	case $_key in
+		y ) _rc=0 ;;
+		* ) _rc=1 ;;
+	esac
+	printf "\n"
+	return $_rc
+}
+
+parallel_curl () {
+	_no_args=$( args_for_curl | wc -l )
+
+	if [ "$xargs_parallel" -eq 0 ];then
+		unset xargs_parallel
+	fi
+
+	## POSIX xargs will even try to run an empty command
+	## therefor we wrap the call to curl in a shell that first checks
+	## if there any arguments
+
+	# shellcheck disable=SC2016
+	xargs -n "$_no_args" ${xargs_parallel+-P "$max_procs"} \
+		sh -c '[ $# -gt 0 ] && exec "$0" "$@"' curl $http_backend_args
+}
+
+set_timestamp () {
+	if [ -e "$cache_dir/timestamps/$1" ];then
+		get_timestamp "$@"
+	fi
+	$awk 'BEGIN{ srand(); print srand() > "'"$cache_dir/timestamps/$1"'"}'
+}
+
+get_timestamp () {
+	read -r "${2:-$1}" < "$cache_dir/timestamps/$1"
+}
+
+################
+## Subcommands #
+################
+
+sync_followings () {
+
+	if [ -z "$sync_followings" ];then
+		die "You have to configure sync_followings in $config_file."
+	fi
+
+	curl --compressed -LSs "$sync_followings" > "$cache_dir/sync_followings.txt.new" || return
+
+	touch "$cache_dir/sync_followings.txt"
+	if cmp "$cache_dir/sync_followings.txt" "$cache_dir/sync_followings.txt.new" >/dev/null 2>&1; then
+		rm "$cache_dir/sync_followings.txt.new"
+		return
+	fi
+
+	tempdir="$cache_dir/tmp.$$"
+	mkdir -p "$tempdir" || return
+
+	sort "$follow_file"                       > "$tempdir/followings"
+	sort "$cache_dir/sync_followings.txt"     > "$tempdir/sync_followings.txt"
+	sort "$cache_dir/sync_followings.txt.new" > "$tempdir/sync_followings.txt.new"
+
+	comm -13 "$tempdir/sync_followings.txt" "$tempdir/sync_followings.txt.new" | \
+		comm -13 "$tempdir/followings" - | \
+		while read -r _nick _url; do
+			follow "$_nick" "$_url"
+		done
+	mv "$cache_dir/sync_followings.txt.new" "$cache_dir/sync_followings.txt"
+	rm -R "$tempdir"
+}
+
+update () {
+	if ! [ -s "$follow_file" ] ;then
+		die "You're not following anyone."
+	fi
+
+	if [ -e "$twtfile" ];then
+		ln -sf "$twtfile" "$cache_dir/twtfiles/$nick.txt"
+	fi
+
+	{
+		if [ $# -eq 0 ];then
+			cat "$follow_file"
+		else
+			printf "%s\n" "$@" | $awk '
+				BEGIN {
+					follow_file = "'"$follow_file"'"
+					while ((getline < follow_file) > 0 )
+						followings[$1] = $2
+				}
+				followings[$1] {
+					print $1 " " followings[$1]
+				}
+			'
+		fi
+	} |  while read -r nick url;do
+		rewrite_url
+		args_for_curl "$nick" "$url"
+	done | parallel_curl | process_stat_log
+
+	for logfile in "$log_dir"/http.log.*;do
+		[ -e "$logfile" ] || continue
+		_nick="${logfile##*.}"
+		$awk '{print "'"$_nick"'" ": " $0 }' "$logfile" >&2
+		rm "$logfile"
+	done
+}
+
+follow () {
+
+	if [ "$1" = "$nick" ]; then
+		die "You can't follow someone under your nick.";
+	fi
+
+	tempfile="$follow_file.$$"
+	$awk '
+		BEGIN {
+			nick = "'"$1"'"
+			url  = "'"$2"'"
+			force  = '"$force"'
+			stderr = "cat >&2"
+		}
+		$1 == nick || $2 == url {
+			if ( force ) next
+			printf "You are already following %s at %s.\n", $1, $2 | stderr
+			exit 1
+		}
+		1
+		END {
+			print nick, url
+		}
+	' "$follow_file" > "$tempfile" && mv "$tempfile" "$follow_file" && info "You're now following $1."
+}
+
+unfollow () {
+	tempfile="$follow_file.$$"
+
+	UNFOLLOW="$*" $awk '
+		BEGIN {
+			split(ENVIRON["UNFOLLOW"], unfollow, " ")
+			stderr = "cat >&2"
+		}
+		{
+			remove=0
+			for ( idx in unfollow ) {
+				if ( unfollow[idx] == $1 || unfollow[idx] == $2 ) {
+					remove=1
+					delete unfollow[idx]
+					break
+				}
+			}
+			if ( remove == 0 ) {
+				print
+			}
+		}
+		END {
+			for ( idx in unfollow )  {
+				printf "You are not following %s.\n", unfollow[idx] | stderr
+			}
+		}
+	' < "$follow_file" > "$tempfile" && mv "$tempfile" "$follow_file" && info "You're not following $* anymore."
+}
+
+following () {
+    if [ -n "$1" ]; then
+        maybe_update "$@"
+        export cache_dir follow_file
+        printf "%s\n" "$@" | $awk '
+            BEGIN {
+                follow_file = ENVIRON["follow_file"]
+                while ( ( getline < follow_file ) > 0 )
+                    followings[$1] = $2
+                close(follow_file)
+            }
+            {
+                if ( followings[$1] ) {
+                    twtfile = ENVIRON["cache_dir"] "/twtfiles/" $1 ".txt"
+                    while ( (getline < twtfile ) > 0 )
+                        if ( /^#/ && $2 == "following" )
+                            print $4 " " $5
+                }
+            }
+        ' | sort | uniq
+	elif [ -e "$follow_file" ];then
+		cat "$follow_file"
+	fi
+}
+
+url () {
+	for url; do
+		curl -s "$url" | $awk '
+			BEGIN {
+				url = "'"$url"'"
+			}
+			{
+				c = c $0
+			}
+			END {
+				if ( match(c,/<title>/) ) {
+					start = RSTART+RLENGTH
+					match(c,/<\/title>/)
+					len = RSTART-start
+					title = substr(c,start,len)
+					gsub(/^[ \t]+|[ \t]+$/, "", title)
+					sub(/\.$/,"", title)
+					print title " ⌘ " url
+				} else {
+					print url
+				}
+			}
+	'; done | tweet
+}
+
+# shellcheck disable=SC2120
+tweet () {
+	: >"$draft_file"
+
+	if [ $# -eq 0 ];then
+		if [ -t 0 ];then
+			"$EDITOR" "$draft_file"
+		else
+			cat > "$draft_file"
+		fi
+	else
+		printf "%s\n" "$@" > "$draft_file"
+	fi
+	draft_to_twtfile
+}
+
+ui () {
+	export FZF_DEFAULT_COMMAND="txtnish timeline -l 200 --theme=oneline 2>/dev/null"
+	fzf \
+		--exact \
+		--ansi \
+		--no-sort \
+		--bind="ctrl-t:execute(txtnish tweet)+reload($FZF_DEFAULT_COMMAND),ctrl-u:reload($FZF_DEFAULT_COMMAND),enter:ignore" \
+		--header 'Help: ctrl-u:Update ctrl-t:Tweet ctrl-q:Quit' \
+		--preview="echo {} | $formatter" --preview-window=down:10% \
+		--layout=reverse
+}
+
+reply () {
+	use_pager=0
+	use_color=0
+	cat <<-EOF > "$draft_file"
+		
+		# Please enter your tweets. Lines starting with '# ' and empty
+		# lines will be ignored.
+		# You can follow or unfollow feeds by starting a line with a /,
+		# for example:
+		# /follow foo https://example.com/foo.txt
+		# Those lines will not be tweeted.
+		
+EOF
+	timeline "$@" | $sed -e 's/^/# /' -e 's/^# $//' >> "$draft_file"
+	$editor "$draft_file"
+	tempfile="$draft_file.$$"
+	$sed -e '/^# /d' -e '/^[[:space:]]*$/d' "$draft_file" > "$tempfile"
+	mv "$tempfile" "$draft_file"
+	draft_to_twtfile
+}
+
+mailpipe () {
+	if [ -z "$mail_password" ];then
+		die "You have to set mail_password!"
+	fi
+	# shellcheck disable=SC2119
+	$awk '
+		NR==1,/^$/ {next }
+		!pw_seen {
+			if ( "password '"$mail_password"'" != $0 ) {
+				exit
+			}
+			pw_seen=1;
+			next
+		}
+		/^[[:space:]]*$/ || /^>/ { next }
+		/-- /  { exit }
+		1
+	' | tweet
+}
+
+mail () {
+	have_cmd mail || die "mailx(1) not installed."
+
+	use_pager=0
+	use_color=0
+	filter_expr="new()"
+	tempfile="$cache_dir/timeline.$$"
+	timeline > "$tempfile"
+	if [ -s "$tempfile" ]; then
+		command mail -s twtxt "$@" < "$tempfile"
+	fi
+	rm -f "$tempfile"
+}
+
+timeline () {
+	set_timestamp last_timeline
+
+	case $1 in
+		*://* )
+			curl --compressed -Ss -L --user-agent "$user_agent" "$1" \
+				| $awk 'BEGIN{OFS="\t"; url = "'"$1"'"}{ print url, url, "", $0 }' \
+				| display_tweets
+			exit 0
+			;;
+	esac
+	maybe_update "$@";
+
+	have_gpg=0
+	if have_cmd "$gpg_bin" ;then
+		have_gpg=1
+	fi
+
+	{
+	if [ $# -eq 0 ];then
+		following | while read -r _nick _url; do
+			printf "%s %s\n" "$_nick" "$_url"
+		done
+		printf "%s %s\n" "$nick" "$twturl"
+	else
+		printf "%s\n" "$@" | $awk '
+			BEGIN {
+				follow_file = "'"$follow_file"'"
+				while ( (getline < follow_file) > 0 )
+					followings[$1] = $2
+				close(follow_file)
+			}
+			{
+				if ( followings[$1] )
+					print $1, followings[$1]
+			}
+		'
+	fi
+	} | while read -r nick url;do
+
+		file="$cache_dir/twtfiles/$nick.txt"
+
+		[ -e "$file" ] || continue
+
+		prop=
+
+		if [ "$have_gpg" -eq 1 ] && [ "$check_signatures" -eq 1 ];then
+			gpg_status="$(gpg_verify "$file")"
+			case $gpg_status in
+				*NODATA*   ) prop=gpg_unsigned ;;
+				*NOPUBKEY* ) prop=gpg_signed ;;
+				*VALIDSIG* ) prop=gpg_trusted ;;
+				*          ) prop=gpg_unknown ;;
+			esac
+		fi
+
+		case $url in
+			https://* ) prop="${prop:+$prop,}tls" ;;
+			http://* ) prop="${prop:+$prop,}notls" ;;
+			ipfs://* | ipns://* ) prop=ipfs ;;
+		esac
+
+		prefix_columns "$nick" "$url" "$prop" < "$file"
+	done | display_tweets
+}
+
+update_metadata () {
+    [ "$add_metadata" -eq 0 ] && return
+	tempfile="$twtfile.$$"
+	{
+		printf "# %s = %s\n" \
+            client "txtnish/$VERSION" \
+            nick "$nick"
+        if [ -n "$twturl" ]; then
+            printf "# %s = %s\n" twturl "$twturl"
+        fi
+		if [ "$sign_twtfile" -eq 1 ];then
+			gpgconf --list-options gpg \
+			| awk -F: '$1 == "default-key" {print substr($10,2)}' \
+			| xargs "$gpg_bin" --fingerprint \
+			| awk '/Key fingerprint = / { print "# gpg_fingerprint = " substr($0,25) }'
+		fi
+		following | while read line; do printf "# following = %s\n" "$line" ;done
+		grep -v -e '^#' "$twtfile"
+	} > "$tempfile"
+	mv "$tempfile" "$twtfile"
+}
+
+publish () {
+	update_metadata
+	if [ "$ipfs_publish" -eq 1 ] && have_cmd ipfs;then
+		_ipfs_path="$twtfile"
+		if [ "$ipfs_wrap_with_dir" -eq 1 ];then
+			_ipfs_args=-w
+		fi
+		if [ "$ipfs_recursive" -eq 1 ];then
+			_ipfs_args="$_ipfs_args -r"
+			_ipfs_path="${twtfile%/*}"
+		fi
+
+		# shellcheck disable=SC2086
+		if ipfs add -q $_ipfs_args "$_ipfs_path" > "$cache_dir/ipfs";then
+			$awk 'END{ print $1 }' "$cache_dir/ipfs" | xargs ipfs name "publish"
+		fi
+	fi
+	if [ "$sign_twtfile" -eq 1 ];then
+		if [ -n "$sign_user" ]; then
+			signopt="-u $sign_user"
+			# for security, echo this
+			printf "Signing as %s.\n" "$sign_user"
+		else
+			unset signopt
+		fi
+		if mkdir -p "$cache_dir/tmp.$$/";then
+			tempdir="$cache_dir/tmp.$$/"
+		else
+			die "Can't create temporary dir $tempdir"
+		fi
+		if "$gpg_bin" --clearsign $signopt --output "$tempdir/${twtfile##*/}" "$twtfile";then
+			twtfile="$tempdir/${twtfile##*/}"
+		else
+			die "Can't sign twtfile. Exiting";
+		fi
+	fi
+	if [ -n "$scp_user" ] && [ -n "$scp_host" ];then
+		if [ "$sftp_over_scp" -eq 1 ]; then
+			sftp "$scp_user@$scp_host" <<-EOF
+				put "$twtfile" "${scp_remote_name:-${twtfile##*/}}"
+EOF
+		else
+			scp "$twtfile" "$scp_user@$scp_host:${scp_remote_name:-${twtfile##*/}}"
+		fi
+	fi
+	if [ -n "$ftp_user" ] && [ -n "$ftp_host" ];then
+		if curl -Ss -nT "$twtfile" "ftp://$ftp_user@$ftp_host/${ftp_remote_name:-${twtfile##*/}}";then
+			info "Uploaded twtfile to ftp://$ftp_user@$ftp_host/${ftp_remote_name:-${twtfile##*/}}"
+		fi
+	fi
+	post_tweet_hook
+}
+
+quickstart () {
+
+	## Import settings from twtxt
+
+	if [ -e "${XDG_CONFIG_HOME:-$HOME/.config}/twtxt/config" ];then
+		if ! [ -e "$follow_file" ] && yesno "Import followings from twtxt?" ;then
+
+			twtxt following | $awk '{ print $1, $3 }' > "$follow_file"
+		fi
+
+		if ! [ -e "$config_file" ] && yesno "Import settings from twtxt?" ;then
+			nick=$(twtxt config twtxt.nick)
+			twturl=$(twtxt config twtxt.twturl)
+			limit=$(twtxt config twtxt.limit_timeline)
+			twtfile=$(twtxt config twtxt.twtfile)
+			sort_order=$(twtxt config twtxt.sorting)
+			disclose_identity=$(twtxt config twtxt.disclose_identity)
+
+			{
+				[ -n "$nick" ]       && printf "nick=%s\n"       "$nick"
+				[ -n "$twturl" ]     && printf "twturl=%s\n"     "$twturl"
+				[ -n "$limit" ]      && printf "limit=%s\n"      "$limit"
+				[ -n "$twtfile" ]    && printf "twtfile=%s\n"    "$twtfile"
+				[ -n "$sort_order" ] && printf "sort_order=%s\n" "$sort_order"
+				[ -n "$disclose_identity" ] && printf "disclose_identity=%s\n" "$disclose_identity"
+
+			} > "$config_file"
+		fi
+	fi
+
+	## Quickstart for new users
+
+	getline "Please enter your desired nick" nick
+	getline "Please enter the desired location for your twtxt file" twtfile
+	getline "Please enter the URL your twtxt file will be accessible from" twturl
+	if yesno "Do you want to disclose your identity? Your nick and URL will be shared when making HTTP requests?";then
+		disclose_identity=1
+	fi
+
+	if yesno "Import urls to follow we-are-twtx?" ;then
+		curl -Ss https://raw.githubusercontent.com/mdom/we-are-twtxt/master/we-are-twtxt.txt | \
+			xargs -n2 "$program_name" "follow"
+	fi
+
+	if yesno "Do you want to upload your twtfile with scp?";then
+		getline "Please enter your scp username" scp_user
+		getline "Pleaser enter scp host" scp_host
+	fi
+
+	if yesno "Do you want to upload your twtfile with ftp?";then
+		getline "Please enter your ftp username" ftp_user
+		getline "Pleaser enter ftp host" ftp_host
+	fi
+
+	if yesno "Write configuration to $config_file?";then
+		if [ -e "$config_file" ];then
+			mv "$config_file" "$config_file.bak"
+			printf "Backup old config to %s.bak\n" "$config_file"
+		fi
+		cat <<-EOF > "$config_file"
+			nick="$nick"
+			twturl="$twturl"
+			twtfile="$twtfile"
+			disclose_identity="$disclose_identity"
+EOF
+		if [ -n "$scp_user" ] && [ -n "$scp_host" ];then
+			cat <<-EOF >> "$config_file"
+				scp_user="$scp_user"
+				scp_host="$scp_host"
+EOF
+		fi
+		if [ -n "$ftp_user" ] && [ -n "$ftp_host" ];then
+			cat <<-EOF >> "$config_file"
+				ftp_user="$ftp_user"
+				ftp_host="$ftp_host"
+EOF
+		fi
+		printf "Write new configuration to %s\n" "$config_file"
+	fi
+
+
+}
+
+########################
+# Command line parsing #
+########################
+
+check_if_valid_option () {
+	case ",$options," in
+		*,$1,* ) : ;;
+		* ) usage "Invalid option $OPTION" ;;
+	esac
+}
+
+
+set_optarg () {
+	case $1 in
+		-[!-]?* )
+			[ -n "${1#??}" ] || usage "Option ${1%%${1#??}} requires an argument."
+			OPTARG="${1#*??}"
+			;;
+		--?*=?* )
+			[ -n "${1#*=}" ] || usage "Option ${1%%=*} requires an argument."
+			OPTARG="${1#*=}"
+			;;
+		* )
+			[ -n "$2" ] || usage "Option $1 requires an argument."
+			OPTARG="$2"
+			SHIFT=2
+			;;
+	esac
+}
+
+set_optarg_bool () {
+	case $OPTION in
+		-[A-Z] ) OPTARG=0 ;;
+		-[a-z] ) OPTARG=1 ;;
+		--no-?* ) OPTARG=0 ;;
+		--?* ) OPTARG=1 ;;
+	esac
+}
+
+check_arguments () {
+	$awk '
+		BEGIN {
+			args_given = '"$1"'
+			args_expected = split("'"$2"'",args)
+			stderr = "cat >&2"
+
+			if ( args_given == args_expected ) exit 0
+
+			if ( args_given > args_expected )
+				if ( args[ args_expected ] !~ /\.\.\.\]?$/ ) {
+					print "Too many arguments." | stderr
+					exit 1
+				}
+
+			if ( args_given < args_expected )
+				for( i = 1; i <= args_expected; i++ )
+					if ( i > args_given && args[i] !~ /^\[.+\]$/ ) {
+						printf "Required argument %s missing.\n", args[i] | stderr
+						exit 1
+					}
+		}
+	'
+}
+
+call_mode () {
+	while [ -n "$1" ]; do
+		OPTION="$1"
+		SHIFT=1
+		case $1 in
+			--theme | --theme=?* )
+				check_if_valid_option theme
+				set_optarg "$@"
+				theme="$OPTARG"
+				;;
+			--timeout | --timeout=?* )
+				check_if_valid_option timeout
+				set_optarg "$@"
+				timeout="$OPTARG"
+				;;
+			-l | --limit | --limit=?* | -l?* )
+				check_if_valid_option limit
+				set_optarg "$@"
+				limit="$OPTARG"
+				;;
+			-N | --max-procs | --max-procs=?* | -N?* )
+				check_if_valid_option max-procs
+				set_optarg "$@"
+				max_procs="$OPTARG"
+				;;
+			-S | --search | --search=?* | -S?* )
+				check_if_valid_option search
+				set_optarg "$2"
+				filter_expr="$OPTARG"
+				;;
+			-h | --help )
+				check_if_valid_option help
+			       	usage
+				;;
+			-p | -P | --pager | --no-pager )
+				check_if_valid_option pager
+				set_optarg_bool
+				use_pager="$OPTARG"
+				;;
+			-u | -U | --update | --no-update )
+				check_if_valid_option update
+				set_optarg_bool
+				always_update="$OPTARG"
+				;;
+			-a | --ascending )
+				check_if_valid_option ascending
+				sort_order=ascending
+				;;
+			-d | --descending )
+				check_if_valid_option descending
+				sort_order=descending
+				;;
+			-R | --raw )
+				check_if_valid_option raw
+				theme=raw
+				;;
+			-v | --verbose )
+				check_if_valid_option verbose
+				verbose=1
+				;;
+			-f | --force )
+				check_if_valid_option force
+				force=1
+				;;
+			-- )
+				shift
+				break
+				;;
+			-[!-]?* )
+				shift
+				## dash 0.5.7 can't handle direct expansion
+				_tmp=${OPTION#??}
+				set -- "${OPTION%$_tmp}" "-$_tmp" "$@"
+				SHIFT=0
+				;;
+			-* )
+				usage "Invalid option $1."
+				;;
+			* )
+				break
+				;;
+		esac
+		shift "$SHIFT"
+	done
+
+	if [ -n "$arguments" ]; then
+		if ! check_arguments $# "$arguments"; then
+			usage
+			exit 1
+		fi
+	fi
+
+	case $mode in
+		*-* ) mode="${mode%-*}_${mode#*-}"
+	esac
+
+	$mode "$@"
+}
+
+usage_main () {
+	if [ -n "$1" ];then
+		printf "%s\n" "$1" >&2;
+		exec >&2
+	fi
+	cat <<-EOF
+		usage: $program_name COMMAND [OPTIONS...]
+
+		  Command:
+		    tweet           Append a new tweet to your twtxt file.
+		    timeline        Retrieve your personal timeline.
+		    follow          Add a new source to your followings.
+		    unfollow        Remove an existing source from your followings.
+		    following       Return the list of sources you're following.
+		    reply           Reply to tweets.
+		    publish         Publish your twtfile.
+		    sync-followings Sync followings from remote file.
+		    mail            Send new tweets per mail.
+		    url             Share urls
+		    ui              Start fzf based user-interface (experimental).
+
+		  Options:
+		    -h, --help      Print a help message and exit.
+		    -V, --version   Print version and exit.
+
+EOF
+	if [ -n "$1" ];then
+		exit 1
+	else
+		exit 0
+	fi
+}
+
+usage () {
+	_err=$1
+	if [ -n "$_err" ];then
+		printf "%s\n" "$_err" >&2
+		exec >&2
+	fi
+
+	cat <<-EOF
+		usage: $program_name $mode [OPTIONS...]${arguments:+ $arguments}
+
+		Synopsis:
+		  $synopsis
+
+		Options:
+EOF
+
+	options="$options,"
+	while [ -n "$options" ] ;do
+		c=${options%%,*}
+		case $c in
+			help )       printf "  -h, --help\n\tPrint a help message and exit.\n" ;;
+			limit )      printf "  -l, --limit\n\t NUM Limit total numer of tweets shown.\n" ;;
+			ascending )  printf "  -a, --ascending\n\tSort timeline in ascending order.\n" ;;
+			descending ) printf "  -d, --descending\n\tSort timeline in descending order.\n" ;;
+			pager )      printf "  -p, --pager\n\tUse pager to display content.\n" ;;
+			no-pager )   printf "  -P, --no-pager\n\tDo not use pager to display content.\n" ;;
+			update )     printf "  -u, --update\n\tUpdate sources.\n" ;;
+			no-update )  printf "  -U, --no-update\n\tDo not update sources.\n" ;;
+			raw )        printf "  -R, --raw\n\tPrint raw timeline.\n" ;;
+			max-procs )  printf "  -N, --max-procs NUM\n\tUse NUM parallel download processes.\n" ;;
+			search )     printf "  -S, --search EXP\n\tFilter tweets\n" ;;
+			config )     printf "  -c, --config CFG\n\tSpecify a custom config file location.\n" ;;
+			force )      printf "  -f, --force\n\tDisable safety checks and force action.\n" ;;
+			theme )      printf "  --theme THEME\n\tUse theme to display timeline.\n" ;;
+			timeout )    printf "  --timeout SECONDS\n\tMaximum time in seconds to fetch a feed.\n" ;;
+		esac
+		options=${options#$c,}
+	done
+
+	## Always end usage with a empty line
+	printf "\n"
+
+	if [ -n "$_err" ];then
+		exit 1
+	else
+		exit 0
+	fi
+}
+
+check_curl () {
+	if ! have_cmd curl;then
+		die "curl has to be installed."
+	fi
+
+	oIFS="$IFS"
+	IFS=.
+	set -- $(curl -V | $awk '{print $2;exit}')
+	if [ "$1" -lt 7 ] || [ "$1" -eq 7 ] && [ "$2" -lt 26 ];then
+		die "Need at least curl 7.26.0."
+	fi
+
+	IFS="$oIFS"
+}
+
+#########
+## Main #
+#########
+
+main() {
+
+	trap cleanup EXIT
+
+	create_dir "$config_dir"
+	create_dir "$cache_dir"
+	create_dir "$cache_dir/twtfiles"
+	create_dir "$cache_dir/timestamps"
+	create_dir "$log_dir"
+
+	if ! [ -e "$follow_file" ];then
+		:> "$follow_file"
+	fi
+
+	check_curl
+
+	while [ -n "$1" ]; do
+		SHIFT=1
+		OPTION="$1"
+		case $1 in
+			-V | --version )
+				printf "%s\n" "$VERSION"
+				exit 0
+				;;
+			-h | --help )
+				usage_main
+				;;
+			-c | --config | --config=?* | -c?*  )
+				set_optarg "$@"
+				config_file="$OPTARG"
+				[ -e "$config_file" ] || die "Missing configuration file '$config_file'";
+				;;
+			-??* )
+				shift
+				## dash 0.5.7 can't handle direct expansion
+				_tmp=${OPTION#??}
+				set -- "${OPTION%$_tmp}" "-$_tmp" "$@"
+				SHIFT=0
+				;;
+			-* )
+				usage "Invalid option $1"
+				;;
+			* )
+				break
+				;;
+		esac
+		shift "$SHIFT"
+	done
+
+	shift $(( OPTIND - 1))
+
+	read_config
+
+	mode=$1
+
+	if [ -z "$mode" ];then
+		usage_main
+		exit 1
+	fi
+
+	shift
+
+	case $mode in
+		update )
+			synopsis="Fetching new twtfiles from all your sources."
+			options="help,verbose,max-procs,timeout"
+			;;
+		follow )
+			synopsis="Add a new source to your followings."
+			arguments="NICK SOURCE"
+			options="help,verbose,force"
+			;;
+		unfollow )
+			synopsis="Remove an existing source from your followings."
+			arguments="NICK..."
+			options="help,verbose"
+			;;
+		following )
+			synopsis="Return the list of sources you're following."
+			options="help,verbose"
+			;;
+		timeline | view )
+			synopsis="Display timeline."
+			arguments="[NICK...]"
+			options="help,limit,verbose,ascending,descending,update,no-update,max-procs,search,pager,no-pager,raw,theme,timeout"
+			;;
+		ui )
+			synopsis="Start fzf based user-interface (experimental)."
+			options="help,verbose"
+			;;
+		reply )
+			synopsis="Reply to tweets."
+			arguments="[NICK]"
+			options="help,limit,verbose,ascending,descending,update,no-update,max-procs,search,timeout"
+			;;
+		publish )
+			synopsis="Publish your twtfile."
+			options="help,verbose"
+			;;
+		tweet )
+			synopsis="Append a new tweet to your twtxt file."
+			arguments="[TWEET...]"
+			options="help,verbose"
+			;;
+		url )
+			synopsis="Share urls with your followers."
+			arguments="URL..."
+			options="help,verbose"
+			;;
+		sync-followings )
+			synopsis="Sync followings from a remote file."
+			options="help,verbose"
+			;;
+		mail )
+			synopsis="Mail new tweets."
+			arguments="ADDRESS..."
+			options="help,verbose,ascending,descending,update,no-update"
+			;;
+		mailpipe )
+			synopsis="Read mails from stdin and tweet them."
+			options="help,verbose"
+			;;
+		quickstart )
+			synopsis="Import settings from twtxt."
+			options="help,verbose"
+			;;
+		* ) printf "Unknown mode %s.\n" "$mode" >&2; usage_main; exit 1;;
+
+	esac
+
+	call_mode "$@"
+
+	exit 0
+}
+
+main "$@"

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-date -u +'Now:  %a, %d %b %Y %R:%S +0000'
-notmuch show from:verification@steamoji.com and date:today |
-grep -e '^Your verification' -e ^Date |
-head -n2
+date -u +'Now:  %a, %d %b %Y %R:%S +0000' >&2
+out=$(notmuch show from:verification@steamoji.com and date:today)
+<<<"$out" grep ^Date >&2
+<<<"$out" grep '^Your verification' | sed -E -n 's,[^1-9]+([1-9]+).*,\1,p'

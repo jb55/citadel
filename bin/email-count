@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+exec notmuch --config /home/jb55/.notmuch-config-personal count 'tag:inbox and not tag:filed and not tag:noise'

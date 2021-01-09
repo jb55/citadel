@@ -7,4 +7,4 @@ if [ -z "$1" ]; then
 	printf "\n"
 	exit 0
 fi
-exec cp -vr --no-clobber "$SKELETON_CLOSET/$1"/.
+exec cp -vr --no-clobber "$SKELETON_CLOSET/$1"/. .

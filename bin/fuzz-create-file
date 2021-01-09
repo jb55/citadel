@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+set -eou pipefail
+
+dir=$(rg --files | xargs dirname | sort -u | fuzzer "$@")
+
+printf 'edit ~/%s/' "$dir" >&2
+read name
+
+if [ -z "$name" ]; then
+	exit 1
+fi
+
+mkdir -p "$dir" && edit "$dir/$name"

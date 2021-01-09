@@ -2,7 +2,7 @@
 
 #export LESS="-R -S --quit-if-one-screen"
 
-printf "sys: %s@%s\npwd: %s\n" \
+printf "%s@%s:%s\n" \
 	"$USER" \
 	"$HOSTNAME" \
 	"$PWD"

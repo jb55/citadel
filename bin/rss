@@ -1,2 +1,17 @@
 #!/usr/bin/env bash
-ssh charon r2e $@
+
+set -eou pipefail
+
+if [ -z "$1" ]; then
+	printf "usage: rss <something.com>\n"
+	exit 1
+fi
+
+rsshref=$(curl -sL "$1" | rsslink)
+
+if [ -z "$rsshref" ]; then
+	printf "no rss feed found on '%s'\n" "$1"
+	exit 2
+fi
+
+rssurl "$rsshref"
