@@ -6,6 +6,7 @@ set -o vi
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return
 
+export LONG_RUNNING_COMMAND_TIMEOUT=3
 export PS1='$(printf "\x01\033[30;1m\x02%3.*s\x01\033[0m\x02> \x01\033[33m\x02" $? $?)'
 export PS0='\033[0m'
 
