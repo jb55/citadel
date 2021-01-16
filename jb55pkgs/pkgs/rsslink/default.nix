@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = writeScript "rsslink" ''
     #!${bash}/bin/bash
-    ${pup}/bin/pup 'link[type="application/rss+xml"] attr{href}'
+    ${pup}/bin/pup 'link[type="application/rss+xml"] attr{href}' | head -n1
   '';
 
   phases = ["installPhase"];
