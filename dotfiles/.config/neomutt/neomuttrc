@@ -4,6 +4,10 @@ set sendmail="/home/jb55/bin/sendmail"
 set virtual_spoolfile=yes
 set folder="/home/jb55/mail/personal"
 set wait_key=no
+
+set sort = threads 
+set sort_aux = reverse-last-date-received
+
 virtual-mailboxes \
   "INBOX" "notmuch://?query=query:inbox"
 
