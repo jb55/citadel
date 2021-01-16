@@ -5,6 +5,7 @@ rf	recent files	fuzz-recent-files
 eFl	edit fuzz command list	fuzz-edit-command-list
 eFc	edit fuzz command	fuzz-edit-command
 sFc	show fuzz command	fuzz-show-fuzz-command
+ff	create file	echo fuzz-create-file
 of	open file	fuzz-open-file
 ec	edit commands	fuzz-edit-scripts
 em	edit mimi	echo edit ~/.config/mimi/mime.conf
