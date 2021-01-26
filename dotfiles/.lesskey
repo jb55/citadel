@@ -4,7 +4,7 @@ J next-file
 K prev-file
 f forw-screen-force
 F back-screen 
-d forw-screen-force
+d forw-screen
 u back-screen
 V forw-forever
 " set-mark
