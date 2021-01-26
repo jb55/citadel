@@ -242,7 +242,7 @@ myKeys theme = [
   , ("M-d", toggleWS)
   , ("M-f", toggleFull theme)
   , ("M-c", toggleCenter)
-  , ("M-m", toggleMirror)
+  , ("M-b", toggleMirror)
   , ("M-g", toggleGaps)
   -- , ("M-r", toggleFull)
   , ("M-v", sendKey shiftMask xK_Insert)
