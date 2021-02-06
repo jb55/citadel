@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-exec /run/current-system/sw/bin/dmenu -fn terminus-12 "$@"
+exec /run/current-system/sw/bin/dmenu -fn Inconsolata:size=14 "$@"

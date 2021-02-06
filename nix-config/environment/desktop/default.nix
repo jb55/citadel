@@ -25,7 +25,7 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
       aerc
       clipmenu
       colorpicker
-      dmenu2
+      dmenu
       dragon-drop
       dunst
       dynamic-colors

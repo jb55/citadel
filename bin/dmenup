@@ -10,6 +10,6 @@ fi
 prompt="$1"
 shift
 
-out=$(dmenu -noinput -p "$prompt")
+out=$(dmenu -p "$prompt")
 
 "$@" $out

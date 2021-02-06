@@ -1,2 +1,2 @@
 #!/bin/sh
-exec clipmenu "$@" -i -fn Inconsolata:size=14 -p clip -l 40 -w 700
+exec clipmenu "$@" -i -fn Inconsolata:size=14 -p clip -l 40 

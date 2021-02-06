@@ -109,14 +109,14 @@ in {
     #       '';
     #     });
 
-    dmenu2 = pkgs.lib.overrideDerivation super.dmenu2 (attrs: {
-      patches =
-        [ (super.fetchurl
-          { url = "https://jb55.com/s/404ad3952cc5ccf3.patch";
-            sha1 = "404ad3952cc5ccf3aa0674f31a70ef0e446a8d49";
-          })
-        ];
-    });
+    #dmenu2 = pkgs.lib.overrideDerivation super.dmenu2 (attrs: {
+    #  patchs =
+    #    [ (super.fetchurl
+    #      { url = "https://jb55.com/s/404ad3952cc5ccf3.patch";
+    #        sha1 = "404ad3952cc5ccf3aa0674f31a70ef0e446a8d49";
+    #      })
+    #    ];
+    #});
 
     #htop = pkgs.lib.overrideDerivation super.htop (attrs: {
     #  patches =
