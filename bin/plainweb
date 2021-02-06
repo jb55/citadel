@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+USER_AGENT="User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.89 Safari/537.36"
+
 if [ -z "$1" ]; then
   printf "usage: plainweb <url>\n"
   exit 1
@@ -9,7 +11,7 @@ HURL="/tmp/$(sha256sum <<<"$1" | awk '{print $1}').txt"
 OUT=${2:-$HURL}
 
 if [ ! -f "$HURL" ]; then
-	curl -sL "$1" | pandoc -f html -t plain - -o "$HURL"
+	curl -H "$USER_AGENT" -sL "$1" | sed 's,googletagmanager.com,google.com,g' | pandoc -f html -t plain - -o "$HURL"
 fi
 
 exec lessr "$HURL"
