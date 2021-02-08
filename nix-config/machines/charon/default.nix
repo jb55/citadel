@@ -223,7 +223,6 @@ in
     sieves = builtins.readFile ./dovecot/filters.sieve;
   };
 
-  #users.extraUsers.prosody.extraGroups = [ "jb55cert" ];
   users.extraUsers.smtpd.extraGroups = [ "jb55cert" ];
   users.extraUsers.jb55.extraGroups = [ "jb55cert" ];
 
