@@ -22,9 +22,9 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
        samp
        sharefile
        snap
-       viscal
+       #viscal
        zebra
-       zoom-link-opener
+       #zoom-link-opener
        define
     ];
     myHaskellPackages = with pkgs.haskellPackages; [

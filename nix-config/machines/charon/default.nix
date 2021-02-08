@@ -32,6 +32,14 @@ let gitExtra = {
     gitCfg = extra.git-server { inherit config pkgs; extra = extra // gitExtra; };
     hearpress = (import <jb55pkgs> { nixpkgs = pkgs; }).hearpress;
     myemail = "jb55@jb55.com";
+    xmpp_modules = [
+	    "csi"
+	    "smacks"
+	    "mam"
+	    "cloud_notify"
+	    "carbons"
+	    "http_upload"
+    ];
     radicale-rights = pkgs.writeText "radicale-rights" ''
       [vanessa-famcal-access]
       user = vanessa
@@ -105,17 +113,6 @@ in
     #(import ./vidstats extra)
   ];
 
-  # systemd.services.httpiped = {
-  #   description = "httpiped";
-  #   wantedBy = [ "multi-user.target" ];
-  #   after    = [ "multi-user.target" ];
-  #   environment = {
-  #     PORT = httpipePort;
-  #   };
-  #   serviceConfig.Restart = "always";
-  #   serviceConfig.ExecStart = "${httpiped}/bin/httpiped";
-  # };
-
   services.xinetd.enable = true;
   services.xinetd.services =
   [
@@ -130,6 +127,7 @@ in
   ];
 
   users.extraGroups.jb55cert.members = [ "prosody" "nginx" ];
+  users.extraGroups.vmail.members = [ "jb55" ];
 
   services.gitDaemon.basePath = "/var/git-public/repos";
   services.gitDaemon.enable = true;
@@ -184,11 +182,15 @@ in
 
   security.acme.certs."sheetzen.com" = {
     webroot = "/var/www/challenges";
+    group = "jb55cert";
+    allowKeysForGroup = true;
     email = myemail;
   };
 
   security.acme.certs."bitcoinwizard.net" = {
     webroot = "/var/www/challenges";
+    group = "jb55cert";
+    allowKeysForGroup = true;
     email = myemail;
   };
 
@@ -199,25 +201,26 @@ in
     users = {
       jb55 = {
         password = "$6$KHmFLeDBaXBE1Jkg$eEN8HM3LpZ4muDK/JWC25qW9xSZq0AqsF4tlzEan7yctROJ9A/lSqz6gN1b1GtwE7efroXGHtDi2FEJ2ujDAl0";
-        aliases = [ "postmaster" "bill" "will" "william" "me" "jb" ];
+        aliases = [ "postmaster" "bill" "will" "william" "me" "jb" "guestdaddy" ];
       };
+
     };
 
     sieves = builtins.readFile ./dovecot/filters.sieve;
   };
 
   users.extraUsers.prosody.extraGroups = [ "jb55cert" ];
-  services.prosody.enable = false;
+  services.prosody.enable = true;
   services.prosody.admins = [ "jb55@jb55.com" ];
   services.prosody.allowRegistration = false;
-  services.prosody.extraModules = [
-    # "cloud_notify"
-    # "smacks"
-    "carbons"
-    # "http_upload"
-  ];
+  services.prosody.extraModules = xmpp_modules;
+  services.prosody.package = pkgs.prosody.override { 
+	withCommunityModules = xmpp_modules; 
+  };
   services.prosody.extraConfig = ''
     c2s_require_encryption = true
+ 
+    http_upload_expire_after = 60 * 60 * 24 * 7
   '';
   services.prosody.ssl = {
     cert = "/var/lib/acme/jb55.com/fullchain.pem";

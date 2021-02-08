@@ -59,8 +59,8 @@ notmuchcmd tag +lightning +clightning '(to:"ElementsProject/lightning" or to:"li
 notmuchcmd tag +nix-dev +nix +list \(to:nix-dev@lists.science.uu.nl OR to:nix-dev@cs.uu.nl OR to:nix-devel@googlegroups.com OR from:nixos1@discoursemail.com\) and tag:inbox
 notmuchcmd tag +redo +list to:redo-list.googlegroups.com and tag:inbox
 
-# filed
-notmuchcmd tag +filed '(tag:list or tag:rss or tag:busy)' and not tag:filed and not tag:best and not tag:flagged and tag:inbox
+# file busy
+notmuchcmd tag +filed tag:busy and not tag:filed and not tag:best and not tag:flagged and tag:inbox
 
 # more contracting stuff
 notmuchcmd tag +work +steamoji tag:inbox and to:steamoji
@@ -76,6 +76,6 @@ notmuchcmd tag +flagged -busy -filed tag:inbox and '(tag:list and tag:to-me) or 
 notmuchcmd tag +inbox -spam +flagged "bitcoin wizard" and tag:spam
 
 # phone mail
-notmuchcmd tag -inbox tag:inbox and folder:".Archive"
+notmuchcmd tag -inbox tag:inbox and '(folder:".Archive" or folder:".Trash")'
 
 printf "notmuch tagging done.\n"

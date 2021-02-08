@@ -76,7 +76,7 @@ in {
 
   documentation.nixos.enable = false;
   documentation.dev.enable = true;
-  documentation.man.generateCaches = true; # list manpages
+  #documentation.man.generateCaches = true; # list manpages
 
   programs.ssh.startAgent = true;
 
