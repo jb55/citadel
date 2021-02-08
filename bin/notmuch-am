@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+mbox=$(mktemp)
+notmuch show --format=mbox "$1" > "$mbox"
+msgid=$(grep -i ^message-id "$mbox" | cut -d" " -f2 | head -n1)
+b4 am "$msgid" -m "$mbox"
+rm -f "$mbox"

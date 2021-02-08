@@ -27,6 +27,7 @@ gb	git branches	echo git bvr
 ni	notmuch inbox	fuzz-notmuch-inbox
 nt	notmuch threads	fuzz-notmuch-threads
 nat	notmuch archive	fuzz-notmuch-archive
+nam	notmuch am	fuzz-notmuch-am
 nai	notmuch archive inbox	fuzz-notmuch-archive-inbox
 nq	notmuch query	fuzz-notmuch-query
 es	email status	echo email-status-once
