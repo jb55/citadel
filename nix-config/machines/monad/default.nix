@@ -201,13 +201,13 @@ in
         NINTENDO_FF y
       '';
     }
-    { # pci acs hack, not really safe or a good idea
-      name = "acs-overrides";
-      patch = pkgs.fetchurl {
-        url = "https://aur.archlinux.org/cgit/aur.git/plain/add-acs-overrides.patch?h=linux-vfio";
-        sha256 = "1b1qjlqkbwpv82aja48pj9vpi9p6jggc8g92p4rg7zjjjs2ldp24";
-      };
-    }
+    #{ # pci acs hack, not really safe or a good idea
+    #  name = "acs-overrides";
+    #  patch = pkgs.fetchurl {
+    #    url = "https://aur.archlinux.org/cgit/aur.git/plain/add-acs-overrides.patch?h=linux-vfio";
+    #    sha256 = "1b1qjlqkbwpv82aja48pj9vpi9p6jggc8g92p4rg7zjjjs2ldp24";
+    #  };
+    #}
   ];
   boot.kernelParams = [ "pcie_acs_override=downstream" ];
 
