@@ -38,6 +38,7 @@ in
         # For a client configuration, one peer entry for the server will suffice.
         {
           publicKey = "TbGgpOqD6teLon0ksZKS8zvvjHtkOGKNWPpHZxhVFWA=";
+          #allowedIPs = [ "0.0.0.0/0" "::/0" ];
           allowedIPs = [ "10.100.0.1/32" ];
           #endpoint = "127.0.0.1:3333";
           endpoint = "24.84.152.187:53";
