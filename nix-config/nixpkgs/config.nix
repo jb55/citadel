@@ -52,6 +52,12 @@ in {
       ];
     });
 
+    neomutt = pkgs.lib.overrideDerivation super.neomutt (attrs: {
+      postConfigure = ''
+        sed -i '/HAVE_CURS_SET 1/d' config.h
+      '';
+    });
+
     weechat = super.weechat.override {configure = {availablePlugins, ...}: {
         scripts = with super.weechatScripts; [ wee-slack ];
       };
