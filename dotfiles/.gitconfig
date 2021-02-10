@@ -19,6 +19,8 @@
   insteadOf = gitlab:
 [url "jb55.com:git/"]
   insteadOf = dev:
+[url "jb55.com:git-public/"]
+  insteadOf = jb55:
 [url "ssh://git@phabricator.monstercat.com/diffusion/"]
   insteadOf = phab:
 [url "http://git.monster.cat/"]
