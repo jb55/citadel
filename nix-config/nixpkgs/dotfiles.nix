@@ -18,6 +18,8 @@ let
     #!${pkgs.bash}/bin/bash
     ${pkgs.feh}/bin/feh --bg-fill ${bgimg}
     ${pkgs.xlibs.xsetroot}/bin/xsetroot -cursor_name left_ptr
+    ${pkgs.autocutsel}/bin/autocutsel -fork -selection CLIPBOARD
+    ${pkgs.autocutsel}/bin/autocutsel -fork -selection PRIMARY
 
     gpg-connect-agent /bye
     GPG_TTY=$(tty)
