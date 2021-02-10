@@ -12,6 +12,7 @@ in {
   allowUnfree = true;
   allowUnfreeRedistributable = true;
   allowBroken = false;
+  checkMeta = true;
   zathura.useMupdf = true;
 
 
