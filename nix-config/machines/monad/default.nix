@@ -297,7 +297,7 @@ in
   services.tor.enable = if extra.is-minimal then false else true;
   services.tor.controlPort = 9051;
   services.tor.client.enable = true;
-  services.tor.extraConfig = extra.private.tor.extraConfig;
+  services.tor.settings = extra.private.tor.settings;
 
   services.fcgiwrap.enable = if extra.is-minimal then false else true;
 
