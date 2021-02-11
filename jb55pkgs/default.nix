@@ -4,6 +4,12 @@ let callPackage = pkgs.callPackage;
     fetch = args: callPackage (pkgs.fetchFromGitHub ({
       owner = "jb55";
     } // args)) {};
+
+    fetch-jb55 = args: callPackage (pkgs.fetchgit ({
+      url = "git://jb55.com/${args.repo}";
+      inherit (args) sha256 rev;
+    })) {};
+
     fetch-srht = args: callPackage (pkgs.fetchgit ({
       url = "https://git.sr.ht/~jb55/${args.repo}";
       inherit (args) sha256 rev;
@@ -27,10 +33,10 @@ in rec {
     sha256 = "17mmmqvn0xfh1vk85bip87cqc3mb9vqgs07p19zrprm4yasyims2";
   };
 
-  cmdtree = fetch {
+  cmdtree = fetch-jb55 {
     repo = "cmdtree";
-    rev  = "cb735b87a79b4b98018afa88e22bba000e091e6d"; # use my config
-    sha256 = "1i32dysk3a505k9y9phrrl04yv53llxn6mxcdl7789d9c8dqfkyl";
+    rev  = "3c3927d2e62cd91c6bc7a4313f6ef6edcc3e9336"; # use my config
+    sha256 = "0fy30v4d9c73az97g8sbnaca89zj6g984rgyjjbkj3ymb3cszmj4";
   };
 
   zoom-link-opener = fetch {
