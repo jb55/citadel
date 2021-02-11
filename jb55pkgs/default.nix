@@ -39,6 +39,12 @@ in rec {
     sha256 = "0fy30v4d9c73az97g8sbnaca89zj6g984rgyjjbkj3ymb3cszmj4";
   };
 
+  nixpkgs-ml-tools = fetch-jb55 {
+    repo = "nixpkgs-ml-tools";
+    rev  = "3d62d22c3c33d885d62418344acba029fe41f541"; # use my config
+    sha256 = "03ql84sf3rc4ixnmn88hxjgs1cgilzf41aw31iwzfg3sk1pqxdkv";
+  };
+
   zoom-link-opener = fetch {
     repo = "zoom-link-opener";
     rev  = "0.1.1";
