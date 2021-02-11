@@ -13,6 +13,15 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
       class "GtkMenuShell" binding "gtk-binding-menu"
     '';
 
+    jb55pkgs = import <jb55pkgs> { inherit pkgs; };
+
+    jbpkgs = with jb55pkgs; [
+       snap
+       cmdtree
+       zoom-link-opener
+       viscal
+    ];
+
     df = pkgs.dwarf-fortress-packages.dwarf-fortress-full.override {
        #dfVersion = "0.44.11";
        enableIntro = false;
@@ -21,7 +30,7 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
        enableTextMode = true;
     };
 
-    mypkgs = with pkgs; [
+    mypkgs = (with pkgs; [
       aerc
       clipmenu
       colorpicker
@@ -29,7 +38,6 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
       dragon-drop
       dunst
       dynamic-colors
-      emacs
       feh
       todo-txt-cli
       getmail # for getmail-gmail-xoauth-tokens
@@ -39,6 +47,7 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
       libnotify
       msmtp
       muchsync
+      neomutt
       notmuch
       oathToolkit
       pandoc
@@ -72,7 +81,7 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
       zoom-us
 
       df
-    ];
+    ]) ++ jbpkgs;
 
 in {
 

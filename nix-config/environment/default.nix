@@ -10,22 +10,18 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
     myPackages = with jb55pkgs; [
        bcalc
        btcs
-       cmdtree
        csv-delim
        csv-scripts
        datefmt
-       dbopen
        extname
        kindle-send
        mandown
        ratio
        samp
        sharefile
-       snap
-       #viscal
        zebra
-       #zoom-link-opener
        define
+       nixpkgs-ml-tools
     ];
     myHaskellPackages = with pkgs.haskellPackages; [
       #skeletons
