@@ -11,12 +11,37 @@ set sort = threads
 set sort_aux = reverse-last-date-received
 
 virtual-mailboxes \
-  "INBOX" "notmuch://?query=query:inbox"
+  "INBOX" "notmuch://?query=query:inbox" \
+  "nixpkgs-dev" "notmuch://?query=query:nixpkgs" \
+  "2day" "notmuch://?query=query:2day" \
+  "best" "notmuch://?query=query:best" \
+  "bitcoin" "notmuch://?query=query:bitcoin" \
+  "flagged" "notmuch://?query=query:flagged" \
+  "github" "notmuch://?query=query:github" \
+  "lightning" "notmuch://?query=query:lightning" \
+  "list" "notmuch://?query=query:list" \
+  "nixpkgs" "notmuch://?query=query:nixpkgs" \
+  "notmuch" "notmuch://?query=query:notmuch" \
+  "today" "notmuch://?query=query:today" \
+  "work" "notmuch://?query=query:work"
 
-macro index A "<modify-labels>-unread -inbox" "Archive message"
+macro index,pager A "<modify-labels>-unread -inbox" "Archive message"
 macro index S "<modify-labels>+spam -unread -inbox" "Spam message"
 macro index c "<change-vfolder>?" "Change to vfolder overview"
 macro index \\\\ "<vfolder-from-query>" "Search mailbox"
 
+my_hdr Bcc: William Casarin <jb55@jb55.com>
+
 alias jb55 William Casarin <jb55@jb55.com>
 alias nixpkgs-dev ~andir/nixpkgs-dev@lists.sr.ht
+
+color quoted        magenta             default # Quoting Ebene 1
+color quoted1       red                 default # Quoting Ebene 2
+color quoted2       green               default # Quoting Ebene 3
+color quoted3       magenta             default # Quoting Ebene 4
+color quoted4       blue                default # Quoting Ebene 5
+color quoted5       cyan                default # Quoting Ebene 6
+color quoted6       green               default # Quoting Ebene 7
+color quoted7       red                 default # Quoting Ebene 8
+color quoted8       magenta             default # Quoting Ebene 9
+color quoted9       blue                default # Quoting Ebene 10
