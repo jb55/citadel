@@ -24,18 +24,6 @@ let
   walletemail = import ./walletemail.nix { inherit pkgs bcli; };
 in
 {
-  #systemd.user.services.bitcoin-dca =  {
-  #  enable = true;
-  #  description = "bitcoin dca";
-
-  #  serviceConfig = {
-  #    Type = "oneshot";
-  #    ExecStart = dca;
-  #  };
-
-  #  startAt = "Thu *-*-* 10:00:00";
-  #};
-
   services.bitcoind = {
     mainnet = {
       enable = if extra.is-minimal then false else true;
@@ -65,10 +53,4 @@ in
       '';
     };
   };
-
-  # services.electrs.enable = false;
-  # services.electrs.dataDir = "/zbig/electrs";
-  # services.electrs.bitcoinDataDir = bitcoinDataDir;
-
-
 }
