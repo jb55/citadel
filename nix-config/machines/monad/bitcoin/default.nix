@@ -47,9 +47,10 @@ in
         bind-addr=0.0.0.0:9735
         announce-addr=24.84.152.187:9735
         network=bitcoin
-        log-level=debug
-        alias=bitsbacker.com
+        alias=jb55.com
         rgb=ff0000
+        proxy=127.0.0.1:9050
+        experimental-offers
       '';
     };
   };
