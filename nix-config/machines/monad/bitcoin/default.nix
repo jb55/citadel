@@ -2,6 +2,18 @@ extra:
 { config, lib, pkgs, ... }:
 
 let
+  nix-bitcoin = import (pkgs.fetchFromGitHub {
+    owner  = "fort-nix";
+    repo   = "nix-bitcoin";
+    rev    = "eddc48ee62e5b84400f43941dd72de06c874f0f6";
+    sha256 = "1s2fzzw0zyd11nacg130lhpnrkd9ismj4cdr6sq8413my1h4hbdx";
+  }) { inherit pkgs; };
+
+  plugins = ["summary"];
+
+  mkPluginCfg = name:
+    "plugin=${builtins.getAttr name (nix-bitcoin.clightning-plugins)}/${name}.py";
+
   bitcoinDataDir = "/zbig/bitcoin";
 
   base-bitcoin-conf = extra.private.bitcoin;
@@ -51,6 +63,7 @@ in
         rgb=ff0000
         proxy=127.0.0.1:9050
         experimental-offers
+        ${lib.concatStringsSep "\n" (map mkPluginCfg plugins)}
       '';
     };
   };
