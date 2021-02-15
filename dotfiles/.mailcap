@@ -1,2 +1,2 @@
-
 text/html; w3m -I %{charset} -T text/html; copiusoutput;
+application/pdf; zathura %s
