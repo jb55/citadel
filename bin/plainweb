@@ -11,7 +11,7 @@ HURL="/tmp/$(sha256sum <<<"$1" | awk '{print $1}').txt"
 OUT=${2:-$HURL}
 
 if [ ! -f "$HURL" ]; then
-	curl -H "$USER_AGENT" -sL "$1" | sed 's,googletagmanager.com,google.com,g' | pandoc -f html -t plain - -o "$HURL"
+	w3m -header "$USER_AGENT" -dump "$1" > "$HURL"
 fi
 
 exec lessr "$HURL"
