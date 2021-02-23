@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
 wmctrl -a Participant || \
-wmctrl -a "Zoom Meeting"
+wmctrl -a "Zoom Meeting" || \
+wmctrl -a "Zoom"
 
