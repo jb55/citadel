@@ -100,6 +100,9 @@ in
         { publicKey = "N4bIpjNL/IzV59y5KWHiR54n0rAKYcr3/BkVLzCmBBA="; # old-mac
           allowedIPs = [ "10.100.0.5/32" ];
         }
+        { publicKey = "Ynuism5cSJYUrMF/gWZti8W+PztLufaB/3mQlXV6HyY="; # vanessa-phone
+          allowedIPs = [ "10.100.0.6/32" ];
+        }
       ];
     };
 
