@@ -311,15 +311,30 @@ in
   '';
 
   services.nginx.enable = if extra.is-minimal then false else true;
+  systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
   services.nginx.httpConfig = ''
       server {
-        listen      80 default_server;
-        server_name _;
-        root /www/public;
-        index index.html index.htm;
-        location / {
-          try_files $uri $uri/ =404;
-        }
+        listen 80;
+        listen ${extra.machine.ztip}:80;
+        listen 192.168.86.26;
+
+	server_name notes.jb55.com;
+
+	location / {
+	    root                  /var/www/notes;
+	    autoindex on;
+            index index.html;
+
+	    client_body_temp_path /var/www/tmp;
+
+	    dav_methods PUT DELETE MKCOL COPY MOVE;
+	    dav_ext_methods PROPFIND OPTIONS;
+
+	    client_max_body_size 10M;
+
+	    create_full_put_path  on;
+	    dav_access            user:rw group:rw  all:rw;
+	}
       }
 
     '' + (if config.services.nix-serve.enable then ''
