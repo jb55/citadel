@@ -32,6 +32,7 @@
 [gui]
   recentrepo = /Users/jb55/src/js/titania
 [alias]
+  s = show
   a = add
   b = branch
   au = add -u
@@ -63,7 +64,6 @@
   refl = reflog --date=relative
   r = rebase
   serve = !git daemon --reuseaddr --verbose --base-path=. --export-all ./.git
-  s = status
   stat2 = log --stat --pretty=format:'%C(auto,yellow)%h%C(auto,magenta)% G? %C(auto,blue)%>(12,trunc)%cr %C(auto,green)%aN %C(auto,red)%D %n%n   %C(auto,reset)%s%n'
   st = status -sb
   tagd = !"git tag --format='%(creatordate:short)%09%(refname:strip=2)' | sort"
