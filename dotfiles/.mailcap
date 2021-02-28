@@ -1,2 +1,2 @@
-text/html; w3m -I %{charset} -T text/html; copiusoutput;
+text/html; w3m -dump -o document_charset=%{charset} '%s'; nametemplate=%s.html; copiousoutput
 application/pdf; zathura %s
