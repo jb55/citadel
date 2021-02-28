@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-USER_AGENT="User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.89 Safari/537.36"
+USER_AGENT='User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) QtWebEngine/5.15.2 Chrome/83.0.4103.122 Safari/537.36'
 
 if [ -z "$1" ]; then
   printf "usage: plainweb <url>\n"
@@ -11,7 +11,8 @@ HURL="/tmp/$(sha256sum <<<"$1" | awk '{print $1}').txt"
 OUT=${2:-$HURL}
 
 if [ ! -f "$HURL" ]; then
-	w3m -header "$USER_AGENT" -dump "$1" > "$HURL"
+	#w3m -header "$USER_AGENT" -dump "$1" > "$HURL"
+	w3m -dump "$1" > "$HURL"
 fi
 
 exec lessr "$HURL"
