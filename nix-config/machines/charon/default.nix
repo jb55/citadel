@@ -430,6 +430,14 @@ in
         proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
       }
 
+      location = /saylor-saif {
+        return 302 https://episodes.castos.com/5ffc6bf0bf71b5-21733898/34.-Michael-Saylor-on-The-Fiat-Standard.mp3;
+      }
+
+      location = /attack {
+        return 302 https://nakamotoinstitute.org/mempool/speculative-attack/;
+      }
+
       location /phlog {
         autoindex on;
       }
