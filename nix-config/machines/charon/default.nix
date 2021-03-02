@@ -1,8 +1,8 @@
 extra:
 { config, lib, pkgs, ... }:
 let gitExtra = {
-      git = {projectroot = "/var/git";};
-      host = "git.zero.jb55.com";
+      git = {projectroot = "/var/git-public/repos";};
+      host = "git.jb55.com";
     };
     httpipePort = "8899";
     # httpiped = (import (pkgs.fetchgit {
@@ -30,6 +30,7 @@ let gitExtra = {
     };
 
     gitCfg = extra.git-server { inherit config pkgs; extra = extra // gitExtra; };
+
     hearpress = (import <jb55pkgs> { nixpkgs = pkgs; }).hearpress;
     myemail = "jb55@jb55.com";
     xmpp_modules = [
@@ -131,6 +132,17 @@ in
 
   services.gitDaemon.basePath = "/var/git-public/repos";
   services.gitDaemon.enable = true;
+
+  users.users = {
+    git = {
+      uid = config.ids.uids.git;
+      description = "Git daemon user";
+    };
+  };
+
+  users.groups = {
+    git.gid = config.ids.gids.git;
+  };
 
   services.radicale.enable = true;
   services.radicale.config = ''
@@ -272,7 +284,6 @@ in
   services.fcgiwrap.enable = true;
 
   services.nginx.httpConfig = ''
-    ${gitCfg}
 
     server {
       listen 443 ssl;
@@ -329,6 +340,21 @@ in
 
       location /.well-known/acme-challenge {
         root /var/www/challenges;
+      }
+
+      location ~ ^(/[^/]+)/?$ {
+	if (-f $document_root$1/file/README.md.html) {
+	  return 302 $1/file/README.md.html;
+	}
+	if (-f $document_root$1/file/README.html) {
+	  return 302 $1/file/README.html;
+	}
+	if (-f $document_root$1/file/README.txt.html) {
+	  return 302 $1/file/README.txt.html;
+	}
+	if (-f $document_root$1/log.html) {
+	  return 302 $1/log.html;
+	}
       }
 
       root /var/git-public/stagit;
