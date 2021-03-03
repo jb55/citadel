@@ -1,2 +1,0 @@
-#!/usr/bin/env bash
-xdotool selectwindow set_window --name "$1"
