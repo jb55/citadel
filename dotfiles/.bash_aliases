@@ -53,6 +53,7 @@ export PAGER=less
 export GOPATH=$HOME/dev/gocode
 export PATH=$HOME/bin:$PATH
 export PATH=$HOME/.local/bin:$PATH
+export PATH=$HOME/.npm/bin:$PATH
 
 md () {
     mandown README*
