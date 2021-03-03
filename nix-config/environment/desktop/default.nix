@@ -19,6 +19,7 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
        snap
        cmdtree
        zoom-link-opener
+       x11-rename
        viscal
     ];
 
