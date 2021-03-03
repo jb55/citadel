@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+export DDG_MENU="dmenu -p ddg-results -l 40"
+exec dmenup duckduckgo ddg

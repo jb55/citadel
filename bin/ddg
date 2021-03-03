@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+set -eou pipefail
+
+DDG_MENU=${DDG_MENU:-fzf}
+
+ddgr --json "$@" | jq -r '.[] | [.title,.url] | @tsv' | $DDG_MENU | cutt -f2 | xargs open
