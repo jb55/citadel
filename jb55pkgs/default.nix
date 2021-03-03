@@ -36,8 +36,8 @@ in rec {
 
   cmdtree = fetch-jb55 {
     repo = "cmdtree";
-    rev  = "3c3927d2e62cd91c6bc7a4313f6ef6edcc3e9336"; # use my config
-    sha256 = "0fy30v4d9c73az97g8sbnaca89zj6g984rgyjjbkj3ymb3cszmj4";
+    rev  = "86d3680c934ef0cfa87103ec5e9e59e30bbaa5ca"; # use my config
+    sha256 = "1m6mgay9rc4vc8ib6zxvvz75flcaxdargpijqdh4zm45bghn34lp";
   };
 
   nixpkgs-ml-tools = fetch-jb55 {
