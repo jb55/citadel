@@ -12,5 +12,3 @@ set recolor-keephue    "false"
 
 set scroll-page-aware "false"
 set scroll-step 100
-set smooth-scroll "true"
-
