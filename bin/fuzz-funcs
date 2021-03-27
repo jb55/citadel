@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+set -eou pipefail
+file=$(rg --files | fuzzer "$@")
+fuzz-search-file "$file" " func "

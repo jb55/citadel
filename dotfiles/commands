@@ -21,6 +21,7 @@ cs	compile show build	echo cat .build-result
 m	make	fuzz-make
 sp	search project	fuzz-search-files
 ss	search project file	fuzz-search-file
+sf	search project file funcs	fuzz-funcs
 h	run history	fuzz-run-hist
 tj	tag jump	fuzz-tag-jump
 te	todos edit	echo edit ~/docs/todo/todo.txt
