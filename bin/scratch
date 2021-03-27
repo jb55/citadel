@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+tmp="$(mktemp)"
+edit "$tmp"
+printf "%s\n", "$tmp"
