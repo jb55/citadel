@@ -21,3 +21,4 @@ let maplocalleader = "\\"
 nmap <Leader>xda ma:%s/\s\+$//g<CR>`a
 
 autocmd FileType go autocmd BufWritePre <buffer> execute "normal! mz:mkview\<esc>:%!gofmt-safe\<esc>:loadview\<esc>`z"
+autocmd BufEnter,BufNew *.gmi set wrap linebreak
