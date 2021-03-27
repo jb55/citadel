@@ -1,9 +1,12 @@
 #!/usr/bin/env bash
 BOOKS_DIR="${1:-$HOME/docs}"
 
+set -eou pipefail
+
 find "$BOOKS_DIR" -name '*.txt' -type f -printf '%T@\t%f\t%p\n' |
   sort -rn |
   cutt -f2- |
+  ct |
   fzf |
-  awkt '{print $2}' |
+  awk '{print $2}' |
   xargs lessr
