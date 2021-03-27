@@ -38,7 +38,7 @@ if hostname == 'quiver':
 # `{line0}`: Same as `{line}`, but starting from index 0. * `{column0}`:
 # Same as `{column}`, but starting from index 0.
 # Type: ShellCommand
-c.editor.command = ['edit', '{file}']
+c.editor.command = ['edit-gui', '{file}', '+{line}']
 
 # This setting can be used to map keys to other keys. When the key used
 # as dictionary-key is pressed, the binding for the key used as
