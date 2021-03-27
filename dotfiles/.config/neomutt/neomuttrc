@@ -6,6 +6,7 @@ set folder="/home/jb55/mail/personal"
 set wait_key=no
 set from="jb55@jb55.com"
 set pipe_decode=yes
+unset markers
 
 set sort = threads 
 set sort_aux = reverse-last-date-received
