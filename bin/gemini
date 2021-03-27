@@ -1,2 +1,8 @@
 #!/usr/bin/env sh
-exec $GEMINICLIENT "$@"
+if [[ "$1" =~ ^gemini: ]] || [[ "$1" =~ ^gopher: ]]; then
+	$GEMINICLIENT "$@"
+else
+	$GEMINICLIENT "gemini://$1"
+fi
+
+
