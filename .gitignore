@@ -1,2 +1,5 @@
-/bin/cmdtree
-/bin/viscal
+bin/cmdtree
+bin/viscal
+bin/gmni
+bin/lagrange
+bin/resources.lgr
