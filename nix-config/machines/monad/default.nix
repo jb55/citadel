@@ -129,7 +129,7 @@ in
   services.dnsmasq.resolveLocalQueries = true;
   #services.dnsmasq.servers = ["127.0.0.1#43"];
   # services.dnsmasq.servers = ["127.0.0.1#43" "1.1.1.1" "8.8.8.8"];
-  services.dnsmasq.servers = ["1.1.1.1" "8.8.8.8"];
+  services.dnsmasq.servers = ["8.8.8.8" "8.8.4.4" ];
   services.dnsmasq.extraConfig = ''
     cache-size=10000
     addn-hosts=/var/hosts
