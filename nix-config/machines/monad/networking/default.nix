@@ -139,6 +139,8 @@ in
     port = 14325;
   };
 
+  services.jellyfin.enable = true;
+
   services.plex = {
     enable = true;
     group = "transmission";
