@@ -3,6 +3,10 @@
 dir=$(dirname "$1")
 base=$(basename "$1")
 
+if [ "$base" == "" ]; then
+	exit 3
+fi
+
 export LESSHISTFILE="$dir/.$base.hst"
 touch $LESSHISTFILE || :
 
