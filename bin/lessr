@@ -15,4 +15,4 @@ then
 fi
 
 # export LESS="-cix8JRM --save-marks"
-exec less -J --save-marks "$@"
+exec less --save-marks "$@"
