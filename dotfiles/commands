@@ -9,8 +9,9 @@ ff	create file	echo fuzz-create-file
 of	open file	fuzz-open-file
 ec	edit commands	fuzz-edit-scripts
 em	edit mimi	echo edit ~/.config/mimi/mime.conf
-ev	edit nvim config	echo edit ~/.config/nvim/init.vim
-en	edit neomutt config	echo edit ~/.config/neomutt/neomuttrc
+ecv	edit nvim config	echo edit ~/.config/nvim/init.vim
+ecn	edit neomutt config	echo edit ~/.config/neomutt/neomuttrc
+ecc	edit vdirsyncer config	echo edit ~/.config/vdirsyncer/config
 sc	show command	fuzz-show-script
 sh	show history	fuzz-show-hist
 Nc	new command	echo make-script
