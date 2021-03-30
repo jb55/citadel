@@ -3,10 +3,15 @@ BOOKS_DIR="${1:-$HOME/docs}"
 
 set -eou pipefail
 
-find "$BOOKS_DIR" -name '*.txt' -type f -printf '%T@\t%f\t%p\n' |
+document=$(find "$BOOKS_DIR" \( -iname '*.txt' -o -iname '*.epub' -o -iname '*.pdf' -o -iname '*.djvu' \) -type f -printf '%T@\t%f\t%p\n' |
   sort -rn |
   cutt -f2- |
   ct |
   fzf |
-  awk '{print $2}' |
-  xargs lessr
+  awk '{print $2}')
+
+if [ $(extname "$document") == ".txt" ]; then
+	lessr "$document"
+else
+	open "$document"
+fi
