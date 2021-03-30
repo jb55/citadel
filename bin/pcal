@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+khal -c ~/.config/khal/personal interactive

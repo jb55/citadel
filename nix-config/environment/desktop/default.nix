@@ -74,6 +74,7 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
       xautolock
       xbindkeys
       xclip
+      vdirsyncer
       xdotool
       xlibs.xev
       xlibs.xmodmap

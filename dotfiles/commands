@@ -19,6 +19,7 @@ cc	compile	fuzz-compile
 cr	compile repeat	fuzz-compile-repeat
 ce	compile error	fuzz-compile-error
 cs	compile show build	echo cat .build-result
+kp	khal personal	echo pcal
 m	make	fuzz-make
 sp	search project	fuzz-search-files
 ss	search project file	fuzz-search-file
