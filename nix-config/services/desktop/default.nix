@@ -173,6 +173,15 @@ in
     drivers = [ pkgs.gutenprint ] ;
   };
 
+  systemd.user.services.sync-calendar = {
+    enable   = if extra.is-minimal then false else true;
+    description = "Calendar Sync";
+    wantedBy = [ "graphical-session.target" ];
+    after    = [ "graphical-session.target" ];
+    serviceConfig.ExecStart = "${pkgs.vdirsyncer}/bin/vdirsyncer sync";
+    startAt = "*:0/15";
+  };
+
   systemd.user.services.standup = {
     enable   = if extra.is-minimal then false else true;
     description = "Standup notification";

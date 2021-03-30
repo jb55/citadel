@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+runlogu sync-calendar.service
