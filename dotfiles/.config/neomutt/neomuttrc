@@ -27,7 +27,7 @@ virtual-mailboxes \
   "today" "notmuch://?query=query:today" \
   "work" "notmuch://?query=query:work"
 
-macro index,pager a "<modify-labels>-unread -inbox" "Archive message"
+macro index,pager a "<modify-labels>-unread -inbox<enter>j<enter>
 macro index,pager A "<create-alias>" "Create alias"
 macro index,pager F "<modify-labels>+filed" "File message"
 macro index S "<modify-labels>+spam -unread -inbox" "Spam message"
