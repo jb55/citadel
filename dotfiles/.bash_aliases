@@ -63,6 +63,7 @@ function run_fuzzer() {
 	eval "$(fuzz-run-command "$@")"
 }
 
+alias m="neomutt"
 alias s="general-status"
 alias t="todo.sh"
 alias e="edit -n"
