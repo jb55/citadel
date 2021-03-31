@@ -97,3 +97,5 @@
 	template = /home/jb55/.git-template
 [grep]
 	lineNumber = true
+[credential "https://github.com"]
+	helper = !gh auth git-credential
