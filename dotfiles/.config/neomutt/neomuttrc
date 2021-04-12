@@ -49,3 +49,5 @@ color quoted6       green               default # Quoting Ebene 7
 color quoted7       red                 default # Quoting Ebene 8
 color quoted8       magenta             default # Quoting Ebene 9
 color quoted9       blue                default # Quoting Ebene 10
+
+color header            brightcyan          default        '^Subject:'
