@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+set -eou pipefail
+
+file=$(ls -1pt | grep -v / | fuzzer)
+
+echo "open $file"
