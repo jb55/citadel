@@ -19,7 +19,7 @@ echo "$output" >> /tmp/msmtp.log
 if grep -E '^\s+enqueued' <<<"$output"
 then
 	if command -v notify-send &> /dev/null; then
-		notify-send "$output"
+		notify-send -u critical "$output"
 	fi
 fi
 
