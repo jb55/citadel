@@ -64,6 +64,7 @@ function run_fuzzer() {
 }
 
 alias m="neomutt"
+alias mq="msmtp-queue"
 alias s="general-status"
 alias t="todo.sh"
 alias e="edit -n"
