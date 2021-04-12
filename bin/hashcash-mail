@@ -1,0 +1,7 @@
+
+#!/usr/bin/env bash
+
+email=${1:-"jb55@jb55.com"}
+hcash=$(hashcash -mb26 "$email")
+
+sed "/^From:.*/i X-Hashcash: $hcash"

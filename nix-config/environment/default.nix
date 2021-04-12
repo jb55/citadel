@@ -46,6 +46,7 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
       dateutils
       direnv
       du-dust
+      hashcash
       file
       fzf
       git-tools
