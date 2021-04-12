@@ -40,6 +40,7 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
       dunst
       dynamic-colors
       feh
+      khal
       todo-txt-cli
       getmail # for getmail-gmail-xoauth-tokens
       gnome3.gnome-calculator
