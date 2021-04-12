@@ -12,7 +12,8 @@ em	edit mimi	echo edit ~/.config/mimi/mime.conf
 ecv	edit nvim config	echo edit ~/.config/nvim/init.vim
 ecn	edit neomutt config	echo edit ~/.config/neomutt/neomuttrc
 ecc	edit vdirsyncer config	echo edit ~/.config/vdirsyncer/config
-lt	last files	fuzz-last-files
+elf	edit last files	fuzz-last-files edit
+olf	open last files	fuzz-last-files open
 sc	show command	fuzz-show-script
 sh	show history	fuzz-show-hist
 Nc	new command	echo make-script

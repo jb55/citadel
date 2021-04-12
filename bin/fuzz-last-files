@@ -2,6 +2,8 @@
 
 set -eou pipefail
 
+action="${1:-open}"
+
 file=$(ls -1pt | grep -v / | fuzzer)
 
-echo "open $file"
+echo "$action $file"
