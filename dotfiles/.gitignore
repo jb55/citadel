@@ -26,3 +26,5 @@ node_modules/
 /.msmtprc
 /.dynamic-colors/
 .Xresources.d/themes/current
+/.local/share/zathura/bookmarks
+/.local/share/zathura/input-history
