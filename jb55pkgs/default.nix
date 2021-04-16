@@ -36,8 +36,8 @@ in rec {
 
   cmdtree = fetch-jb55 {
     repo = "cmdtree";
-    rev  = "86d3680c934ef0cfa87103ec5e9e59e30bbaa5ca"; # use my config
-    sha256 = "1m6mgay9rc4vc8ib6zxvvz75flcaxdargpijqdh4zm45bghn34lp";
+    rev  = "9ff1b9d375385210ea2221b4b0e55408453dbd0b"; # use my config
+    sha256 = "0wnp2wis28iplln9h7yips835bhmcchmp373pvw0say35hn3rd36";
   };
 
   nixpkgs-ml-tools = fetch-jb55 {
@@ -58,10 +58,10 @@ in rec {
     sha256 = "1l7rfjwnjc28zszbrzjqsgyp47hkl355is8zshfgv3wacb7n6424";
   };
 
-  viscal = fetch {
+  viscal = fetch-jb55 {
     repo = "viscal";
-    rev  = "0.0.1";
-    sha256 = "0kisxf6m1xvll8xj54rl3lr07aq3l0gizix5axp9hkawss0b55sa";
+    rev  = "4b87413babb4296d94ac8535f1160f7a0d507c4e";
+    sha256 = "0lamxx6xh5b8f38sqyn2ghqplvvaaxwkmvd6gb3vwqyw2qr3vwga";
   };
 
   datefmt = fetch {
