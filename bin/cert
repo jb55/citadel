@@ -1,6 +1,6 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -i bash -p openssl
-out=$(echo "Q" | openssl s_client -connect "$1":"${2:-443}" -servername "$1")
+out=$(echo "Q" | openssl s_client -connect "${2:-$1}":"${3:-443}" -servername "$1")
 
 cert=$(sed -ne '
    /-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p      # got the range, ok
