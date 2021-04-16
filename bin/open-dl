@@ -3,8 +3,9 @@
 set -e
 
 cd "${1:-$HOME/Downloads}"
+max_depth=${3:-1}
 
-out=$(find . -maxdepth 1 -name "*.${2:-pdf}" -type f -printf "%T@ %Tc %p\n" \
+out=$(find . -maxdepth $max_depth -name "*.${2:-pdf}" -type f -printf "%T@ %Tc %p\n" \
   | sort -nr \
   | cut -f2- -d" " \
   | dmenu -p docs -l 30 \
