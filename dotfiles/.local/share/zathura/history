@@ -812,7 +812,7 @@ position-y=0.97368421052631582
 time=1618340011
 
 [/home/jb55/docs/books/feynman-lectures-qm.pdf]
-page=0
+page=343
 offset=0
 zoom=1.4950634696755993
 rotate=0
@@ -820,12 +820,12 @@ pages-per-row=1
 first-page-column=1:2
 page-right-to-left=false
 position-x=0.5
-position-y=0.00072674418604651162
-time=1618440442
-jumplist=
+position-y=0.49895787626151811
+time=1618534603
+jumplist=0 0.5 0.00072674418604651162 343 0.5 0.49895787626151816 
 
 [1bMi6KbAspTe1SmjogJ+4cqorxX1P6ZkL6Wm5NmBuwM=]
-page=0
+page=343
 offset=0
 zoom=1.4950634696755993
 rotate=0
@@ -833,8 +833,8 @@ pages-per-row=1
 first-page-column=1:2
 page-right-to-left=false
 position-x=0.5
-position-y=0.00072674418604651162
-time=1618440442
+position-y=0.49895787626151811
+time=1618534603
 
 [/home/jb55/Downloads/driver-full.pdf]
 page=98
@@ -910,3 +910,28 @@ page-right-to-left=false
 position-x=0.50549450549450547
 position-y=0.19702721082894231
 time=1618534162
+
+[/home/jb55/docs/books/feynman-lectures-mechanics-radiation-heat.pdf]
+page=39
+offset=0
+zoom=2.5952045133991537
+rotate=0
+pages-per-row=1
+first-page-column=1:2
+page-right-to-left=false
+position-x=0.49963741841914433
+position-y=0.040345604222547828
+time=1618535817
+jumplist=33 0.49963741841914433 0.034495149056611031 50 0.50006092829535265 0.051956272817973811 68 0.50006092829535265 0.070551314140287869 33 0.50006092829535265 0.034394289346899427 
+
+[zPOXn8am9j6RVTWLPzqUrVV+yNWRbOy+X3rTD2XuTYc=]
+page=39
+offset=0
+zoom=2.5952045133991537
+rotate=0
+pages-per-row=1
+first-page-column=1:2
+page-right-to-left=false
+position-x=0.49963741841914433
+position-y=0.040345604222547828
+time=1618535817
