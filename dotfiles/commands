@@ -24,6 +24,9 @@ cs	compile show build	echo cat .build-result
 kp	khal personal	echo pcal
 m	make	fuzz-make
 sp	search project	fuzz-search-files
+sd	search diff	fuzz-edit-diff-line
+sD	search staged diff	fuzz-edit-diff-line --staged
+sC	search commit	fuzz-edit-diff-line HEAD^-
 ss	search project file	fuzz-search-file
 sf	search project file funcs	fuzz-funcs
 h	run history	fuzz-run-hist

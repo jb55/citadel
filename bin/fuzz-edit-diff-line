@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+set -eou pipefail
+
+file_line=$(git diff "$@" |
+	showlinenum show_path=1 |
+	grep -E ':\+' |
+	fzf --ansi |
+	sed -n 's,^\([^:]\+\):\([^:]\+\).*,"\1" +\2,p')
+
+echo "edit $file_line"
