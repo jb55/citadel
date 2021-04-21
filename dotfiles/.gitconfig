@@ -39,6 +39,7 @@
   f = fetch -p
   br = symbolic-ref --short HEAD
   ca = commit --amend
+  mlap = push monad HEAD:laptop
   c = commit
   cloner = clone --recursive
   d = diff
