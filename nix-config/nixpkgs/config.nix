@@ -76,15 +76,6 @@ in {
 
     wine = super.wineWowPackages.staging;
 
-    dasht = super.lib.overrideDerivation super.dasht (attrs: {
-      src = pkgs.fetchFromGitHub {
-        owner  = "sunaku";
-        repo   = "dasht";
-        sha256 = "1i4gc68aypa0fk94ssy2gzakcn2qlmp9qf427km6fxbjx15qsbjn";
-        rev    = "issue-45";
-      };
-    });
-
     phonectl = super.python3Packages.callPackage (import (super.fetchFromGitHub {
       owner  = "jb55";
       repo   = "phonectl";

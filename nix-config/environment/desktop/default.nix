@@ -38,6 +38,7 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
       colorpicker
       dmenu
       dragon-drop
+      dasht
       dunst
       dynamic-colors
       feh
