@@ -27,6 +27,7 @@ in rec {
   define = callPackage ./pkgs/define { };
   rsslink = callPackage ./pkgs/rsslink { };
   x11-rename = callPackage ./pkgs/x11-rename { };
+  hoogle-zen = callPackage ./pkgs/hoogle-zen { };
 
   ratio = fetch-srht {
     repo = "ratio";

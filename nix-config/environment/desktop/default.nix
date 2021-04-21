@@ -20,6 +20,7 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
        cmdtree
        zoom-link-opener
        x11-rename
+       hoogle-zen
        viscal
     ];
 
