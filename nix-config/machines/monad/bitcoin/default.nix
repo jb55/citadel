@@ -5,8 +5,8 @@ let
   nix-bitcoin = import (pkgs.fetchFromGitHub {
     owner  = "fort-nix";
     repo   = "nix-bitcoin";
-    rev    = "eddc48ee62e5b84400f43941dd72de06c874f0f6";
-    sha256 = "1s2fzzw0zyd11nacg130lhpnrkd9ismj4cdr6sq8413my1h4hbdx";
+    rev    = "v0.0.44";
+    sha256 = "08qn597r3xnqg9s7bnkssf4xcxvm0lf6xmisr86nkp2gammazc42";
   }) { inherit pkgs; };
 
   plugins = ["summary" "rebalance"];
