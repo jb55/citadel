@@ -9,7 +9,7 @@ let
     sha256 = "1s2fzzw0zyd11nacg130lhpnrkd9ismj4cdr6sq8413my1h4hbdx";
   }) { inherit pkgs; };
 
-  plugins = ["summary"];
+  plugins = ["summary" "rebalance"];
 
   mkPluginCfg = name:
     "plugin=${builtins.getAttr name (nix-bitcoin.clightning-plugins)}/${name}.py";
