@@ -10,8 +10,16 @@ export LESS="-cix8RM --save-marks"
 export RADV_PERFTEST=aco
 export AMD_DEBUG=nodma
 
+TERM_THEME=$(basename $(readlink ~/.Xresources.d/themes/current))
+
+if [ $TERM_THEME == "light" ]
+then
+	export BAT_THEME=GitHub
+else
+	export BAT_THEME=base16
+fi
+
 export BAT_STYLE=plain
-export BAT_THEME=base16
 export LPASS_HOME="$HOME/.config/lpass"
 export FUZZER=fzf
 export GOPHERCLIENT=vf1
