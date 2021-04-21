@@ -16,10 +16,8 @@ switch-term-themes "$theme" &
 
 if [ "$theme" == "light" ]; then
   feh --bg-fill ~/var/img/wallpapers/wireframe-deer-white.jpg &
-  exec emacsclient -s $HOME/.emacs.d/server/server --eval "(jb55/themeswitch 'light)" &
 else
   feh --bg-fill ~/var/img/wallpapers/red-low-poly.png &
-  exec emacsclient -s $HOME/.emacs.d/server/server --eval "(jb55/themeswitch 'dark)" &
 fi
 
 wait
