@@ -98,7 +98,7 @@ config.set('url.searchengines', {
   'e': 'https://www.google.com/search?q=site%3Apackage.elm-lang.org+{}&btnI=Im+Feeling+Lucky',
   'key': 'https://www.npmjs.org/browse/keyword/{}',
   'h': 'http://holumbus.fh-wedel.de/hayoo/hayoo.html?query={}',
-  'lh': 'http://localhost:8080/?hoogle={} -package:Cabal',
+  'lh': 'http://localhost:8088/?hoogle={} -package:Cabal',
   'hoogle': 'http://www.haskell.org/hoogle/?hoogle={}',
   'github': 'http://github.com/search?q={}',
   'r': 'https://old.reddit.com/r/{}',

@@ -385,7 +385,6 @@ in {
       mbox
       mime-mail
       mime-types
-      miso
       mmorph
       monad-control
       monad-coroutine
@@ -395,7 +394,7 @@ in {
       monad-stm
       monadloc
       # mongoDB
-      monoid-extras
+      #monoid-extras
       neat-interpolation
       network
       newtype

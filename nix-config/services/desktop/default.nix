@@ -17,7 +17,8 @@ in
   ];
 
   services.hoogle = {
-    enable = false;
+    enable = true;
+    port = 8088;
     packages = pkgs.myHaskellPackages;
     haskellPackages = pkgs.haskellPackages;
   };
