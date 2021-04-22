@@ -349,6 +349,52 @@ in
 
     server {
       listen 80;
+      listen [::]:80;
+
+      server_name social.jb55.com;
+
+      location /.well-known/acme-challenge {
+        root /var/www/challenges;
+      }
+
+      location / {
+        return 301 https://social.jb55.com$request_uri;
+      }
+    }
+
+    server {
+      listen 443 ssl;
+      listen [::]:443 ssl;
+
+      server_name social.jb55.com;
+
+      ssl_certificate /var/lib/acme/social.jb55.com/fullchain.pem;
+      ssl_certificate_key /var/lib/acme/social.jb55.com/key.pem;
+
+      location / {
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $remote_addr;
+        proxy_set_header Host $http_host;
+        proxy_pass http://127.0.0.1:5188/;
+      }
+
+    }
+
+    server {
+      listen 443 default_server ssl;
+      listen [::]:443 default_server ssl;
+
+      server_name _;
+      return 444;
+
+      ssl_certificate /var/lib/acme/jb55.com/fullchain.pem;
+      ssl_certificate_key /var/lib/acme/jb55.com/key.pem;
+    }
+
+    server {
+      listen 80;
+      listen [::]:80;
+
       server_name git.jb55.com;
 
       location /.well-known/acme-challenge {
@@ -426,13 +472,18 @@ in
       rewrite ^/pkgs.tar.gz$ https://github.com/jb55/jb55pkgs/archive/master.tar.gz permanent;
       rewrite ^/pkgs/?$ https://github.com/jb55/jb55pkgs/archive/master.tar.gz permanent;
 
+        if ( $http_accept ~ "application/activity\+json" ) { 
+	  return 302 https://social.jb55.com;
+	}
+
+        if ( $http_accept ~ "application/ld\+json" ) { 
+	  return 302 https://social.jb55.com;
+	}
+
+
       location / {
         gzip on;
         gzip_types application/json;
-
-        error_page 418 = @jb55activity;
-
-        if ( $http_accept ~ "application/activity\+json" ) { return 418; }
 
         try_files $uri $uri/ =404;
       }
@@ -455,26 +506,16 @@ in
         return 302 https://nakamotoinstitute.org/mempool/speculative-attack/;
       }
 
+      location = /social {
+        return 302 https://bitcoinhackers.org/users/jb55;
+      }
+
       location /phlog {
         autoindex on;
       }
 
-      location @jb55activity {
-         root /;
-         default_type application/activity+json;
-         try_files ${jb55-activity} =404;
-      }
-
-      location = /.well-known/webfinger {
-         error_page 418 = @jb55webfinger;
-         if ( $query_string = "resource=acct:jb55@jb55.com" ) { return 418; }
-         return 404;
-      }
-
-      location @jb55webfinger {
-         root /;
-         default_type application/jrd+json;
-         try_files ${webfinger} =404;
+      location /.well-known/webfinger {
+	 return 302 https://social.jb55.com$request_uri;
       }
 
       location /cal/ {
