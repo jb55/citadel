@@ -215,6 +215,7 @@ in
         before2 = pkgs.writeText "sieves" cfg.sieves;
       };
       extraConfig = ''
+     	disable_plaintext_auth = no
         postmaster_address = postmaster@${cfg.domain}
         mail_attribute_dict = file:/var/spool/mail/%n/dovecot-attributes
 
@@ -231,8 +232,9 @@ in
 
         service imap-login {
           inet_listener imaps {
+	    address = 10.100.0.7
             port = 12788
-            ssl = yes
+            ssl = no
           }
         }
 
