@@ -192,6 +192,13 @@ in
     email = myemail;
   };
 
+  security.acme.certs."social.jb55.com" = {
+    webroot = "/var/www/challenges";
+    group = "jb55cert";
+    allowKeysForGroup = true;
+    email = myemail;
+  };
+
   security.acme.certs."sheetzen.com" = {
     webroot = "/var/www/challenges";
     group = "jb55cert";
