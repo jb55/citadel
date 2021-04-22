@@ -294,6 +294,8 @@ in
 
     server {
       listen 443 ssl;
+      listen [::]:443 ssl;
+
       server_name bitcoinwizard.net;
       root /home/jb55/www/coretto.io;
       index index.html;
@@ -324,12 +326,16 @@ in
 
     server {
       listen 443 ssl;
+      listen [::]:443 ssl;
+
       server_name www.bitcoinwizard.net;
       return 301 https://bitcoinwizard.net$request_uri;
     }
 
     server {
       listen 80;
+      listen [::]:80;
+
       server_name bitcoinwizard.net www.bitcoinwizard.net;
 
       location /.well-known/acme-challenge {
@@ -385,6 +391,7 @@ in
 
     server {
       listen 80;
+      listen [::]:80;
       server_name openpgpkey.jb55.com;
 
       location /.well-known/acme-challenge {
@@ -394,6 +401,7 @@ in
 
     server {
       listen 443 ssl;
+      listen [::]:443 ssl;
       server_name openpgpkey.jb55.com;
 
       ssl_certificate /var/lib/acme/openpgpkey.jb55.com/fullchain.pem;
@@ -406,6 +414,8 @@ in
 
     server {
       listen 443 ssl;
+      listen [::]:443 ssl;
+
       server_name jb55.com;
       root /www/jb55/public;
       index index.html index.htm;
@@ -480,6 +490,8 @@ in
 
     server {
       listen 80;
+      listen [::]:80;
+
       server_name jb55.com www.jb55.com;
 
       location /.well-known/acme-challenge {
@@ -502,6 +514,8 @@ in
     }
     server {
       listen 443 ssl;
+      listen [::]:443 ssl;
+
       server_name www.jb55.com;
       return 301 https://jb55.com$request_uri;
     }
