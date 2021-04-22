@@ -185,6 +185,7 @@ in
 
         listen on 0.0.0.0 port 25 hostname ${cfg.domain} tls pki ${cfg.domain}
         listen on 0.0.0.0 port 12566 hostname ${cfg.domain} tls-require pki ${cfg.domain} auth <credentials>
+        listen on 2600:3c01::f03c:91ff:fe08:5bfb port 12566 hostname ${cfg.domain} tls-require pki ${cfg.domain} auth <credentials>
 
         action "local_mail" lmtp localhost:24 alias <aliases>
         action "outbound" relay helo "${cfg.domain}"
