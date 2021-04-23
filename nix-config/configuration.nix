@@ -39,6 +39,7 @@ let machine = extra.private.machine;
     };
     user = {
         name = "jb55";
+        isNormalUser = true;
         group = "users";
         uid = 1000;
         extraGroups = [ "wheel" "dialout" ];
