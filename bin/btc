@@ -3,7 +3,7 @@
 cmd=${1:-price}
 shift
 
-if [ $HOSTNAME != "monad" ]; then
+if [ $cmd != "price" ] && [ $HOSTNAME != "monad" ]; then
 	exec ssh monad env PATH=/home/jb55/bin:\$PATH btc-$cmd "$@"
 fi
 
