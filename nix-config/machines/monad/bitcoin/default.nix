@@ -33,9 +33,38 @@ let
     to = "jb55 ${extra.private.btc-supplier}";
     addr = extra.private.btc-supplier-addr;
   };
+
   walletemail = import ./walletemail.nix { inherit pkgs bcli; };
+
+  spark-module = import ./modules/spark-wallet.nix nix-bitcoin.spark-wallet;
+  spark-port = 9962;
 in
 {
+  imports = [ spark-module ];
+
+  services.spark-wallet.enable = true;
+  services.spark-wallet.address = extra.machine.ztip;
+  services.spark-wallet.port = spark-port;
+  services.spark-wallet.publicUrl = "http://wallet.jb55.com";
+
+  services.nginx.httpConfig = ''
+    server {
+      listen ${extra.machine.ztip}:80;
+      server_name wallet.jb55.com;
+
+      location / {
+        proxy_pass  http://${extra.machine.ztip}:${toString spark-port};
+        proxy_next_upstream error timeout invalid_header http_500 http_502 http_503 http_504;
+        proxy_redirect off;
+        proxy_buffering off;
+        proxy_set_header        Host            $host;
+        proxy_set_header        X-Real-IP       $remote_addr;
+        proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+      }
+    }
+
+  '';
+
   services.bitcoind = {
     mainnet = {
       enable = if extra.is-minimal then false else true;
