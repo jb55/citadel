@@ -72,7 +72,7 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
       mpv
       w3m
       wine
-      steam
+      #steam
       wmctrl
       xautolock
       xbindkeys
@@ -112,9 +112,9 @@ in {
   };
 
   environment.systemPackages = if extra.is-minimal then (with pkgs; [
-    steam
-    steam-run
-    wine
+    #steam
+    #steam-run
+    #wine
     lastpass-cli
     rxvt_unicode-with-plugins
   ]) else mypkgs;
