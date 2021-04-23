@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+hash=$1
+bits=$(cut -d: -f2 <<<"$hash")
+resource=$(cut -d: -f4 <<<"$hash")
+
+hashcash -cdb $bits -r $resource $hash
