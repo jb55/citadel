@@ -1,2 +1,7 @@
 #!/usr/bin/env sh
-exec $HOME/dev/github/ElementsProject/lightning/cli/lightning-cli --lightning-dir $HOME/.lightning-bitcoin "$@"
+if [ $(hostname) == "monad" ];
+then
+	$HOME/dev/github/ElementsProject/lightning/cli/lightning-cli --lightning-dir $HOME/.lightning-bitcoin "$@"
+else
+	ssh monad /home/jb55/bin/lcli "$@"
+fi
