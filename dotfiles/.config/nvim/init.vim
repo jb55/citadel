@@ -11,7 +11,6 @@ set hidden
 
 map Y y$
 
-highlight ColorColumn ctermbg=8
 syntax on
 
 set clipboard+=unnamedplus
