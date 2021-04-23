@@ -289,8 +289,6 @@ in {
     ];
 
     myHaskellPackages = hp: with hp; [
-      #(doJailbreak pandoc-lens)
-      (dontCheck (doJailbreak serialise))
       Boolean
       Decimal
       HTTP
@@ -302,33 +300,20 @@ in {
       aeson-qq
       async
       attoparsec
-      # base32-bytestring
       base32string
       base58-bytestring
       bifunctors
-      # bitcoin-api
-      # bitcoin-api-extra
       unliftio
-      # bitcoin-block
-      # bitcoin-script
-      # bitcoin-tx
       blaze-builder
       blaze-builder-conduit
       blaze-html
       blaze-markup
-      blaze-textual
-      # bson-lens
-      #bytestring-show
       cased
       cassava
       cereal
-      clientsession
-      clientsession
       colour
       comonad
       comonad-transformers
-      #compact-string-fix
-      #cryptohash
       directory
       dlist
       dlist-instances
@@ -371,7 +356,6 @@ in {
       lifted-base
       linear
       list-extras
-      # list-t
       logict
       mbox
       mime-mail
@@ -384,8 +368,6 @@ in {
       monad-par-extras
       monad-stm
       monadloc
-      # mongoDB
-      #monoid-extras
       neat-interpolation
       network
       newtype
@@ -402,7 +384,6 @@ in {
       persistent-postgresql
       persistent-template
       posix-paths
-      #postgresql-binary
       postgresql-simple
       pretty-show
       probability
@@ -422,30 +403,20 @@ in {
       rex
       s3-signer
       safe
-      #sbv
       scotty
       sqlite-simple
       lucid
       semigroupoids
       semigroups
-      #servant
-      #servant-cassava
-      #servant-client
-      #servant-docs
-      #servant-lucid
-      #servant-server
       shake
       shakespeare
-      #shelly
       shqq
       simple-reflect
-      #speculation
       split
       spoon
       stache
       stm
       stm-chans
-      #stm-stats
       store
       stache
       streaming
@@ -472,12 +443,10 @@ in {
       test-framework
       test-framework-hunit
       text
-      # text-format
       text-regex-replace
       thyme
       time
       time-units
-      #tinytemplate
       transformers
       transformers-base
       turtle
