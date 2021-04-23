@@ -34,7 +34,7 @@ in
     (import ../../misc/imap-notifier extra)
   ] ++ (if !extra.is-minimal then [ (import ./bitcoin extra) ] else []);
 
-  hardware.steam-hardware.enable = true;
+  #hardware.steam-hardware.enable = true;
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
