@@ -42,7 +42,7 @@ in
 {
   imports = [ spark-module ];
 
-  services.spark-wallet.enable = true;
+  services.spark-wallet.enable = false;
   services.spark-wallet.address = extra.machine.ztip;
   services.spark-wallet.port = spark-port;
   services.spark-wallet.publicUrl = "http://wallet.jb55.com";
