@@ -40,6 +40,12 @@ in rec {
     sha256 = "0wnp2wis28iplln9h7yips835bhmcchmp373pvw0say35hn3rd36";
   };
 
+  imap-notify = fetch-jb55 {
+    repo = "imap-notify";
+    rev  = "0.1.1"; # use my config
+    sha256 = "0q3cxwgx7w91k77sb9iilfbvnn4fka9d47k02jrwhf3g6jk1jij1";
+  };
+
   nixpkgs-ml-tools = fetch-jb55 {
     repo = "nixpkgs-ml-tools";
     rev  = "3d62d22c3c33d885d62418344acba029fe41f541"; # use my config
