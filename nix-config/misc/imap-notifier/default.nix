@@ -1,11 +1,6 @@
 extra:
 { config, lib, pkgs, ... }:
-let notify = pkgs.callPackage (pkgs.fetchFromGitHub {
-                      owner = "jb55";
-                      repo = "imap-notify";
-                      rev = "c0936c0bb4b7e283bbfeccdbac77f4cb50f71b3b";
-                      sha256 = "19vadvnkg6bjp1607nlawdx1x07xnbbx7bgk66rbwrs4vhkvarkg";
-                    }) {};
+let imap-notify = (import <jb55pkgs> {}).imap-notify;
     penv = pkgs.python2.withPackages (ps: with ps; [ dbus-python pygobject2 ]);
     awake-from-sleep-fetcher = pkgs.writeScript "awake-from-sleep-fetcher" ''
       #!${penv}/bin/python2 -u
@@ -44,7 +39,7 @@ let notify = pkgs.callPackage (pkgs.fetchFromGitHub {
       arg="${host}"
 
       # wait for connectivity
-      until ${pkgs.libressl.nc}/bin/nc -w 1 -vz jb55.com 12566 &>/dev/null; do sleep 1; done
+      until ${pkgs.libressl.nc}/bin/nc -w 1 -vz ${host} 12788 &>/dev/null; do sleep 1; done
 
       # run it once first in case we missed any from lost connectivity
       ${cmd} || :
@@ -52,7 +47,8 @@ let notify = pkgs.callPackage (pkgs.fetchFromGitHub {
       export IMAP_NOTIFY_PASS=${pass}
       export IMAP_NOTIFY_CMD=${cmd}
       export IMAP_NOTIFY_HOST=${host}
-      exec ${notify}/bin/imap-notify
+      export IMAP_NOTIFY_TLS=no
+      exec ${imap-notify}/bin/imap-notify
     '';
 in
 with extra; {
@@ -98,7 +94,7 @@ with extra; {
               notify
             ) 200>/tmp/email-notify.lock
           '';
-      in notifier "jb55@jb55.com" private.personal-email-pass cmd "jb55.com";
+      in notifier "jb55@jb55.com" private.personal-email-pass cmd "10.100.0.7";
   };
 
   systemd.user.services.awake-from-sleep-fetcher = {
