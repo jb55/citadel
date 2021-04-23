@@ -45,6 +45,11 @@ in
 
           persistentKeepalive = 25;
         }
+        { # charon
+          publicKey = "BklL4dTL8WK3xnmM899Hr50/UlXaLYhJQWllj2p4ZEg=";
+          allowedIPs = [ "10.100.0.7/32" ];
+          endpoint = "45.79.91.128:51820";
+        }
         {
           publicKey = "vIh3IQgP92OhHaC9XBiJVDLlrs3GVcR6hlXaapjTiA0=";
 
