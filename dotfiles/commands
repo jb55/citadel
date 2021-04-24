@@ -33,6 +33,7 @@ h	run history	fuzz-run-hist
 tj	tag jump	fuzz-tag-jump
 te	todos edit	echo edit ~/docs/todo/todo.txt
 gb	git branches	echo git bvr
+ghi	github issues	fuzz-gh-issue-list
 ni	notmuch inbox	fuzz-notmuch-inbox
 nt	notmuch threads	fuzz-notmuch-threads
 nat	notmuch archive	fuzz-notmuch-archive
