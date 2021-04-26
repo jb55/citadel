@@ -1,0 +1,13 @@
+
+#!/usr/bin/env bash
+
+prs() {
+if [ -z "$1" ]; then
+	gh pr list
+else
+	gh pr list --search "$@"
+fi
+}
+
+id=$(prs "$@" | fuzzer | cutt -f1)
+echo gh pr view --comments "$id"
