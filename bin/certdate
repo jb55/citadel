@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+cert "$@" 2>/dev/null | grep -E '(Before|After|Verification)'
