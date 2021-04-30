@@ -76,9 +76,12 @@ function notify_when_long_running_commands_finish_install() {
 
             now=$(get_now)
             current_window=$(active_window_id)
+
+
             if [[ $current_window != $__udm_last_window ]] ||
                  [[ ! -z "$IGNORE_WINDOW_CHECK" ]] ||
                 [[ $current_window == "nowindowid" ]] ; then
+                echo "$__udm_last_window" > $HOME/var/cmd_last_window
                 local time_taken=$(( $now - $__udm_last_command_started ))
                 local longtimeout="$(((time_taken / 3) * 1000))"
                 local timeout="$(btcs -t 15000 $longtimeout min)"
