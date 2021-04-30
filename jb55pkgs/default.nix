@@ -73,8 +73,8 @@ in rec {
 
   datefmt = fetch {
     repo = "datefmt";
-    rev  = "67a176de6db75fddecd0239dd6afe2659b1b1b46";
-    sha256 = "08as7m9fnsidryx9bm6bwp1hq43g59icv97x58zfrgpk68y8v785";
+    rev  = "fd48a2fa528d0c2a7ae6e53c350fedd3a6ef4e75";
+    sha256 = "008kzm899w66r4jai5nnzyvn404iy1381yjb67df4wln8wzy0pqk";
   };
 
   btcs = fetch {
