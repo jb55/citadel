@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+
+set -eou pipefail
+
+PANDOC=${PANDOC:-pandoc}
+
+function onfail() {
+	printf "\n\nFAILED, output dir: $PWD\n\n"
+}
+
+function get_tmpname() {
+	hashpart=$(sha256sum <<<"$url" | awk '{print $1}')
+	printf "$PWD/out-${hashpart:0:8}.epub\n"
+}
+
+trap onfail ERR
+
+url="$1"
+# extract the protocol
+proto="$(<<<"$url" grep :// | sed -e's,^\(.*://\).*,\1,g')"
+noproto=$(<<<"$url" sed -e s,$proto,,g)
+path="$(<<<"$noproto" grep / | cut -d/ -f2-)"
+cdpath=$(basename "$path")
+
+out_name=$(readlink -f "${2:-"$(get_tmpname)"}")
+hostname=$(echo "$url" | awk -F[/:] '{print $4}')
+
+tmpdir=$(mktemp -d)
+
+cd "$tmpdir"
+
+wget \
+     --page-requisites \
+     --adjust-extension \
+     --span-hosts \
+     --convert-links \
+     --restrict-file-names=windows \
+     --domains "$hostname" \
+     --no-parent \
+     "$url" 1>&2
+
+target=$(find . -name '*.htm*' | grep . | head -n1)
+file=$(basename "$target")
+cd "$(dirname "$target")"
+printf "converting %s ... " "$file" 1>&2
+$PANDOC "$file" -o "$out_name" 1>&2
+printf "done. saved as:\n" "$out_name" 1>&2
+printf "%s\n" "$out_name"
+
+cd
+rm -rf "$tmpdir"
