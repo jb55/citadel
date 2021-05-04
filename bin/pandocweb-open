@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+url="${2:-$(xclip -o)}"
+typ="${1:-pdf}"
+
+function get_tmpname() {
+	hashpart=$(sha256sum <<<"$url" | awk '{print $1}')
+	printf "/tmp/out-${hashpart:0:8}.$typ\n"
+}
+
+file="$(get_tmpname)"
+(pandocweb "$url" "$file" && open "$file") || notify-send -u critical failed
+
