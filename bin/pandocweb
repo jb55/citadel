@@ -37,10 +37,13 @@ wget \
      --restrict-file-names=windows \
      --domains "$hostname" \
      --no-parent \
-     "$url" 1>&2
+     "$url" || :
 
+printf "finding html file... \n" 1>&2
 target=$(find . -name '*.htm*' | grep . | head -n1)
-file=$(basename "$target")
+printf "found: %s\n" "$target" 1>&2
+file="$(basename "$target")"
+
 cd "$(dirname "$target")"
 printf "converting %s ... " "$file" 1>&2
 $PANDOC "$file" -o "$out_name" 1>&2
