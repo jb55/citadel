@@ -42,7 +42,7 @@ in
         # For a client configuration, one peer entry for the server will suffice.
         { publicKey = "TbGgpOqD6teLon0ksZKS8zvvjHtkOGKNWPpHZxhVFWA=";
           allowedIPs = [ "10.100.0.1/32" ];
-          endpoint = "24.84.152.187:53";
+          endpoint = "24.84.152.187:51820";
         }
         { publicKey = "wcoun9+1GX4awQF2Yd0WbsQ6RKHE9SsOsYv3qR7mbB0="; # quiver
           allowedIPs = [ "10.100.0.2/32" ];
