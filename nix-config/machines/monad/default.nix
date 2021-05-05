@@ -202,6 +202,16 @@ in
 
   #boot.kernelParams = [ "pcie_acs_override=downstream" ];
 
+  systemd.user.services.clightning-rpc-tunnel = {
+    description = "clightning mainnet rpc tunnel";
+    wantedBy = [ "default.target" ];
+    after    = [ "default.target" ];
+
+    serviceConfig.ExecStart = extra.util.writeBash "lightning-tunnel" ''
+      ${pkgs.socat}/bin/socat -d -d TCP-LISTEN:7878,fork,reuseaddr,range=10.100.0.2/32 UNIX-CONNECT:/home/jb55/.lightning/bitcoin/lightning-rpc
+    '';
+  };
+
   virtualisation.libvirtd.enable = true;
   virtualisation.libvirtd.qemuOvmf = true;
   virtualisation.libvirtd.qemuVerbatimConfig = ''
