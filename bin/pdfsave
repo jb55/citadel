@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
-
-#PANDOC='pandoc --metadata=fontfamily:libertine'
-PANDOC='pandoc --pdf-engine=xelatex --metadata=fontfamily:libertine -V geometry:margin=1.2in --variable urlcolor=cyan'
-#PANDOC='pandoc -V geometry:margin=1.2in --variable urlcolor=cyan'
+PANDOC=pandoc-nice
 
 usage () {
   printf "usage: pdfsave file.md out.pdf OR <file.md pdfsave out.pdf [markdown]\n" >&2
