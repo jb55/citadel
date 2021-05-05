@@ -19,6 +19,7 @@ else
 	export BAT_THEME=base16
 fi
 
+export PANDOC=pandoc-nice
 export BAT_STYLE=plain
 export LPASS_HOME="$HOME/.config/lpass"
 export FUZZER=fzf
