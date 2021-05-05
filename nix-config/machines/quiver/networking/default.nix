@@ -41,7 +41,7 @@ in
           #allowedIPs = [ "0.0.0.0/0" "::/0" ];
           allowedIPs = [ "10.100.0.1/32" ];
           #endpoint = "127.0.0.1:3333";
-          endpoint = "24.84.152.187:53";
+          endpoint = "24.84.152.187:51820";
 
           persistentKeepalive = 25;
         }
