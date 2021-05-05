@@ -35,6 +35,7 @@
 [alias]
   s = show
   a = add
+  ap = add -p
   b = branch
   au = add -u
   f = fetch -p
