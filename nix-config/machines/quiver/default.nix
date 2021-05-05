@@ -95,7 +95,7 @@ extra:
     serviceConfig.ExecStart = extra.util.writeBash "lightning-tunnel" ''
       socket=/home/jb55/.lightning-bitcoin-rpc
       rm -f $socket
-      ${pkgs.socat}/bin/socat -d -d UNIX-LISTEN:$socket,reuseaddr,fork TCP:10.147.20.220:7878
+      ${pkgs.socat}/bin/socat -d -d UNIX-LISTEN:$socket,reuseaddr,fork TCP:10.100.0.1:7878
     '';
   };
 
@@ -107,7 +107,7 @@ extra:
     serviceConfig.ExecStart = extra.util.writeBash "lightning-testnet-tunnel" ''
       socket=/home/jb55/.lightning-testnet-rpc
       rm -f $socket
-      ${pkgs.socat}/bin/socat -d -d UNIX-LISTEN:$socket,reuseaddr,fork TCP:10.147.20.220:7879
+      ${pkgs.socat}/bin/socat -d -d UNIX-LISTEN:$socket,reuseaddr,fork TCP:10.100.0.1:7879
     '';
   };
 
