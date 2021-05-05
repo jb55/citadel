@@ -76,7 +76,7 @@ let mkfont = n: lesrc:
 in
 {
   fonts = {
-    enableFontDir = true;
+    fontDir.enable = true;
     enableGhostscriptFonts = true;
     fontconfig.defaultFonts.serif = [ "Bookerly" ];
     fontconfig.defaultFonts.monospace  = [ "Inconsolata" ];
