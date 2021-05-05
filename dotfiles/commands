@@ -18,6 +18,7 @@ ff	create file	echo fuzz-create-file
 gb	git branches	echo git bvr
 ghi	github issues	fuzz-gh-issue-list
 ghp	github prf	fuzz-gh-pr-list
+gpm	git mlap	echo git mlap
 h	run history	fuzz-run-hist
 kp	khal personal	echo pcal
 m	make	fuzz-make
