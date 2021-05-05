@@ -68,7 +68,7 @@
   r = rebase
   serve = !git daemon --reuseaddr --verbose --base-path=. --export-all ./.git
   stat2 = log --stat --pretty=format:'%C(auto,yellow)%h%C(auto,magenta)% G? %C(auto,blue)%>(12,trunc)%cr %C(auto,green)%aN %C(auto,red)%D %n%n   %C(auto,reset)%s%n'
-  st = status -sb
+  st = status
   tagd = !"git tag --format='%(creatordate:short)%09%(refname:strip=2)' | sort"
   tg = log --date-order --tags --simplify-by-decoration --pretty=format:'%ai %h %d'
   try = merge --no-commit --no-ff
