@@ -1,7 +1,7 @@
-export TODO_DIR="$HOME/docs/todo"
-export TODO_FILE="$TODO_DIR/todo.txt"
-export DONE_FILE="$TODO_DIR/done.txt"
-export REPORT_FILE="$TODO_DIR/report.txt"
+export TODO_DIR="${TODO_DIR:-"$HOME/docs/todo"}"
+export TODO_FILE="${TODO_FILE:-"$TODO_DIR/todo.txt"}"
+export DONE_FILE="${DONE_FILE:-"$TODO_DIR/done.txt"}"
+export REPORT_FILE="${REPORT_FILE:-"$TODO_DIR/report.txt"}"
 
 export PRI_A=$RED        # color for A priority
 export PRI_B=$YELLOW         # color for B priority
