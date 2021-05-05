@@ -1,44 +1,45 @@
-cd	change directory	fuzz-cd-dirname
-pf	edit project file	fuzz-edit-file
-pc	cat project file	fuzz-cat-file
-rf	recent files	fuzz-recent-files
-eFl	edit fuzz command list	fuzz-edit-command-list
-eFc	edit fuzz command	fuzz-edit-command
-sFc	show fuzz command	fuzz-show-fuzz-command
-ff	create file	echo fuzz-create-file
-of	open file	fuzz-open-file
-ec	edit commands	fuzz-edit-scripts
-em	edit mimi	echo edit ~/.config/mimi/mime.conf
-ecv	edit nvim config	echo edit ~/.config/nvim/init.vim
-ecn	edit neomutt config	echo edit ~/.config/neomutt/neomuttrc
-ecc	edit vdirsyncer config	echo edit ~/.config/vdirsyncer/config
-elf	edit last files	fuzz-last-files edit
-olf	open last files	fuzz-last-files open
-sc	show command	fuzz-show-script
-sh	show history	fuzz-show-hist
 Nc	new command	echo make-script
 cc	compile	fuzz-compile
-cr	compile repeat	fuzz-compile-repeat
+cd	change directory	fuzz-cd-dirname
 ce	compile error	fuzz-compile-error
+cr	compile repeat	fuzz-compile-repeat
 cs	compile show build	echo cat .build-result
-kp	khal personal	echo pcal
-m	make	fuzz-make
-sp	search project	fuzz-search-files
-sd	search diff	fuzz-edit-diff-line
-sD	search staged diff	fuzz-edit-diff-line --staged
-sC	search commit	fuzz-edit-diff-line HEAD^-
-ss	search project file	fuzz-search-file
-sf	search project file funcs	fuzz-funcs
-h	run history	fuzz-run-hist
-tj	tag jump	fuzz-tag-jump
-te	todos edit	echo edit ~/docs/todo/todo.txt
+eFc	edit fuzz command	fuzz-edit-command
+eFl	edit fuzz command list	fuzz-edit-command-list
+ec	edit commands	fuzz-edit-scripts
+ecc	edit vdirsyncer config	echo edit ~/.config/vdirsyncer/config
+egc	edit git config	echo edit ~/.gitconfig
+elf	edit last files	fuzz-last-files edit
+em	edit mimi	echo edit ~/.config/mimi/mime.conf
+enc	edit neomutt config	echo edit ~/.config/neomutt/neomuttrc
+es	email status	echo email-status-once
+evc	edit nvim config	echo edit ~/.config/nvim/init.vim
+ff	create file	echo fuzz-create-file
 gb	git branches	echo git bvr
 ghi	github issues	fuzz-gh-issue-list
 ghp	github prf	fuzz-gh-pr-list
+h	run history	fuzz-run-hist
+kp	khal personal	echo pcal
+m	make	fuzz-make
+nai	notmuch archive inbox	fuzz-notmuch-archive-inbox
+nam	notmuch am	fuzz-notmuch-am
+nat	notmuch archive	fuzz-notmuch-archive
 ni	notmuch inbox	fuzz-notmuch-inbox
 nt	notmuch threads	fuzz-notmuch-threads
-nat	notmuch archive	fuzz-notmuch-archive
-nam	notmuch am	fuzz-notmuch-am
-nai	notmuch archive inbox	fuzz-notmuch-archive-inbox
-es	email status	echo email-status-once
+of	open file	fuzz-open-file
+olf	open last files	fuzz-last-files open
+pc	cat project file	fuzz-cat-file
+pf	edit project file	fuzz-edit-file
+rf	recent files	fuzz-recent-files
+sC	search commit	fuzz-edit-diff-line HEAD^-
+sD	search staged diff	fuzz-edit-diff-line --staged
+sFc	show fuzz command	fuzz-show-fuzz-command
+sc	show command	fuzz-show-script
+sd	search diff	fuzz-edit-diff-line
+sf	search project file funcs	fuzz-funcs
+sh	show history	fuzz-show-hist
+sp	search project	fuzz-search-files
+ss	search project file	fuzz-search-file
+te	todos edit	echo edit ~/docs/todo/todo.txt
+tj	tag jump	fuzz-tag-jump
 z	fz	echo fz
