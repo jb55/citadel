@@ -32,6 +32,7 @@ let
     synergy = 24800;
     lightning = 9735;
     lightningt = 9736;
+    lntun = 7878;
     dns = 53;
     http = 80;
     wireguard = 51820;
@@ -40,11 +41,12 @@ let
   };
 
   firewallRules = [
-    "nixos-fw -s 10.100.0.1/24,192.168.86.1/24 -p tcp --dport 8080 -j nixos-fw-accept" # dev
-    "nixos-fw -s 10.100.0.1/24 -p tcp --dport 80 -j nixos-fw-accept"
-    "nixos-fw -s 10.100.0.1/24 -p tcp --dport 3000 -j nixos-fw-accept"
-    "nixos-fw -s 10.100.0.1/24 -p tcp --dport ${toString ports.weechat} -j nixos-fw-accept"
-    "nixos-fw -s 10.100.0.1/24,192.168.86.1/24 -p tcp --dport 8333 -j nixos-fw-accept" # bitcoin
+    "nixos-fw -s 10.100.0.0/24,192.168.86.1/24 -p tcp --dport 8080 -j nixos-fw-accept" # dev
+    "nixos-fw -s 10.100.0.0/24 -p tcp --dport 80 -j nixos-fw-accept"
+    "nixos-fw -s 10.100.0.0/24 -p tcp --dport 3000 -j nixos-fw-accept"
+    "nixos-fw -s 10.100.0.2/32 -p tcp --dport ${toString ports.lntun} -j nixos-fw-accept"
+    "nixos-fw -s 10.100.0.0/24 -p tcp --dport ${toString ports.weechat} -j nixos-fw-accept"
+    "nixos-fw -s 10.100.0.0/24,192.168.86.1/24 -p tcp --dport 8333 -j nixos-fw-accept" # bitcoin
     "nixos-fw -s 192.168.122.218 -p udp --dport 137 -j nixos-fw-accept"
     "nixos-fw -s 192.168.122.218 -p udp --dport 138 -j nixos-fw-accept"
     "nixos-fw -s 192.168.122.218 -p tcp --dport 139 -j nixos-fw-accept"
@@ -63,7 +65,7 @@ in
 
   #networking.firewall.trustedInterfaces = ["wg0"];
   networking.firewall.allowedTCPPorts = with ports; [ lightning lightningt synergy http ];
-  networking.firewall.allowedUDPPorts = [ ports.dns ports.wireguard ];
+  networking.firewall.allowedUDPPorts = with ports; [ dns wireguard ];
 
   networking.nat.enable = true;
   networking.nat.externalInterface = "eth0";
@@ -102,6 +104,10 @@ in
         }
         { publicKey = "Ynuism5cSJYUrMF/gWZti8W+PztLufaB/3mQlXV6HyY="; # vanessa-phone
           allowedIPs = [ "10.100.0.6/32" ];
+        } 
+	{ publicKey = "BklL4dTL8WK3xnmM899Hr50/UlXaLYhJQWllj2p4ZEg="; # charon
+          allowedIPs = [ "10.100.0.7/32" ];
+          endpoint = "45.79.91.128:51820";
         }
       ];
     };
