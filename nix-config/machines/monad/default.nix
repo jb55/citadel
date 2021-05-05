@@ -199,7 +199,8 @@ in
     #  };
     #}
   ];
-  boot.kernelParams = [ "pcie_acs_override=downstream" ];
+
+  #boot.kernelParams = [ "pcie_acs_override=downstream" ];
 
   virtualisation.libvirtd.enable = true;
   virtualisation.libvirtd.qemuOvmf = true;
