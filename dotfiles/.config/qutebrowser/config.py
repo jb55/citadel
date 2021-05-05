@@ -5,6 +5,8 @@
 import socket
 hostname = socket.gethostname()
 
+config.load_autoconfig(False)
+
 # Uncomment this to still load settings configured via autoconfig.yml
 # config.load_autoconfig()
 
