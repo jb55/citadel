@@ -1,0 +1,40 @@
+#!/usr/bin/env bpftrace
+#include <net/sock.h>
+
+BEGIN
+{
+  printf("Tracing per-PID, per-thread network traffic. Ctrl-C to stop\n");
+}
+
+kprobe:sock_recvmsg,
+kprobe:sock_sendmsg
+{
+  $sock = (struct socket *)arg0;
+  $family = $sock->sk->__sk_common.skc_family;
+  if ($family == AF_INET || $family == AF_INET6) {
+    @inetsocket[tid] = 1;
+  } else {
+    @inetsocket[tid] = 0;
+  }
+}
+
+kretprobe:sock_recvmsg
+{
+  if (@inetsocket[tid] && retval < 0x7fffffff) {
+    @recv_bytes[pid, comm] = sum(retval);
+  }
+  delete(@inetsocket[tid])
+}
+
+kretprobe:sock_sendmsg
+{
+  if (@inetsocket[tid] && retval < 0x7fffffff) {
+    @send_bytes[pid, comm] = sum(retval);
+  }
+  delete(@inetsocket[tid])
+}
+
+END
+{
+  clear(@inetsocket);
+}
