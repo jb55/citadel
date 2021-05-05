@@ -30,4 +30,4 @@ printf "$DIR\n"
 
 read -p "Press enter to review."
 
-bats "$DIR"/*.patch
+diffs "$DIR"/*.patch
