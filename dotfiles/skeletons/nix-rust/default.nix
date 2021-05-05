@@ -2,5 +2,5 @@
 with pkgs;
 stdenv.mkDerivation {
   name = "project";
-  nativeBuildInputs = [ cargo rustc ];
+  nativeBuildInputs = [ cargo rustc rustfmt ];
 }
