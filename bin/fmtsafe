@@ -1,11 +1,20 @@
 #!/usr/bin/env bash
 
+cmd="$1"
+shift
+
 orig=$(mktemp)
 fmt=$(mktemp)
 
+function cleanup() {
+	rm -f "$orig" "$fmt"
+}
+
+trap cleanup exit
+
 cat > "$orig"
 
-<"$orig" gofmt "$@" > "$fmt" 2>/dev/null
+<"$orig" $cmd "$@" > "$fmt" 2>/dev/null
 
 if [ $? -eq 0 ]; then
 	cat "$fmt"
@@ -13,4 +22,3 @@ else
 	cat "$orig"
 fi
 
-rm -f "$orig" "$fmt"
