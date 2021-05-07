@@ -8,8 +8,8 @@ if [ ! -f .build-result ]; then
 fi
 
 # todo: determine project language
-LANG=rust
-ERR_OPTS="--exit-0 --tac --preview 'grep -B1 -A20 {} .build-result | bat -l $LANG --color=always --highlight-line 1' --preview-window=:wrap:60%"
+PLANG=rust
+ERR_OPTS="--exit-0 --tac --ansi --preview 'build-preview {}' --preview-window=top"
 
 <.build-result grep -E '[[:space:]]*[^: ]+:[0-9]+.*' | 
 env FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS $ERR_OPTS" fuzzer "$@" | 

@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+process_line() {
+	<<<"$1" stripansi | sed 's,\[,\\[,g;s,\],\\],g'
+}
+
+line="$(process_line "$1")"
+
+
+<.build-result stripansi | grep -E -A20 "$line" | bat -l rust --color=always --highlight-line 1
