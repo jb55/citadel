@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
 set -e
+if [ "$1" = "--dir" ]; then
+	shift
+	cd "$1"
+	shift
+fi
 file=$(rg --files | fuzzer "$@")
 echo $EDITOR \"$(readlink -f $file)\"

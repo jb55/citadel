@@ -39,6 +39,7 @@ export XZ=pxz
 export HISTSIZE=50000
 export FZF_CTRL_R_OPTS="-e"
 export FZF_DEFAULT_OPTS="-e"
+export FZF_DEFAULT_COMMAND='rg --files --hidden'
 export EMACSCLIENT=edit
 
 export NIXPKGS=$HOME/nixpkgs

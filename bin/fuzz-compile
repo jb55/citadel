@@ -2,12 +2,20 @@
 
 set -eou pipefail
 
-if [ -f package.json ] && [ ! -f Makefile ]; then
+cmd=""
+
+if [ -f package.json ] && [ ! -f Makefile ]
+then
 	target=$(jq -r '.scripts | keys[]' package.json | fuzzer "$@")
-	echo npm run $target \2\>\&\1\| tee .build-result
+	cmd="npm run $target"
+elif [ -f Cargo.toml ]
+then
+	cmd="cargo check --color=always 2>&1| sed -E '/^.*(warning|error).*:/N;s/\n//;s/-->//g'"
 else
 	target=$(fuzz-make "$@")
-	echo make -j $target \2\>\&\1\| tee .build-result
+	cmd="make -j $target"
 fi
 
+fullcmd="$cmd 2>&1| tee .build-result"
 
+<<<"$fullcmd" tee .buildcmd

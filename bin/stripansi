@@ -1,1 +1,2 @@
-perl -pe 's/\e\[?.*?[\@-~]//g'
+#!/usr/bin/env bash
+exec perl -pe 's/\e\[?.*?[\@-~]//g'

@@ -1,13 +1,13 @@
-Nc	new command	echo make-script
 cc	compile	fuzz-compile
 cd	change directory	fuzz-cd-dirname
 ce	compile error	fuzz-compile-error
 cr	compile repeat	fuzz-compile-repeat
+cR	compile repeat error	fuzz-compile-repeat-error
 cs	compile show build	echo cat .build-result
+ecc	edit vdirsyncer config	echo edit ~/.config/vdirsyncer/config
+ec	edit commands	fuzz-edit-scripts
 eFc	edit fuzz command	fuzz-edit-command
 eFl	edit fuzz command list	fuzz-edit-command-list
-ec	edit commands	fuzz-edit-scripts
-ecc	edit vdirsyncer config	echo edit ~/.config/vdirsyncer/config
 egc	edit git config	echo edit ~/.gitconfig
 elf	edit last files	fuzz-last-files edit
 em	edit mimi	echo edit ~/.config/mimi/mime.conf
@@ -25,18 +25,20 @@ m	make	fuzz-make
 nai	notmuch archive inbox	fuzz-notmuch-archive-inbox
 nam	notmuch am	fuzz-notmuch-am
 nat	notmuch archive	fuzz-notmuch-archive
+Nc	new command	echo make-script
 ni	notmuch inbox	fuzz-notmuch-inbox
 nt	notmuch threads	fuzz-notmuch-threads
 of	open file	fuzz-open-file
 olf	open last files	fuzz-last-files open
 pc	cat project file	fuzz-cat-file
 pf	edit project file	fuzz-edit-file
+ps	edit project skeletons	fuzz-edit-file --dir ~/dotfiles/skeletons
 rf	recent files	fuzz-recent-files
 sC	search commit	fuzz-edit-diff-line HEAD^-
-sD	search staged diff	fuzz-edit-diff-line --staged
-sFc	show fuzz command	fuzz-show-fuzz-command
 sc	show command	fuzz-show-script
 sd	search diff	fuzz-edit-diff-line
+sD	search staged diff	fuzz-edit-diff-line --staged
+sFc	show fuzz command	fuzz-show-fuzz-command
 sf	search project file funcs	fuzz-funcs
 sh	show history	fuzz-show-hist
 sp	search project	fuzz-search-files

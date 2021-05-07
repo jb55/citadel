@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-tac ~/.fuzzhist | grep -E "make [^\w]+"  | head -n1
+cat .buildcmd
