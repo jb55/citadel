@@ -54,3 +54,5 @@ color quoted8       magenta             default # Quoting Ebene 9
 color quoted9       blue                default # Quoting Ebene 10
 
 color header            brightcyan          default        '^Subject:'
+
+source ~/.mail_aliases
