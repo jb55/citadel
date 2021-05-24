@@ -57,6 +57,7 @@
   lnd = log --no-decorate
   lgrep = log --grep
   line = log --oneline
+  linea = log --all --no-merges --topo-order --date=relative --pretty=format:'%C(auto,yellow)%h%C(auto,magenta)%  %C(auto,blue)%>(12,trunc)%ad %C(auto,green) %C(auto,reset)%s%C(reset)% %C(bold) — %an%C(reset)%C(bold yellow)%d%C(reset)'
   lineg = log --oneline --graph
   l = log
   muff = merge --no-ff
