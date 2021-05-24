@@ -11,7 +11,6 @@
 	pager = delta --hunk-style=plain --file-style=box --paging=always
 [sendemail]
   smtpServer=/home/jb55/bin/sendmail
-	cccmd = git-contacts
 [url "git@github.com:"]
   insteadOf = gh:
 [url "git@git.sr.ht:~"]
