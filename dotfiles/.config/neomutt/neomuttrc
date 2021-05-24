@@ -6,7 +6,7 @@ set folder="/home/jb55/mail/personal"
 set wait_key=no
 set from="jb55@jb55.com"
 set pipe_decode=no
-set envelope_from=yes
+#set envelope_from=yes
 set mime_forward=no
 unset markers
 set text_flowed

@@ -2,7 +2,7 @@
 
 file="$(mktemp)"
 cat > "$file"
-sendmail-bg "$file" "$@" & disown
+sendmail-bg "$file" -t --read-envelope-from "$@" & disown
 
 # always succeed, even on connection/mail failure
 # we'll simply queue the mail in our outbox
