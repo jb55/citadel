@@ -73,6 +73,7 @@ function run_fuzzer() {
 	eval "$(fuzz-run-command "$@")"
 }
 
+alias C="pcal list"
 alias m="neomutt"
 alias mq="msmtp-queue"
 alias s="general-status"
