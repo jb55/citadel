@@ -5,7 +5,11 @@ WALLETS=${WALLETS:-$(bcli listwallets | jq -r '.[]' | paste -sd" " )}
 (for wallet in $WALLETS
 do
   bcli -rpcwallet="$wallet" "$@" listtransactions '*' 2000 \
-      | jq -rc '.[] | {label: .label, address: .address, category: .category, amount: .amount, blocktime: .blocktime, hash: .hash}'
+	  | jq -rc '.[] | {wallet: "'$wallet'", label: .label, address: .address, category: .category, amount: .amount, blocktime: .blocktime, confirmations: .confirmations, txid: .txid, vout: .vout}'
 done) \
-  | jq -src 'sort_by(.blocktime) | .[] | [.label,.address,.category,.amount,.blocktime,.hash] | @tsv'
+  | jq -src 'sort_by(.blocktime) | .[] | [.wallet,.label,.address,.category,.amount,.blocktime,.confirmations,.txid,.vout] | @tsv'
+
+  #| jq -src '.[] | [.label,.address,.category,.amount,.blocktime,.confirmations,.txid,.vout] | @tsv'
+
+
 
