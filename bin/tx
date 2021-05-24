@@ -1,2 +1,3 @@
-#!/usr/bin/env sh
-bcli getrawtransaction "$1" 2
+#!/usr/bin/env bash
+
+bcli getrawtransaction "$1" 2 | jq -C . | less
