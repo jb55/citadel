@@ -10,7 +10,8 @@ then
 	cmd="npm run $target"
 elif [ -f Cargo.toml ]
 then
-	cmd="cargo check --color=always 2>&1| sed -E '/^.*(warning|error).*:/N;s/\n//;s/-->//g'"
+	target=$(printf "check\nbuild\n" | fuzzer "$@")
+	cmd="cargo $target --color=always 2>&1| sed -E '/^.*(warning|error).*:/N;s/\n//;s/-->//g'"
 else
 	target=$(fuzz-make "$@")
 	cmd="make -j $target"
