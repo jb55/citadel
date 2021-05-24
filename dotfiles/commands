@@ -1,3 +1,4 @@
+bt	btc txs	fuzz-btc-txs
 cc	compile	fuzz-compile
 cd	change directory	fuzz-cd-dirname
 ce	compile error	fuzz-compile-error
