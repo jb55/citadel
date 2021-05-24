@@ -1,7 +1,4 @@
 #!/usr/bin/env bash
 set -eou pipefail
 
-thread_search=$(fuzz-notmuch-query-thread "$@")
-thread=$(eval "$thread_search")
-fuzz-record-command "thread=\$($thread_search) && notmuch-thread-reader \$thread"
-echo "notmuch am $thread"
+echo notmuch am --am --add-link --fuzzy to:nixpkgs-dev
