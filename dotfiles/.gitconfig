@@ -8,7 +8,7 @@
 [core]
   excludesfile = /Users/jb55/.gitignore_global
 	editor = nvim
-  pager = delta --hunk-style=plain --file-style=box
+	pager = delta --hunk-style=plain --file-style=box --paging=always
 [sendemail]
   smtpServer=/home/jb55/bin/sendmail
 	cccmd = git-contacts
