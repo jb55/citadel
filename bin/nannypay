@@ -15,7 +15,7 @@ if [ -z $pay ]; then
 fi
 
 
-CSV="${NANNYPAY_CSV:-$HOME/.local/share/nannypay/${NANNY}.txt}"
+CSV="${NANNYPAY_CSV:-$HOME/.local/share/nannypay/${NANNY}.tsv}"
 mkdir -p "$(dirname "$CSV")"
 if [ ! -f "$CSV" ]; then
     touch "$CSV"
