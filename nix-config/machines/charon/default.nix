@@ -484,6 +484,7 @@ in
       location / {
         gzip on;
         gzip_types application/json;
+        charset utf-8;
 
         try_files $uri $uri/ =404;
       }
