@@ -10,9 +10,9 @@ export LESS="-cix8RM --save-marks"
 export RADV_PERFTEST=aco
 export AMD_DEBUG=nodma
 
-TERM_THEME=$(basename $(readlink ~/.Xresources.d/themes/current))
+TERM_THEME="$(basename $(readlink ~/.Xresources.d/themes/current))"
 
-if [ $TERM_THEME == "light" ]
+if [ "$TERM_THEME" == "light" ]
 then
 	export BAT_THEME=GitHub
 else
