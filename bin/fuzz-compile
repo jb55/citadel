@@ -2,6 +2,9 @@
 
 set -eou pipefail
 
+tmp=$(mktemp)
+trap "rm -f $tmp" EXIT
+
 cmd=""
 
 if [ -f package.json ] && [ ! -f Makefile ]
@@ -17,6 +20,6 @@ else
 	cmd="make -j $target"
 fi
 
-fullcmd="$cmd 2>&1| tee .build-result"
+fullcmd="$cmd 2>&1| tee $tmp; mv $tmp .build-result"
 
 <<<"$fullcmd" tee .buildcmd
