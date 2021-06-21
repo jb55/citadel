@@ -74,6 +74,7 @@ function run_fuzzer() {
 }
 
 alias C="pcal list"
+alias Ci="pcal interactive"
 alias m="neomutt"
 alias mq="msmtp-queue"
 alias s="general-status"
