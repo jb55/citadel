@@ -35,6 +35,12 @@ in rec {
     sha256 = "17mmmqvn0xfh1vk85bip87cqc3mb9vqgs07p19zrprm4yasyims2";
   };
 
+  git-email-contacts = fetch-jb55 {
+    repo = "git-email-contacts";
+    rev  = "952c0cd39d538faa82b00f1c330bae66caaee04c";
+    sha256 = "15xhafq7i2yy7g0fd9b9sw7zlyv7nx65mylca3xsnvq28h57pfli";
+  };
+
   cmdtree = fetch-jb55 {
     repo = "cmdtree";
     rev  = "9ff1b9d375385210ea2221b4b0e55408453dbd0b"; # use my config
