@@ -37,8 +37,8 @@ in rec {
 
   git-email-contacts = fetch-jb55 {
     repo = "git-email-contacts";
-    rev  = "952c0cd39d538faa82b00f1c330bae66caaee04c";
-    sha256 = "15xhafq7i2yy7g0fd9b9sw7zlyv7nx65mylca3xsnvq28h57pfli";
+    rev  = "7301d727cf09157497cbe72b9174a63b98b9e287";
+    sha256 = "1y36k3cl94k10s7q6rfx4lni81d30w2kv8n14idjhbbr9ck4jv06";
   };
 
   cmdtree = fetch-jb55 {
