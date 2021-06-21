@@ -1,8 +1,22 @@
 #! /usr/bin/env sh
 
-file="$(mktemp)"
-cat > "$file"
-sendmail-bg "$file" -t --read-envelope-from "$@" & disown
+export EMAIL_CUSTOM_CONN_TEST=/home/jb55/bin/email-conn-test
+export EMAIL_CONN_TEST=c
+
+#file="$(mktemp)"
+#cat > "$file"
+#sendmail-bg "$file" -t --read-envelope-from "$@" & disown
+
+output=$(msmtpq "$@" 2> /tmp/msmtp.err)
+echo "$output" >> /tmp/msmtp.log
+
+if grep -E '^\s+enqueued' <<<"$output"
+then
+	if command -v notify-send &> /dev/null; then
+		notify-send -u critical "$output"
+	fi
+fi
+
 
 # always succeed, even on connection/mail failure
 # we'll simply queue the mail in our outbox
