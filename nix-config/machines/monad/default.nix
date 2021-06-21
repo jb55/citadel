@@ -8,6 +8,8 @@ let util = extra.util;
       rev    = "0bc27f4740e382f2a2896dc1dabfec1d0ac96818";
       sha256 = "1h1h2n50d2cwcyw3zp4lamfvrdjy1gjghffvl3qrp6arfsfa615y";
     };
+    jb55pkgs = import <jb55pkgs> { inherit pkgs; };
+    git-email-contacts = "${jb55pkgs.git-email-contacts}/bin/git-email-contacts";
     email-notify = util.writeBash "email-notify-user" ''
       export HOME=/home/jb55
       export PATH=${lib.makeBinPath (with pkgs; [ eject libnotify muchsync notmuch openssh ])}:$PATH
@@ -160,6 +162,32 @@ in
     '';
 
     startAt = "Mon..Fri *-*-* 09:00:00";
+  };
+
+  systemd.user.services.bitcoin-contacts = {
+    enable = if extra.is-minimal then false else true;
+    description = "Email bitcoin PR patches that have me as a git-contact";
+
+    wantedBy    = [ "graphical-session.target" ];
+    after       = [ "graphical-session.target" ];
+
+    path = with pkgs; [ openssh msmtp libnotify netcat ];
+
+    environment = {
+	SSH_AUTH_SOCK = "/run/user/1000/ssh-agent";
+    };
+
+    serviceConfig.ExecStart = util.writeBash "bitcoin-contacts" ''
+	export SSH_ASKPASS="${pkgs.x11_ssh_askpass}/libexec/x11-ssh-askpass"
+	cd /home/jb55/dev/github/bitcoin/bitcoin 
+	while true
+	do
+		duration="5m"
+		${git-email-contacts}
+		printf "done for now, waiting %s...\n" $duration 2>&1
+		sleep $duration
+	done
+    '';
   };
 
   systemd.user.services.stop-spotify-bedtime = {
