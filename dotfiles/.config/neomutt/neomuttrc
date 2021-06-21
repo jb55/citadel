@@ -36,6 +36,7 @@ macro index S "<modify-labels>+spam -unread -inbox" "Spam message"
 macro index c "<change-vfolder>?" "Change to vfolder overview"
 macro index \\\\ "<vfolder-from-query>" "Search mailbox"
 macro pager p "|grep patch$ | xargs curl -sL | delta --paging always"
+macro pager P "|delta --paging always"
 
 my_hdr Bcc: William Casarin <jb55@jb55.com>
 
