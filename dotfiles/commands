@@ -35,10 +35,10 @@ pc	cat project file	fuzz-cat-file
 pf	edit project file	fuzz-edit-file
 ps	edit project skeletons	fuzz-edit-file --dir ~/dotfiles/skeletons
 rf	recent files	fuzz-recent-files
-sC	search commit	fuzz-edit-diff-line HEAD^-
+sgh	search git head	fuzz-edit-diff-line HEAD^-
 sc	show command	fuzz-show-script
-sd	search diff	fuzz-edit-diff-line
-sD	search staged diff	fuzz-edit-diff-line --staged
+sgd	search git diff	fuzz-edit-diff-line
+sgs	search git staged diff	fuzz-edit-diff-line --staged
 sFc	show fuzz command	fuzz-show-fuzz-command
 sf	search project file funcs	fuzz-funcs
 sh	show history	fuzz-show-hist
