@@ -21,5 +21,7 @@ nmap <Leader>xda ma:%s/\s\+$//g<CR>`a
 
 autocmd FileType go autocmd BufWritePre <buffer> execute "normal! mz:mkview\<esc>:%!fmtsafe gofmt\<esc>:loadview\<esc>`z"
 autocmd FileType rust autocmd BufWritePre <buffer> execute "normal! mz:mkview\<esc>:%!fmtsafe rustfmt\<esc>:loadview\<esc>`z"
+autocmd filetype javascript set sw=2 ts=2 expandtab
 
 autocmd BufEnter,BufNew *.gmi set wrap linebreak
+au BufWritePost,FileWritePost ~/.Xdefaults,~/.Xresources silent! !xrdb -load % >/dev/null 2>&1
