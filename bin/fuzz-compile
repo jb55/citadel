@@ -13,7 +13,7 @@ then
 	cmd="npm run $target"
 elif [ -f Cargo.toml ]
 then
-	target=$(printf "check\nbuild\n" | fuzzer "$@")
+	target=$(printf "check\nbuild\ntest\n" | fuzzer "$@")
 	cmd="cargo $target --color=always 2>&1| sed -E '/^.*(warning|error).*:/N;s/\n//;s/-->//g'"
 else
 	target=$(fuzz-make "$@")
