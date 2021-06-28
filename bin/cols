@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+cols=${1:-80}
+shift
+fold -w $cols -s "$@"
