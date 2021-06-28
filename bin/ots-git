@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env sh
 
 # Wrapper for the ots-git-gpg-wrapper
 #
