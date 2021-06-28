@@ -40,6 +40,9 @@ in
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
+  services.ofono.enable = true;
+  services.ofono.plugins = with pkgs; [ ofono-phonesim ];
+
   services.prometheus.enable = false;
   # services.prometheus.dataDir = "/zbig/data/prometheus";
   services.grafana.enable = false;
