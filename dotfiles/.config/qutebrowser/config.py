@@ -30,7 +30,7 @@ config.set('content.javascript.enabled', True, 'qute://*/*')
 config.set('fonts.default_family', 'terminus')
 
 if hostname == 'quiver':
-  config.set('zoom.default', 125)
+  config.set('zoom.default', 150)
 
 
 # Editor (and arguments) to use for the `open-editor` command. The
@@ -53,6 +53,7 @@ c.bindings.key_mappings = {'<Ctrl+6>': '<Ctrl+^>', '<Ctrl+Enter>': '<Ctrl+Return
 
 # Bindings for normal mode
 config.unbind('r')
+config.bind('(', 'zoom 100')
 config.bind(')', 'zoom 150')
 config.bind('d', 'scroll-page 0 1')
 config.bind('u', 'scroll-page 0 -1')
