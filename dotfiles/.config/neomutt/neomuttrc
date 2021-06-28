@@ -41,9 +41,6 @@ macro pager P "|grep patch$ | xargs curl -sL | delta --paging always<enter>"
 
 my_hdr Bcc: William Casarin <jb55@jb55.com>
 
-alias jb55 William Casarin <jb55@jb55.com>
-alias nixpkgs-dev ~andir/nixpkgs-dev@lists.sr.ht
-
 color quoted        magenta             default # Quoting Ebene 1
 color quoted1       red                 default # Quoting Ebene 2
 color quoted2       green               default # Quoting Ebene 3
