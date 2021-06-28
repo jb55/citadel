@@ -59,7 +59,7 @@ in {
     });
 
     weechat = super.weechat.override {configure = {availablePlugins, ...}: {
-        scripts = with super.weechatScripts; [ wee-slack ];
+        scripts = with super.weechatScripts; [ wee-slack weechat-matrix ];
       };
     };
 
