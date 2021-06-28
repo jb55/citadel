@@ -1,7 +1,7 @@
 [user]
   name = William Casarin
   email = jb55@jb55.com
-  signingkey = 0xE02D3FD4EB4585A63531C1D0E1BFCB90A1FF7A1C
+	signingkey = 0x90EEB2149F6689622EFF595FA13C2E3632EA34D7!
 [color]
   diff = auto
   status = auto
