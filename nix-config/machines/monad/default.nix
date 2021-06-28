@@ -182,10 +182,12 @@ in
 
     serviceConfig.ExecStart = util.writeBash "bitcoin-contacts" ''
 	export SSH_ASKPASS="${pkgs.x11_ssh_askpass}/libexec/x11-ssh-askpass"
-	cd /home/jb55/dev/github/bitcoin/bitcoin 
 	while true
 	do
 		duration="5m"
+		cd /home/jb55/dev/github/bitcoin/bitcoin 
+		${git-email-contacts}
+		cd /home/jb55/dev/github/bitcoin-core/gui 
 		${git-email-contacts}
 		printf "done for now, waiting %s...\n" $duration 2>&1
 		sleep $duration
