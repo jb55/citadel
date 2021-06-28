@@ -12,6 +12,8 @@ s,;,\t,g
 EOF
 )
 
+sudo echo hello
+
 sudo iwlist wlp4s0 scan \
     | grep -A6 -i -e key \
     | tr '\n' $'\t' \
