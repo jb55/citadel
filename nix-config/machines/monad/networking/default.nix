@@ -145,7 +145,7 @@ in
     port = 14325;
   };
 
-  services.jellyfin.enable = true;
+  services.jellyfin.enable = false;
 
   services.plex = {
     enable = true;
