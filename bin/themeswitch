@@ -17,7 +17,7 @@ switch-term-themes "$theme" &
 if [ "$theme" == "light" ]; then
   feh --bg-fill ~/var/img/wallpapers/wireframe-deer-white.jpg &
 else
-  feh --bg-fill ~/var/img/wallpapers/red-low-poly.png &
+  feh --bg-fill ~/var/img/red-low-poly.png &
 fi
 
 wait
