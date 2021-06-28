@@ -34,6 +34,7 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
 
     mypkgs = (with pkgs; [
       aerc
+      hwi
       clipmenu
       colorpicker
       dmenu
