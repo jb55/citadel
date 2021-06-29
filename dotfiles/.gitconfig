@@ -7,8 +7,8 @@
   status = auto
 [core]
   excludesfile = /Users/jb55/.gitignore_global
-	editor = nvim
-	pager = delta --hunk-style=plain --file-style=box --paging=always
+  editor = edit
+  pager = delta --hunk-style=plain --file-style=box --paging=always
 [sendemail]
   smtpServer=/home/jb55/bin/sendmail
 [url "git@github.com:"]
