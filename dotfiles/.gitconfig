@@ -88,18 +88,14 @@
 [rerere]
 	enabled = false
 	autoupdate = false
-[http "https://git.monstercat.com"]
-	sslCAInfo = /home/jb55/.flynn/ca-certs/default.pem
-[credential "https://git.monstercat.com"]
-	helper = /home/jb55/bin/flynn git-credentials
 [gpg]
-	program = /home/jb55/bin/ots-git
+	program = ~/bin/ots-git
 [magit]
 	hideCampaign = true
 [github]
 	user = jb55
 [commit]
-	template = /home/jb55/.git-template
+	template = ~/.git-template
 [grep]
 	lineNumber = true
 [credential "https://github.com"]
