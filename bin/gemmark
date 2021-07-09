@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+set -eou pipefail
+url=$(<~/dotfiles/gemmarks ct | fzf | awkp 2)
+gemini "$url"
