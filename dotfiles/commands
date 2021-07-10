@@ -13,10 +13,12 @@ egc	edit git config	echo edit ~/.gitconfig
 elf	edit last files	fuzz-last-files edit
 em	edit mimi	echo edit ~/.config/mimi/mime.conf
 enc	edit neomutt config	echo edit ~/.config/neomutt/neomuttrc
+egm	edit gemmarks	echo edit ~/dotfiles/gemmarks
 es	email status	echo email-status-once
 evc	edit nvim config	echo edit ~/.config/nvim/init.vim
 ff	create file	echo fuzz-create-file
 jt	jump tag	fuzz-jump-tag
+G	gemini	echo gemmark
 gb	git branches	echo git bvr
 ghi	github issues	fuzz-gh-issue-list
 ghp	github prf	fuzz-gh-pr-list
