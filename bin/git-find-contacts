@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+if [ -z $1 ]; then
+  printf "usage: git-find-contacts <commit-range>\n"
+  exit 1
+fi
+
+(
+for hash in $(git log --format=%H "$@")
+do 
+	git-contacts ${hash}^-
+done
+) | sort | uniq -c | sort -nr
