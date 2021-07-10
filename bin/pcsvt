@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+columnt "$@" | cat -n | less -R -S

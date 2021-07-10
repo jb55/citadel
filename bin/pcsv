@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+csv-delim "$@" | pcsvt
