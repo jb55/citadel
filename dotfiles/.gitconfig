@@ -76,6 +76,7 @@
   try = merge --no-commit --no-ff
   co = checkout
   fixes = show -s --pretty='format:Fixes: %h (\"%s\")'
+	pushall = !git remote | parallel -L1 -I R git push R master
 [rebase]
   autosquash = true
 [pull]
