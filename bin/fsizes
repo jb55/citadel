@@ -1,0 +1,2 @@
+#!/usr/bin/env sh
+find . -name "*.$1" -print0 | xargs -0 fsize | paste -sd+ | bc | nfmt
