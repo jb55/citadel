@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+
+if [ -z "$1" ]
+then
+	printf "usage: wname <title>\n"
+	exit 1
+fi
+
+window_id=$(xprop -root _NET_ACTIVE_WINDOW | awk '{print $5}')
+xdotool set_window --name "$1" "$window_id"
