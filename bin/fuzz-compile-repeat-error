@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+set -eou pipefail
+
+bash .buildcmd &>/dev/null
+fuzz-compile-error
