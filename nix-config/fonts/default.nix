@@ -52,26 +52,6 @@ let mkfont = n: lesrc:
         url = "https://jb55.com/s/a266c50144cbad1a.ttf";
         sha256 = "db5133b6a09c8eba78b29dc05019d8f361f350483d679fd8c668e1c657a303fc";
       };
-    Nunito-Regular =
-      mkfont "Nunito-Regular" {
-        url = "https://jb55.com/s/Nunito-Regular.ttf";
-        sha256 = "9e2747806c4a30f0d4f39596a13dd97dc5484b96845d945d90b300e1bbdebc72";
-      };
-    Nunito-Bold =
-      mkfont "Nunito-Bold" {
-        url = "https://jb55.com/s/Nunito-Bold.ttf";
-        sha256 = "8b9e27ba172e5b535b1d0564b4882f74aecc77a4dc4d20fc400bd2b2bc4418c1";
-      };
-    Nunito-Light =
-      mkfont "Nunito-Light" {
-        url = "https://jb55.com/s/Nunito-Light.ttf";
-        sha256 = "25d4c5a89428f032e3851eed4f903a1c800c2bde74f3893f3ac62782ed67cfbf";
-      };
-    Nunito-ExtraLight =
-      mkfont "Nunito-ExtraLight" {
-        url = "https://jb55.com/s/Nunito-ExtraLight.ttf";
-        sha256 = "5a45507eb9ab280700c0da004905c0ac9d774124a10be71cb650ce3e66983113";
-      };
 
     ohsnap =
       pkgs.stdenv.mkDerivation rec {
@@ -92,15 +72,14 @@ let mkfont = n: lesrc:
       };
 
     myfonts = [ aldrich VarelaRound-Regular Questrial Comfortaa-Regular
-                Bookerly-Regular Bookerly-RegularItalic Bookerly-Bold Bookerly-BoldItalic 
-		ohsnap Nunito-Regular Nunito-Bold Nunito-Light Nunito-ExtraLight ];
+                Bookerly-Regular Bookerly-RegularItalic Bookerly-Bold Bookerly-BoldItalic ohsnap ];
 in
 {
   fonts = {
     fontDir.enable = true;
     enableGhostscriptFonts = true;
     fontconfig.defaultFonts.serif = [ "Bookerly" ];
-    fontconfig.defaultFonts.monospace  = [ "IBM Plex Mono" ];
+    fontconfig.defaultFonts.monospace  = [ "Inconsolata" ];
     fontconfig.defaultFonts.sansSerif  = [ "Noto Sans" ];
     enableDefaultFonts = if extra.is-minimal then false else true;
     fonts = if extra.is-minimal then [pkgs.terminus_font] else (with pkgs; [
