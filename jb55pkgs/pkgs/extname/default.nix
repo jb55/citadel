@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, lib, fetchFromGitHub }:
 stdenv.mkDerivation rec {
-  name = "extname-${version}";
+  pname = "extname";
   version = "1.1.1";
 
   src = fetchFromGitHub {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = "PREFIX=$(out)";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Utility to get file extensions from its arguments";
     homepage = "https://github.com/jb55/extname";
     maintainers = with maintainers; [ jb55 ];

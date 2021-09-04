@@ -1,5 +1,6 @@
 { stdenv
 , makeWrapper
+, lib
 , pandoc
 , fetchFromGitHub
 , man
@@ -19,7 +20,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pandoc man makeWrapper ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Render markdown as a manpage";
     homepage = "https://github.com/jb55/mandown";
     maintainers = with maintainers; [ jb55 ];

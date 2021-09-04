@@ -29,10 +29,10 @@ in rec {
   x11-rename = callPackage ./pkgs/x11-rename { };
   hoogle-zen = callPackage ./pkgs/hoogle-zen { };
 
-  ratio = fetch-srht {
+  ratio = fetch-jb55 {
     repo = "ratio";
-    rev  = "4eb820fb362c554baa73e244dae29aa62ec2d9d5";
-    sha256 = "17mmmqvn0xfh1vk85bip87cqc3mb9vqgs07p19zrprm4yasyims2";
+    rev  = "4ae6e67712946aba70df992cdeafcc03301c6c76";
+    sha256 = "10qx30s0c6gcinfgdlb3c8rxkv4j25m29jsl923k44bbh3jpdnak";
   };
 
   git-email-contacts = fetch-jb55 {
@@ -49,8 +49,8 @@ in rec {
 
   imap-notify = fetch-jb55 {
     repo = "imap-notify";
-    rev  = "0.1.1"; # use my config
-    sha256 = "0q3cxwgx7w91k77sb9iilfbvnn4fka9d47k02jrwhf3g6jk1jij1";
+    rev  = "11d8f9b544531a27cbe0fc49ab5c1d4b26d3fba4";
+    sha256 = "1nnc50plrg9m1dbw8a1hla0d1f86s0bmpy8majq8vicdhf6qxbja";
   };
 
   nixpkgs-ml-tools = fetch-jb55 {
@@ -85,8 +85,8 @@ in rec {
 
   btcs = fetch {
     repo = "btcs";
-    rev  = "0.1";
-    sha256 = "1ls4wr7ii6icr43z3n49pm1z11sdxv06g799ww8pvxv1ax7aysl6";
+    rev  = "bbc7b0d96b5b1dc3114ea56b365ee4586cd86d3b";
+    sha256 = "05mfs6d4r1b9mnzgn74wgjvj04rrmc93hgqqzf53xbrlb0a5s4wg";
   };
 
   snap = fetch {
@@ -95,9 +95,9 @@ in rec {
     sha256 = "0j8j2588z09v7zz1f9d11zw2n0wq70sxy9lvwrw4l5yz75n3cral";
   };
 
-  bcalc = fetch {
+  bcalc = fetch-jb55 {
     repo   = "bcalc";
-    rev    = "5a51083ec33883d3fec3c74cb0891b317f4d1f35";
-    sha256 = "1mdkpd8rc5y4a4j0mwv7mkfd58a43mpxkxhrjlkkmcf2nngvqi0j";
+    rev    = "b96c9f5379841c5049dc1b0aca05750f5f0dcdb8";
+    sha256 = "1lq7jqlyk4crd6f2z1ms0vqy6mq58q819nwn68adjdv309l4dqvf";
   };
 }

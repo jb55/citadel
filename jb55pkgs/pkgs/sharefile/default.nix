@@ -3,13 +3,14 @@
 , makeWrapper
 , perl
 , rsync
+, lib
 , coreutils
 , openssh
 , fetchFromGitHub
 }:
 let
   inputs = [ perl perlPackages.URI rsync openssh coreutils ];
-  buildPaths = sep: fmt: "${stdenv.lib.concatStringsSep sep (map fmt inputs)}";
+  buildPaths = sep: fmt: "${lib.concatStringsSep sep (map fmt inputs)}";
 in stdenv.mkDerivation rec {
   name = "sharefile-${version}";
   version = "1.2";
