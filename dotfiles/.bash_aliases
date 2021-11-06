@@ -6,20 +6,19 @@
 export PAGER="less"
 export LESS="-cix8RM --save-marks"
 
-# mesa
-export RADV_PERFTEST=aco
-export AMD_DEBUG=nodma
-
 TERM_THEME="$(basename $(readlink ~/.Xresources.d/themes/current))"
 
 if [ "$TERM_THEME" == "light" ]
 then
 	export BAT_THEME=GitHub
 else
-	export BAT_THEME=base16
+	export BAT_THEME=zenburn
 fi
 
+export NNCPCFG=~/.nncprc
 export PANDOC=pandoc-nice
+export MAIL=/home/jb55/var/notify/email-notify
+export MAILREADER=/run/current-system/sw/bin/neomutt
 export BAT_STYLE=plain
 export LPASS_HOME="$HOME/.config/lpass"
 export FUZZER=fzf
@@ -28,9 +27,6 @@ export GEMINICLIENT=av98
 export GOPHER=$GOPHERCLIENT
 export GNUPGHOME="$HOME/.gnupg"
 export SHAREFILE_HOST='charon:public/s/'
-export KINDLE_FROM_EMAIL='jackbox55@gmail.com'
-export KINDLE_TXT_EMAIL='jb55@jb55.com'
-export KINDLE_EMAIL='jb55@free.kindle.com'
 export SHAREFILE_URL='https://jb55.com/s/'
 export SHARE_SS_DIR="$HOME/var/img/ss"
 export DOTFILES=${DOTFILES:-$HOME/dotfiles}
@@ -73,16 +69,19 @@ function run_fuzzer() {
 	eval "$(fuzz-run-command "$@")"
 }
 
+alias qud="steam-run ~/.local/share/Steam/steamapps/common/Caves\ of\ Qud/CoQ.x86_64"
 alias C="pcal list"
 alias Ci="pcal interactive"
 alias m="neomutt"
+alias mt="f nt query:today"
 alias mq="msmtp-queue"
+alias ibmgfx="cp437"
 alias s="general-status"
 alias t="todo.sh"
 alias e="edit -n"
 alias g=git
-alias f=run_fuzzer
 alias vim=nvim
+alias f=run_fuzzer
 alias feh="feh --conversion-timeout 2"
 alias info="info --vi-keys"
 alias ag="ag --pager=less"

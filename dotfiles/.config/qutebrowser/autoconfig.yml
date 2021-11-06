@@ -6,5 +6,5 @@
 
 config_version: 2
 settings:
-  content.host_blocking.enabled:
-    global: false
+  content.proxy:
+    global: socks://172.24.0.1:9050

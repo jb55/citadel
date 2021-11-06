@@ -1,8 +1,22 @@
 #!/usr/bin/env bash
-set -eou pipefail
-file=$(rg --files | fuzzer "$@")
+set -eo pipefail
+
+file="$1"
+if [ -n $1 ]; then
+	if [ ! -f "$1" ]; then
+		file=$(rg --files | fuzzer "$1")
+	fi
+else
+	file=$(rg --files | fuzzer)
+fi
+
+
 file=$(readlink -f "$file")
-batcmd="bat --color=always \"$file\" | cat -n | $FUZZER --ansi --tac | awk '{print \$1}'"
-fuzz-record-command "$batcmd | xargs -I{} $EDITOR \"$file\" +\{\}"
-line=$(eval $batcmd)
-echo $EDITOR \"$file\" +$line
+q=""
+if [ -n "$2" ] && [ "$2" != "" ]; then
+	q="--query '$2'"
+fi
+
+linecmd="awkt '{print \$0, NR}' '$file' | fzf --ansi --tac $q | sed -En 's,.*\t([0-9]+)$,\1,p'"
+num=$(eval $linecmd)
+echo ${3:-$EDITOR} +$num \"$file\" "# $(sed -n ${num}p "$file")"

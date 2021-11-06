@@ -9,21 +9,42 @@ set colorcolumn=80
 set nowrap
 set hidden
 
+hi ColorColumn ctermbg=8
+
 map Y y$
 
 syntax on
 
-set clipboard+=unnamedplus
+set clipboard=unnamedplus
 
 let mapleader = "\\"
 let maplocalleader = "\\"
 nmap <Leader>xda ma:%s/\s\+$//g<CR>`a
+
+nmap <C-q> :q<CR>
 nmap <C-x> :x<CR>
+nmap <C-s> ^D
+nmap <C-n> :tn<CR>
+nmap <C-p> :tp<CR>
+
+imap <A-j> {
+imap <A-k> }
+imap <A-n> [
+imap <A-m> ]
+imap <A-h> (
+imap <A-l> )
+imap <A-u> _
+imap <A-i> -
+imap <A-o> +
+imap <A-,> =
+imap <A-Space> <CR>
 
 autocmd FileType go autocmd BufWritePre <buffer> execute "normal! mz:mkview\<esc>:%!fmtsafe gofmt\<esc>:loadview\<esc>`z"
+autocmd FileType go set wrap rnu
 autocmd FileType rust autocmd BufWritePre <buffer> execute "normal! mz:mkview\<esc>:%!fmtsafe rustfmt\<esc>:loadview\<esc>`z"
-autocmd filetype javascript set sw=2 ts=2 expandtab
+"autocmd filetype html set sw=2 ts=2 expandtab
 
-autocmd filetype javascript set sw=2 ts=2 expandtab
+autocmd BufEnter,BufNew *.nix set sw=2 ts=2 expandtab
 autocmd BufEnter,BufNew *.gmi set wrap linebreak
+
 au BufWritePost,FileWritePost ~/.Xdefaults,~/.Xresources silent! !xrdb -load % >/dev/null 2>&1

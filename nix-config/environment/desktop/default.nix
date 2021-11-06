@@ -29,12 +29,14 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
        enableIntro = false;
        enableFPS = false;
        enableDFHack = false;
-       enableTextMode = true;
+       enableTextMode = false;
+       theme = "cla";
     };
 
     mypkgs = (with pkgs; [
       aerc
       hwi
+      bitcoin
       clipmenu
       colorpicker
       dmenu
@@ -48,6 +50,7 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
       getmail # for getmail-gmail-xoauth-tokens
       gnome3.gnome-calculator
       gtk-engine-murrine
+      lagrange
       lastpass-cli
       libnotify
       msmtp
@@ -59,7 +62,7 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
       pavucontrol
       pinentry
       postgresql # psql
-      python37Packages.trezor
+      #python37Packages.trezor
       qalculate-gtk
       qutebrowser
       rxvt_unicode-with-plugins
@@ -111,6 +114,8 @@ in {
     QT_STYLE_OVERRIDE = "GTK+";
     VK_ICD_FILENAMES = "/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json"; # radv
   };
+
+  programs.steam.enable = true;
 
   environment.systemPackages = if extra.is-minimal then (with pkgs; [
     #steam

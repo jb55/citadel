@@ -268,16 +268,16 @@ in
     "f /dev/shm/scream 0660 jb55 qemu-libvirtd -"
   ];
 
-  systemd.user.services.scream-ivshmem = {
-    enable = true;
-    description = "Scream IVSHMEM";
-    serviceConfig = {
-      ExecStart = "${pkgs.scream-receivers}/bin/scream-ivshmem-pulse /dev/shm/scream";
-      Restart = "always";
-    };
-    wantedBy = [ "multi-user.target" ];
-    requires = [ "pulseaudio.service" ];
-  };
+  #systemd.user.services.scream-ivshmem = {
+  #  enable = true;
+  #  description = "Scream IVSHMEM";
+  #  serviceConfig = {
+  #    ExecStart = "${pkgs.scream-receivers}/bin/scream-ivshmem-pulse /dev/shm/scream";
+  #    Restart = "always";
+  #  };
+  #  wantedBy = [ "multi-user.target" ];
+  #  requires = [ "pulseaudio.service" ];
+  #};
 
   systemd.user.services.btc-ban-aws = {
     enable   = if extra.is-minimal then false else true;

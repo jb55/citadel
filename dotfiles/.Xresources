@@ -20,8 +20,8 @@ URxvt.keysym.M-v:    perl:keyboard-select:activate
 URxvt.keysym.M-s:    perl:keyboard-select:search
 URxvt.keysym.M-f:    perl:url-picker
 
-URxvt.resize-font.smaller: M-j
-URxvt.resize-font.bigger:  M-k
+URxvt.resize-font.smaller: M-9
+URxvt.resize-font.bigger:  M-0
 
 
 ! urxvt
@@ -30,14 +30,14 @@ URxvt.resize-font.bigger:  M-k
 !URxvt*font: xft:Source Code Pro:size=13:antialias=true;hinting=true,\
 !            xft:Kochi Gothic:antialias=true,hinting=true
 !URxvt*font: xft:PT Mono:size=11
-URxvt*font: xft:Inconsolata:size=18:hinting=true
+URxvt*font: xft:Inconsolata:size=20:hinting=true
 !urxvt.font: xft:terminus:antialias=false:pixelsize=16
 
 !xft:Inconsolata:size=18:antialias=true;hinting=true
 !
 /* URxvt*font: xft:Noto Serif:size=10:antialias=true;hinting=true */
 
-URxvt*internalBorder: 22
+URxvt*internalBorder: 14
 URxvt*matcher.button: 1
 
 URxvt.color-themes.autosave: 1

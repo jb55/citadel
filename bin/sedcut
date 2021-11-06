@@ -1,2 +1,2 @@
 #!/bin/sh
-exec sed -n 's,.*'"$1"'.*,\1,p'
+exec sed -E -n 's,.*'"$1"'.*,\1,p'

@@ -26,6 +26,7 @@ import XMonad.Hooks.SetWMName
 import XMonad.Hooks.UrgencyHook
 import XMonad.Layout.Gaps
 import XMonad.Layout.Grid
+import XMonad.Util.Scratchpad
 import XMonad.Layout.LayoutModifier
 import XMonad.Layout.Maximize
 import XMonad.Layout.MultiToggle
@@ -193,14 +194,17 @@ shouldFloat = do
   name <- appName
   return (fs && not (shouldntFloat name))
 
+scratchHook = scratchpadManageHook (W.RationalRect 0.1 0.1 0.6 0.3)
+myManageHook = scratchHook <+> (shouldFloat --> doFullFloat)
+
 myConfig theme =
   let lout = layout theme
       cfg = def {
-                terminal           = "urxvtc"
+                terminal           = termName
               , modMask            = mod4Mask
               , layoutHook         = lout
               , startupHook        = myStartupHook (Layout lout)
-              , manageHook         = shouldFloat --> doFullFloat -- doesn't show otherwise
+              , manageHook         = myManageHook
               , normalBorderColor  = "#222"
               , focusedBorderColor = "#BE5046"
             }
@@ -236,6 +240,9 @@ toggleFull theme = sendMessage (Toggle (TabbedFull theme))
 toggleMirror     = sendMessage (Toggle MIRROR)
 toggleCenter     = sendMessage (Toggle Center)
 
+termName :: String
+termName = "urxvtc"
+
 myKeys theme = [
     ("M-p", spawn "dmenu_run -fn \"terminus-12\" -p \"run\"")
   , ("M-a", focusUrgent)
@@ -244,6 +251,7 @@ myKeys theme = [
   , ("M-c", toggleCenter)
   , ("M-b", toggleMirror)
   , ("M-g", toggleGaps)
+  , ("M-s", scratchpadSpawnActionTerminal termName)
   -- , ("M-r", toggleFull)
   , ("M-v", sendKey shiftMask xK_Insert)
   ]

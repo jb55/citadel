@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+objdump -d "$@" | grep callq | sedcut '<\([^>]*\)>' | sortur

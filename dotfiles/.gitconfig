@@ -47,7 +47,6 @@
   default = !git config branch.master.remote origin && git config branch.master.merge refs/heads/master
   ds = diff --staged
   ff = merge --ff-only
-  hash = !"git rev-parse HEAD | tr -d '\n' | xclip"
   lnd = log --no-decorate
   lg1 = log --graph --branches --tags --remotes --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %s %C(bold)— %an%C(reset)%C(bold yellow)%d%C(reset)' --abbrev-commit --date=relative
   lgl = log --format='%h  %cr  %s'
@@ -88,7 +87,7 @@
 	enabled = false
 	autoupdate = false
 [gpg]
-	program = ~/bin/ots-git
+	program = /home/jb55/bin/ots-git
 [magit]
 	hideCampaign = true
 [github]
@@ -99,3 +98,5 @@
 	lineNumber = true
 [credential "https://github.com"]
 	helper = !gh auth git-credential
+[init]
+	defaultBranch = master

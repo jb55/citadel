@@ -1,17 +1,8 @@
 #!/usr/bin/env bash
 
-services="home-email-notifier work-email-notifier email-notify-switcher"
-
-export SYSTEMD_COLORS=1
-
 ctl () {
     printf "%s-ing %s email notifier\n" "$1" "$2" >&2
 }
-
-if [ $# -eq 0 ]
-then
-    printf "nostat [ARGS].. - ARGS: {+,-}h, +start, -stop\n" >&2
-fi
 
 for var in "$@"
 do
@@ -27,12 +18,10 @@ do
      esac
 done
 
-printf '\n' >&2
-
-res=$(ls -1 ~/var/notify)
-if [ -z "$res" ]
+res=off
+if [ -f ~/var/notify/home ]
 then
-    res=off
+    res=on
 fi
 
 printf '%s\n' "$res"

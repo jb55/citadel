@@ -8,13 +8,14 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
       sha256 = "0xd86s2smjvlc7rlb6rkgx2hj3c3sbcz3gs8rf93x69jqdvwb6rr";
     }) {};
     myPackages = with jb55pkgs; [
+       rsslink
        bcalc
        btcs
        csv-delim
        csv-scripts
        datefmt
        extname
-       kindle-send
+       #kindle-send
        mandown
        ratio
        samp
@@ -29,7 +30,6 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
 
     minimal-pkgs = with pkgs; [
       git-tools
-      neovim
       fzf
       ripgrep
     ];
@@ -43,16 +43,17 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
       bat
       bc
       binutils
+      cp437
       dateutils
       direnv
       du-dust
-      hashcash
       file
       fzf
       git-tools
-      gnupg
       gnumake
+      gnupg
       groff
+      hashcash
       haskellPackages.una
       htop
       imagemagick
@@ -63,30 +64,45 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
       linuxPackages.bpftrace
       linuxPackages.perf
       lsof
+      mailutils
       manpages
       mdcat
       minisign
       neovim
+      nethack
       network-tools
+      nix-direnv 
       nodejs
       opentimestamps-client
       par
       parallel
       patchelf
       pv
-      python
+      python3
       ripgrep
       rsync
+      scdoc
       screen
       shellcheck
+      universal-ctags
       unixtools.xxd
       unzip
-      universal-ctags
       weechat
       wget
+      xonsh
       zip
       zstd
     ];
 in {
   environment.systemPackages = if extra.is-minimal then minimal-pkgs else mypkgs;
+
+    nix.extraOptions = ''
+	keep-outputs = true
+	keep-derivations = true
+    '';
+
+    environment.pathsToLink = [
+        "/share/nix-direnv"
+    ];
+
 }

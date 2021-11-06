@@ -11,4 +11,4 @@ set recolor-darkcolor  "#afb6c3"
 set recolor-keephue    "false"
 
 set scroll-page-aware "false"
-set scroll-step 100
+set scroll-step 10

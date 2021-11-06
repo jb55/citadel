@@ -42,6 +42,6 @@ bind '"\C-x^": history-expand-line'
 
 bind '"\C-f": "\C-x\C-addi`fuzz-run-command`\C-x\C-e\C-x^\C-x\C-a$a\C-x\C-r"'
 bind -m vi-command '"\C-f": "i\C-f"'
-bind '"\C-h": "\C-x\C-addi`fuzz-run-command sh`\C-x\C-e\C-x^\C-x\C-a$a\C-x\C-r"'
+bind '"\eh": "\C-x\C-addi`fuzz-run-command sh`\C-x\C-e\C-x^\C-x\C-a$a\C-x\C-r"'
 bind -m vi-command '"\C-h": "i\C-h"'
 bind '"\C-l":clear-screen'

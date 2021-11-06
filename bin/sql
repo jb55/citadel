@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+dosql() {
+  local query="$1"
+  local args=("-U" "$pg_user" -A)
+  if [ ! -z "$query" ];
+  then
+    args+=(-c "$query")
+  fi
+  psql -F $'\t' "${args[@]}"
+}
+
+dosql "$@" | column -t -s $'\t' | less -S

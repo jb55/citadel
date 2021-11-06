@@ -15,7 +15,7 @@ rfc_file="$RFC_DIR/rfc${1}.txt"
 
 if [ ! -f "$rfc_file" ]
 then
-  url="https://tools.ietf.org/rfc/rfc${1}.txt" 
+  url="https://www.rfc-editor.org/rfc/rfc${1}.txt" 
   curl --fail --compressed -s "$url" > "$rfc_file" || (rm -f "$rfc_file" && exit 1)
 fi
 
