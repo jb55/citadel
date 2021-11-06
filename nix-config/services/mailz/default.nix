@@ -278,6 +278,7 @@ in
           }
 
           ${mailbox "Alerts"}
+          ${mailbox "Bulk"}
           ${mailbox "RSS"}
           ${mailbox "GitHub"}
           ${mailbox "Lists"}

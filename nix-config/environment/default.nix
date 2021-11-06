@@ -21,7 +21,7 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
        sharefile
        zebra
        define
-       nixpkgs-ml-tools
+       #nixpkgs-ml-tools
     ];
     myHaskellPackages = with pkgs.haskellPackages; [
       #skeletons

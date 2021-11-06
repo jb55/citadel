@@ -76,12 +76,15 @@ notmuchcmd tag +work +commit tag:github and tag:inbox and to:commitdev
 notmuchcmd tag +flagged -busy -filed tag:inbox and '(tag:list and tag:to-me) or to:mention@noreply.github.com or author@noreply.github.com or to:review_requested@noreply.github.com or to:comment@noreply.github.com or (subject:jb55 and tag:github)'
 
 # spam
-notmuchcmd tag +spam -inbox 'subject:"BOOM OF SALES"' and tag:inbox
+notmuchcmd tag +spam -inbox 'from:"BOOM OF SALES"' and tag:inbox
 
 # not spam
 notmuchcmd tag +inbox -spam +flagged "bitcoin wizard" and tag:spam
 
 # phone mail
 notmuchcmd tag -inbox tag:inbox and '(folder:".Archive" or folder:".Trash" or folder:".Archives")'
+
+# bulk bs
+notmuchcmd tag +filed +bulk 'folder:".Bulk"'
 
 printf "notmuch tagging done.\n"
