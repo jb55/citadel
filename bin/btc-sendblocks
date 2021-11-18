@@ -1,0 +1,19 @@
+#/usr/bin/env bash
+
+HEIGHT=${1:-708720}
+DST=${2:-quiver}
+
+set -eou pipefail
+
+if [ -z $1 ]
+then
+	printf "usage: btc-sendblocks <from-height> <DSTNODE>\n"
+	exit 0
+fi
+
+for i in $(seq $HEIGHT $(btc blocks))
+do
+	bcli getblock $(bcli getblockhash $i) 0 |
+	xxd -r -p |
+	nncp-exec "$DST" block $i
+done

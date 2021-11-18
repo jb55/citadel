@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+
+monad_blocks=$(ssh monad btc-blocks)
+our_blocks=$(btc blocks)
+behind=$(bc <<<"$monad_blocks - $our_blocks")
+
+printf "%s\n" "$behind"

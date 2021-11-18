@@ -1,0 +1,3 @@
+#!/bin/sh
+
+nncp-call -onlinedeadline ${1:-10} -autotoss ${2:-monad}

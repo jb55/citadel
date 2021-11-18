@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+. /home/jb55/.nncpenv
+
+msgfile=$(mktemp)
+tmp=$(mktemp)
+cat > "$tmp"
+
+cat <<EOF > $msgfile
+response from $NNCP_SENDER for command:
+
+$ $@
+
+Output saved to $tmp
+
+THIS FILE WILL BE DELETED when this closes
+Make sure to move it or lose it!
+
+Go to the next page to view output.
+EOF
+
+read -r -d '' cmds <<EOF
+less $msgfile $tmp
+rm -f $tmp $msgfile
+EOF
+
+urxvtc -e bash -c "$cmds"

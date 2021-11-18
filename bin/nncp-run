@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+dst=${1:-monad}
+shift
+
+if [ -t 0 ]; then
+    echo -n "" | nncp-exec $dst cmd "$@"
+else
+    nncp-exec $dst cmd "$@"
+fi
+

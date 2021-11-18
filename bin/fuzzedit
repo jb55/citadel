@@ -3,4 +3,4 @@ file=$1
 prefix=$2
 shift
 shift
-fuzz-search-file "$file" "$prefix $@" edit
+fuzz-search-file "$file" "$prefix$@" edit

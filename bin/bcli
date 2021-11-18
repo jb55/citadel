@@ -1,8 +1,8 @@
-#!/usr/bin/env sh
+#!/bin/sh
 if [ $(hostname) == "monad" ]
 then
-exec bitcoin-cli -rpcuser=rpcuser -rpcpassword=rpcpass -datadir=/zbig/bitcoin "$@"
+	exec bitcoin-cli -rpcuser=rpcuser -rpcpassword=rpcpass -datadir=/zbig/bitcoin "$@"
 else
-ssh monad bitcoin-cli -rpcuser=rpcuser -rpcpassword=rpcpass -datadir=/zbig/bitcoin "$@"
+	exec bitcoin-cli "$@"
 fi
 
