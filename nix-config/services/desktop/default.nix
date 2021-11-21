@@ -215,21 +215,22 @@ in
 
   services.clipmenu.enable = true;
 
-  environment.systemPackages = [pkgs.phonectl];
-  systemd.user.services.phonectl = {
-    enable      = if extra.is-minimal then false else true;
-    description = "phonectl";
-    wantedBy = [ "graphical-session.target" ];
-    after    = [ "graphical-session.target" ];
+  #environment.systemPackages = [pkgs.phonectl];
 
-    serviceConfig.ExecStart = "${pkgs.phonectl}/bin/phonectld";
+  #systemd.user.services.phonectl = {
+  #  enable      = if extra.is-minimal then false else true;
+  #  description = "phonectl";
+  #  wantedBy = [ "graphical-session.target" ];
+  #  after    = [ "graphical-session.target" ];
 
-    environment = with secrets.phonectl; {
-      PHONECTLUSER=user;
-      PHONECTLPASS=pass;
-      PHONECTLPHONE=phone;
-    };
-  };
+  #  serviceConfig.ExecStart = "${pkgs.phonectl}/bin/phonectld";
+
+  #  environment = with secrets.phonectl; {
+  #    PHONECTLUSER=user;
+  #    PHONECTLPASS=pass;
+  #    PHONECTLPHONE=phone;
+  #  };
+  #};
 
   # TODO: maybe doesn't have my package env
   # systemd.user.services.xbindkeys = {

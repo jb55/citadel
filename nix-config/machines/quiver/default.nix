@@ -21,7 +21,7 @@ extra:
     options thinkpad_acpi enabled=0
   '';
 
-  services.teamviewer.enable = true;
+  services.teamviewer.enable = false;
 
   services.synergy.server.enable = true;
   services.synergy.server.screenName = "quiver";

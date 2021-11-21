@@ -16,6 +16,7 @@ let
   ports = {
     synergy = 24800;
     wireguard = 51820;
+    nncp = 5442;
   };
 
   firewallRules = [
@@ -94,6 +95,6 @@ in
 
   networking.firewall.extraCommands = extraCommands;
   networking.firewall.extraStopCommands = extraStopCommands;
-  #networking.firewall.allowedTCPPorts = [ 8333 ];
+  networking.firewall.allowedTCPPorts = with ports; [ nncp ];
   networking.firewall.allowedUDPPorts = with ports; [ wireguard ];
 }

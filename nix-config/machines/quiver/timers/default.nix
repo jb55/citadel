@@ -5,7 +5,7 @@ extra:
   ];
 
   systemd.user.services.myopia-reminder = {
-    enable   = true;
+    enable   = false;
     description = "Myopia Reminder";
 
     wantedBy    = [ "graphical-session.target" ];
