@@ -33,7 +33,7 @@ macro index,pager a "<modify-labels>-unread -inbox<enter>j<enter>
 macro index,pager A "<create-alias>" "Create alias"
 macro index,pager F "<modify-labels>+filed" "File message"
 macro index,pager + "<modify-labels>+"
-macro index S "<modify-labels>+spam -unread -inbox" "Spam message"
+macro index,pager S "<modify-labels>+spam -unread -inbox<enter>j<enter>
 macro index c "<change-vfolder>?" "Change to vfolder overview"
 macro index \\\\ "<vfolder-from-query>" "Search mailbox"
 macro pager p "|delta --paging always<enter>"

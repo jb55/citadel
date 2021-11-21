@@ -6,5 +6,5 @@
 
 config_version: 2
 settings:
-  content.host_blocking.enabled:
+  content.blocking.enabled:
     global: false
