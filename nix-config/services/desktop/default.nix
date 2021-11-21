@@ -26,13 +26,13 @@ in
   services.pcscd.enable = true;
   services.gnome3.gnome-keyring.enable = if extra.is-minimal then false else true;
 
-  services.trezord.enable = if extra.is-minimal then false else true;
+  services.trezord.enable = false;
 
   services.avahi.enable = true;
   services.avahi.publish.enable = true;
   services.avahi.publish.userServices = true;
 
-  services.spotifyd.enable = if extra.is-minimal then false else true;
+  services.spotifyd.enable = false;
   services.spotifyd.config = ''
     [global]
     username = bcasarin
@@ -139,7 +139,7 @@ in
     autoRepeatDelay = 200;
     autoRepeatInterval = 50;
 
-    xkbOptions = "terminate:ctrl_alt_bksp, ctrl:nocaps, keypad:hex, altwin:swap_alt_win, lv3:ralt_switch, compose:${composeKey}";
+    xkbOptions = "terminate:ctrl_alt_bksp,  ctrl:nocaps, keypad:hex, altwin:swap_alt_win, lv3:ralt_switch, compose:${composeKey}";
 
     wacom.enable = false;
 
@@ -215,21 +215,21 @@ in
 
   services.clipmenu.enable = true;
 
-  environment.systemPackages = [pkgs.phonectl];
-  systemd.user.services.phonectl = {
-    enable      = if extra.is-minimal then false else true;
-    description = "phonectl";
-    wantedBy = [ "graphical-session.target" ];
-    after    = [ "graphical-session.target" ];
+  #environment.systemPackages = [pkgs.phonectl];
+  #systemd.user.services.phonectl = {
+  #  enable      = if extra.is-minimal then false else true;
+  #  description = "phonectl";
+  #  wantedBy = [ "graphical-session.target" ];
+  #  after    = [ "graphical-session.target" ];
 
-    serviceConfig.ExecStart = "${pkgs.phonectl}/bin/phonectld";
+  #  serviceConfig.ExecStart = "${pkgs.phonectl}/bin/phonectld";
 
-    environment = with secrets.phonectl; {
-      PHONECTLUSER=user;
-      PHONECTLPASS=pass;
-      PHONECTLPHONE=phone;
-    };
-  };
+  #  environment = with secrets.phonectl; {
+  #    PHONECTLUSER=user;
+  #    PHONECTLPASS=pass;
+  #    PHONECTLPHONE=phone;
+  #  };
+  #};
 
   # TODO: maybe doesn't have my package env
   # systemd.user.services.xbindkeys = {

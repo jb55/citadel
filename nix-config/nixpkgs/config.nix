@@ -17,13 +17,9 @@ in {
 
 
   packageOverrides = super: rec {
-    qemu = super.qemu.override {
-      smbdSupport = true;
-    };
-
-    scream-receivers = super.scream-receivers.override {
-      pulseSupport = true;
-    };
+    #qemu = super.qemu.override {
+    #  smbdSupport = true;
+    #};
 
     # /run/current-system/sw/bin/ls $HOME/.emacs.d/elpa | sed 's/-[[:digit:]].*//g;s/\+$/-plus/g' | sort -u
     #emacs = super.emacsHead;
@@ -33,15 +29,6 @@ in {
     }) {
       inherit pkgs;
     };
-
-    less = pkgs.lib.overrideDerivation super.less (attrs: {
-      patches = [
-        (super.fetchurl {
-          url = "https://jb55.com/s/0001-mark-save-lastmarks.patch";
-          sha256 = "4974a406ddcdc46c2008b9a828d9eba3a04b8a46ed02ca5e5534b2f09441a709";
-	})
-      ];
-    });
 
     msmtp = pkgs.lib.overrideDerivation super.msmtp (attrs: {
       patches = [
@@ -72,27 +59,20 @@ in {
       };
     });
 
-    lastpass-cli = super.lastpass-cli.override { guiSupport = true; };
+    #lastpass-cli = super.lastpass-cli.override { guiSupport = true; };
 
     wine = super.wineWowPackages.staging;
 
-    phonectl = super.python3Packages.callPackage (import (super.fetchFromGitHub {
-      owner  = "jb55";
-      repo   = "phonectl";
-      sha256 = "0wqpwg32qa1rzpw7881r6q2zklxlq1y4qgyyy742pihfh99rkcmj";
-      rev    = "de0f37a20d16a32a73f9267860302357b2df0c20";
-    })) {};
+    #notmuch = pkgs.lib.overrideDerivation super.notmuch (attrs: {
+    #  src = pkgs.fetchFromGitHub {
+    #    owner  = "jb55";
+    #    repo   = "notmuch";
+    #    rev    = "f0f99973ad9d4e932b34cc76a5d7c6629079575a";
+    #    sha256 = "0n89q4vlq0yhn6dqjjb7sva54cvg62hcj1yxryvs5jai5n5gl493";
+    #  };
 
-    notmuch = pkgs.lib.overrideDerivation super.notmuch (attrs: {
-      src = pkgs.fetchFromGitHub {
-        owner  = "jb55";
-        repo   = "notmuch";
-        rev    = "f0f99973ad9d4e932b34cc76a5d7c6629079575a";
-        sha256 = "0n89q4vlq0yhn6dqjjb7sva54cvg62hcj1yxryvs5jai5n5gl493";
-      };
-
-      doCheck = false;
-    });
+    #  doCheck = false;
+    #});
 
     # wirelesstools =
     #   let

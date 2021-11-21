@@ -11,7 +11,7 @@ wallet="$2"
 from="Bitcoin Wallet <bitcoind@monad>"
 to="William Casarin <jb55@jb55.com>"
 subject="Wallet notification"
-keys="-r 0x8860420C3C135662EABEADF96342E010C44A6337 -r 0x5B2B1E4F62216BC74362AC61D4FBA2FC4535A2A9 -r 0xE02D3FD4EB4585A63531C1D0E1BFCB90A1FF7A1C"
+keys="-r 0xC5D732336E9DC2C7F9D9D91CAC3CB14001216D67"
 
 tx="$(${bcli} -rpcwallet=$wallet gettransaction "$txid" true)"
 address="$(${pkgs.jq}/bin/jq -r '.details[0].address' <<<"$tx")"

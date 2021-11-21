@@ -21,7 +21,7 @@ let machine = extra.private.machine;
     };
     util = extra.util;
     caches = [ "https://cache.nixos.org" ];
-    composeKey = if machine == "quiver" then "ralt" else "rwin";
+    composeKey = if machine == "quiver" then "ralt" else "prsc";
     home = "/home/jb55";
     isDark = false;
     bash = "${pkgs.bashInteractive}/bin/bash";

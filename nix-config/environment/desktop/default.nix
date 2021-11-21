@@ -16,7 +16,7 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
     jb55pkgs = import <jb55pkgs> { inherit pkgs; };
 
     jbpkgs = with jb55pkgs; [
-       snap
+       #snap
        cmdtree
        zoom-link-opener
        x11-rename
@@ -34,7 +34,6 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
 
     mypkgs = (with pkgs; [
       aerc
-      hwi
       clipmenu
       colorpicker
       dmenu
@@ -59,7 +58,7 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
       pavucontrol
       pinentry
       postgresql # psql
-      python37Packages.trezor
+      #python37Packages.trezor
       qalculate-gtk
       qutebrowser
       rxvt_unicode-with-plugins
@@ -119,8 +118,4 @@ in {
     lastpass-cli
     rxvt_unicode-with-plugins
   ]) else mypkgs;
-
-  security.wrappers = {
-    slock.source = "${pkgs.slock}/bin/slock";
-  };
 }

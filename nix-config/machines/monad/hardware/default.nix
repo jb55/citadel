@@ -10,7 +10,7 @@
      modprobe -i vfio-pci
   '';
 
-  boot.kernelParams = [ "amdgpu.gpu_recovery=1" "amd_iommu=on" "pcie_aspm=off" ];
+  boot.kernelParams = [ "amdgpu.gpu_recovery=1" ];
   boot.kernelModules = [ "kvm-amd" "kvm-intel" ];
   boot.loader.grub.copyKernels = true;
   boot.extraModulePackages = [ ];
@@ -24,6 +24,11 @@
     { device = "znix/home";
       fsType = "zfs";
     };
+
+  #fileSystems."/chonk" =
+  #  { device = "chonk";
+  #    fsType = "zfs";
+  #  };
 
   fileSystems."/zbig" =
     { device = "zbig";

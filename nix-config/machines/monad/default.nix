@@ -40,7 +40,7 @@ in
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
-  services.ofono.enable = true;
+  services.ofono.enable = false;
   services.ofono.plugins = with pkgs; [ ofono-phonesim ];
 
   services.prometheus.enable = false;
@@ -56,39 +56,12 @@ in
   ];
 
   # services.guix.enable = true;
-  services.synergy.server.enable = if extra.is-minimal then false else true;
-  services.synergy.server.autoStart = true;
-  services.synergy.server.screenName = "desktop";
-  services.synergy.server.configFile = pkgs.writeText "barrier-cfg" ''
-    section: screens
-      desktop:
-      mac:
-      win:
-    end
-    section: aliases
-        desktop:
-          192.168.86.26
-        mac:
-          10.100.0.4
-        win:
-          192.168.122.218
-    end
-    section: links
-      desktop:
-          left = mac
-          right = win
-      mac:
-          right = desktop
-      win:
-          left = desktop
-    end
-    section: options
-      keystroke(alt+control+h) = switchInDirection(left)
-      keystroke(alt+control+l) = switchInDirection(right)
-    end
-  '';
+  services.synergy.client.enable = if extra.is-minimal then false else true;
+  services.synergy.client.autoStart = true;
+  services.synergy.client.serverAddress = "10.100.0.2";
+  services.synergy.client.screenName = "monad";
 
-  services.bitlbee.enable = if extra.is-minimal then false else true;
+  services.bitlbee.enable = if extra.is-minimal then false else false;
   services.bitlbee.libpurple_plugins = with pkgs; [
     pidgin-skypeweb
     purple-facebook
@@ -174,7 +147,7 @@ in
     wantedBy    = [ "graphical-session.target" ];
     after       = [ "graphical-session.target" ];
 
-    path = with pkgs; [ openssh msmtp libnotify netcat ];
+    path = with pkgs; [ openssh msmtp libnotify netcat gitFull ];
 
     environment = {
 	SSH_AUTH_SOCK = "/run/user/1000/ssh-agent";
@@ -184,11 +157,17 @@ in
 	export SSH_ASKPASS="${pkgs.x11_ssh_askpass}/libexec/x11-ssh-askpass"
 	while true
 	do
-		duration="5m"
+		duration="30m"
 		cd /home/jb55/dev/github/bitcoin/bitcoin 
 		${git-email-contacts}
+		git gc
 		cd /home/jb55/dev/github/bitcoin-core/gui 
 		${git-email-contacts}
+		git gc
+		cd /home/jb55/etc/nixpkgs-master
+		git fetch -p upstream
+		${git-email-contacts}
+		git gc
 		printf "done for now, waiting %s...\n" $duration 2>&1
 		sleep $duration
 	done
@@ -245,7 +224,7 @@ in
     '';
   };
 
-  virtualisation.libvirtd.enable = true;
+  virtualisation.libvirtd.enable = false;
   virtualisation.libvirtd.qemuOvmf = true;
   virtualisation.libvirtd.qemuVerbatimConfig = ''
     user = "jb55"
@@ -259,25 +238,6 @@ in
       "/dev/rtc","/dev/hpet", "/dev/sev"
     ]
   '';
-
-  services.samba = {
-  };
-
-  systemd.tmpfiles.rules = [
-    "f /dev/shm/looking-glass 0660 jb55 qemu-libvirtd -"
-    "f /dev/shm/scream 0660 jb55 qemu-libvirtd -"
-  ];
-
-  systemd.user.services.scream-ivshmem = {
-    enable = true;
-    description = "Scream IVSHMEM";
-    serviceConfig = {
-      ExecStart = "${pkgs.scream-receivers}/bin/scream-ivshmem-pulse /dev/shm/scream";
-      Restart = "always";
-    };
-    wantedBy = [ "multi-user.target" ];
-    requires = [ "pulseaudio.service" ];
-  };
 
   systemd.user.services.btc-ban-aws = {
     enable   = if extra.is-minimal then false else true;
@@ -296,7 +256,7 @@ in
 
   environment.systemPackages = [ pkgs.virt-manager ];
 
-  virtualisation.virtualbox.host.enable = false;#if extra.is-minimal then false else true;
+  virtualisation.virtualbox.host.enable = true;#if extra.is-minimal then false else true;
   virtualisation.virtualbox.host.enableHardening = false;
   #virtualization.virtualbox.host.enableExtensionPack = true;
 
@@ -314,8 +274,8 @@ in
 
   documentation.nixos.enable = false;
 
-  # services.trezord.enable = if extra.is-minimal then false else true;
-  services.redis.enable = if extra.is-minimal then false else true;
+  services.redis.enable = if extra.is-minimal then false else false;
+  services.mongodb.enable = if extra.is-minimal then false else false;
 
   services.zeronet.enable = false;
   #services.zeronet.trackers = ''
@@ -325,8 +285,6 @@ in
   #  https://trakx.herokuapp.com:443/announce
   #  udp://ultra.zt.ua:6969/announce
   #'';
-
-  services.mongodb.enable = if extra.is-minimal then false else false;
 
   services.tor.enable = if extra.is-minimal then false else true;
   services.tor.controlPort = 9051;
@@ -350,7 +308,7 @@ in
       server {
         listen 80;
         listen ${extra.machine.ztip}:80;
-        listen 192.168.86.26;
+        listen 192.168.87.26;
 
 	server_name notes.jb55.com;
 
@@ -419,7 +377,7 @@ in
   #     # type db  user address            method
   #     local  all all                     trust
   #     host   all all  127.0.0.1/32       trust
-  #     host   all all  192.168.86.0/24    trust
+  #     host   all all  192.168.87.0/24    trust
   #   '';
   #   extraConfig = ''
   #     listen_addresses = '0.0.0.0'
@@ -435,7 +393,7 @@ in
   #     # type db  user address            method
   #     local  all all                     trust
   #     host   all all  127.0.0.1/32       trust
-  #     host   all all  192.168.86.0/24    trust
+  #     host   all all  192.168.87.0/24    trust
   #   '';
   #   extraConfig = ''
   #     listen_addresses = '0.0.0.0'

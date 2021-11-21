@@ -165,8 +165,8 @@ extra:
   # https://github.com/nmikhailov/Validity90  # driver not done yet
   services.fprintd.enable = false;
 
-  services.tor.enable = true;
-  services.tor.client.enable = true;
+  services.tor.enable = false;
+  services.tor.client.enable = false;
   services.tor.controlPort = 9051;
 
   services.autorandr.enable = true;

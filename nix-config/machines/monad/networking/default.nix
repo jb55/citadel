@@ -1,7 +1,7 @@
 extra:
 { config, lib, pkgs, ... }:
 let
-  chromecastIP = "192.168.86.190";
+  chromecastIP = "192.168.87.190";
   iptables = "iptables -A nixos-fw";
   ipr = "${pkgs.iproute}/bin/ip";
   hasVPN = true;
@@ -37,16 +37,19 @@ let
     http = 80;
     wireguard = 51820;
     weechat = 9000;
+    nncp = 5442;
     inherit (extra.private) notify-port;
   };
 
   firewallRules = [
-    "nixos-fw -s 10.100.0.0/24,192.168.86.1/24 -p tcp --dport 8080 -j nixos-fw-accept" # dev
+    "nixos-fw -s 10.100.0.0/24,192.168.87.1/24 -p tcp --dport 8080 -j nixos-fw-accept" # dev
+    "nixos-fw -s 10.100.0.0/24,192.168.87.1/24 -p tcp --dport 5442 -j nixos-fw-accept"
     "nixos-fw -s 10.100.0.0/24 -p tcp --dport 80 -j nixos-fw-accept"
     "nixos-fw -s 10.100.0.0/24 -p tcp --dport 3000 -j nixos-fw-accept"
     "nixos-fw -s 10.100.0.2/32 -p tcp --dport ${toString ports.lntun} -j nixos-fw-accept"
     "nixos-fw -s 10.100.0.0/24 -p tcp --dport ${toString ports.weechat} -j nixos-fw-accept"
-    "nixos-fw -s 10.100.0.0/24,192.168.86.1/24 -p tcp --dport 8333 -j nixos-fw-accept" # bitcoin
+    "nixos-fw -s 10.100.0.0/24,192.168.87.1/24 -p tcp --dport 8333 -j nixos-fw-accept" # bitcoin
+    "nixos-fw -s 10.100.0.0/24,192.168.87.1/24 -p tcp --dport 8332 -j nixos-fw-accept" # bitcoin-rpc
     "nixos-fw -s 192.168.122.218 -p udp --dport 137 -j nixos-fw-accept"
     "nixos-fw -s 192.168.122.218 -p udp --dport 138 -j nixos-fw-accept"
     "nixos-fw -s 192.168.122.218 -p tcp --dport 139 -j nixos-fw-accept"
@@ -153,26 +156,26 @@ in
     openFirewall = true;
   };
 
-  services.xinetd.enable = true;
-  services.xinetd.services =
-  [
-    { name = "gopher";
-      port = 70;
-      server = "${pkgs.gophernicus}/bin/in.gophernicus";
-      serverArgs = "-nf -r /var/gopher";
-      extraConfig = ''
-        disable = no
-        env = PATH=${pkgs.coreutils}/bin:${pkgs.curl}/bin
-        passenv = PATH
-      '';
-    }
-  ];
+  #services.xinetd.enable = true;
+  #services.xinetd.services =
+  #[
+  #  { name = "gopher";
+  #    port = 70;
+  #    server = "${pkgs.gophernicus}/bin/in.gophernicus";
+  #    serverArgs = "-nf -r /var/gopher";
+  #    extraConfig = ''
+  #      disable = no
+  #      env = PATH=${pkgs.coreutils}/bin:${pkgs.curl}/bin
+  #      passenv = PATH
+  #    '';
+  #  }
+  #];
 
   services.nginx.httpConfig = lib.mkIf config.services.transmission.enable ''
     server {
       listen 80;
       listen ${extra.machine.ztip}:80;
-      listen 192.168.86.26;
+      listen 192.168.87.26;
 
       # server names for this server.
       # any requests that come in that match any these names will use the proxy.
@@ -233,7 +236,7 @@ in
     server {
       listen 80;
       listen ${extra.machine.ztip}:80;
-      listen 192.168.86.26;
+      listen 192.168.87.26;
       server_name torrents.jb55.com torrentz.jb55.com torrents.home torrent.home;
 
       location = /download {

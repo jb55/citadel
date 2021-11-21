@@ -1,7 +1,7 @@
 extra:
 { config, lib, pkgs, ... }:
 let
-  chromecastIPs = [ "192.168.86.190" ];
+  chromecastIPs = [ "192.168.87.190" ];
   iptables = "iptables -A nixos-fw";
   openChromecast = ip: ''
     ${iptables} -p udp -s ${ip} -j nixos-fw-accept
@@ -76,7 +76,7 @@ in
     ${lib.concatStringsSep "\n\n" (map openChromecast chromecastIPs)}
 
     # home network nginx
-    iptables -A nixos-fw -p tcp -s 192.168.86.0/24 -d 192.168.86.0/24 --dport 80 -j nixos-fw-accept
+    iptables -A nixos-fw -p tcp -s 192.168.87.0/24 -d 192.168.87.0/24 --dport 80 -j nixos-fw-accept
 
     # mark tor-related packets
     iptables -t mangle -A OUTPUT -m cgroup --cgroup 12 -j MARK --set-mark 12
@@ -92,7 +92,7 @@ in
   '';
 
   networking.firewall.extraStopCommands = ''
-    iptables -D nixos-fw -p tcp -s 192.168.86.0/24 -d 192.168.86.0/24 --dport 80 -j nixos-fw-accept || true
+    iptables -D nixos-fw -p tcp -s 192.168.87.0/24 -d 192.168.87.0/24 --dport 80 -j nixos-fw-accept || true
 
     # mark tor-related packets
     iptables -t mangle -D OUTPUT -m cgroup --cgroup 12 -j MARK --set-mark 12 || true

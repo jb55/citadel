@@ -14,7 +14,6 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
        csv-scripts
        datefmt
        extname
-       kindle-send
        mandown
        ratio
        samp
