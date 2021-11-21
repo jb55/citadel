@@ -3,3 +3,4 @@ bin/viscal
 bin/gmni
 bin/lagrange
 bin/resources.lgr
+.direnv

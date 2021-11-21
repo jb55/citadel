@@ -67,6 +67,7 @@ config.bind('<Ctrl-m>', 'set-mark')
 #config.bind('<Ctrl-d>', 'scroll-page 0 0.5')
 #config.bind('<Ctrl-u>', 'scroll-page 0 -0.5')
 config.bind('<Ctrl-r>', 'reload')
+config.bind('<Ctrl-e>', 'edit-text')
 
 config.bind('e', 'open-editor')
 config.bind('co', 'tab-only')

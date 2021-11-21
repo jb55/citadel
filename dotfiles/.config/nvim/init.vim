@@ -48,3 +48,8 @@ autocmd BufEnter,BufNew *.nix set sw=2 ts=2 expandtab
 autocmd BufEnter,BufNew *.gmi set wrap linebreak
 
 au BufWritePost,FileWritePost ~/.Xdefaults,~/.Xresources silent! !xrdb -load % >/dev/null 2>&1
+
+if has("autocmd")
+  au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
+    \| exe "normal! g'\"" | endif
+endif

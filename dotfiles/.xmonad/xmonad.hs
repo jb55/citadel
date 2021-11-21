@@ -194,7 +194,7 @@ shouldFloat = do
   name <- appName
   return (fs && not (shouldntFloat name))
 
-scratchHook = scratchpadManageHook (W.RationalRect 0.1 0.1 0.6 0.3)
+scratchHook = scratchpadManageHook (W.RationalRect 0.1 0.1 0.6 0.6)
 myManageHook = scratchHook <+> (shouldFloat --> doFullFloat)
 
 myConfig theme =

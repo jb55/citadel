@@ -40,8 +40,9 @@ pf	edit project file	fuzz-edit-file
 ps	edit project skeletons	fuzz-edit-file --dir ~/dotfiles/skeletons
 rf	recent files	fuzz-recent-files
 sc	show command	fuzz-show-script
-ds	docs->stripe	fuzzdoc ~/docs/stripe-v72.txt '^type '
-Ssg	steamoji service gql	fuzzedit schema '^type '
+dsa	docs->stripe->api	~/docs/stripe/jumpapi
+dsg	docs->stripe->go	fuzzdoc ~/docs/stripe/go-v72.txt '^type '
+Ssg	steamoji service gql	fuzzedit schema '^'
 Ssm	steamoji service mutations	fuzzedit mutation '^func '
 Ssq	steamoji service queries	fuzzedit query '^func '
 Sd	edit steamoji doc	echo edit /home/jb55/projects/steamoji/doc/$(ls -1pt /home/jb55/projects/steamoji/doc | grep -v / | head -n1)
@@ -50,8 +51,12 @@ sf	search project file funcs	fuzz-funcs
 sgd	search git diff	fuzz-edit-diff-line
 sgh	search git head	fuzz-edit-diff-line HEAD^-
 sgs	search git staged diff	fuzz-edit-diff-line --staged
+sgb	search git branch	fuzz-jump-branchdiff
 sh	show history	fuzz-show-hist
 sp	search project	fuzz-search-files
 ss	search project file	fuzz-search-file
-te	todos edit	echo edit ~/docs/todo/todo.txt
+ts	trello sprint	fuzz-trello-sprint
+tsi	trello sprint inprogress	fuzz-trello-sprint "^In Progress "
+tsb	trello sprint backlog	fuzz-trello-sprint "^Backlog "
+tst	trello sprint todo	fuzz-trello-sprint "^Todo "
 z	fz	echo fz
