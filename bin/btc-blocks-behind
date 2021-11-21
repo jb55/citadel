@@ -1,6 +1,6 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
-monad_blocks=$(ssh monad btc-blocks)
+monad_blocks=$(ssh monad btc-blocks 2>/dev/null)
 our_blocks=$(btc blocks)
 behind=$(bc <<<"$monad_blocks - $our_blocks")
 

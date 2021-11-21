@@ -1,2 +1,2 @@
-#!/usr/bin/env sh
-urxvtc -e nvim "$@"
+#!/bin/sh
+urxvt -e edit "$@"

@@ -1,2 +1,2 @@
-#!/usr/bin/env bash
-exec perl -pe 's/\e\[?.*?[\@-~]//g'
+#!/bin/sh
+exec sed 's/\x1b\[[0-9;]*m//g'
