@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+repo=$(git remote -v | grep origin | sedcut ':([^/]+/[^ ]+)' | head -n1)
+open "https://github.com/$repo/pull/$1"

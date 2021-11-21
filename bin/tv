@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+xset -display :0 dpms force "$1"

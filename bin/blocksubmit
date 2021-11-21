@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -eou pipefail
+
+. /home/jb55/.nncpenv
+
+res=$(xxd -p | tr -d '\n' > /tmp/blocks/$1)
+
+#if [ $res == "prev-blk-not-found" ]; then
+#	exit 42
+#fi

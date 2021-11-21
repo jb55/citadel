@@ -1,0 +1,7 @@
+#!/bin/sh
+
+export NNCPCFG=/home/jb55/.nncprc
+export HOME=/home/jb55
+export PATH=/home/jb55/.npm/bin:/home/jb55/.local/bin:/home/jb55/bin:/run/wrappers/bin:/home/jb55/.nix-profile/bin:/etc/profiles/per-user/jb55/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:/home/jb55/.fzf/bin:/nix/store/qi3kpll3n9k9cjr5l8yyn5h3ydazl612-neovim-ruby-env/bin
+
+nohup nncp-cmd-runner "$@"

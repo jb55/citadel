@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+set -eou pipefail
+
+mkdir -p /tmp/blocks
+
+nncp-toss
+
+blocks=$(bcli getblockcount)
+
+cd /tmp/blocks
+for block in $(ls -1 | sort -n)
+do
+	printf "submitting block $block ... " >&2
+
+	res=$(<$block bcli -stdin submitblock)
+
+	printf "$res\n" >&2
+
+	if [ "$res" = "prev-blk-not-found" ]; then
+		exit 42
+	fi
+done
+
+blocks2=$(bcli getblockcount)
+
+printf "%d to height %d, processed %d blocks\n" $blocks $blocks2 $(bc <<<"$blocks2 - $blocks")
+
+rm -rf /tmp/blocks/*

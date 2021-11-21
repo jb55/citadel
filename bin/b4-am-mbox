@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+mbox=$(mktemp)
+curl -sL "$1" > "$mbox"
+msgid=$(grep -i ^message-id "$mbox" | head -n1 | sed -E -n 's,.*<([^>]+)>.*,\1,p')
+b4 am "$msgid" -m "$mbox"
+rm -f "$mbox"

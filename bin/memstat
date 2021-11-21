@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 printf "hogs\n\n"
-procmem | tail -n10 | nfmt
+procmem | tail -n20 | nfmt
 all=$(procmemall)
 arc=$(arcsize)
 total=$(($all + $arc))

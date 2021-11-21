@@ -1,0 +1,13 @@
+#!/bin/sh
+
+. /home/jb55/.nncpenv
+
+out=$(mktemp)
+echo "$@" >> /tmp/cmds
+$@ &> "$out"
+
+<"$out" nncp-exec $NNCP_SENDER cat $@
+
+echo "finished nncp-cmd $@" | sendalert
+
+rm -f "$out"

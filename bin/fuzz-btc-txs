@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+last2=$(btc-txs | fzf --tac | awk '{print $(NF-1), $NF}')
+
+echo tx $last2

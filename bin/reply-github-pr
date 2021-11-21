@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+set -eou pipefail
+
+tmp=$(mktemp)
+reply="$(mktemp).eml"
+
+function cleanup() {
+	rm -f "$tmp"
+}
+
+trap cleanup EXIT
+
+cat > "$tmp"
+
+replyto=$(grep -i ^reply-to "$tmp" | head -n1 | sed -E -n 's,^reply-to: (.*)$,\1,pI')
+printf "reply-to %s\n" "$replyto" >&2
+link=$(<"$tmp" sed -E -n 's,.*(https://github.com/[^/]+/[^/]+/pull/[0-9]+).*,\1.patch,p' | head -n1 | grep .)
+
+printf "fetching patch %s\n" "$link" >&2
+curl -sL "$link" | notmuch insert +insertedreply
+
+id=$(notmuch search --output=messages tag:insertedreply | head -n1 | grep .)
+
+notmuch reply "$id" | sed "/^To:/a Cc: $replyto" > "$reply"
+notmuch search --output=files "$id" | xargs rm -f
+notmuch new &>/dev/null
+
+$EDITOR "$reply"
+printf "%s\n" "$reply"

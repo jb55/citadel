@@ -1,0 +1,4 @@
+
+#!/usr/bin/env bash
+export FUZZ_QUERY="$@"
+exec fuzz-notmuch-query

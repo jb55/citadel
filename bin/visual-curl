@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+tmpfile=$(mktemp)
+curl -sL "$@" > "$tmpfile"
+urxvtc -e less $tmpfile
+rm -f "$tmpfile"
