@@ -4,14 +4,15 @@ set sendmail="/home/jb55/bin/sendmail"
 set virtual_spoolfile=yes
 set folder="/home/jb55/mail/personal"
 set wait_key=no
+set pager_stop=yes
 set from="jb55@jb55.com"
 set pipe_decode=yes
-#set envelope_from=yes
+set envelope_from=yes
 set mime_forward=no
 unset markers
 set text_flowed
 
-set sort = threads 
+set sort = threads
 set sort_aux = reverse-last-date-received
 
 virtual-mailboxes \
@@ -37,6 +38,9 @@ macro index,pager S "<modify-labels>+spam -unread -inbox<enter>j<enter>
 macro index c "<change-vfolder>?" "Change to vfolder overview"
 macro index \\\\ "<vfolder-from-query>" "Search mailbox"
 macro pager p "|delta --paging always<enter>"
+macro pager d "<next-page>"
+macro pager u "<previous-page>"
+macro pager c "|cols<enter>"
 macro pager P "|grep patch$ | xargs curl -sL | delta --paging always<enter>"
 
 my_hdr Bcc: William Casarin <jb55@jb55.com>

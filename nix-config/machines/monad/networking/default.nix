@@ -29,7 +29,6 @@ let
   };
 
   ports = {
-    synergy = 24800;
     lightning = 9735;
     lightningt = 9736;
     lntun = 7878;
@@ -67,7 +66,7 @@ in
   networking.hostId = extra.machine.hostId;
 
   #networking.firewall.trustedInterfaces = ["wg0"];
-  networking.firewall.allowedTCPPorts = with ports; [ lightning lightningt synergy http ];
+  networking.firewall.allowedTCPPorts = with ports; [ lightning lightningt http ];
   networking.firewall.allowedUDPPorts = with ports; [ dns wireguard ];
 
   networking.nat.enable = true;

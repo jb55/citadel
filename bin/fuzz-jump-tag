@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 set -eou pipefail
 
 TAGS=tags
@@ -13,12 +12,6 @@ if [ ! -f tags ]; then
 	fi
 fi
 
-cutt() {
-	cut -d $'\t' --output-delimiter=$'\t' "$@"
-}
+tag=$(grep -v '!_TAG' "$TAGS" | fuzzer ^"$@" | cutt -f1)
 
-res=$(grep -v '^!_TAG' "$TAGS" | fzf)
-file=$(<<<"$res" cutt -f2)
-search=$(<<<"$res" cutt -f3- | sed -E -n 's,^([^"]+).*,\1,p')
-
-printf "vim '%s' -c %q -c :noh\n" "$file" "$search"
+echo "$EDITOR -t $tag" 

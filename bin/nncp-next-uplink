@@ -1,0 +1,2 @@
+#!/bin/sh
+qalc -t "$(cat ~/var/nsync-sleep) seconds - ($(date +%s) - $(cat ~/var/nsync)) seconds"

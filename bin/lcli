@@ -1,2 +1,2 @@
 #!/usr/bin/env sh
-$HOME/dev/github/ElementsProject/lightning/cli/lightning-cli --lightning-dir $HOME/.lightning "$@"
+ssh monad /home/jb55/bin/lcli "$@"

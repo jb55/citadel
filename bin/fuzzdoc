@@ -1,0 +1,6 @@
+#!/usr/bin/env sh
+file=$1
+prefix=$2
+shift
+shift
+fuzz-search-file "$file" "$prefix $@" "less -S"

@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+set -eou pipefail
+find .git/refs | sed 's,^.git/,...,g' | fzf | xargs fuzz-edit-diff-line

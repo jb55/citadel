@@ -5,6 +5,12 @@ set -o vi
 
 export HOME=/home/jb55
 
+export NIXPKGS=$HOME/nixpkgs
+export NIX_PATH="nixpkgs=$NIXPKGS:$NIX_PATH"
+export NIX_PATH="nixos-config=$NIX_FILES:$NIX_PATH"
+export NIX_PATH="jb55pkgs=$HOME/etc/jb55pkgs:$NIX_PATH"
+export NIX_PATH="dotfiles=$HOME/dotfiles:$NIX_PATH"
+
 # If not running interactively, don't do anything
 #[ -z "$PS1" ] && return
 
@@ -40,6 +46,8 @@ fi
 
 export NNCPCFG=~/.nncprc
 export PANDOC=pandoc-nice
+export MAIL=/home/jb55/var/notify/email-notify
+export MAILREADER=/run/current-system/sw/bin/neomutt
 export BAT_STYLE=plain
 export LPASS_HOME="$HOME/.config/lpass"
 export FUZZER=fzf
@@ -48,9 +56,6 @@ export GEMINICLIENT=av98
 export GOPHER=$GOPHERCLIENT
 export GNUPGHOME="$HOME/.gnupg"
 export SHAREFILE_HOST='charon:public/s/'
-export KINDLE_FROM_EMAIL='jackbox55@gmail.com'
-export KINDLE_TXT_EMAIL='jb55@jb55.com'
-export KINDLE_EMAIL='jb55@free.kindle.com'
 export SHAREFILE_URL='https://jb55.com/s/'
 export SHARE_SS_DIR="$HOME/var/img/ss"
 export DOTFILES=${DOTFILES:-$HOME/dotfiles}
@@ -61,16 +66,6 @@ export FZF_CTRL_R_OPTS="-e"
 export FZF_DEFAULT_OPTS="-e"
 export FZF_DEFAULT_COMMAND='rg --files --hidden'
 export EMACSCLIENT=edit
-
-export NIXPKGS=$HOME/nixpkgs
-
-# nix paths
-export NIX_PATH="nixpkgs=$NIXPKGS:$NIX_PATH"
-export NIX_PATH="nixos-config=$NIX_FILES:$NIX_PATH"
-export NIX_PATH="jb55pkgs=$HOME/etc/jb55pkgs:$NIX_PATH"
-export NIX_PATH="dotfiles=$HOME/dotfiles:$NIX_PATH"
-
-# Customize to your needs...
 
 # other
 export EDITOR="edit"
@@ -93,52 +88,55 @@ function run_fuzzer() {
 	eval "$(fuzz-run-command "$@")"
 }
 
-alias C="pcal list"
-alias Ci="pcal interactive"
-alias m="neomutt"
-alias mq="msmtp-queue"
-alias s="general-status"
-alias t="todo.sh"
-alias e="edit -n"
-alias g=git
-alias f=run_fuzzer
-alias vim=nvim
-alias feh="feh --conversion-timeout 2"
-alias info="info --vi-keys"
 alias ag="ag --pager=less"
 alias attach="grabssh; screen -rD"
 alias awkt="awk -v FS=$'\t' -v OFS=$'\t'"
 alias catt="pygmentize -O style=monokai -f console256 -g"
+alias Ci="pcal interactive"
 alias clip="xclip -selection clipboard"
+alias C="pcal list"
 alias cpptags="ctags -R --sort=1 --c++-kinds=+p --fields=+iaS --extra=+q --language-force=C++"
 alias crontab="VIM_CRONTAB=true crontab"
 alias cutt="cut -d $'\t' --output-delimiter=$'\t'"
+alias e="edit -n"
 alias emacs="env TERM=xterm-256color emacs"
+alias feh="feh --conversion-timeout 2"
 alias fixssh="source $HOME/bin/fixssh"
+alias f=run_fuzzer
+alias fzf="fzf --exact"
+alias g=git
 alias githist="git reflog show | grep '}: commit' | nl | sort -nr | nl | sort -nr | cut --fields=1,3 | sed s/commit://g | sed -e 's/HEAD*@{[0-9]*}://g'"
+alias ibmgfx="cp437"
+alias info="info --vi-keys"
+alias jc="journalctl -u"
+alias jcu="journalctl --user -u"
 alias jsonpp="python -mjson.tool"
 alias ls="ls --color"
+alias m="neomutt"
+alias mq="msmtp-queue"
+alias mt="f nt query:today"
+alias myipaddress=myip
+alias myip="dig +short myip.opendns.com @resolver1.opendns.com"
 alias noder="env NODE_NO_READLINE=1 rlwrap node"
 alias nr="npm run"
+alias ns="nix-shell -p"
 alias page=$PAGER
 alias prettyjson=jsonpp
+alias qud="steam-run ~/.local/share/Steam/steamapps/common/Caves\ of\ Qud/CoQ.x86_64"
+alias scs="systemctl status"
+alias scsu="systemctl status --user"
+alias s="general-status"
 alias sorry='sudo $(fc -l -n -1)'
 alias tmuxa="tmux a -d -t "
 alias tmux="tmux -2"
+alias t="todo.sh"
+alias u="cd .."
+alias vim=nvim
 alias vless="/usr/share/vim/vim72/macros/less.sh"
 alias vnc_once="x11vnc -safer -nopw -once -display :0"
+alias wanip=myip
 alias wget="wget -c"
 alias xclip="xclip -selection clipboard"
-alias myip="dig +short myip.opendns.com @resolver1.opendns.com"
-alias wanip=myip
-alias myipaddress=myip
-alias ns="nix-shell -p"
-alias fzf="fzf --exact"
-alias u="cd .."
-alias scs="systemctl status"
-alias scsu="systemctl status --user"
-alias jc="journalctl -u"
-alias jcu="journalctl --user -u"
 
 ghclone () {
   cd "$(gh-clone "$@")"
@@ -285,10 +283,6 @@ source $DOTFILES/.fzf_helpers
 # z
 source $HOME/bin/z.sh
 
-# nix
-#. /Users/jb55/.nix-profile/etc/profile.d/nix.sh
-
-CURL_CA_BUNDLE=/opt/local/share/curl/curl-ca-bundle.crt
 [ -e "$DIRCOLORS" ] && eval "$(dircolors -b "$DIRCOLORS")"
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 [ -f ~/bin/z.sh ] && source ~/bin/z.sh
@@ -304,6 +298,8 @@ bind '"\C-x^": history-expand-line'
 
 bind '"\C-f": "\C-x\C-addi`fuzz-run-command`\C-x\C-e\C-x^\C-x\C-a$a\C-x\C-r"'
 bind -m vi-command '"\C-f": "i\C-f"'
-bind '"\C-h": "\C-x\C-addi`fuzz-run-command sh`\C-x\C-e\C-x^\C-x\C-a$a\C-x\C-r"'
+bind '"\C-g": "\C-x\C-addi`fuzz-run-command sh`\C-x\C-e\C-x^\C-x\C-a$a\C-x\C-r"'
 bind -m vi-command '"\C-h": "i\C-h"'
 bind '"\C-l":clear-screen'
+
+

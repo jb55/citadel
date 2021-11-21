@@ -21,6 +21,40 @@ extra:
     options thinkpad_acpi enabled=0
   '';
 
+  services.teamviewer.enable = false;
+
+  services.synergy.server.enable = true;
+  services.synergy.server.screenName = "quiver";
+  services.synergy.server.autoStart = true;
+  services.synergy.server.configFile = pkgs.writeText "barrier-cfg" ''
+    section: screens
+      monad:
+      quiver:
+      mac:
+    end
+    section: aliases
+        monad:
+          10.100.0.1
+        quiver:
+          10.100.0.2
+        mac:
+          10.100.0.4
+    end
+    section: links
+      monad:
+          left = quiver
+      quiver:
+          right = monad
+          left = mac
+      mac:
+          right = quiver
+    end
+    section: options
+      keystroke(alt+control+h) = switchInDirection(left)
+      keystroke(alt+control+l) = switchInDirection(right)
+    end
+  '';
+
 
   # telepathy is a garbage fire
   services.telepathy.enable = false;
@@ -165,9 +199,17 @@ extra:
   # https://github.com/nmikhailov/Validity90  # driver not done yet
   services.fprintd.enable = false;
 
-  services.tor.enable = false;
-  services.tor.client.enable = false;
+  #services.pleroma.enable = true;
+
+  services.tor.enable = true;
+  services.tor.client.enable = true;
+
   services.tor.controlPort = 9051;
+  services.tor.client.socksListenAddress = {
+    addr = "172.24.0.1";
+    port = 9050;
+    IsolateDestAddr = false;
+  };
 
   services.autorandr.enable = true;
   services.acpid.enable = false;

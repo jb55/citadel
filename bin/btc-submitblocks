@@ -6,14 +6,18 @@ mkdir -p /tmp/blocks
 
 nncp-toss
 
-blocks=$(bcli getblockcount)
+blocks=$(bitcoin-cli getblockcount)
 
 cd /tmp/blocks
-for block in $(ls -1 | sort -n)
+blocklist=$(ls -1 | sort -n)
+to_submit=$(wc -l <<<"$blocklist")
+printf "%d blocks to submit...\n" "$to_submit" >&2 
+
+for block in $blocklist
 do
 	printf "submitting block $block ... " >&2
 
-	res=$(<$block bcli -stdin submitblock)
+	res=$(<$block bitcoin-cli -stdin submitblock)
 
 	printf "$res\n" >&2
 

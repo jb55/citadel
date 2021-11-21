@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+set -e
+
+usage() {
+	printf "usage: timer "food is ready!" 10min\n"
+	exit 0
+}
+
+if [ -z "$1" ]; then
+	usage
+fi
+
+now=$(date +%s)
+target=$(date -d "$2" +%s)
+
+duration=$(($target - $now))
+
+sleep $duration
+notify-send -u critical "$1"

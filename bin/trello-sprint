@@ -1,0 +1,6 @@
+#!/bin/sh
+trello show-cards -b Sprint -l "In Progress" |
+grep '^\*' |
+fzf |
+awkp 2 |
+xargs trello card-details

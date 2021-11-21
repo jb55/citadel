@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+cmd="$@"
+name="$1"
+
+while true
+do
+	printf "%s> " "$name"
+
+	read args
+
+	$cmd "$args"
+done
+
+printf "\n"

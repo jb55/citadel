@@ -29,26 +29,30 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
        enableIntro = false;
        enableFPS = false;
        enableDFHack = false;
-       enableTextMode = true;
+       enableTextMode = false;
+       theme = "cla";
     };
 
     mypkgs = (with pkgs; [
       aerc
+      bitcoin
       clipmenu
       colorpicker
+      dasht
       dmenu
       dragon-drop
-      dasht
       dunst
       dynamic-colors
       feh
-      khal
-      todo-txt-cli
       getmail # for getmail-gmail-xoauth-tokens
       gnome3.gnome-calculator
       gtk-engine-murrine
+      hwi
+      khal
+      lagrange
       lastpass-cli
       libnotify
+      mpv
       msmtp
       muchsync
       neomutt
@@ -66,18 +70,18 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
       simplescreenrecorder
       slock
       spotify
+      #steam
       sxiv
       texlive.combined.scheme-full
+      todo-txt-cli
       userConfig
-      mpv
+      vdirsyncer
       w3m
       wine
-      #steam
       wmctrl
       xautolock
       xbindkeys
       xclip
-      vdirsyncer
       xdotool
       xlibs.xev
       xlibs.xmodmap
@@ -111,6 +115,8 @@ in {
     VK_ICD_FILENAMES = "/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json"; # radv
   };
 
+  programs.steam.enable = true;
+
   environment.systemPackages = if extra.is-minimal then (with pkgs; [
     #steam
     #steam-run
@@ -118,4 +124,6 @@ in {
     lastpass-cli
     rxvt_unicode-with-plugins
   ]) else mypkgs;
+
+  programs.slock.enable = true;
 }

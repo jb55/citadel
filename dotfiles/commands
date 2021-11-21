@@ -1,6 +1,7 @@
 bt	btc txs	fuzz-btc-txs
 cc	compile	fuzz-compile
 cd	change directory	fuzz-cd-dirname
+cdpr	cd project root	echo cd $(project-root)
 ce	compile error	fuzz-compile-error
 cR	compile repeat error	fuzz-compile-repeat-error
 cr	compile repeat	fuzz-compile-repeat
@@ -11,43 +12,51 @@ ed	edit default.nix	echo edit default.nix
 eFc	edit fuzz command	fuzz-edit-command
 eFl	edit fuzz command list	fuzz-edit-command-list
 egc	edit git config	echo edit ~/.gitconfig
-elf	edit last files	fuzz-last-files edit
-em	edit mimi	echo edit ~/.config/mimi/mime.conf
-enc	edit neomutt config	echo edit ~/.config/neomutt/neomuttrc
 egm	edit gemmarks	echo edit ~/dotfiles/gemmarks
-es	email status	echo email-status-once
-evc	edit nvim config	echo edit ~/.config/nvim/init.vim
+elf	edit last files	fuzz-last-files edit
+eM	edit mimi	echo edit ~/.config/mimi/mime.conf
+em	edit mutt config	echo edit ~/.config/neomutt/neomuttrc
+vim	edit vim config	echo edit ~/.config/nvim/init.vim
 ff	create file	echo fuzz-create-file
-jt	jump tag	fuzz-jump-tag
-G	gemini	echo gemmark
 gb	git branches	echo git bvr
+G	gemini	echo gemmark
 ghi	github issues	fuzz-gh-issue-list
 ghp	github prf	fuzz-gh-pr-list
 gpm	git mlap	echo git mlap
 h	run history	fuzz-run-hist
+jt	jump tag	fuzz-jump-tag
 kp	khal personal	echo pcal
-m	make	fuzz-make
 nai	notmuch archive inbox	fuzz-notmuch-archive-inbox
 nam	notmuch am	fuzz-notmuch-am
 nat	notmuch archive	fuzz-notmuch-archive
 Nc	new command	echo make-script
 ni	notmuch inbox	fuzz-notmuch-inbox
 nt	notmuch threads	fuzz-notmuch-threads
+nT	email today	echo f nt query:today
 of	open file	fuzz-open-file
 olf	open last files	fuzz-last-files open
 pc	cat project file	fuzz-cat-file
 pf	edit project file	fuzz-edit-file
 ps	edit project skeletons	fuzz-edit-file --dir ~/dotfiles/skeletons
 rf	recent files	fuzz-recent-files
-sgh	search git head	fuzz-edit-diff-line HEAD^-
 sc	show command	fuzz-show-script
-sgd	search git diff	fuzz-edit-diff-line
-sgs	search git staged diff	fuzz-edit-diff-line --staged
+dsa	docs->stripe->api	~/docs/stripe/jumpapi
+dsg	docs->stripe->go	fuzzdoc ~/docs/stripe/go-v72.txt '^type '
+Ssg	steamoji service gql	fuzzedit schema '^'
+Ssm	steamoji service mutations	fuzzedit mutation '^func '
+Ssq	steamoji service queries	fuzzedit query '^func '
+Sd	edit steamoji doc	echo edit /home/jb55/projects/steamoji/doc/$(ls -1pt /home/jb55/projects/steamoji/doc | grep -v / | head -n1)
 sFc	show fuzz command	fuzz-show-fuzz-command
 sf	search project file funcs	fuzz-funcs
+sgd	search git diff	fuzz-edit-diff-line
+sgh	search git head	fuzz-edit-diff-line HEAD^-
+sgs	search git staged diff	fuzz-edit-diff-line --staged
+sgb	search git branch	fuzz-jump-branchdiff
 sh	show history	fuzz-show-hist
 sp	search project	fuzz-search-files
 ss	search project file	fuzz-search-file
-te	todos edit	echo edit ~/docs/todo/todo.txt
-tj	tag jump	fuzz-tag-jump
+ts	trello sprint	fuzz-trello-sprint
+tsi	trello sprint inprogress	fuzz-trello-sprint "^In Progress "
+tsb	trello sprint backlog	fuzz-trello-sprint "^Backlog "
+tst	trello sprint todo	fuzz-trello-sprint "^Todo "
 z	fz	echo fz

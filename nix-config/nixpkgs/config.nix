@@ -17,9 +17,9 @@ in {
 
 
   packageOverrides = super: rec {
-    #qemu = super.qemu.override {
-    #  smbdSupport = true;
-    #};
+    qemu = super.qemu.override {
+      smbdSupport = true;
+    };
 
     # /run/current-system/sw/bin/ls $HOME/.emacs.d/elpa | sed 's/-[[:digit:]].*//g;s/\+$/-plus/g' | sort -u
     #emacs = super.emacsHead;
@@ -63,38 +63,12 @@ in {
 
     wine = super.wineWowPackages.staging;
 
-    #notmuch = pkgs.lib.overrideDerivation super.notmuch (attrs: {
-    #  src = pkgs.fetchFromGitHub {
-    #    owner  = "jb55";
-    #    repo   = "notmuch";
-    #    rev    = "f0f99973ad9d4e932b34cc76a5d7c6629079575a";
-    #    sha256 = "0n89q4vlq0yhn6dqjjb7sva54cvg62hcj1yxryvs5jai5n5gl493";
-    #  };
-
-    #  doCheck = false;
-    #});
-
-    # wirelesstools =
-    #   let
-    #     patch = super.fetchurl {
-    #               url    = "https://jb55.com/s/iwlist-print-scanning-info-allocation-failed.patch";
-    #               sha256 = "31c97c6abf3f0073666f9f94f233fae2fcb8990aae5e7af1030af980745a8efc";
-    #             };
-    #   in
-    #     pkgs.lib.overrideDerivation super.wirelesstools (attrs: {
-    #       prePatch = ''
-    #         patch -p0 < ${patch}
-    #       '';
-    #     });
-
-    #dmenu2 = pkgs.lib.overrideDerivation super.dmenu2 (attrs: {
-    #  patchs =
-    #    [ (super.fetchurl
-    #      { url = "https://jb55.com/s/404ad3952cc5ccf3.patch";
-    #        sha1 = "404ad3952cc5ccf3aa0674f31a70ef0e446a8d49";
-    #      })
-    #    ];
-    #});
+    #phonectl = super.python3Packages.callPackage (import (super.fetchFromGitHub {
+    #  owner  = "jb55";
+    #  repo   = "phonectl";
+    #  sha256 = "0wqpwg32qa1rzpw7881r6q2zklxlq1y4qgyyy742pihfh99rkcmj";
+    #  rev    = "de0f37a20d16a32a73f9267860302357b2df0c20";
+    #})) {};
 
     #htop = pkgs.lib.overrideDerivation super.htop (attrs: {
     #  patches =
@@ -102,7 +76,6 @@ in {
     #      { url = "https://jb55.com/s/htop-vim.patch";
     #        sha256 = "3d72aa07d28d7988e91e8e4bc68d66804a4faeb40b93c7a695c97f7d04a55195";
     #      })
-
     #      (super.fetchurl
     #      { url = "https://jb55.com/s/0001-Improving-Command-display-sort.patch";
     #        sha256 = "2207dccce7f9de0c3c6f56d846d7e547c96f63c8a4659ef46ef90c3bd9a013d1";

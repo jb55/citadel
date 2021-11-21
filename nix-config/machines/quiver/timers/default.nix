@@ -3,4 +3,18 @@ extra:
 {
   imports = [
   ];
+
+  systemd.user.services.myopia-reminder = {
+    enable   = false;
+    description = "Myopia Reminder";
+
+    wantedBy    = [ "graphical-session.target" ];
+    after       = [ "graphical-session.target" ];
+
+    serviceConfig.ExecStart = extra.util.writeBash "myopia-reminder" ''
+      ${pkgs.libnotify}/bin/notify-send -u critical "👁"
+    '';
+
+    startAt = "*:0/20"; # every 20 minutes
+  };
 }

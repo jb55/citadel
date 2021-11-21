@@ -32,7 +32,7 @@ config.set('fonts.default_family', 'terminus')
 if hostname == 'monad':
     config.set('zoom.default', 125)
 else:
-    config.set('zoom.default', 150)
+    config.set('zoom.default', 125)
 
 
 # Editor (and arguments) to use for the `open-editor` command. The
@@ -67,6 +67,7 @@ config.bind('<Ctrl-m>', 'set-mark')
 #config.bind('<Ctrl-d>', 'scroll-page 0 0.5')
 #config.bind('<Ctrl-u>', 'scroll-page 0 -0.5')
 config.bind('<Ctrl-r>', 'reload')
+config.bind('<Ctrl-e>', 'edit-text')
 
 config.bind('e', 'open-editor')
 config.bind('co', 'tab-only')

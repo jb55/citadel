@@ -91,8 +91,8 @@ in rec {
 
   snap = fetch {
     repo = "sharefile-snap";
-    rev  = "1.3";
-    sha256 = "0j8j2588z09v7zz1f9d11zw2n0wq70sxy9lvwrw4l5yz75n3cral";
+    rev  = "7eacc49f1df577a9faaa33a22664d93347ff362d";
+    sha256 = "0x5531qyimpah48ijx2bad0mq1gjbpjacymwl3gm08lm0zl0xr09";
   };
 
   bcalc = fetch-jb55 {

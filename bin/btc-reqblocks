@@ -1,0 +1,1 @@
+nncp-run monad btc-sendblocks $(bitcoin-cli getblockcount) quiver

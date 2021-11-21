@@ -1,0 +1,6 @@
+#!/bin/sh
+
+qalc -t "$(bcli getblockchaininfo |
+jq -r .softforks.taproot.bip9.min_activation_height) - $(bcli getblockcount)) * 10 minutes" |
+tee /dev/stderr |
+xargs -I{} qalc -t now + {}
