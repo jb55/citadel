@@ -19,4 +19,4 @@ then
 fi
 
 # export LESS="-cix8JRM --save-marks"
-exec less --save-marks "$@"
+exec less "+''" --save-marks "$@" "$file"
