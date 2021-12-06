@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+
+set -eou pipefail
+
+if [ -z "$1" ]; then
+	printf "usage: rssurl <some.link/rss.xml>\n"
+	exit 1
+fi
+
+name=${2:-feed}
+
+jqs=$(cat <<EOF
+def month_to_num:
+  if   . == "Jan" then "01"
+  elif . == "Feb" then "02"
+  elif . == "Mar" then "03"
+  elif . == "Apr" then "04"
+  elif . == "May" then "05"
+  elif . == "Jun" then "06"
+  elif . == "Jul" then "07"
+  elif . == "Aug" then "08"
+  elif . == "Sep" then "09"
+  elif . == "Oct" then "10"
+  elif . == "Nov" then "11"
+  elif . == "Dec" then "12"
+  else "01"
+  end
+;
+
+def parse_date:
+  (.pubDate | strings | 
+  capture("^[a-zA-Z]{3}, (?<day>[0-9]+) (?<month>[a-zA-Z]{3}) (?<year>[0-9]+) (?<h>[0-9]+):(?<m>[0-9]+):(?<s>[0-9]+)")
+  | "\(.year)-\(.month | month_to_num)-\(.day)T\(.h):\(.m):\(.s)Z"
+  | fromdateiso8601) //
+
+  (.published | strings | sub(".00:00$"; "Z") | fromdateiso8601)
+;
+
+def parse_url:
+ 	. |
+	objects |
+	(.link | strings) //
+	(.link | objects | ."@href") //
+	(.enclosure | objects | ."@url")
+;
+
+(.rss.channel.item // .feed.entry) |
+.[] |
+[(. | parse_date), "$name", .title, (. | parse_url)] |
+@tsv
+EOF
+)
+
+curl --compressed -sL "$1" | xq -rc "$jqs"

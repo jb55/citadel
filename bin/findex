@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+if [ -z "$1" ]; then
+	printf 'usage: find-example <rg query>\n'
+	exit 1
+fi
+
+# cd to project root
+cd $(git rev-parse --show-toplevel)
+
+rg "$1" |
+grep -E '^[^:]+:.*$' |
+cut -d: -f2- |
+sort |
+uniq -c |
+sort -nr |
+sed 's,^[[:space:]]*,,g;s,\(^[[:digit:]]\+\) ,\1\t,g' |
+cut -d $'\t' --output-delimiter=$'\t' -f2- |
+head -n5

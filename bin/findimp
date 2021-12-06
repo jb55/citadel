@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+if [ -z "$1" ]; then
+	printf 'usage: find-import <import-name>\n'
+	exit 1
+fi
+
+findex 'import.*'"$1"

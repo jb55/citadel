@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+set -eou pipefail
+url=$(<"$1" ct | fzf | awkp 2)
+open "$url"

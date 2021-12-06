@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+set -eou pipefail
+
+base64 -w10000 "$@" | tr '/+' '_-' | tr -d '='

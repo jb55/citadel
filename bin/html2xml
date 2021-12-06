@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+tidy -q -asxml --numeric-entities yes 2>/dev/null

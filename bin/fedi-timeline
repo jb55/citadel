@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+set -eou pipefail
+
+timeline=${1:-home}
+
+curl -sL -H "Authorization: Bearer $FEDI_TOKEN" "$FEDI_ENDPOINT/api/v1/timelines/$timeline" |
+jq -r '.[] | [.account.username, .content] | @tsv' |
+sed 's,<[^>]*>,,g' |
+column -t -s $'\t' |
+sed 's,$,\n,g' |
+less

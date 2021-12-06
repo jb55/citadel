@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+set -eou pipefail
+
+query="$(sed 's, ,%20,g' <<<"$1")"
+
+curl --compressed -sL "https://ca1lib.org/s/$query" 

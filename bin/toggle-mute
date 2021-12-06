@@ -1,0 +1,11 @@
+#!/bin/sh
+
+muted=$(pamixer -t --get-mute)
+
+if [ "$muted" = "true" ]; then
+	notify-send "muted"
+elif [ "$muted" = "false" ]; then
+	notify-send "un-muted"
+else
+	notify-send "pamixer not found"
+fi
