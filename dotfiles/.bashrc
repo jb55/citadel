@@ -3,8 +3,6 @@
 # for examples
 set -o vi
 
-export HOME=/home/jb55
-
 export NIXPKGS=$HOME/nixpkgs
 export NIX_PATH="nixpkgs=$NIXPKGS:$NIX_PATH"
 export NIX_PATH="nixos-config=$NIX_FILES:$NIX_PATH"
