@@ -16,7 +16,7 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
     jb55pkgs = import <jb55pkgs> { inherit pkgs; };
 
     jbpkgs = with jb55pkgs; [
-       #snap
+       snap
        cmdtree
        zoom-link-opener
        x11-rename

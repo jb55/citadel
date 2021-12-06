@@ -1,2 +1,14 @@
 #!/usr/bin/env bash
-dbus-send --print-reply --dest="$(spotify-service)" /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause
+
+bus=$(dbus-send \
+      --print-reply=literal \
+      --dest=org.freedesktop.DBus \
+      --type=method_call \
+      /org/freedesktop/DBus \
+      org.freedesktop.DBus.ListNames |
+      tr ' ' '\n' |
+      grep 'org.mpris.MediaPlayer2' |
+      head -n 1
+    )
+
+dbus-send --print-reply --dest="$bus" /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause

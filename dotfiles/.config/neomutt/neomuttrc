@@ -12,6 +12,10 @@ set mime_forward=no
 unset markers
 set text_flowed
 
+set reverse_name=yes
+set reverse_realname=no
+alternates ^jb55@jb55.com$ ^will.casarin@steamoji.com$
+
 set sort = threads
 set sort_aux = reverse-last-date-received
 

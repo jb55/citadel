@@ -24,7 +24,7 @@ rm -rf "$DIR"
 mkdir -p "$DIR"
 
 printf "git format-patch origin/%s..FETCH_HEAD -o %s\n" "$BASE" "$DIR"
-git format-patch origin/$BASE..FETCH_HEAD -o "$DIR"
+git format-patch -U8 origin/$BASE..FETCH_HEAD -o "$DIR"
 
 printf "$DIR\n"
 

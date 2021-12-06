@@ -7,6 +7,7 @@ mkdir -p /tmp/blocks
 nncp-toss
 
 blocks=$(bitcoin-cli getblockcount)
+results=$(mktemp)
 
 cd /tmp/blocks
 blocklist=$(ls -1 | sort -n)
@@ -15,16 +16,17 @@ printf "%d blocks to submit...\n" "$to_submit" >&2
 
 for block in $blocklist
 do
-	printf "submitting block $block ... " >&2
-
 	res=$(<$block bitcoin-cli -stdin submitblock)
 
-	printf "$res\n" >&2
+	echo "$res" >> $results
 
 	if [ "$res" = "prev-blk-not-found" ]; then
 		exit 42
 	fi
 done
+
+echo "$(sortur < $results)"
+rm $results
 
 blocks2=$(bcli getblockcount)
 

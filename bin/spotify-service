@@ -1,6 +1,4 @@
 #!/usr/bin/env bash
-options=$(dbus-send --print-reply --dest=org.freedesktop.DBus  /org/freedesktop/DBus org.freedesktop.DBus.ListNames \
-    | grep spotify \
-    | sedcut '"([^"]+)"')
 
-grep 'spotify$' <<<"$options" || grep -v 'spotify$' <<<"$options"
+service=${1:-spotify}
+

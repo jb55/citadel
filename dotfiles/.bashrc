@@ -35,7 +35,13 @@ UNDISTRACT="$HOME/dotfiles/bash-undistract-me/undistract-me.sh"
 export PAGER="less"
 export LESS="-cix8RM --save-marks"
 
-TERM_THEME="$(basename $(readlink ~/.Xresources.d/themes/current))"
+TERM_THEME="dark"
+if [ -f ~/.Xresources.d/themes/current ]; then
+	TERM_THEME="$(basename $(readlink ~/.Xresources.d/themes/current))"
+fi
+
+# private stuff
+. ~/.bash_private
 
 if [ "$TERM_THEME" == "light" ]
 then

@@ -15,6 +15,8 @@ config.load_autoconfig(False)
 # Type: Dict
 c.aliases = {'q': 'quit', 'w': 'session-save', 'wq': 'quit --save'}
 
+config.set('downloads.location.directory', '~/dl')
+
 # Enable JavaScript.
 # Type: Bool
 config.set('content.javascript.enabled', True, 'file://*')
@@ -82,9 +84,10 @@ config.set('tabs.select_on_remove', 'last-used')
 
 config.set('url.default_page', 'about:blank')
 
+
 config.set('url.searchengines', {
-  'DEFAULT': 'https://google.com/search?q={}',
-  'ddg': 'http://duckduckgo.com/?q={}',
+  #'DEFAULT': 'https://google.com/search?q={}',
+  'DEFAULT': 'http://duckduckgo.com/?q={}',
   'star': 'https://github.com/stars?utf8=%E2%9C%93&q={}',
   'so': 'https://google.com/search?q=site:stackoverflow.com {}',
   'gl': 'http://www.google.com/search?q={}&btnI=Im+Feeling+Lucky',

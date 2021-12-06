@@ -8,6 +8,8 @@ set hlsearch
 set colorcolumn=80
 set nowrap
 set hidden
+set rnu
+set wrap
 
 hi ColorColumn ctermbg=8
 
@@ -40,9 +42,9 @@ imap <A-,> =
 imap <A-Space> <CR>
 
 autocmd FileType go autocmd BufWritePre <buffer> execute "normal! mz:mkview\<esc>:%!fmtsafe gofmt\<esc>:loadview\<esc>`z"
-autocmd FileType go set wrap rnu
+autocmd FileType go set wrap
 autocmd FileType rust autocmd BufWritePre <buffer> execute "normal! mz:mkview\<esc>:%!fmtsafe rustfmt\<esc>:loadview\<esc>`z"
-autocmd filetype javascript set sw=4 ts=4 expandtab
+autocmd FileType javascript autocmd BufWritePre <buffer> execute "normal! mz:mkview\<esc>:%!fmtsafe jsfmt\<esc>:loadview\<esc>`z"
 
 "autocmd filetype html set sw=2 ts=2 expandtab
 

@@ -16,6 +16,9 @@
 "xbacklight -dec 5"
   XF86MonBrightnessDown
 
+"toggle-mute"
+  XF86AudioMute
+
 "xbacklight -inc 5"
   XF86MonBrightnessUp
 

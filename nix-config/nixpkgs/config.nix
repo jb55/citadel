@@ -21,6 +21,10 @@ in {
       smbdSupport = true;
     };
 
+    mpv = super.mpv-with-scripts.override {
+      scripts = [ pkgs.mpvScripts.mpris ];
+    };
+
     # /run/current-system/sw/bin/ls $HOME/.emacs.d/elpa | sed 's/-[[:digit:]].*//g;s/\+$/-plus/g' | sort -u
     #emacs = super.emacsHead;
     nur = import (builtins.fetchTarball {

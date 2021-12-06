@@ -225,7 +225,7 @@ in
   };
 
   virtualisation.libvirtd.enable = false;
-  virtualisation.libvirtd.qemuOvmf = true;
+  virtualisation.libvirtd.qemuOvmf = false;
   virtualisation.libvirtd.qemuVerbatimConfig = ''
     user = "jb55"
     group = "kvm"
@@ -256,7 +256,7 @@ in
 
   environment.systemPackages = [ pkgs.virt-manager ];
 
-  virtualisation.virtualbox.host.enable = true;#if extra.is-minimal then false else true;
+  virtualisation.virtualbox.host.enable = false;
   virtualisation.virtualbox.host.enableHardening = false;
   #virtualization.virtualbox.host.enableExtensionPack = true;
 
