@@ -1,0 +1,13 @@
+#!/bin/sh
+
+set -eou pipefail
+
+if [ -z "$1" ]; then
+  printf "usage: prpatch <id> [owner/project]\n"
+  exit 1
+fi
+
+project=${2:-$(github-project-slug)}
+id="$1"
+
+curl -sL "https://github.com/${project}/pull/${id}.patch"
