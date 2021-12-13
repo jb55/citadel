@@ -256,6 +256,22 @@ in
 
   environment.systemPackages = [ pkgs.virt-manager ];
 
+  services.minecraft-server.enable = true;
+  services.minecraft-server.eula = true;
+  services.minecraft-server.openFirewall = true;
+  services.minecraft-server.declarative = true;
+  services.minecraft-server.serverProperties = {
+    server-port = 25565;
+    difficulty = "normal";
+    gamemode = "survival";
+    force-gamemode = true;
+    max-players = 2;
+    motd = "NixOS Minecraft server!";
+    white-list = false;
+    enable-rcon = true;
+    "rcon.password" = "minecraft";
+  };
+
   virtualisation.virtualbox.host.enable = false;
   virtualisation.virtualbox.host.enableHardening = false;
   #virtualization.virtualbox.host.enableExtensionPack = true;
