@@ -9,5 +9,7 @@ else
 fi
 }
 
-id=$(prs "$@" | fuzzer | cutt -f1)
-echo gh pr view --comments "$id"
+res=$(prs "$@" | fuzzer)
+id=$(<<<"$res" cutt -f1)
+desc=$(<<<"$res" cutt -f2)
+echo gh pr view --comments "$id" \# $desc
