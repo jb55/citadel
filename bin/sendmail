@@ -7,6 +7,11 @@ export EMAIL_CONN_TEST=c
 #cat > "$file"
 #sendmail-bg "$file" -t --read-envelope-from "$@" & disown
 
+if [ "$1" = "--help" ]; then
+	/run/current-system/sw/bin/sendmail "$@"
+	exit 1
+fi
+
 output=$(msmtpq "$@" 2> /tmp/msmtp.err)
 echo "$output" >> /tmp/msmtp.log
 
