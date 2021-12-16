@@ -17,9 +17,11 @@ let
     synergy = 24800;
     wireguard = 51820;
     nncp = 5442;
+    webdev = 8080;
   };
 
   firewallRules = [
+    "nixos-fw -s 192.168.87.1/24 -p tcp --dport ${toString ports.webdev} -j nixos-fw-accept"
     "nixos-fw -s 10.100.0.1/24 -p tcp --dport ${toString ports.synergy} -j nixos-fw-accept"
     "nixos-fw -s 172.24.0.1/24 -p tcp --dport 9050 -j nixos-fw-accept"
   ];
