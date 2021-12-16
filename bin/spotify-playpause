@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -eou pipefail
+
 bus=$(dbus-send \
       --print-reply=literal \
       --dest=org.freedesktop.DBus \
@@ -8,7 +10,20 @@ bus=$(dbus-send \
       org.freedesktop.DBus.ListNames |
       tr ' ' '\n' |
       grep 'org.mpris.MediaPlayer2' |
-      head -n 1
+      grep -v qutebrowser
     )
 
-dbus-send --print-reply --dest="$bus" /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause
+count=$(wc -l <<<"$bus")
+
+playpause() {
+	dbus-send --print-reply --dest="$1" /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause
+}
+
+if [ $count -eq 1 ]; then
+	playpause "$bus"
+	exit 0
+fi
+
+bus=$(<<<"$bus" sed 's,^org.mpris.MediaPlayer2.,,g' | dmenu -i -p "playpause" -l 7)
+
+playpause "org.mpris.MediaPlayer2.$bus"
