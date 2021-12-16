@@ -19,6 +19,7 @@ export PS0='\033[0m'
 #export PS1='$(printf "\x01\033[30;1m\x02%3.*s\x01\033[0m\x02> " $? $?)'
 
 # don't put duplicate lines in the history. See bash(1) for more options
+export HISTSIZE=50000
 export HISTCONTROL=ignoredups
 # ... and ignore same sucessive entries.
 export HISTCONTROL=ignoreboth
@@ -65,7 +66,6 @@ export SHARE_SS_DIR="$HOME/var/img/ss"
 export DOTFILES=${DOTFILES:-$HOME/dotfiles}
 export VI_MODE=1
 export XZ=pxz
-export HISTSIZE=50000
 export FZF_CTRL_R_OPTS="-e"
 export FZF_DEFAULT_OPTS="-e"
 export FZF_DEFAULT_COMMAND='rg --files --hidden'
