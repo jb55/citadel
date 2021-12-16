@@ -39,9 +39,10 @@ def parse_date:
 def parse_url:
  	. |
 	objects |
+	(.enclosure | objects | ."@url") //
 	(.link | strings) //
-	(.link | objects | ."@href") //
-	(.enclosure | objects | ."@url")
+	(.link | objects | ."@href")
+	
 ;
 
 (.rss.channel.item // .feed.entry) |
