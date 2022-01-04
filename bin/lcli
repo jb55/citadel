@@ -1,2 +1,6 @@
 #!/usr/bin/env sh
-ssh monad /home/jb55/bin/lcli "$@"
+if [ "$HOST" != "monad" ]; then
+	ssh monad lightning-cli "$@"
+fi
+
+lightning-cli "$@"
