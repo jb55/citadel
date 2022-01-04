@@ -1,11 +1,25 @@
 #!/usr/bin/env bash
 
+set eou -pipefail
+
 #export LESS="-R -S --quit-if-one-screen"
 
-printf "%s@%s:%s\n" \
-	"$USER" \
+git_status () {
+	if gres=$(git symbolic-ref --short HEAD 2>/dev/null); then
+		printf "[$gres]\n"
+	fi
+}
+
+USR=""
+if [ "$USER" != "jb55" ]; then
+	USR="$USER "
+fi
+
+printf "%s%s %s %s\n" \
+	"$USR" \
 	"$HOSTNAME" \
-	"$PWD"
+	"$PWD" \
+	"$(git_status)"
 
 #if git rev-parse --is-inside-work-tree >/dev/null 2>/dev/null; then
 #	printf "\n"
