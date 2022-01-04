@@ -1,3 +1,16 @@
 #!/usr/bin/env bash
 set -eou pipefail
-echo open "$(rss)"
+
+filter=${1:-"cat"}
+
+res=$(<~/var/rss.tsv eval "$filter" | rss)
+link=$(awkp 1 <<<"$res")
+typ=$(awkp 2 <<<"$res") 
+
+opener="open"
+
+if [[ $typ =~ "@blog" ]]; then
+	opener="plainweb"
+fi
+
+echo $opener $link

@@ -8,6 +8,27 @@ if [ -z "$1" ]; then
 fi
 
 name=${2:-feed}
+typ=${3:-type}
+
+if [ "$typ" = "@blog" ] || [ "$typ" = "@busy" ]
+then
+
+link=$(cat <<EOF
+(.comments | strings) //
+(.link | strings) //
+(.enclosure | objects | ."@url") //
+EOF
+)
+
+else
+
+link=$(cat <<EOF
+(.enclosure | objects | ."@url") //
+(.link | strings) //
+EOF
+)
+
+fi
 
 jqs=$(cat <<EOF
 def month_to_num:
@@ -33,21 +54,20 @@ def parse_date:
   | "\(.year)-\(.month | month_to_num)-\(.day)T\(.h):\(.m):\(.s)Z"
   | fromdateiso8601) //
 
-  (.published | strings | sub(".00:00$"; "Z") | fromdateiso8601)
+  ((.published // ."dc:date") | strings | sub(".00:00$"; "Z") | fromdateiso8601)
 ;
 
 def parse_url:
  	. |
 	objects |
-	(.enclosure | objects | ."@url") //
-	(.link | strings) //
+	$link
 	(.link | objects | ."@href")
 	
 ;
 
 (.rss.channel.item // .feed.entry) |
 .[] |
-[(. | parse_date), "$name", .title, (. | parse_url)] |
+[(. | parse_date), "$name", .title, (. | parse_url), "$typ"] |
 @tsv
 EOF
 )

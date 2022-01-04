@@ -4,6 +4,6 @@ set -eou pipefail
 (
 while IFS=$'\t' read -r name type url
 do
-	echo rssfeed "$url" "$name"
-done < ~/dotfiles/rssfeeds
-) | parallel | sort -n > ~/var/rss.tsv
+	echo rssfeed "$url" "$name" "$type"
+done 
+) < ~/dotfiles/rssfeeds  | parallel | sort -n > ~/var/rss.tsv
