@@ -2,6 +2,14 @@
 
 set -eou pipefail
 
+playstatus() {
+	dbus-send --print-reply --dest="$1" /org/mpris/MediaPlayer2 org.freedesktop.DBus.Properties.Get string:org.mpris.MediaPlayer2.Player string:PlaybackStatus | sed -En 's,.*string "([^"]+)".*,\1,p'
+}
+
+playpause() {
+	dbus-send --print-reply --dest="$1" /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause
+}
+
 bus=$(dbus-send \
       --print-reply=literal \
       --dest=org.freedesktop.DBus \
@@ -10,19 +18,24 @@ bus=$(dbus-send \
       org.freedesktop.DBus.ListNames |
       tr ' ' '\n' |
       grep 'org.mpris.MediaPlayer2' |
-      grep -v qutebrowser
+      grep -v -e qutebrowser -e chromium
     )
 
 count=$(wc -l <<<"$bus")
-
-playpause() {
-	dbus-send --print-reply --dest="$1" /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause
-}
 
 if [ $count -eq 1 ]; then
 	playpause "$bus"
 	exit 0
 fi
+
+# auto-detect any source that is playing and then pause that
+for b in $bus
+do
+	if [ "$(playstatus "$b")" = "Playing" ]; then
+		playpause "$b"
+		exit 0
+	fi
+done
 
 bus=$(<<<"$bus" sed 's,^org.mpris.MediaPlayer2.,,g' | dmenu -i -p "playpause" -l 7)
 
