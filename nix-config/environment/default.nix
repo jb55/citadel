@@ -13,7 +13,6 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
        btcs
        csv-delim
        csv-scripts
-       datefmt
        extname
        mandown
        ratio
@@ -23,9 +22,6 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
        define
        nixpkgs-ml-tools
     ];
-    myHaskellPackages = with pkgs.haskellPackages; [
-      #skeletons
-    ];
 
     minimal-pkgs = with pkgs; [
       git-tools
@@ -33,7 +29,16 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
       ripgrep
     ];
 
-    mypkgs = with pkgs; myHaskellPackages ++ myPackages ++ [
+    mypkgs = with pkgs; myPackages ++ [
+      yq
+      tut
+
+      python3Packages.num2words
+      python3Packages.howdoi
+      tree
+      datefmt
+      nncp
+      asciinema
       aspell
       aspellDicts.en
       aspellDicts.en-computers

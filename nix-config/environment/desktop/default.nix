@@ -34,6 +34,7 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
     };
 
     mypkgs = (with pkgs; [
+      obs-studio
       aerc
       bitcoin
       clipmenu
@@ -44,10 +45,10 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
       dunst
       dynamic-colors
       feh
-      getmail # for getmail-gmail-xoauth-tokens
+      getmail6 # for getmail-gmail-xoauth-tokens
       gnome3.gnome-calculator
       gtk-engine-murrine
-      hwi
+      #hwi
       khal
       lagrange
       lastpass-cli
@@ -77,7 +78,7 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
       userConfig
       vdirsyncer
       w3m
-      wine
+      #wine
       wmctrl
       xautolock
       xbindkeys

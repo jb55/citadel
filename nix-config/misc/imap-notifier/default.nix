@@ -1,9 +1,9 @@
 extra:
 { config, lib, pkgs, ... }:
 let imap-notify = (import <jb55pkgs> {}).imap-notify;
-    penv = pkgs.python2.withPackages (ps: with ps; [ dbus-python pygobject2 ]);
+    penv = pkgs.python3.withPackages (ps: with ps; [ dbus-python pygobject3 ]);
     awake-from-sleep-fetcher = pkgs.writeScript "awake-from-sleep-fetcher" ''
-      #!${penv}/bin/python2 -u
+      #!${penv}/bin/python3 -u
 
       import dbus
       import datetime

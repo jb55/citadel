@@ -40,6 +40,19 @@ in
 
   networking.wireguard.interfaces = {
     # "wg0" is the network interface name. You can name the interface arbitrarily.
+    rcx0 = {
+      ips = [ "10.200.0.5/32" ];
+
+      privateKeyFile = "/home/jb55/.wg/private";
+
+      peers = [
+        { publicKey = "wC+mEE9/PJDuIfr7DFZWnM8HbQz5fSOFHmmzQRxULzM=";
+          allowedIPs = [ "10.200.0.1/32" ];
+          endpoint = "159.89.143.225:53";
+        }
+      ];
+    };
+
     wg0 = {
       # Determines the IP address and subnet of the client's end of the tunnel interface.
       ips = [ "10.100.0.2/28" ];

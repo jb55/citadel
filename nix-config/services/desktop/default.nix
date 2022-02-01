@@ -26,7 +26,7 @@ in
   services.pcscd.enable = true;
   services.gnome3.gnome-keyring.enable = if extra.is-minimal then false else true;
 
-  services.trezord.enable = false;
+  services.trezord.enable = true;
 
   services.avahi.enable = true;
   services.avahi.publish.enable = true;

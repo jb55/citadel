@@ -262,7 +262,6 @@ in
     authentication = ''
       # type db  user address        method
       local  all all                 trust
-      host   all all  172.24.0.0/16  trust
       host   all all  127.0.0.1/16  trust
     '';
     #extraConfig = ''

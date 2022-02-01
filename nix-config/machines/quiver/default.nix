@@ -24,6 +24,7 @@ extra:
   services.teamviewer.enable = false;
 
   services.synergy.server.enable = true;
+  services.synergy.server.tls.enable = false;
   services.synergy.server.screenName = "quiver";
   services.synergy.server.autoStart = true;
   services.synergy.server.configFile = pkgs.writeText "barrier-cfg" ''
@@ -150,7 +151,12 @@ extra:
     wantedBy = [ "default.target" ];
     after    = [ "default.target" ];
 
-    path = with pkgs; [ gnused acpi ];
+    path = with pkgs; [ gnused acpi libnotify ];
+
+    environment = {
+      DISPLAY=":0";
+      DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/1000/bus";
+    };
 
     serviceConfig.ExecStart = extra.util.writeBash "battery-power" ''
       set -e
@@ -170,6 +176,7 @@ extra:
           if ! acpi -b | grep Charging && [ $percent -lt $limit ] && [ "$state" != "heartbeat" ]
           then
               printf "battery %d%% < %d%%, setting heartbeat trigger\n" "$percent" "$limit" >&2
+              notify-send "battery low: %$percent"
               echo heartbeat > "$LED"/trigger
               echo heartbeat > "$LED2"/trigger
               state="heartbeat"
@@ -219,7 +226,7 @@ extra:
 
   services.postgresql = {
     dataDir = "/var/db/postgresql/10/";
-    enable = false;
+    enable = true;
     package = pkgs.postgresql_10;
     # extraPlugins = with pkgs; [ pgmp ];
     authentication = pkgs.lib.mkForce ''
