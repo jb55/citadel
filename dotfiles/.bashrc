@@ -83,6 +83,7 @@ export GOPATH=$HOME/dev/gocode
 export PATH=$HOME/bin:$PATH
 export PATH=$HOME/.local/bin:$PATH
 export PATH=$HOME/.npm/bin:$PATH
+export PATH=$GOPATH/bin:$PATH
 
 md () {
     mandown README*

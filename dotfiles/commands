@@ -1,10 +1,16 @@
-acl	app > cal > list	echo pcal list
 aci	app > cal > interactive	echo pcal interactive
-afh	app > fedi > home	echo fedi-timeline home
-afi	app > fedi > interesting	echo fedi-timeline list/260
-ar	app > rss > feeds	fuzz-rss
-are	app > rss > edit feeds	echo edit ~/dotfiles/rssfeeds
-ars	app > rss > show feeds	echo cat ~/dotfiles/rssfeeds
+acl	app > cal > list	echo pcal list
+afb	app > feeds > blogs	fuzz-rss "grep @blog"
+afe	app > edit feeds	echo edit ~/dotfiles/rssfeeds
+aff	app > feeds	fuzz-rss "grep -v @busy"
+afp	app > feeds > podcasts	fuzz-rss "grep @pod"
+afu	app > update feeds	echo rssfeeds
+afs	app > feeds > busy	fuzz-rss
+afa	app > feeds > arxiv	fuzz-rss "grep @arxiv"
+afy	app > feeds > youtube	fuzz-rss "grep @yt"
+ar	app > reader	fuzz-reader
+ash	app > social > home	echo fedi-timeline home
+asi	app > social > interesting	echo fedi-timeline list/260
 bt	btc txs	fuzz-btc-txs
 cc	compile	fuzz-compile
 cd	change directory	fuzz-cd-dirname
@@ -18,6 +24,7 @@ dsg	docs->stripe->go	fuzzdoc ~/docs/stripe/go-v72.txt '^type '
 ecc	edit vdirsyncer config	echo edit ~/.config/vdirsyncer/config
 ec	edit commands	fuzz-edit-scripts
 ed	edit default.nix	echo edit default.nix
+es	edit shell.nix	echo edit shell.nix
 eFc	edit fuzz command	fuzz-edit-command
 eFl	edit fuzz command list	fuzz-edit-command-list
 egc	edit git config	echo edit ~/.gitconfig
@@ -25,6 +32,7 @@ eG	edit gemmarks	echo edit ~/dotfiles/gemmarks
 elf	edit last files	fuzz-last-files edit
 eM	edit mimi	echo edit ~/.config/mimi/mime.conf
 em	edit mutt config	echo edit ~/.config/neomutt/neomuttrc
+et	edit todo	echo edit ~/docs/todo/todo.txt
 ff	create file	echo fuzz-create-file
 gb	git branches	echo git bvr
 G	gemini	gemmark
@@ -62,9 +70,10 @@ wn	work notes	echo edit /home/jb55/projects/steamoji/doc/$(ls -1pt /home/jb55/pr
 wsg	work service gql	fuzzedit schema '^'
 wsm	work service mutations	fuzzedit mutation '^func '
 wsq	work service queries	fuzzedit query '^func '
-wtb	work > trello backlog	fuzz-trello-sprint "^Backlog "
-wti	work > trello inprogress	fuzz-trello-sprint "^In Progress "
-wtr	work > trello refresh	echo trello refresh
-wts	work > trello sprint	fuzz-trello-sprint
-wtt	work > trello todo	fuzz-trello-sprint "^Todo "
+wdq	work dashboard queries	fuzzedit queries '^'
+wtb	work trello backlog	fuzz-trello-sprint "^Backlog "
+wti	work trello inprogress	fuzz-trello-sprint "^In Progress "
+wtr	work trello refresh	echo trello refresh
+wts	work trello sprint	fuzz-trello-sprint
+wtt	work trello todo	fuzz-trello-sprint "^Todo "
 z	fz	echo fz

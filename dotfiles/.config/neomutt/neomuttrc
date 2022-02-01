@@ -45,7 +45,8 @@ macro pager p "|delta --paging always<enter>"
 macro pager d "<next-page>"
 macro pager u "<previous-page>"
 macro pager c "|cols<enter>"
-macro pager P "|grep patch$ | xargs curl -sL | delta --paging always<enter>"
+#macro pager P "|grep patch$ | xargs curl -sL | delta --paging always<enter>"
+macro pager P "| mail-prpatch | delta --paging always<enter>"
 
 my_hdr Bcc: William Casarin <jb55@jb55.com>
 
