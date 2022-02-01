@@ -11,6 +11,14 @@ opener="open"
 
 if [[ $typ =~ "@blog" ]]; then
 	opener="plainweb"
+elif [[ $typ =~ "@pod" ]]; then
+	opener="mpv"
+elif [[ $typ =~ "@yt" ]]; then
+	opener="mpv"
+elif [[ $typ =~ "@pdf" ]]; then
+	opener="pdfget"
+elif [[ $typ =~ "@arxiv" ]]; then
+	opener="pdfget"
 fi
 
 echo $opener $link

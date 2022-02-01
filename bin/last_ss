@@ -1,2 +1,2 @@
 #!/usr/bin/env sh
-\ls -d -t -1 ~/var/img/ss/* | head -n1
+\ls -d -t -1 ${1:-~/var/img/ss}/* | head -n1

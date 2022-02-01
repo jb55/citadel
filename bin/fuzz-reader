@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+BOOKS_DIR="${1:-$HOME/docs}"
+
+set -eou pipefail
+
+document=$(find "$BOOKS_DIR" \( -iname '*.txt' -o -iname '*.epub' -o -iname '*.pdf' -o -iname '*.djvu' -o -iname '*.md' -o -iname '*.mediawiki' \) -type f -printf '%T@\t%f\t%p\n' |
+  sort -rn |
+  cutt -f2- |
+  ct |
+  fzf |
+  awk '{print $2}')
+
+name="$(basename "$document")"
+noext="${name%.*}"
+
+wname "$noext"
+ext="$(extname "$document")"
+if [ "$ext" == ".txt" ] || [ "$ext" == ".md" ] || [ "$ext" == ".mediawiki" ]; then
+	echo lessr "$document"
+else
+	echo open "$document"
+fi

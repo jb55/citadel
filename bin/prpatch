@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -eou pipefail
+set -eo pipefail
 
 if [ -z "$1" ]; then
   printf "usage: prpatch <id> [owner/project]\n"

@@ -4,10 +4,12 @@ set -eou pipefail
 
 cdup=$(git rev-parse --show-cdup)
 
-file_line=$(git diff "$@" |
+res=$(git diff "$@" |
 	showlinenum show_path=1 |
 	grep -E ':\+' |
-	fzf --ansi |
-	sed -n "s,^\([^:]\+\):\([^:]\+\).*,\"${cdup}\1\" +\2,p")
+	fzf --ansi)
 
-echo "edit $file_line"
+file_line=$(<<<"$res" sed -n "s,^\([^:]\+\):\([^:]\+\).*,\"${cdup}\1\" +\2,p")
+line=$(<<<"$res" sed -En "s,.*:\+(.*)$,\1,p")
+
+echo "edit $file_line  # $line"

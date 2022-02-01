@@ -1,0 +1,3 @@
+#!/bin/sh
+
+/home/jb55/.nix-profile/bin/howdoi "$@" 2>/dev/null

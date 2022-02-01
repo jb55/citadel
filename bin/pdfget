@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+set -eou pipefail
+
+fname="$HOME/dl/$(sha256sum <<<"$1" | cut -d" " -f1).pdf"
+
+if [ -f "$fname" ]; then
+	open "$fname"
+	exit 0
+fi
+
+curl -sL --user-agent definitely-not-curl "$@" > "$fname"
+
+printf "saved %s\n" "$fname" >&2
+open $fname

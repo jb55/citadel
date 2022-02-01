@@ -6,4 +6,4 @@ while IFS=$'\t' read -r name type url
 do
 	echo rssfeed "$url" "$name" "$type"
 done 
-) < ~/dotfiles/rssfeeds  | parallel | sort -n > ~/var/rss.tsv
+) < ~/dotfiles/rssfeeds  | parallel -j20 | sort -n > ~/var/rss.tsv

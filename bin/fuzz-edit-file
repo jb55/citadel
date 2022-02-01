@@ -6,4 +6,5 @@ if [ "$1" = "--dir" ]; then
 	shift
 fi
 file=$(rg --files | fuzzer "$@")
-echo $EDITOR \"$(readlink -f $file)\"
+
+echo $EDITOR \"$file\"

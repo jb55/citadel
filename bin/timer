@@ -3,7 +3,7 @@
 set -e
 
 usage() {
-	printf "usage: timer "food is ready!" 10min\n"
+	printf "usage: timer 'food is ready!' 10min\n"
 	exit 0
 }
 

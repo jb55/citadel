@@ -16,7 +16,7 @@ then
 link=$(cat <<EOF
 (.comments | strings) //
 (.link | strings) //
-(.enclosure | objects | ."@url") //
+(.enclosure | objects | ."@url")
 EOF
 )
 
@@ -24,7 +24,7 @@ else
 
 link=$(cat <<EOF
 (.enclosure | objects | ."@url") //
-(.link | strings) //
+(.link | strings)
 EOF
 )
 
@@ -54,22 +54,30 @@ def parse_date:
   | "\(.year)-\(.month | month_to_num)-\(.day)T\(.h):\(.m):\(.s)Z"
   | fromdateiso8601) //
 
-  ((.published // ."dc:date") | strings | sub(".00:00$"; "Z") | fromdateiso8601)
+  (."dc:date" 
+  | strings
+  | capture("^(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})")
+  | "\(.year)-\(.month)-\(.day)T00:00:00Z"
+  | fromdateiso8601
+  ) //
+
+  ((.published // ."dc:date") | strings | sub(".00:00$"; "Z") | fromdateiso8601) 
+
 ;
 
 def parse_url:
- 	. |
-	objects |
-	$link
-	(.link | objects | ."@href")
-	
+	.
+	| objects
+	| ( ($link // (.link | objects | ."@href"))  //
+	    (.link[] | select(."@type" == "application/pdf") | ."@href")
+	  )
 ;
 
-(.rss.channel.item // .feed.entry) |
+(.rss.channel.item // .feed.entry // ."rdf:RDF".item) |
 .[] |
 [(. | parse_date), "$name", .title, (. | parse_url), "$typ"] |
 @tsv
 EOF
 )
 
-curl --compressed -sL "$1" | xq -rc "$jqs"
+curl --compressed -sL "$1" | xq -rc "$jqs" || (printf "failed fetching $name\n" >&2 ; exit 2)
