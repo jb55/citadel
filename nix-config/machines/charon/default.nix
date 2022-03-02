@@ -4,6 +4,7 @@ let gitExtra = {
       git = {projectroot = "/var/git-public/repos";};
       host = "git.jb55.com";
     };
+    radicale_data = "/var/radicale/data";
     httpipePort = "8899";
     # httpiped = (import (pkgs.fetchgit {
     #   url = https://github.com/jb55/httpipe;
@@ -29,6 +30,15 @@ let gitExtra = {
       sha256 = "91ec02a43317289057c3f7c4f4129558ae799a4789a98bda0fd9360142096731";
     };
 
+    nip05 = pkgs.writeText "nip05.json" ''
+    {
+      "names": {
+        "jb55": "fd3fdb0d0d8d6f9a7667b53211de8ae3c5246b79bdaf64ebac849d5148b5615f",
+        "_": "fd3fdb0d0d8d6f9a7667b53211de8ae3c5246b79bdaf64ebac849d5148b5615f"
+      }
+    }
+    '';
+
     gitCfg = extra.git-server { inherit config pkgs; extra = extra // gitExtra; };
 
     hearpress = (import <jb55pkgs> { nixpkgs = pkgs; }).hearpress;
@@ -45,19 +55,19 @@ let gitExtra = {
       [vanessa-famcal-access]
       user = vanessa
       collection = jb55/4bcae62e-9c8b-0d94-d8ef-977a29a24a84
-      permission = rw
+      permissions = rw
 
       # Give owners read-write access to everything else:
       [owner-write]
       user = .+
-      collection = %(login)s(/.*)?
-      permission = rw
+      collection = {user}/[^/]+
+      permissions = rw
 
       # Everyone can read the root collection
       [read]
       user = .*
-      collection =
-      permission = r
+      collection = .*
+      permissions = R
     '';
     jb55-activity = pkgs.writeText "jb55-custom-activity" ''
       {
@@ -127,7 +137,7 @@ in
     }
   ];
 
-  users.extraGroups.jb55cert.members = [ "prosody" "nginx" ];
+  users.extraGroups.jb55cert.members = [ "prosody" "nginx" "radicale" ];
   users.extraGroups.vmail.members = [ "jb55" ];
 
   services.gitDaemon.basePath = "/var/git-public/repos";
@@ -145,30 +155,19 @@ in
   };
 
   services.radicale.enable = true;
-  services.radicale.config = ''
-    [auth]
-    type = htpasswd
-    htpasswd_filename = /home/jb55/.config/radicale/users
-    htpasswd_encryption = plain
-    delay = 1
 
-    [storage]
-    filesystem_folder = /home/jb55/.config/radicale/data
-
-    [server]
-    hosts = 127.0.0.1:5232
-    ssl = False
-    max_connections = 20
-
-    # 1 Megabyte
-    max_content_length = 10000000
-
-    timeout = 10
-
-    [rights]
-    type = from_file
-    file = ${radicale-rights}
-  '';
+  services.radicale.settings.storage.filesystem_folder = "/var/radicale/data";
+  services.radicale.settings.auth.type = "htpasswd";
+  services.radicale.settings.auth.htpasswd_filename = "${extra.private.radicale.users}";
+  services.radicale.settings.auth.htpasswd_encryption = "plain";
+  services.radicale.settings.auth.delay = "1";
+  services.radicale.settings.server.hosts = "127.0.0.1:5232";
+  services.radicale.settings.server.ssl = "False";
+  services.radicale.settings.server.max_connections = "20";
+  services.radicale.settings.server.max_content_length = "10000000";
+  services.radicale.settings.server.timeout = "10";
+  services.radicale.settings.rights.type = "from_file";
+  services.radicale.settings.rights.file = "${radicale-rights}";
 
   security.acme.certs."jb55.com" = {
     webroot = "/var/www/challenges";
@@ -229,6 +228,9 @@ in
   };
 
   users.extraUsers.prosody.extraGroups = [ "jb55cert" ];
+  users.extraUsers.smtpd.extraGroups = [ "jb55cert" ];
+  users.extraUsers.jb55.extraGroups = [ "jb55cert" ];
+
   services.prosody.enable = true;
   services.prosody.admins = [ "jb55@jb55.com" ];
   services.prosody.allowRegistration = false;
@@ -291,13 +293,14 @@ in
   services.fcgiwrap.enable = true;
 
   services.nginx.httpConfig = ''
+    limit_req_zone $server_name zone=email_form:10m rate=3r/m;
 
     server {
       listen 443 ssl;
       listen [::]:443 ssl;
 
       server_name bitcoinwizard.net;
-      root /home/jb55/www/coretto.io;
+      root /www/bitcoinwizard.net;
       index index.html;
 
       ssl_certificate /var/lib/acme/bitcoinwizard.net/fullchain.pem;
@@ -308,11 +311,12 @@ in
       }
 
       location /email {
+        limit_req zone=email_form;
         gzip off;
         # fcgiwrap is set up to listen on this host:port
         fastcgi_pass                  unix:${config.services.fcgiwrap.socketAddress};
         include                       ${pkgs.nginx}/conf/fastcgi_params;
-        fastcgi_param SCRIPT_FILENAME /home/jb55/www/coretto.io/emailform.py;
+        fastcgi_param SCRIPT_FILENAME /www/bitcoinwizard.net/emailform.py;
 
         client_max_body_size 512;
 
@@ -321,7 +325,18 @@ in
         fastcgi_param PATH_INFO           $uri;
       }
 
+    }
 
+    server {
+      listen 80;
+      listen [::]:80;
+
+      server_name cdn.jb55.com;
+
+      location / {
+        autoindex on;
+        root /www/cdn.jb55.com;
+      }
     }
 
     server {
@@ -401,7 +416,7 @@ in
         root /var/www/challenges;
       }
 
-      location ~ ^(/[^/]+)/?$ {
+      location ~ ^(/[^/\s]+)/?$ {
 	if (-f $document_root$1/file/README.md.html) {
 	  return 302 $1/file/README.md.html;
 	}
@@ -453,7 +468,7 @@ in
       ssl_certificate /var/lib/acme/openpgpkey.jb55.com/fullchain.pem;
       ssl_certificate_key /var/lib/acme/openpgpkey.jb55.com/key.pem;
 
-      location /.well-known/openpgpkey/jb55.com/hu/9adqqiba8jxrhu5wf18bfapmnwjk5ybo {
+      location = /.well-known/openpgpkey/jb55.com/hu/9adqqiba8jxrhu5wf18bfapmnwjk5ybo {
         alias ${pgpkeys};
       }
     }
@@ -517,6 +532,16 @@ in
 
       location /.well-known/webfinger {
 	 return 302 https://social.jb55.com$request_uri;
+      }
+
+      location = /.well-known/openpgpkey/jb55.com/hu/9adqqiba8jxrhu5wf18bfapmnwjk5ybo {
+        add_header Access-Control-Allow-Origin *;
+        alias ${pgpkeys};
+      }
+
+      location = /.well-known/nostr.json {
+        add_header Access-Control-Allow-Origin *;
+        alias ${nip05};
       }
 
       location /cal/ {

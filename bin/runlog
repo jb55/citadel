@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-systemctl restart "$@"; journalctl -fu "$@"
+systemctl restart "$@"; journalctl -n30 -fu "$@"

@@ -159,9 +159,9 @@ in
   {
     system.activationScripts.mailz = ''
       # Make sure SpamAssassin database is present
-      if ! [ -d /etc/spamassassin ]; then
-        cp -r ${pkgs.spamassassin}/share/spamassassin /etc
-      fi
+      #if ! [ -d /etc/spamassassin ]; then
+        #cp -r ${pkgs.spamassassin}/share/spamassassin /etc
+      #fi
 
       # Make sure a DKIM private key exist
       if ! [ -d ${cfg.dkimDirectory}/${cfg.domain} ]; then
@@ -171,7 +171,7 @@ in
       fi
     '';
 
-    services.spamassassin.enable = true;
+    services.spamassassin.enable = false;
 
     services.opensmtpd = {
       enable = true;

@@ -16,7 +16,7 @@ let machine = extra.private.machine;
       is-minimal = false;
       git-server = import ./misc/git-server.nix;
       util       = import ./misc/util.nix { inherit pkgs; };
-      private    = import ./private.nix;
+      private    = import ./private.nix { inherit pkgs; };
       machine    = machineConfig;
     };
     util = extra.util;
