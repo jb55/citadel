@@ -169,10 +169,11 @@ in
   services.radicale.settings.rights.type = "from_file";
   services.radicale.settings.rights.file = "${radicale-rights}";
 
+  security.acme.acceptTerms = true;
+
   security.acme.certs."jb55.com" = {
     webroot = "/var/www/challenges";
     group = "jb55cert";
-    allowKeysForGroup = true;
     #postRun = "systemctl restart prosody";
     email = myemail;
   };
@@ -180,35 +181,30 @@ in
   security.acme.certs."git.jb55.com" = {
     webroot = "/var/www/challenges";
     group = "jb55cert";
-    allowKeysForGroup = true;
     email = myemail;
   };
 
   security.acme.certs."openpgpkey.jb55.com" = {
     webroot = "/var/www/challenges";
     group = "jb55cert";
-    allowKeysForGroup = true;
     email = myemail;
   };
 
   security.acme.certs."social.jb55.com" = {
     webroot = "/var/www/challenges";
     group = "jb55cert";
-    allowKeysForGroup = true;
     email = myemail;
   };
 
   security.acme.certs."sheetzen.com" = {
     webroot = "/var/www/challenges";
     group = "jb55cert";
-    allowKeysForGroup = true;
     email = myemail;
   };
 
   security.acme.certs."bitcoinwizard.net" = {
     webroot = "/var/www/challenges";
     group = "jb55cert";
-    allowKeysForGroup = true;
     email = myemail;
   };
 
@@ -227,11 +223,11 @@ in
     sieves = builtins.readFile ./dovecot/filters.sieve;
   };
 
-  users.extraUsers.prosody.extraGroups = [ "jb55cert" ];
+  #users.extraUsers.prosody.extraGroups = [ "jb55cert" ];
   users.extraUsers.smtpd.extraGroups = [ "jb55cert" ];
   users.extraUsers.jb55.extraGroups = [ "jb55cert" ];
 
-  services.prosody.enable = true;
+  services.prosody.enable = false;
   services.prosody.admins = [ "jb55@jb55.com" ];
   services.prosody.allowRegistration = false;
   services.prosody.extraModules = xmpp_modules;
@@ -279,15 +275,6 @@ in
 
     serviceConfig.Type = "simple";
     serviceConfig.ExecStart = "${npmrepo}/bin/npm-repo-proxy";
-  };
-
-  systemd.services.gaufre = {
-    description = "personal gopher proxy";
-
-    wantedBy = [ "multi-user.target" ];
-
-    serviceConfig.Type = "simple";
-    serviceConfig.ExecStart = "${gaufre}/bin/gaufre 7070";
   };
 
   services.fcgiwrap.enable = true;
@@ -457,6 +444,16 @@ in
 
       location /.well-known/acme-challenge {
         root /var/www/challenges;
+      }
+    }
+
+    server {
+      listen 80;
+      listen [::]:80;
+      server_name lnlink.app;
+
+      location / {
+        root /www/lnlink.app;
       }
     }
 
