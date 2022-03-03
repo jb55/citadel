@@ -170,17 +170,11 @@ in
     email = myemail;
   };
 
-  security.acme.certs."social.jb55.com" = {
-    webroot = "/var/www/challenges";
-    group = "jb55cert";
-    email = myemail;
-  };
-
-  security.acme.certs."sheetzen.com" = {
-    webroot = "/var/www/challenges";
-    group = "jb55cert";
-    email = myemail;
-  };
+  #security.acme.certs."sheetzen.com" = {
+  #  webroot = "/var/www/challenges";
+  #  group = "jb55cert";
+  #  email = myemail;
+  #};
 
   security.acme.certs."bitcoinwizard.net" = {
     webroot = "/var/www/challenges";
@@ -439,9 +433,9 @@ in
       rewrite ^/pkgs/?$ https://github.com/jb55/jb55pkgs/archive/master.tar.gz permanent;
 
       location /inbox {
-	proxy_set_header Host $http_host;
-	proxy_redirect off;
-	proxy_pass http://127.0.0.1:5188/inbox;
+        proxy_set_header Host $host;
+        proxy_redirect off;
+        proxy_pass http://127.0.0.1:5188/inbox;
       }
 
       location / {
@@ -449,8 +443,8 @@ in
         gzip_types application/json;
         charset utf-8;
 
-	proxy_set_header Host $http_host;
-	proxy_redirect off;
+        proxy_set_header Host $host;
+        proxy_redirect off;
 
         if ( $http_accept ~ "application/activity\+json" ) { 
 		proxy_pass http://127.0.0.1:5188;
