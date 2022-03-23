@@ -158,6 +158,13 @@ in
     email = myemail;
   };
 
+  security.acme.certs."cln.jb55.com" = {
+    webroot = "/var/www/challenges";
+    group = "jb55cert";
+    #postRun = "systemctl restart prosody";
+    email = myemail;
+  };
+
   security.acme.certs."git.jb55.com" = {
     webroot = "/var/www/challenges";
     group = "jb55cert";
@@ -507,6 +514,24 @@ in
 
       location ^~ /files/calls {
         error_page 405 =200 $uri;
+      }
+    }
+
+    server {
+      listen 443 ssl;
+      listen [::]:443 ssl;
+
+      server_name cln.jb55.com;
+
+      ssl_certificate /var/lib/acme/cln.jb55.com/fullchain.pem;
+      ssl_certificate_key /var/lib/acme/cln.jb55.com/key.pem;
+
+      location / {
+        proxy_pass http://24.84.152.187:8324;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "Upgrade";
+        proxy_set_header Host $host;
       }
     }
 
