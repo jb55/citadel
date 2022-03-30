@@ -1,0 +1,78 @@
+#!/usr/bin/env python
+
+import sys
+
+class col:
+    RED = '\033[31m'
+    GREEN = '\033[32m'
+    YELLOW = '\033[33m'
+    BLUE = '\033[34m'
+    MAGENTA = '\033[35m'
+    CYAN = '\033[36m'
+    END = '\033[0m'
+
+
+COLORS = [
+    col.MAGENTA,
+    col.RED,
+    col.GREEN,
+    col.BLUE,
+    col.YELLOW,
+    col.CYAN
+]
+
+
+def collapse_lines(ls, context, delim):
+    for l in ls[:context]:
+        sys.stdout.write(colorize_line(l, delim))
+    print(f"{col.MAGENTA}> [..]{col.END}")
+    for l in ls[-context:]:
+        sys.stdout.write(colorize_line(l, delim))
+
+
+def colorize_line(line, delim):
+    if line[0] != delim:
+        return line
+
+    i = 0
+    s = "" + COLORS[i] + line[0]
+    i += 1
+
+    for c in line[1:]:
+        if c == delim:
+            s += col.END + COLORS[i] + delim
+            i = (i+1) % len(COLORS)
+        else:
+            s += c
+
+    s += col.END
+    return s
+
+
+def process(delim):
+    thresh = 10
+    context = 5
+    count = 0
+    lines = []
+
+    for line in sys.stdin:
+        if line[0] == delim:
+            count += 1
+            lines.append(line)
+        else:
+            if count > thresh:
+                collapse_lines(lines, context, delim)
+            else:
+                for l in lines:
+                    sys.stdout.write(colorize_line(l, delim))
+
+            count = 0
+            lines = []
+
+            sys.stdout.write(colorize_line(line, delim))
+
+    if len(lines) > 0:
+        collapse_lines(lines, context, delim)
+
+
+process(">")
