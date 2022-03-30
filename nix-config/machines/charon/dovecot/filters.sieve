@@ -193,3 +193,7 @@ if allof (header :contains "from" "noreply@md.getsentry.com") {
 	fileinto "Alerts";
 }
 
+
+if allof ( header "Precedence" "bulk" ) {
+    fileinto "Bulk";
+}

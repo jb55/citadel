@@ -5,6 +5,9 @@ notmuchcmd () {
   $(notmuch "$@")
 }
 
+# bulk bs
+notmuchcmd tag +filed +bulk 'folder:".Bulk"'
+
 # sent
 notmuchcmd tag +sent tag:inbox and not tag:sent and folder:".Sent"
 
@@ -44,16 +47,16 @@ notmuchcmd tag +git +list to:git@vger.kernel.org and tag:inbox and not tag:git
 notmuchcmd tag +bitcoin +list folder:".Lists.bitcoin" and tag:inbox
 notmuchcmd tag +best -filed +bitcoin-dev +bitcoin +list to:"bitcoin-dev@lists.linuxfoundation.org" and tag:inbox and not tag:bitcoin-dev
 notmuchcmd tag +cypherpunks +list 'from:cypherpunks@lists.cpunks.org' and tag:inbox
-notmuchcmd tag +bitcoin +libbitcoin +list to:libbitcoin@lists.dyne.org and tag:inbox
-notmuchcmd tag +bitcoin +core +busy to:bitcoin@noreply.github.com and tag:inbox and subject:bitcoin/bitcoin
-notmuchcmd tag +bitcoin +core +gui +busy to:bitcoin-core/gui and tag:inbox
+notmuchcmd tag +bitcoin +core to:bitcoin@noreply.github.com and tag:inbox and subject:bitcoin/bitcoin
+notmuchcmd tag +bitcoin +core +gui to:bitcoin-core/gui and tag:inbox
 notmuchcmd tag +bitcoin +busy +bips to:"bitcoin/bips" and tag:inbox
-notmuchcmd tag +lightning +lightning-dev +list to:lightning-dev
 notmuchcmd tag +lightning to:"lightningnetwork/" and tag:inbox
 notmuchcmd tag +crypto +list to:cryptography.metzdowd.com and tag:inbox
 notmuchcmd tag +github +filed \(folder:".GitHub" or from:github.com\) and tag:inbox
+notmuchcmd tag -filed '(to:workflows@vger.kernel.org)' and tag:inbox
 
-notmuchcmd tag +lightning +clightning +list to:"c-lightning@lists.ozlabs.org" and tag:inbox
+notmuchcmd tag -filed +lightning +lightning-dev +list to:lightning-dev
+notmuchcmd tag -filed +lightning +clightning +list to:"c-lightning@lists.ozlabs.org" and tag:inbox
 notmuchcmd tag +lightning +clightning '(to:"ElementsProject/lightning" or to:"lightningd/plugins")' and tag:inbox
 
 notmuchcmd tag +nix-dev +nix +list \(to:nix-dev@lists.science.uu.nl OR to:nix-dev@cs.uu.nl OR to:nix-devel@googlegroups.com OR from:nixos1@discoursemail.com\) and tag:inbox
@@ -72,10 +75,16 @@ notmuchcmd tag +work +commit tag:github and tag:inbox and to:commitdev
 # except if someone mentions e
 notmuchcmd tag +flagged -busy -filed tag:inbox and '(tag:list and tag:to-me) or to:mention@noreply.github.com or author@noreply.github.com or to:review_requested@noreply.github.com or to:comment@noreply.github.com or (subject:jb55 and tag:github)'
 
+# spam
+notmuchcmd tag +spam -inbox 'from:"BOOM OF SALES"' and tag:inbox
+
 # not spam
 notmuchcmd tag +inbox -spam +flagged "bitcoin wizard" and tag:spam
 
 # phone mail
-notmuchcmd tag -inbox tag:inbox and '(folder:".Archive" or folder:".Trash")'
+notmuchcmd tag -inbox tag:inbox and '(folder:".Archive" or folder:".Trash" or folder:".Archives")'
+
+# bulk bs
+notmuchcmd tag +filed +bulk 'folder:".Bulk"'
 
 printf "notmuch tagging done.\n"

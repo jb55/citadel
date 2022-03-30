@@ -55,7 +55,6 @@ in {
       proxy_buffering off;
       proxy_read_timeout 300s;
       expires off;
-      default_type application/octet-stream;
 
       access_log ${logDir}/access.log;
       error_log ${logDir}/error.log;

@@ -97,7 +97,7 @@ in rec {
 
   bcalc = fetch-jb55 {
     repo   = "bcalc";
-    rev    = "b96c9f5379841c5049dc1b0aca05750f5f0dcdb8";
-    sha256 = "1lq7jqlyk4crd6f2z1ms0vqy6mq58q819nwn68adjdv309l4dqvf";
+    rev    = "607c4d562178f4aecee008012e9e83871d2a4f5c";
+    sha256 = "sha256-WD85Ypx0ZbSBj5+1OZcwPRz4V6dbPeK5foB/gn+romc=";
   };
 }
