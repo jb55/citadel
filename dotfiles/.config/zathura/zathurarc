@@ -12,3 +12,5 @@ set recolor-keephue    "false"
 
 set scroll-page-aware "false"
 set scroll-step 10
+
+set guioptions ""

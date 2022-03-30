@@ -15,6 +15,7 @@ else
   /home/jb55/bin/pdfsave "$outfile" "$ext"
 fi
 
+printf "%s\n" "$outfile"
 zathura "$outfile" &>/dev/null
 
 rm "$outfile"

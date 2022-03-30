@@ -17,7 +17,7 @@ set reverse_realname=no
 alternates ^jb55@jb55.com$ ^will.casarin@steamoji.com$
 
 set sort = threads
-set sort_aux = reverse-last-date-received
+#set sort_aux = reverse-last-date-received
 
 virtual-mailboxes \
   "INBOX" "notmuch://?query=query:inbox" \
@@ -46,7 +46,7 @@ macro pager d "<next-page>"
 macro pager u "<previous-page>"
 macro pager c "|cols<enter>"
 #macro pager P "|grep patch$ | xargs curl -sL | delta --paging always<enter>"
-macro pager P "| mail-prpatch | delta --paging always<enter>"
+macro pager P "| mail-prpatch | delta --paging always"
 
 my_hdr Bcc: William Casarin <jb55@jb55.com>
 

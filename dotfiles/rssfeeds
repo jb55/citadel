@@ -36,3 +36,5 @@ veritasium	@yt	https://www.youtube.com/feeds/videos.xml?channel_id=UCHnyfMqiRRG1
 witten	@arxiv	'http://export.arxiv.org/api/query?search_query=au:witten_e&sortBy=lastUpdatedDate&sortOrder=descending'
 zvibern	@arxiv	'http://export.arxiv.org/api/query?search_query=au:bern_zvi&sortBy=lastUpdatedDate&sortOrder=descending'
 scott-aaronson	@blog	https://scottaaronson.blog/?feed=rss2
+dietterich-labs	@yt	https://www.youtube.com/feeds/videos.xml?channel_id=UCd02pSRrecAVFOPjB-bfv-Q
+allen-farrington	@blog	https://medium.com/feed/@allenfarrington

@@ -61,6 +61,7 @@ sgb	search git branch	fuzz-jump-branchdiff
 sgd	search git diff	fuzz-edit-diff-line
 sgh	search git head	fuzz-edit-diff-line HEAD^-
 sgs	search git staged diff	fuzz-edit-diff-line --staged
+sgm	search git modified files	fuzz-git-modified
 sh	show history	fuzz-show-hist
 sp	search project	fuzz-search-files
 ss	search project file	fuzz-search-file
