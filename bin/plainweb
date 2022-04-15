@@ -12,7 +12,7 @@ OUT=${2:-$HURL}
 
 if [ ! -f "$HURL" ]; then
 	#w3m -header "$USER_AGENT" -dump "$1" > "$HURL"
-	w3m -dump "$1" > "$HURL"
+	w3m -dump "$1" | par -w$(tput cols) > "$HURL"
 fi
 
 lessr "$HURL"

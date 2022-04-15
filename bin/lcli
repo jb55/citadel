@@ -1,6 +1,7 @@
 #!/usr/bin/env sh
 if [ "$HOST" != "monad" ]; then
 	ssh monad lightning-cli "$@"
+	exit 0
 fi
 
 lightning-cli "$@"

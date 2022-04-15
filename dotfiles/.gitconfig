@@ -8,7 +8,7 @@
 [core]
   excludesfile = /Users/jb55/.gitignore_global
   editor = edit
-  pager = delta --hunk-style=plain --file-style=box --paging=always
+	pager = delta --max-line-length=4096 --file-style=box --paging=always
 [sendemail]
   smtpServer=/home/jb55/bin/sendmail
 [url "git@github.com:"]
@@ -64,7 +64,7 @@
   prs-merged = log --merges --date=local --author-date-order --glob='pull/origin/*'
   puff = pull --ff-only
   rc = rebase --continue
-  rv = remote -v
+  rv = !"git remote -v | grep fetch | sort | ct"
   refl = reflog --date=relative
   r = rebase
   serve = !git daemon --reuseaddr --verbose --base-path=. --export-all ./.git

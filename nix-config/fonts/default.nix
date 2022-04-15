@@ -95,7 +95,7 @@ in
       ibm-plex
       noto-fonts
       noto-fonts-emoji
-      opensans-ttf
+      open-sans
       raleway
       profont
       terminus_font

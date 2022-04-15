@@ -12,10 +12,21 @@ usage() {
     exit 1
 }
 
+start_review() {
+	diffs "$DIR"/*.patch
+}
+
 if [ -z "$2" ]; then
    usage
 fi
 
+if [ -d "$DIR" ]; then
+	read -p "Found $DIR, review this? (y/n): " res
+	if [ "$res" == "" ] || [ "$res" == "y" ]; then
+		start_review
+		exit 0
+	fi
+fi
 
 git fetch origin $BASE
 git fetch "$REMOTE" "$BRANCH"
@@ -30,4 +41,4 @@ printf "$DIR\n"
 
 read -p "Press enter to review."
 
-diffs "$DIR"/*.patch
+start_review

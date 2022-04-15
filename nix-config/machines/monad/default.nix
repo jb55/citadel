@@ -33,12 +33,12 @@ in
     #(import ../../misc/dnsmasq-adblock.nix)
     (import ../../misc/msmtp extra)
     (import ./networking extra)
-    (import ../../misc/imap-notifier extra)
+    #(import ../../misc/imap-notifier extra)
   ] ++ (if !extra.is-minimal then [ (import ./bitcoin extra) ] else []);
 
   #hardware.steam-hardware.enable = true;
 
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  #boot.kernelPackages = pkgs.linuxPackages_latest;
 
   services.ofono.enable = false;
   services.ofono.plugins = with pkgs; [ ofono-phonesim ];

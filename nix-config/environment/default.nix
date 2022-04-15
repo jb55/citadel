@@ -69,7 +69,7 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
       linuxPackages.perf
       lsof
       mailutils
-      manpages
+      man-pages
       mdcat
       minisign
       neovim
