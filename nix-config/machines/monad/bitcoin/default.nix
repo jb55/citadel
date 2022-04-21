@@ -49,11 +49,15 @@ in
 
   services.nginx.httpConfig = ''
     server {
-      listen ${extra.machine.ztip}:80;
+      listen 80;
+      listen 10.100.0.1:80;
+      listen 192.168.87.26:80;
+
       server_name wallet.jb55.com;
 
       location / {
-        proxy_pass  http://${extra.machine.ztip}:${toString spark-port};
+        proxy_pass  http://127.0.0.1:9962;
+
         proxy_next_upstream error timeout invalid_header http_500 http_502 http_503 http_504;
         proxy_redirect off;
         proxy_buffering off;

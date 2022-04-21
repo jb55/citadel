@@ -31,6 +31,7 @@ let
   ports = {
     lightning = 9735;
     lightningt = 9736;
+    lightning_websocket = 8756;
     lntun = 7878;
     dns = 53;
     http = 80;
@@ -66,7 +67,7 @@ in
   networking.hostId = extra.machine.hostId;
 
   #networking.firewall.trustedInterfaces = ["wg0"];
-  networking.firewall.allowedTCPPorts = with ports; [ lightning lightningt http ];
+  networking.firewall.allowedTCPPorts = with ports; [ lightning lightning_websocket http ];
   networking.firewall.allowedUDPPorts = with ports; [ dns wireguard ];
 
   networking.nat.enable = true;
@@ -107,10 +108,13 @@ in
         { publicKey = "Ynuism5cSJYUrMF/gWZti8W+PztLufaB/3mQlXV6HyY="; # vanessa-phone
           allowedIPs = [ "10.100.0.6/32" ];
         } 
-	{ publicKey = "BklL4dTL8WK3xnmM899Hr50/UlXaLYhJQWllj2p4ZEg="; # charon
+        { publicKey = "BklL4dTL8WK3xnmM899Hr50/UlXaLYhJQWllj2p4ZEg="; # charon
           allowedIPs = [ "10.100.0.7/32" ];
           endpoint = "45.79.91.128:51820";
         }
+        { publicKey = "oYTNuXPl5GQsz53cL55MO9MfI61DyZBrBDy9ZFBpDWU="; # cross (air)
+          allowedIPs = [ "10.100.0.8/32" ];
+        } 
       ];
     };
 
@@ -422,4 +426,5 @@ in
 
   networking.firewall.checkReversePath = false;
   networking.firewall.logReversePathDrops = true;
+  networking.firewall.logRefusedConnections = false;
 }

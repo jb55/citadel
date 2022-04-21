@@ -84,9 +84,9 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
       xbindkeys
       xclip
       xdotool
-      xlibs.xev
-      xlibs.xmodmap
-      xlibs.xset
+      xorg.xev
+      xorg.xmodmap
+      xorg.xset
       zathura
       zoom-us
 

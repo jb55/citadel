@@ -1,4 +1,2 @@
 #!/usr/bin/env sh
-branch="$1"
-shift
-exec git log --reverse "$@" origin/master.."$branch"
+exec git log --reverse "$@" origin/master..
