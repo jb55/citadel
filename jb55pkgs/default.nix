@@ -35,6 +35,12 @@ in rec {
     sha256 = "10qx30s0c6gcinfgdlb3c8rxkv4j25m29jsl923k44bbh3jpdnak";
   };
 
+  nostril = fetch-jb55 {
+    repo = "nostril";
+    rev = "251031f5a5d098d02c5e74556942d3dd706b5ce4";
+    sha256 = "sha256-qLqRxdLDos3akNKbKQ0yIbIIovssK1Q40EzJ8hb6hag=";
+  };
+
   git-email-contacts = fetch-jb55 {
     repo = "git-email-contacts";
     rev  = "7301d727cf09157497cbe72b9174a63b98b9e287";
