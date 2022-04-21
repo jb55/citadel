@@ -2,4 +2,5 @@ text/html; open %s; nametemplate=%s.html
 text/csv; pcsv %s
 image/*; open %s
 video/*; open %s
+audio/*; open %s
 application/pdf; open %s

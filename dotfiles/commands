@@ -21,6 +21,7 @@ cr	compile repeat	fuzz-compile-repeat
 cs	compile show build	echo cat .build-result
 dsa	docs->stripe->api	~/docs/stripe/jumpapi
 dsg	docs->stripe->go	fuzzdoc ~/docs/stripe/go-v72.txt '^type '
+dgt	docs->go->testing	fuzzdoc ~/docs/godoc/testing.txt '^func '
 ecc	edit vdirsyncer config	echo edit ~/.config/vdirsyncer/config
 ec	edit commands	fuzz-edit-scripts
 ed	edit default.nix	echo edit default.nix

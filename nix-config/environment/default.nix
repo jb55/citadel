@@ -9,6 +9,7 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
     }) {};
     myPackages = with jb55pkgs; [
        rsslink
+       nostril
        bcalc
        btcs
        csv-delim

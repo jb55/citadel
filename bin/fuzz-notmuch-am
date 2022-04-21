@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 set -eou pipefail
 
-echo notmuch am --am --add-link --fuzzy to:nixpkgs-dev
+echo notmuch am to:nixpkgs-dev

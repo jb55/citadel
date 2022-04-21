@@ -190,7 +190,7 @@ in
     wantedBy = [ "graphical-session.target" ];
     after    = [ "graphical-session.target" ];
     serviceConfig.ExecStart = "${pkgs.libnotify}/bin/notify-send -u critical standup";
-    startAt = "Mon..Fri *-*-* 9:28:00";
+    startAt = "Mon..Fri *-*-* 8:58:00";
   };
 
   systemd.user.services.urxvtd = {
