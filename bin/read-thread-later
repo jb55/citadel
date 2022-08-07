@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -e
+
+if [[ -z $1 ]] || [[ -z $2 ]]; then
+	printf "usage: read-thread-later <thread:threadid> filename.txt\n" >&2
+	exit 1
+fi
+
+notmuch show --format=text "$1" | collapse | readlater "$2"

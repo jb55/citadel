@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+name=$(cut -f1 -d@ <<<"$1")
+host=$(cut -f2 -d@ <<<"$1")
+
+curl -sL "https://$host/.well-known/lnurlp/$name" | jq

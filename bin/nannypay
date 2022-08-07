@@ -7,7 +7,7 @@ if [ -z "$NANNY" ]; then
     exit 1
 fi
 
-pay=20
+pay=25
 
 if [ -z $pay ]; then
     printf "unknown pay for %s\n" "$NANNY"

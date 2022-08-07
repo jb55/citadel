@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+file=$(git status | grep modified: | awkp 2 | fzf)
+
+echo "edit $file"

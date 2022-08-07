@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 if [ -z "$1" ]; then
-	printf 'usage: find-example <rg query>\n'
+	printf 'usage: findex <rg query>\n'
 	exit 1
 fi
 

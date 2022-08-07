@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+set -e
+
+DOCS_DIR=${DOCS_DIR:-$HOME/docs}
+
+cmd=$(fuzz-reader $DOCS_DIR/queue)
+
+path=$(cut -f2 -d" " <<<"$cmd")
+fname=$(basename "$path")
+
+$cmd
+
+
+printf "Are you done with '$fname'?\n" >&2
+read -rep "(a)rchive, (d)elete, (q)uit: " reply
+
+case $reply in
+	[Dd]* )
+		rm -f "$path"
+		printf 'Deleting %s\n' "$fname" >&2
+		;;
+	[Aa]* )
+		mkdir -p "$DOCS_DIR/archive"
+		mv "$path" "$DOCS_DIR/archive"
+		mv "$DOCS_DIR/queue/.$fname.hst" "$DOCS_DIR/archive" || :
+		printf 'Archiving %s\n' "$fname" >&2
+		;;
+	* ) ;;
+esac

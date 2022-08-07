@@ -10,4 +10,4 @@ for line in sys.stdin.readlines():
   hist[x] = (hist.get(x) or 0) + 1
 
 for key, count in hist.items():
-  print "%s\t%s" % (count, key)
+  print("{}\t{}".format(count,key))

@@ -31,10 +31,10 @@ squarebitcoin	@blog	https://squareselfcustody.substack.com/feed.xml
 stackernews	@busy	https://stacker.news/rss
 susskind	@arxiv	'http://export.arxiv.org/api/query?search_query=au:susskind_l&sortBy=lastUpdatedDate&sortOrder=descending'
 thedrive	@pod	https://peterattiadrive.libsyn.com/rss
-timferris	@pod	https://rss.art19.com/tim-ferriss-show
 veritasium	@yt	https://www.youtube.com/feeds/videos.xml?channel_id=UCHnyfMqiRRG1u-2MsSQLbXA
 witten	@arxiv	'http://export.arxiv.org/api/query?search_query=au:witten_e&sortBy=lastUpdatedDate&sortOrder=descending'
 zvibern	@arxiv	'http://export.arxiv.org/api/query?search_query=au:bern_zvi&sortBy=lastUpdatedDate&sortOrder=descending'
+nielsen	@arxiv	'http://export.arxiv.org/api/query?search_query=au:nielsen_m_a&sortBy=lastUpdatedDate&sortOrder=descending'
 scott-aaronson	@blog	https://scottaaronson.blog/?feed=rss2
 dietterich-labs	@yt	https://www.youtube.com/feeds/videos.xml?channel_id=UCd02pSRrecAVFOPjB-bfv-Q
 allen-farrington	@blog	https://medium.com/feed/@allenfarrington
