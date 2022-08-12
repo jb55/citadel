@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+file=$1
+
+shift
+
+while read line; do
+	echo "$line" | ${@//\{\}/$line}
+done < <(tail -n0 -f $file)

@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+set -e
+
+thread=$(notmuch search --format=json ${1:-query:inbox and tag:github} | notmuch-select-threads)
+
+notmuch show $thread | mail-prpatch

@@ -49,6 +49,7 @@ Nc	new command	echo make-script
 ni	notmuch inbox	fuzz-notmuch-inbox
 nT	email today	echo f nt query:today
 nt	notmuch threads	fuzz-notmuch-threads
+ng	notmuch github patch	fuzz-notmuch-ghpatch
 of	open file	fuzz-open-file
 olf	open last files	fuzz-last-files open
 pc	cat project file	fuzz-cat-file
