@@ -92,7 +92,8 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
       universal-ctags
       unixtools.xxd
       unzip
-      weechat
+      #weechat
+      websocat
       wget
       xonsh
       zip

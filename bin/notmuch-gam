@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+set -eou pipefail
+cmd=$(fuzz-notmuch-gam)
+
+$cmd

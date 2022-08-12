@@ -93,8 +93,6 @@
 	hideCampaign = true
 [github]
 	user = jb55
-[commit]
-	template = ~/.git-template
 [grep]
 	lineNumber = true
 [credential "https://github.com"]

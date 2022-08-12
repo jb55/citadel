@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+#set -eou pipefail
+slug=$(github-project-slug)
+if [ slug == "" ]; then
+	slug="and subject:$slug"
+fi
+thread=$(notmuch search --format=json from:github $slug and subject:PR and date:month.. |
+jq -r '.[] | "\(.timestamp) \(.subject)\t\(.thread)"' |
+sort -nr |
+datefmt --timeago |
+fzf --no-sort -m |
+cutt -f2 |
+xargs -I{} printf 'thread:{}\n')
+
+echo "notmuch show $thread | mail-prpatch"

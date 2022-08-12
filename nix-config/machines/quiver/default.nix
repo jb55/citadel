@@ -17,6 +17,8 @@ extra:
 
   documentation.nixos.enable = false;
 
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+
   boot.extraModprobeConfig = ''
     options thinkpad_acpi enabled=0
   '';
@@ -226,7 +228,7 @@ extra:
 
   services.postgresql = {
     dataDir = "/var/db/postgresql/10/";
-    enable = true;
+    enable = false;
     package = pkgs.postgresql_10;
     # extraPlugins = with pkgs; [ pgmp ];
     authentication = pkgs.lib.mkForce ''

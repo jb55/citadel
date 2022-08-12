@@ -9,7 +9,7 @@
 , fetchFromGitHub
 }:
 let
-  inputs = [ perl perlPackages.URI rsync openssh coreutils ];
+  inputs = [ perl perlPackages.URI perlPackages.AnyURIEscape rsync openssh coreutils ];
   buildPaths = sep: fmt: "${lib.concatStringsSep sep (map fmt inputs)}";
 in stdenv.mkDerivation rec {
   name = "sharefile-${version}";

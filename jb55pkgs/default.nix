@@ -67,8 +67,8 @@ in rec {
 
   zoom-link-opener = fetch {
     repo = "zoom-link-opener";
-    rev  = "0.1.1";
-    sha256 = "013q814i7wcbl2ba5jpqkz00kpa1jaly53np30i4x01cfdfzywi3";
+    rev  = "0.1.2";
+    sha256 = "sha256-sytjRdK+CVxnJU4EdVzZyK0c7TJJo+64kJfJTTrKwKM=";
   };
 
   zebra = fetch {
@@ -79,8 +79,8 @@ in rec {
 
   viscal = fetch-jb55 {
     repo = "viscal";
-    rev  = "4b87413babb4296d94ac8535f1160f7a0d507c4e";
-    sha256 = "0lamxx6xh5b8f38sqyn2ghqplvvaaxwkmvd6gb3vwqyw2qr3vwga";
+    rev  = "b93b651522ca684e46603316df88b2c7241afecd";
+    sha256 = "sha256-iOR3vztBqq+/7+tGDcRuU4HfsBuCLjPKKAflzAAsqOM=";
   };
 
   datefmt = fetch {

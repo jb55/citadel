@@ -24,7 +24,7 @@ in
   };
 
   services.pcscd.enable = true;
-  services.gnome3.gnome-keyring.enable = if extra.is-minimal then false else true;
+  services.gnome.gnome-keyring.enable = if extra.is-minimal then false else true;
 
   services.trezord.enable = true;
 
@@ -198,10 +198,10 @@ in
     description = "RXVT-Unicode Daemon";
     wantedBy = [ "graphical-session.target" ];
     after    = [ "graphical-session.target" ];
-    path = [ pkgs.rxvt_unicode-with-plugins ];
+    path = [ pkgs.rxvt-unicode ];
     serviceConfig = {
       Restart = "always";
-      ExecStart = "${pkgs.rxvt_unicode-with-plugins}/bin/urxvtd -q -o";
+      ExecStart = "${pkgs.rxvt-unicode}/bin/urxvtd -q -o";
     };
   };
 

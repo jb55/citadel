@@ -17,8 +17,10 @@ set reverse_name=yes
 set reverse_realname=no
 alternates ^jb55@jb55.com$ ^will.casarin@steamoji.com$
 
-set sort = threads
+#set sort = threads
 #set sort_aux = reverse-last-date-received
+#set sort = reverse-last-date-received
+set sort = last-date-received
 
 virtual-mailboxes \
   "INBOX" "notmuch://?query=query:inbox" \
@@ -35,11 +37,11 @@ virtual-mailboxes \
   "today" "notmuch://?query=query:today" \
   "work" "notmuch://?query=query:work"
 
-macro index,pager a "<modify-labels>-unread -inbox<enter>j<enter>
+macro index,pager a "<modify-labels>-unread -inbox<enter>
 macro index,pager A "<create-alias>" "Create alias"
 macro index,pager F "<modify-labels>+filed" "File message"
 macro index,pager + "<modify-labels>+"
-macro index,pager S "<modify-labels>+spam -unread -inbox<enter>j<enter>
+macro index,pager S "<modify-labels>+spam -unread -inbox<enter>
 macro index c "<change-vfolder>?" "Change to vfolder overview"
 macro index \\\\ "<vfolder-from-query>" "Search mailbox"
 macro pager p "|delta --paging always<enter>"

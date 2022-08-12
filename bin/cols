@@ -1,4 +1,4 @@
 #!/usr/bin/env sh
-cols=${1:-$(tput cols)}
+cols=${1:-73}
 shift
 fold -w $cols -s "$@"

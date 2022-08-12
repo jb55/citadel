@@ -29,6 +29,14 @@ nmap <C-s> ^D
 nmap <C-n> :tn<CR>
 nmap <C-p> :tp<CR>
 
+" autoparens
+"ino " ""<left>
+"ino ' ''<left>
+"ino ( ()<left>
+"ino [ []<left>
+"ino { {}<left>
+"ino {<CR> {<CR>}<ESC>O
+
 imap <A-j> {
 imap <A-k> }
 imap <A-n> [
