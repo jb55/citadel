@@ -20,7 +20,7 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
        cmdtree
        zoom-link-opener
        x11-rename
-       hoogle-zen
+       #hoogle-zen
        viscal
     ];
 
@@ -35,8 +35,6 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
 
     mypkgs = (with pkgs; [
       obs-studio
-      aerc
-      bitcoin
       clipmenu
       colorpicker
       dasht
@@ -46,10 +44,9 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
       dynamic-colors
       feh
       getmail6 # for getmail-gmail-xoauth-tokens
-      gnome3.gnome-calculator
+      gnome.gnome-calculator
       gtk-engine-murrine
-      #hwi
-      khal
+      hwi
       lagrange
       lastpass-cli
       libnotify
@@ -61,24 +58,22 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
       oathToolkit
       pandoc
       pavucontrol
+      pamixer
       pinentry
       postgresql # psql
-      #python37Packages.trezor
       qalculate-gtk
       qutebrowser
-      rxvt_unicode-with-plugins
+      rxvt-unicode
       signal-desktop
       simplescreenrecorder
       slock
       spotify
-      #steam
       sxiv
-      texlive.combined.scheme-full
       todo-txt-cli
+      tdesktop
       userConfig
       vdirsyncer
       w3m
-      #wine
       wmctrl
       xautolock
       xbindkeys
@@ -90,7 +85,14 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
       zathura
       zoom-us
 
-      df
+      #aerc 
+      #bitcoin     --- probably don't want a binary substitute of this
+      #khal
+      #python37Packages.trezor
+      #texlive.combined.scheme-full
+      #steam
+      #wine
+      #df
     ]) ++ jbpkgs;
 
 in {
@@ -116,14 +118,15 @@ in {
     VK_ICD_FILENAMES = "/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json"; # radv
   };
 
-  programs.steam.enable = true;
+  programs.steam.enable = false;
 
   environment.systemPackages = if extra.is-minimal then (with pkgs; [
     #steam
     #steam-run
     #wine
+    
     lastpass-cli
-    rxvt_unicode-with-plugins
+    rxvt-unicode
   ]) else mypkgs;
 
   programs.slock.enable = true;

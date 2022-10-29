@@ -2,6 +2,11 @@
 
 USER_AGENT='User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) QtWebEngine/5.15.2 Chrome/83.0.4103.122 Safari/537.36'
 
+if [ "$1" = "-f" ]; then
+	FORCE=1
+	shift
+fi
+
 if [ -z "$1" ]; then
   printf "usage: plainweb <url>\n"
   exit 1
@@ -10,9 +15,13 @@ fi
 HURL="/tmp/$(sha256sum <<<"$1" | awk '{print $1}').txt"
 OUT=${2:-$HURL}
 
-if [ ! -f "$HURL" ]; then
+if [[ $FORCE -eq 1 ]] || [[ ! -f "$HURL" ]]; then
+	printf "fetching...\n" >&2
 	#w3m -header "$USER_AGENT" -dump "$1" > "$HURL"
-	w3m -dump "$1" | par -w$(tput cols) > "$HURL"
+	#w3m -dump "$1" | par -w$(tput cols) > "$HURL"
+	w3m -dump "$1" > "$HURL"
+	#<"$HURL" par -w$(tput cols) > "$HURL.par"
 fi
 
 lessr "$HURL"
+printf "$HURL\n" >&2

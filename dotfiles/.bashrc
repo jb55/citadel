@@ -3,6 +3,7 @@
 # for examples
 set -o vi
 
+export LC_CTYPE="en_US.UTF-8"
 export NIXPKGS=$HOME/nixpkgs
 export NIX_PATH="nixpkgs=$NIXPKGS:$NIX_PATH"
 export NIX_PATH="nixos-config=$NIX_FILES:$NIX_PATH"
@@ -22,7 +23,7 @@ export PS0='\033[0m'
 export HISTSIZE=50000
 export HISTCONTROL=ignoredups
 # ... and ignore same sucessive entries.
-export HISTCONTROL=ignoreboth
+#export HISTCONTROL=ignoreboth
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.

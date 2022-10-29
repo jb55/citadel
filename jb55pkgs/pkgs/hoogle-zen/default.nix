@@ -1,7 +1,7 @@
 { pkgs        ? import <nixpkgs> {},
   stdenv      ? pkgs.stdenv,
   bash        ? pkgs.bash,
-  zenity      ? pkgs.gnome3.zenity,
+  zenity      ? pkgs.gnome.zenity,
   writeScript ? pkgs.writeScript
 }:
 stdenv.mkDerivation rec {

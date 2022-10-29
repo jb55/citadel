@@ -61,7 +61,7 @@ with extra; {
       IMAP_NOTIFY_PORT = "12788";
     };
 
-    path = with pkgs; [ eject utillinux muchsync notmuch bash openssh ];
+    path = with pkgs; [ eject util-linux muchsync notmuch bash openssh ];
 
     serviceConfig.Type = "simple";
     serviceConfig.Restart = "always";

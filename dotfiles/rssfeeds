@@ -23,18 +23,21 @@ noagenda	@pod	http://feed.nashownotes.com/rss.xml
 peakpropsperity	@blog,@busy	https://feeds.feedburner.com/PeakProsperity
 portal	@pod	https://www.omnycontent.com/d/playlist/9b7dacdf-a925-4f95-84dc-ac46003451ff/1713c520-edb6-43a3-b1b9-acb8002fdae7/58e33a0c-f86b-41c5-a11c-acb8002fdaf5/podcast.rss
 quanta	@blog	https://api.quantamagazine.org/feed/
-quantapodcast	@pod	https://api.quantamagazine.org/feed/podcast/
 sabine	@yt	https://www.youtube.com/feeds/videos.xml?channel_id=UC1yNl2E66ZzKApQdRuTQ4tw
 samharris	@pod	https://wakingup.libsyn.com/rss
 shitcoinchron	@blog	https://chainfail.substack.com/feed
 squarebitcoin	@blog	https://squareselfcustody.substack.com/feed.xml
 stackernews	@busy	https://stacker.news/rss
-susskind	@arxiv	'http://export.arxiv.org/api/query?search_query=au:susskind_l&sortBy=lastUpdatedDate&sortOrder=descending'
 thedrive	@pod	https://peterattiadrive.libsyn.com/rss
-timferris	@pod	https://rss.art19.com/tim-ferriss-show
 veritasium	@yt	https://www.youtube.com/feeds/videos.xml?channel_id=UCHnyfMqiRRG1u-2MsSQLbXA
-witten	@arxiv	'http://export.arxiv.org/api/query?search_query=au:witten_e&sortBy=lastUpdatedDate&sortOrder=descending'
-zvibern	@arxiv	'http://export.arxiv.org/api/query?search_query=au:bern_zvi&sortBy=lastUpdatedDate&sortOrder=descending'
-scott-aaronson	@blog	https://scottaaronson.blog/?feed=rss2
+susskind	@arxiv @physics	'http://export.arxiv.org/api/query?search_query=au:susskind_l&sortBy=lastUpdatedDate&sortOrder=descending'
+witten	@arxiv @physics	'http://export.arxiv.org/api/query?search_query=au:witten_e&sortBy=lastUpdatedDate&sortOrder=descending'
+zvibern	@arxiv @physics	'http://export.arxiv.org/api/query?search_query=au:bern_zvi&sortBy=lastUpdatedDate&sortOrder=descending'
+nielsen	@arxiv @physics	'http://export.arxiv.org/api/query?search_query=au:nielsen_m_a&sortBy=lastUpdatedDate&sortOrder=descending'
+maldacena	@arxiv @physics	'http://export.arxiv.org/api/query?search_query=au:maldacena_j&sortBy=lastUpdatedDate&sortOrder=descending'
+harlow	@arxiv @physics	'http://export.arxiv.org/api/query?search_query=au:harlow_d&sortBy=lastUpdatedDate&sortOrder=descending'
+bousso	@arxiv @physics	'http://export.arxiv.org/api/query?search_query=au:bousso_r&sortBy=lastUpdatedDate&sortOrder=descending'
+scott-aaronson	@blog @physics	https://scottaaronson.blog/?feed=rss2
 dietterich-labs	@yt	https://www.youtube.com/feeds/videos.xml?channel_id=UCd02pSRrecAVFOPjB-bfv-Q
 allen-farrington	@blog	https://medium.com/feed/@allenfarrington
+woit	@blog	https://www.math.columbia.edu/~woit/wordpress/?feed=rss2

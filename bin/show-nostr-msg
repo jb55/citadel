@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+set -e
+
+content=$(jq -r '.[2] | "\(.pubkey):\n\n\(.content)"')
+
+notify-send -u critical "$content" 

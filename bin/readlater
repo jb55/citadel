@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+set -e
+
+tmp=$(mktemp)
+cat > "$tmp"
+fname="$1"
+
+if [ -z $1 ]; then
+	printf "usage: readlater fname.txt\n"
+	exit 2
+fi
+
+fname=${fname%.txt}.txt
+
+mkdir -p $HOME/docs/queue
+mv "$tmp" "$HOME/docs/queue/$fname"
+printf "Added '$fname' to read queue\n" >&2
+rm -f "$tmp"

@@ -3,6 +3,8 @@ printf "building cache of nixpkgs\n" >&2
 nix-env -f $NIXPKGS -qaP \* > /tmp/search1 &
 printf "building cache of haskellPackages\n" >&2
 nix-env -f $NIXPKGS -qaPA haskellPackages > /tmp/search2 &
+printf "building cache of perlPackages\n" >&2
+nix-env -f $NIXPKGS -qaPA perlPackages > /tmp/search3 &
 wait
-cat /tmp/search1 /tmp/search2 | sort > ~/.nixenv.cache
+cat /tmp/search{1,2,3} | sort > ~/.nixenv.cache
 rm -f /tmp/search1 /tmp/search2

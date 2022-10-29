@@ -3,6 +3,6 @@ if [ $(hostname) == "monad" ]
 then
 	exec bitcoin-cli -rpcuser=rpcuser -rpcpassword=rpcpass -datadir=/zbig/bitcoin "$@"
 else
-	exec bitcoin-cli "$@"
+	ssh monad bcli "$@"
 fi
 

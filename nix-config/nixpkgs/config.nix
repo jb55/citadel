@@ -21,7 +21,7 @@ in {
       smbdSupport = true;
     };
 
-    mpv = super.mpv-with-scripts.override {
+    mpv = pkgs.wrapMpv pkgs.mpv-unwrapped {
       scripts = [ pkgs.mpvScripts.mpris ];
     };
 
@@ -33,15 +33,6 @@ in {
     }) {
       inherit pkgs;
     };
-
-    less = pkgs.lib.overrideDerivation super.less (attrs: {
-      patches = [
-        (super.fetchurl {
-          url = "https://jb55.com/s/0001-Fix-regression-where-lastmark-isn-t-saved-250.patch";
-          sha256 = "0171f3c60406232fdd24a3c7a59fa7dd92b673b612998a545459d704ba922ca2";
-        })
-      ];
-    });
 
     msmtp = pkgs.lib.overrideDerivation super.msmtp (attrs: {
       patches = [
@@ -58,10 +49,10 @@ in {
       '';
     });
 
-    weechat = super.weechat.override {configure = {availablePlugins, ...}: {
-        scripts = with super.weechatScripts; [ wee-slack weechat-matrix ];
-      };
-    };
+    #weechat = super.weechat.override {configure = {availablePlugins, ...}: {
+    #    scripts = with super.weechatScripts; [ wee-slack weechat-matrix ];
+    #  };
+    #};
 
     dunst = pkgs.lib.overrideDerivation super.dunst (attrs: {
       src = pkgs.fetchFromGitHub {

@@ -7,6 +7,7 @@ set wait_key=no
 set pager_stop=yes
 set from="jb55@jb55.com"
 set pipe_decode=yes
+set pipe_split=no
 set envelope_from=yes
 set mime_forward=no
 unset markers
@@ -16,8 +17,10 @@ set reverse_name=yes
 set reverse_realname=no
 alternates ^jb55@jb55.com$ ^will.casarin@steamoji.com$
 
-set sort = threads
+#set sort = threads
 #set sort_aux = reverse-last-date-received
+#set sort = reverse-last-date-received
+set sort = last-date-received
 
 virtual-mailboxes \
   "INBOX" "notmuch://?query=query:inbox" \
@@ -34,11 +37,11 @@ virtual-mailboxes \
   "today" "notmuch://?query=query:today" \
   "work" "notmuch://?query=query:work"
 
-macro index,pager a "<modify-labels>-unread -inbox<enter>j<enter>
+macro index,pager a "<modify-labels>-unread -inbox<enter>
 macro index,pager A "<create-alias>" "Create alias"
 macro index,pager F "<modify-labels>+filed" "File message"
 macro index,pager + "<modify-labels>+"
-macro index,pager S "<modify-labels>+spam -unread -inbox<enter>j<enter>
+macro index,pager S "<modify-labels>+spam -unread -inbox<enter>
 macro index c "<change-vfolder>?" "Change to vfolder overview"
 macro index \\\\ "<vfolder-from-query>" "Search mailbox"
 macro pager p "|delta --paging always<enter>"
@@ -46,6 +49,7 @@ macro pager d "<next-page>"
 macro pager u "<previous-page>"
 macro pager c "|cols|less<enter>"
 macro pager t "|collapse|less<enter>"
+macro attach h "|w3m -dump -T text/html | less<enter>" "View text/html with w3m"
 #macro pager P "|grep patch$ | xargs curl -sL | delta --paging always<enter>"
 macro pager P "| mail-prpatch | delta --paging always"
 
@@ -64,4 +68,10 @@ color quoted9       blue                default # Quoting Ebene 10
 
 color header            brightcyan          default        '^Subject:'
 
+#collapse threads
+folder-hook . "push \eV"
+set collapse_unread=yes
+set uncollapse_jump=yes
+
 source ~/.mail_aliases
+

@@ -44,6 +44,7 @@ h	run history	fuzz-run-hist
 jt	jump tag	fuzz-jump-tag
 nai	notmuch archive inbox	fuzz-notmuch-archive-inbox
 nam	notmuch am	fuzz-notmuch-am
+ng	notmuch github patch	fuzz-notmuch-gam
 nat	notmuch archive	fuzz-notmuch-archive
 Nc	new command	echo make-script
 ni	notmuch inbox	fuzz-notmuch-inbox
@@ -72,6 +73,7 @@ wn	work notes	echo edit /home/jb55/projects/steamoji/doc/$(ls -1pt /home/jb55/pr
 wsg	work service gql	fuzzedit schema '^'
 wsm	work service mutations	fuzzedit mutation '^func '
 wsq	work service queries	fuzzedit query '^func '
+wsp	work service permissions	fuzzedit permission.go '^"'
 wdq	work dashboard queries	fuzzedit queries '^'
 wtb	work trello backlog	fuzz-trello-sprint "^Backlog "
 wti	work trello inprogress	fuzz-trello-sprint "^In Progress "

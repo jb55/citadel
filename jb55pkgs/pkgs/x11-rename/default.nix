@@ -3,7 +3,7 @@
   fetchurl    ? pkgs.fetchurl, 
   bash        ? pkgs.bash,
   xdotool     ? pkgs.xdotool,
-  zenity      ? pkgs.gnome3.zenity,
+  zenity      ? pkgs.gnome.zenity,
   writeScript ? pkgs.writeScript 
 }:
 let

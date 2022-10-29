@@ -1,4 +1,5 @@
 text/html; open %s; nametemplate=%s.html
+#text/html; w3m -dump '%s'; copiousoutput
 text/csv; pcsv %s
 image/*; open %s
 video/*; open %s
