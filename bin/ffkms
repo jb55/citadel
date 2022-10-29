@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+ffmpeg \
+  -f kmsgrab \
+  -thread_queue_size 64 \
+  -i - \
+  -vf 'hwmap=derive_device=vaapi,hwdownload,format=bgr0,scale=1280:720' \
+  -c:v libx264 \
+  -preset:v superfast \
+  -tune zerolatency \
+  -intra-refresh 1 \
+  -f mpegts \
+  -b:v 3M \
+  udp://10.100.0.2:55000
+
+  #-f pulse \
+  #-i 'alsa_output.pci-0000_26_00.1.hdmi-stereo.monitor' \

@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+ffmpeg -f x11grab -s 1920x1080 -i :0.0 -preset ultrafast -vcodec libx264 -tune zerolatency -b 900k -f mpegts udp://192.168.87.100:55000

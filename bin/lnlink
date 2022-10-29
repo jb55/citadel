@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+nodehost=$(lightning-cli getinfo | jq -r '. as $r | .address[0] | "\($r.id)@\(.address):\(.port)"')
+token=$(lightning-cli commando-rune "$@" | jq -r '.rune | @uri')
+echo "lnlink:$nodehost?token=$token"

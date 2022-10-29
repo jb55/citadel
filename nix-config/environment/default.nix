@@ -35,7 +35,7 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
       tut
 
       python3Packages.num2words
-      python3Packages.howdoi
+      #python3Packages.howdoi
       tree
       datefmt
       nncp

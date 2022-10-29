@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+POST="$(cat)"
+
+printf "using post '%s'\n" "$POST" >&2
+
+for relay in $(cat ~/dotfiles/relays)
+do
+	echo "$POST" | websocat "$relay" &
+done
+
+wait

@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+bcli getrawmempool false | jq -r '.[]' | btc-fetchtxs

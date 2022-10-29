@@ -2,6 +2,10 @@ extra:
 { config, lib, pkgs, ... }:
 
 let
+  jb55pkgs = import <jb55pkgs> { inherit pkgs; };
+
+  nostril = jb55pkgs.nostril;
+
   nix-bitcoin = import (pkgs.fetchFromGitHub {
     owner  = "fort-nix";
     repo   = "nix-bitcoin";
@@ -34,7 +38,7 @@ let
     addr = extra.private.btc-supplier-addr;
   };
 
-  walletemail = import ./walletemail.nix { inherit pkgs bcli; };
+  walletemail = import ./walletemail.nix { inherit pkgs bcli nostril; inherit (extra) private; };
 
   spark-module = import ./modules/spark-wallet.nix nix-bitcoin.spark-wallet;
   spark-port = 9962;
@@ -54,6 +58,14 @@ in
       listen 192.168.87.26:80;
 
       server_name wallet.jb55.com;
+
+      location /core/ {
+        alias /var/www/lnlink-core/;
+      }
+
+      location /cln/ {
+        alias /var/www/btcmerchant/;
+      }
 
       location / {
         proxy_pass  http://127.0.0.1:9962;
