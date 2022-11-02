@@ -6,7 +6,5 @@
 
 config_version: 2
 settings:
-  content.media.audio_capture:
-    https://meet.google.com: true
-  content.media.video_capture:
-    https://meet.google.com: true
+  content.notifications.enabled:
+    https://www.tiktok.com: false

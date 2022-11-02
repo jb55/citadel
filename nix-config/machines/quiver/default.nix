@@ -161,8 +161,6 @@ extra:
     };
 
     serviceConfig.ExecStart = extra.util.writeBash "battery-power" ''
-      set -e
-
       LED=/sys/class/leds/tpacpi::power
       LED2=/sys/class/leds/tpacpi::kbd_backlight
 

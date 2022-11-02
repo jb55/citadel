@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -eou pipefail
 
-datefmt '%m-%d' |
+datefmt --relative |
 fzf --tac --no-sort |
 cutt -f4,5

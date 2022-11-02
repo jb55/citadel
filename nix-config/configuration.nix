@@ -75,6 +75,10 @@ in {
     DefaultTimeoutStartSec=20s
   '';
 
+  i18n.extraLocaleSettings = {
+    LC_TIME="en_DK.UTF-8";
+  };
+
   documentation.nixos.enable = false;
   documentation.dev.enable = true;
   #documentation.man.generateCaches = true; # list manpages
@@ -87,6 +91,8 @@ in {
 
   nix.useSandbox = machine != "charon";
   nix.trustedUsers = [ "root" "jb55" ];
+
+  boot.blacklistedKernelModules = [ "pcspkr" ]; # STOP THE BEEPING
 
   users.extraUsers.jb55 = user;
   users.extraGroups.docker.members = [ "jb55" ];
