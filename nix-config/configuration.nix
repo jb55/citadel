@@ -90,6 +90,7 @@ in {
   nixpkgs.config = import ./nixpkgs/config.nix;
 
   nix.useSandbox = machine != "charon";
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nix.trustedUsers = [ "root" "jb55" ];
 
   boot.blacklistedKernelModules = [ "pcspkr" ]; # STOP THE BEEPING

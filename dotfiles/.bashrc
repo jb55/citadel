@@ -15,17 +15,18 @@ export NIX_PATH="dotfiles=$HOME/dotfiles:$NIX_PATH"
 # If not running interactively, don't do anything
 #[ -z "$PS1" ] && return
 
+export HOST=$(hostname)
 export LONG_RUNNING_COMMAND_TIMEOUT=3
-export PS1='$(printf "\x01\033[30;1m\x02%3.*s\x01\033[0m\x02> \x01\033[33m\x02" $? $?)'
+export PS1='$(printf "\x01\033[30;1m\x02%3.*s\x01\033[0m\x02 %s> \x01\033[33m\x02" $? $? $HOST)'
 export PS0='\033[0m'
 
 #export PS1='$(printf "\x01\033[30;1m\x02%3.*s\x01\033[0m\x02> " $? $?)'
 
 # don't put duplicate lines in the history. See bash(1) for more options
 export HISTSIZE=50000
-export HISTCONTROL=ignoredups
+#export HISTCONTROL=ignoredups
 # ... and ignore same sucessive entries.
-#export HISTCONTROL=ignoreboth
+export HISTCONTROL=ignoreboth
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.

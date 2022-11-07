@@ -5,6 +5,7 @@ afe	app > edit feeds	echo edit ~/dotfiles/rssfeeds
 aff	app > feeds	fuzz-rss "grep -v @busy"
 afp	app > feeds > podcasts	fuzz-rss "grep @pod"
 afu	app > update feeds	echo rssfeeds
+ada	app > direnv > allow	echo direnv allow
 afs	app > feeds > busy	fuzz-rss
 afa	app > feeds > arxiv	fuzz-rss "grep @arxiv"
 afy	app > feeds > youtube	fuzz-rss "grep @yt"

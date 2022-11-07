@@ -15,9 +15,8 @@ if [ "$USER" != "jb55" ]; then
 	USR="$USER "
 fi
 
-printf "%s%s %s %s\n" \
+printf "%s%s %s\n" \
 	"$USR" \
-	"$HOSTNAME" \
 	"$PWD" \
 	"$(git_status)"
 

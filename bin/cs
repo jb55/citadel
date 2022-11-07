@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-exec curl cheat.sh/$1
+exec curl -s cheat.sh/$1 | less
