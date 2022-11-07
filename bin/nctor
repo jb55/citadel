@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+nc -v -w 1 -x 127.0.0.1:9050 -z "$@"

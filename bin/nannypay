@@ -7,8 +7,6 @@ if [ -z "$NANNY" ]; then
     exit 1
 fi
 
-pay=25
-
 if [ -z $pay ]; then
     printf "unknown pay for %s\n" "$NANNY"
     exit 1
@@ -16,6 +14,8 @@ fi
 
 
 CSV="${NANNYPAY_CSV:-$HOME/.local/share/nannypay/${NANNY}.tsv}"
+
+set -e
 mkdir -p "$(dirname "$CSV")"
 if [ ! -f "$CSV" ]; then
     touch "$CSV"

@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+
+BITCOIN_RPCUSER=rpcuser
+BITCOIN_RPCPASS=rpcpass
+BITCOIN_RPCPORT=${BITCOIN_RPCPORT:-8332}
+BITCOIN_HOST=${BITCOIN_HOST:-127.0.0.1}
+
+mkreq () {
+    (
+        printf '['
+        echo ${1#","}
+        printf ']'
+    )
+}
+
+doreq() {
+    local host="http://${BITCOIN_HOST}:${BITCOIN_RPCPORT}"
+    mkreq "$1" |
+    curl -s -u $BITCOIN_RPCUSER:$BITCOIN_RPCPASS \
+        --data-binary @- \
+        -H 'content-type: text/plain;' "$host"
+}
+
+make_hash_reqs() {
+        xargs printf ',{"jsonrpc": "1.0", "id":"blockhashes", "method": "getblockhash", "params": [%d] }\n'
+}
+
+make_block_reqs() {
+        xargs printf ',{"jsonrpc": "1.0", "id":"blocks", "method": "getblock", "params": ["%s", 2] }\n'
+}
+
+block_reqs=$(
+doreq "$(make_hash_reqs)" |
+jq -cr '.[].result' |
+make_block_reqs
+)
+
+doreq "$block_reqs" | jq -cr '.[].result'

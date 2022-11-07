@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+BITCOIN_RPCUSER=rpcuser
+BITCOIN_RPCPASS=rpcpass
+BITCOIN_RPCPORT=${BITCOIN_RPCPORT:-8332}
+BITCOIN_HOST=${BITCOIN_HOST:-127.0.0.1}
+
+mkreq () {
+    (
+        printf '['
+        echo ${1#","}
+        printf ']'
+    )
+}
+
+doreq() {
+    local host="http://${BITCOIN_HOST}:${BITCOIN_RPCPORT}"
+    mkreq "$1" |
+    curl -s -u $BITCOIN_RPCUSER:$BITCOIN_RPCPASS \
+        --data-binary @- \
+        -H 'content-type: text/plain;' "$host"
+}
+
+make_reqs() {
+        xargs printf ',{"jsonrpc": "1.0", "id":"get_txids", "method": "getrawtransaction", "params": ["%s", 1] }\n'
+}
+
+txid_reqs=$(make_reqs)
+
+doreq "$txid_reqs" | jq '.[].result'

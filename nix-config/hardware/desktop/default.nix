@@ -84,7 +84,7 @@ in
     EndSection
   '';
 
-  services.printing.drivers = [ pkgs.cups-brother-hll2370dw ];
+  #services.printing.drivers = [ pkgs.cups-brother-hll2370dw ];
 
   boot.blacklistedKernelModules = ["dvb_usb_rtl28xxu"];
   fileSystems."/media/kindle" =

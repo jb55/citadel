@@ -416,6 +416,14 @@ in
   #   '';
   # };
 
+  # for kmsgrab streaming
+  security.wrappers.ffmpeg = {
+    source = "${pkgs.ffmpeg}/bin/ffmpeg";
+    capabilities = "cap_sys_admin+ep";
+    owner = "root";
+    group = "root";
+  };
+
   # security.pam.u2f = {
   #   enable = true;
   #   interactive = true;
