@@ -21,13 +21,18 @@ in rec {
   dbopen      = callPackage ./pkgs/dbopen { };
   extname     = callPackage ./pkgs/extname { };
   mandown     = callPackage ./pkgs/mandown { };
-  sharefile   = callPackage ./pkgs/sharefile { };
   samp        = callPackage ./pkgs/samp { };
 
   define = callPackage ./pkgs/define { };
   rsslink = callPackage ./pkgs/rsslink { };
   x11-rename = callPackage ./pkgs/x11-rename { };
   hoogle-zen = callPackage ./pkgs/hoogle-zen { };
+
+  sharefile = fetch-jb55  { 
+    repo = "sharefile";
+    rev  = "9a6b16f13d94833cd1801d5d7a926d5422054d74";
+    sha256 = "sha256-zIZ+lyjvBI72AQMCjWw/pRE1gWR1BZeg5Y/2kqo61kY=";
+  };
 
   ratio = fetch-jb55 {
     repo = "ratio";
