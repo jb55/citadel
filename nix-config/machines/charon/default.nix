@@ -18,16 +18,55 @@ let gitExtra = {
       sha256 = "16cjcz2cakrgl3crn63s5w1k4h4y51h8v0326v5bim8r1hxrpq4n";
     }) {}).package;
 
+    lnurl-commando = (import (pkgs.fetchFromGitHub {
+      owner  = "jb55";
+      repo   = "lnurl-commando";
+      rev    = "1abfb1d03c49be2c73517f3f576fe5299952a077";
+      sha256 = "0h4s1aqvydaj32ahjx4x9f28s8z7dxwsmf0knajmb6fidgyjxj7p";
+    }) {}).package;
+
+    ln-proxy-port = "8777";
+    sendsats-port = "8193";
+
+    ln-ws-proxy = (import (pkgs.fetchFromGitHub {
+      owner = "jb55";
+      repo  = "ln-ws-proxy";
+      rev   = "d201ba9f4f8a7c55e97c2c718837cccca7e50338";
+      sha256 = "1j43mzm0g0051n5lb231vmkxg75v0bdx0pqprix24xav5jw2a19c";
+    }) {}).package;
+    
+    sendsatslol = (import (pkgs.fetchzip {
+      url = "https://jb55.com/s/sendsatslol.tar.gz";
+      sha256 = "11jn5sxppc62zpck9i9cqalh5par33xxkm8qlxb7xscykr3qdfv4";
+    }) {}).package;
+
     pgpkeys = pkgs.fetchurl {
       url = "https://jb55.com/s/329bdbb1552cf060.pub";
       sha256 = "91ec02a43317289057c3f7c4f4129558ae799a4789a98bda0fd9360142096731";
     };
 
+    laser-eyes = pkgs.fetchurl {
+      url = "https://jb55.com/s/laser-eyes.png";
+      sha256 = "b4c54a631168a3d970c7cb89e3753ecc02f8850ad381b9c0b41979e3a248ca3f";
+    };
+
     nip05 = pkgs.writeText "nip05.json" ''
     {
       "names": {
-        "jb55": "fd3fdb0d0d8d6f9a7667b53211de8ae3c5246b79bdaf64ebac849d5148b5615f",
-        "_": "fd3fdb0d0d8d6f9a7667b53211de8ae3c5246b79bdaf64ebac849d5148b5615f"
+        "jb55": "32e1827635450ebb3c5a7d12c1f8e7b2b514439ac10a67eef3d9fd9c5c68e245",
+        "notepad": "4570d7a0b49b5524797120810116a2a5c18281423b173a557056f08f15c5382d",
+        "clightning": "9630f464cca6a5147aa8a35f0bcdd3ce485324e732fd39e09233b1d848238f31",
+        "minebot": "6cad545430904b84a8101c5783b65043f19ae29d2da1076b8fc3e64892736f03",
+        "gpt3": "5c10ed0678805156d39ef1ef6d46110fe1e7e590ae04986ccf48ba1299cb53e2",
+        "_": "32e1827635450ebb3c5a7d12c1f8e7b2b514439ac10a67eef3d9fd9c5c68e245"
+      },
+
+      "relays": {
+        "32e1827635450ebb3c5a7d12c1f8e7b2b514439ac10a67eef3d9fd9c5c68e245": ["wss://relay.damus.io"],
+        "4570d7a0b49b5524797120810116a2a5c18281423b173a557056f08f15c5382d": ["wss://relay.damus.io"],
+        "9630f464cca6a5147aa8a35f0bcdd3ce485324e732fd39e09233b1d848238f31": ["wss://relay.damus.io"],
+        "6cad545430904b84a8101c5783b65043f19ae29d2da1076b8fc3e64892736f03": ["wss://relay.damus.io"],
+        "5c10ed0678805156d39ef1ef6d46110fe1e7e590ae04986ccf48ba1299cb53e2": ["wss://relay.damus.io"]
       }
     }
     '';
@@ -250,6 +289,46 @@ in
     #'';
   };
 
+  systemd.services.sendsatslol = {
+    description = "sendsatslol";
+
+    wantedBy = [ "multi-user.target" ];
+
+    environment = {
+      PORT = sendsats-port;
+    };
+
+    serviceConfig.Restart = "always";
+    serviceConfig.WorkingDirectory = "/www/sendsats.lol";
+    serviceConfig.Type = "simple";
+    serviceConfig.ExecStart = "${sendsatslol}/lib/node_modules/sendsats.lol/sendsats";
+  };
+
+  systemd.services.ln-ws-proxy = {
+    description = "ln-ws-proxy";
+
+    wantedBy = [ "multi-user.target" ];
+
+    environment = {
+      PORT = ln-proxy-port;
+    };
+
+    serviceConfig.Restart = "always";
+    serviceConfig.Type = "simple";
+    serviceConfig.ExecStart = "${ln-ws-proxy}/lib/node_modules/ln-ws-proxy/ln-ws-proxy";
+  };
+
+  systemd.services.lnurl-commando = {
+    description = "lnurl-commando";
+
+    wantedBy = [ "multi-user.target" ];
+
+    serviceConfig.Type = "simple";
+    serviceConfig.ExecStart = ''
+    ${lnurl-commando}/lib/node_modules/lnurl-commando/lnurl-commando --nodeid 03f3c108ccd536b8526841f0a5c58212bb9e6584a1eb493080e7c1cc34f82dad71 --host 24.84.152.187:443 --rune 'CFZ1H1X34ZjHYEciNUNeFLSLlz-KM6jTJF4UpejtQZM9MTEmbWV0aG9kPWludm9pY2U=' --callback 'https://jb55.com/pr' --description "jb55's lightning address" --longDescription "Welcome to my clightning-powered lightning address. Any donation is greatly appreciated!" --thumbnail ${laser-eyes} --identifier "jb55@jb55.com" 
+    '';
+  };
+
   systemd.services.npmrepo = {
     description = "npmrepo.com";
 
@@ -262,7 +341,9 @@ in
   services.fcgiwrap.enable = true;
 
   services.nginx.httpConfig = ''
-    limit_req_zone $server_name zone=email_form:10m rate=3r/m;
+    limit_req_zone $binary_remote_addr zone=email_form:10m rate=3r/m;
+    limit_req_zone $binary_remote_addr zone=payreq:10m rate=10r/m;
+
 
     server {
       listen 443 ssl;
@@ -303,9 +384,36 @@ in
       server_name cdn.jb55.com;
 
       location / {
+        add_header 'Access-Control-Allow-Origin' '*' always;
+        add_header 'Access-Control-Expose-Headers' 'Content-Length' always;
+
         autoindex on;
         root /www/cdn.jb55.com;
       }
+    }
+
+    server {
+      listen 80;
+      listen [::]:80;
+
+      server_name damus.io;
+
+      location / {
+        autoindex on;
+        root /www/damus.io;
+      }
+
+      location /code {
+        return 301 https://github.com/damus-io;
+      }
+    }
+
+    server {
+      listen 80;
+      listen [::]:80;
+
+      server_name www.damus.io;
+      return 301 https://damus.io$request_uri;
     }
 
     server {
@@ -405,11 +513,29 @@ in
     server {
       listen 80;
       listen [::]:80;
-      server_name lnlink.app;
+      server_name lnlink.org www.lnlink.org tls.lnlink.org;
+      root /www/jb55/public/lnlink/link;
+    }
+
+    server {
+      listen 80;
+      listen [::]:80;
+      server_name proxy.lnlink.org;
 
       location / {
-        root /www/lnlink.app;
+        proxy_pass http://127.0.0.1:${ln-proxy-port};
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "Upgrade";
+        proxy_set_header Host $host;
       }
+    }
+
+    server {
+      listen 80;
+      listen [::]:80;
+      server_name lnlink.app;
+      root /www/jb55/public/lnlink;
     }
 
     server {
@@ -426,8 +552,45 @@ in
     }
 
     server {
-      listen 443 ssl;
-      listen [::]:443 ssl;
+      listen 80;
+      listen [::]:80;
+      
+      server_name sendsats.lol;
+
+      location / {
+        index index.html;
+        root /www/sendsats.lol/public;
+      }
+
+      location /.well-known/lnurlp {
+        proxy_set_header Host $host;
+        proxy_redirect off;
+        proxy_pass http://127.0.0.1:${sendsats-port}$request_uri;
+      }
+
+      location ~ /@ {
+        proxy_set_header Host $host;
+        proxy_redirect off;
+        proxy_pass http://127.0.0.1:${sendsats-port}$request_uri;
+      }
+
+
+    }
+
+    server {
+      listen 80;
+      listen [::]:80;
+
+      server_name www.sendsats.lol;
+
+      location / {
+        return 301 https://sendsats.lol$request_uri;
+      }
+    }
+
+    server {
+      listen 443 ;
+      listen [::]:443 ;
 
       server_name jb55.com;
       root /www/jb55/public;
@@ -439,6 +602,24 @@ in
       rewrite ^/pkgs.tar.gz$ https://github.com/jb55/jb55pkgs/archive/master.tar.gz permanent;
       rewrite ^/pkgs/?$ https://github.com/jb55/jb55pkgs/archive/master.tar.gz permanent;
 
+      location /.well-known/acme-challenge {
+        root /var/www/challenges;
+      }
+
+      location /.well-known/lnurlp/jb55/ {
+        proxy_set_header Host $host;
+        proxy_redirect off;
+        proxy_pass http://127.0.0.1:8083/;
+      }
+
+      location /pr/ {
+        limit_req zone=payreq;
+
+        proxy_set_header Host $host;
+        proxy_redirect off;
+        proxy_pass http://127.0.0.1:8083/;
+      }
+
       location /inbox {
         proxy_set_header Host $host;
         proxy_redirect off;
@@ -447,7 +628,7 @@ in
 
       location / {
         gzip on;
-        gzip_types application/json;
+        gzip_types application/json application/wasm;
         charset utf-8;
 
         proxy_set_header Host $host;
@@ -484,6 +665,10 @@ in
 
       location = /social {
         return 302 https://bitcoinhackers.org/users/jb55;
+      }
+
+      location = /tftc {
+        return 302 https://www.youtube.com/watch?v=_Y_Mlk__KR0;
       }
 
       location /phlog {
@@ -539,32 +724,30 @@ in
       listen 80;
       listen [::]:80;
 
+      server_name cln.jb55.com;
+
+      location /.well-known/acme-challenge {
+        root /var/www/challenges;
+      }
+
+      location / {
+        return 301 https://cln.jb55.com$request_uri;
+      }
+    }
+
+    server {
+      listen 80;
+      listen [::]:80;
+
       server_name jb55.com www.jb55.com;
 
       location /.well-known/acme-challenge {
         root /var/www/challenges;
       }
 
-      location ~ ^/[01] {
-        proxy_pass  http://localhost:7070;
-        proxy_next_upstream error timeout invalid_header http_500 http_502 http_503 http_504;
-        proxy_redirect off;
-        proxy_buffering off;
-        proxy_set_header        Host            $host;
-        proxy_set_header        X-Real-IP       $remote_addr;
-        proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
-      }
-
       location / {
         return 301 https://jb55.com$request_uri;
       }
-    }
-    server {
-      listen 443 ssl;
-      listen [::]:443 ssl;
-
-      server_name www.jb55.com;
-      return 301 https://jb55.com$request_uri;
     }
 
   '';

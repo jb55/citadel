@@ -15,6 +15,13 @@ in
   networking.firewall.allowedTCPPorts = with ports; [ 22 443 80 70 12566 12788 5222 5269 3415 git gemini ];
   networking.firewall.allowedUDPPorts = with ports; [ wireguard ];
 
+  networking.tempAddresses = "disabled";
+  networking.enableIPv6 = true;
+  networking.interfaces.enp0s3.ipv6.addresses = [ {
+    address = "2600:3c01::f03c:91ff:fe08:5bfb";
+    prefixLength = 64;
+  } ];
+
   networking.domain = "jb55.com";
   networking.search = [ "jb55.com" ];
   networking.extraHosts = ''
@@ -47,11 +54,11 @@ in
         { publicKey = "wcoun9+1GX4awQF2Yd0WbsQ6RKHE9SsOsYv3qR7mbB0="; # quiver
           allowedIPs = [ "10.100.0.2/32" ];
         }
-	{ publicKey = "vIh3IQgP92OhHaC9XBiJVDLlrs3GVcR6hlXaapjTiA0="; # phone
-          allowedIPs = [ "10.100.0.3/32" ];
-        }
         { publicKey = "Dp8Df75X8Kh9gd33e+CWyyhOvT4mT0X9ToPwBUEBU1k="; # mac
           allowedIPs = [ "10.100.0.4/32" ];
+        }
+	      { publicKey = "fj35gCObJ+uP/8tDpYsAD+b2XuSpa82umL/8LscIHwQ="; # pixel6
+          allowedIPs = [ "10.100.0.9/32" ];
         }
       ];
     };

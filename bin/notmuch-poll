@@ -73,7 +73,7 @@ notmuchcmd tag +work +commit -filed tag:inbox and to:will.casarin@commit.dev
 notmuchcmd tag +work +commit tag:github and tag:inbox and to:commitdev
 
 # except if someone mentions e
-notmuchcmd tag +flagged -busy -filed tag:inbox and '(tag:list and tag:to-me) or to:mention@noreply.github.com or author@noreply.github.com or to:review_requested@noreply.github.com or to:comment@noreply.github.com or (subject:jb55 and tag:github)'
+notmuchcmd tag +flagged -busy -filed tag:inbox and '(tag:list and tag:to-me) or to:mention@noreply.github.com or author@noreply.github.com or to:ci_activity@noreply.github.com or to:review_requested@noreply.github.com or to:comment@noreply.github.com or (subject:jb55 and tag:github) or damus or nostr or ((usdt or ebpf or bpf or tracepoints) and bitcoin)'
 
 # spam
 notmuchcmd tag +spam -inbox 'from:"BOOM OF SALES"' and tag:inbox
