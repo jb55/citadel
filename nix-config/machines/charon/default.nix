@@ -36,8 +36,8 @@ let gitExtra = {
     }) {}).package;
     
     sendsatslol = (import (pkgs.fetchzip {
-      url = "https://jb55.com/s/sendsatslol.tar.gz";
-      sha256 = "11jn5sxppc62zpck9i9cqalh5par33xxkm8qlxb7xscykr3qdfv4";
+      url = "https://jb55.com/s/sendsatslol-1.2.3.tar.gz";
+      sha256 = "0dhidndp59332kmnfrrz64lnvsczbddsfabh1c8gglzl7l5yv4vd";
     }) {}).package;
 
     pgpkeys = pkgs.fetchurl {
@@ -55,6 +55,7 @@ let gitExtra = {
       "names": {
         "jb55": "32e1827635450ebb3c5a7d12c1f8e7b2b514439ac10a67eef3d9fd9c5c68e245",
         "notepad": "4570d7a0b49b5524797120810116a2a5c18281423b173a557056f08f15c5382d",
+        "btc": "21763c71793764a2661eb10ede32a8f2312c9f8db08bc539c888bafa38dcf368",
         "clightning": "9630f464cca6a5147aa8a35f0bcdd3ce485324e732fd39e09233b1d848238f31",
         "minebot": "6cad545430904b84a8101c5783b65043f19ae29d2da1076b8fc3e64892736f03",
         "gpt3": "5c10ed0678805156d39ef1ef6d46110fe1e7e590ae04986ccf48ba1299cb53e2",
@@ -344,7 +345,6 @@ in
     limit_req_zone $binary_remote_addr zone=email_form:10m rate=3r/m;
     limit_req_zone $binary_remote_addr zone=payreq:10m rate=10r/m;
 
-
     server {
       listen 443 ssl;
       listen [::]:443 ssl;
@@ -387,6 +387,7 @@ in
         add_header 'Access-Control-Allow-Origin' '*' always;
         add_header 'Access-Control-Expose-Headers' 'Content-Length' always;
 
+        charset utf-8;
         autoindex on;
         root /www/cdn.jb55.com;
       }
@@ -401,10 +402,74 @@ in
       location / {
         autoindex on;
         root /www/damus.io;
+
+        add_header 'Access-Control-Allow-Origin' '*' always;
+        add_header 'Access-Control-Expose-Headers' 'Content-Length' always;
+      }
+
+      location ~* "^/(?<note>note1[qpzry9x8gf2tvdw0s3jn54khce6mua7l]{58})/?$" {
+        return 302 https://snort.social/e/$note;
+      }
+
+      location ~* "^/r/(?<note>note1[qpzry9x8gf2tvdw0s3jn54khce6mua7l]{58})/?$" {
+        return 302 https://snort.social/e/$note;
+      }
+
+      location ~* "^/r/(?<pk>npub1[qpzry9x8gf2tvdw0s3jn54khce6mua7l]{58})/?$" {
+        return 302 https://snort.social/p/$pk;
+      }
+
+      location ~* "^/(?<pk>npub1[qpzry9x8gf2tvdw0s3jn54khce6mua7l]{58})/?$" {
+        return 302 https://snort.social/p/$pk;
+      }
+
+      location /github-hook {
+        proxy_pass http://localhost:3111;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+      }
+
+      location /email {
+        limit_req zone=email_form;
+        gzip off;
+        # fcgiwrap is set up to listen on this host:port
+        fastcgi_pass                  unix:${config.services.fcgiwrap.socketAddress};
+        include                       ${pkgs.nginx}/conf/fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME /www/damus.io/emailform.py;
+
+        client_max_body_size 512;
+
+        # export all repositories under GIT_PROJECT_ROOT
+
+        fastcgi_param PATH_INFO           $uri;
+      }
+
+      location /appstore {
+        return 301 https://apps.apple.com/us/app/damus/id1628663131;
+      }
+
+      location /devchat {
+        return 301 https://t.me/+abMSAEO6ho8xYjdh;
+      }
+
+      location /testflight {
+        return 301 https://testflight.apple.com/join/CLwjLxWl;
       }
 
       location /code {
-        return 301 https://github.com/damus-io;
+        return 301 https://github.com/damus-io/damus/pulls;
+      }
+
+      location /figma {
+        return 301 https://www.figma.com/file/ORaT1T0Ywfbm0sIjwy5Rgq/Damus-iOS?type=design&node-id=0-1&t=AGpDcKb6rHfpQ9CA-0;
+      }
+
+      location /merch/hat {
+        return 302 http://lnlink.org/?d=ASED88EIzNU2uFJoQfClxYISu55lhKHrSTCA58HMNPgtrXECMjQuODQuMTUyLjE4Nzo4MzI0AANgB6Cj2QCeZAFOZ1nS6qGuRe4Vf6qzwJyQ5Qo3b0HRt_w9MTIwJm1ldGhvZD1pbnZvaWNlfG1ldGhvZD13YWl0aW52b2ljZSZwbmFtZWxhYmVsXmxubGluay0mcmF0ZT04BERhbXVzIEhhdAAFAALG8AZUaGFua3MgZm9yIHN1cHBvcnRpbmcgRGFtdXMhAA==;
+      }
+
+      location /merch {
+        return 302 http://lnlink.org/?d=ASED88EIzNU2uFJoQfClxYISu55lhKHrSTCA58HMNPgtrXECMjQuODQuMTUyLjE4Nzo4MzI0AANgB6Cj2QCeZAFOZ1nS6qGuRe4Vf6qzwJyQ5Qo3b0HRt_w9MTIwJm1ldGhvZD1pbnZvaWNlfG1ldGhvZD13YWl0aW52b2ljZSZwbmFtZWxhYmVsXmxubGluay0mcmF0ZT04BERhbXVzIE1lcmNoAAUAAfvQBlRoYW5rcyBmb3Igc3VwcG9ydGluZyBkYW11cyEA;
       }
     }
 
@@ -563,12 +628,24 @@ in
       }
 
       location /.well-known/lnurlp {
+        add_header 'Access-Control-Allow-Origin' '*' always;
+        add_header 'Access-Control-Expose-Headers' 'Content-Length' always;
+
+        proxy_set_header Host $host;
+        proxy_redirect off;
+        proxy_pass http://127.0.0.1:${sendsats-port}$request_uri;
+      }
+
+      location /tips/jb55 {
         proxy_set_header Host $host;
         proxy_redirect off;
         proxy_pass http://127.0.0.1:${sendsats-port}$request_uri;
       }
 
       location ~ /@ {
+        add_header 'Access-Control-Allow-Origin' '*' always;
+        add_header 'Access-Control-Expose-Headers' 'Content-Length' always;
+
         proxy_set_header Host $host;
         proxy_redirect off;
         proxy_pass http://127.0.0.1:${sendsats-port}$request_uri;
@@ -606,10 +683,8 @@ in
         root /var/www/challenges;
       }
 
-      location /.well-known/lnurlp/jb55/ {
-        proxy_set_header Host $host;
-        proxy_redirect off;
-        proxy_pass http://127.0.0.1:8083/;
+      location /.well-known/lnurlp/jb55 {
+        return 302 https://sendsats.lol/.well-known/lnurlp/jb55;
       }
 
       location /pr/ {
