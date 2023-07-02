@@ -40,6 +40,7 @@
   f = fetch -p
   br = symbolic-ref --short HEAD
   ca = commit --amend
+  cp = cherry-pick
   mlap = push monad HEAD:laptop
   c = commit
   cloner = clone --recursive
@@ -71,6 +72,7 @@
   stat2 = log --stat --pretty=format:'%C(auto,yellow)%h%C(auto,magenta)% G? %C(auto,blue)%>(12,trunc)%cr %C(auto,green)%aN %C(auto,red)%D %n%n   %C(auto,reset)%s%n'
   st = status
   tagd = !"git tag --format='%(creatordate:short)%09%(refname:strip=2)' | sort"
+  authors = !"git log --format='%aN <%aE>' | sort -u"
   tg = log --date-order --tags --simplify-by-decoration --pretty=format:'%ai %h %d'
   try = merge --no-commit --no-ff
   co = checkout
@@ -91,6 +93,8 @@
 	program = /home/jb55/bin/ots-git
 [magit]
 	hideCampaign = true
+[nostr]
+	relays = wss://relay.damus.io wss://nos.lol wss://nostr.wine
 [github]
 	user = jb55
 [grep]
