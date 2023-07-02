@@ -460,6 +460,22 @@ in
         return 301 https://github.com/damus-io/damus/pulls;
       }
 
+      location /list/patches {
+        return 301 https://groups.google.com/a/damus.io/g/patches;
+      }
+
+      location /list/product {
+        return 301 https://groups.google.com/a/damus.io/g/product;
+      }
+
+      location /list/design {
+        return 301 https://groups.google.com/a/damus.io/g/design;
+      }
+
+      location /list/dev {
+        return 301 https://groups.google.com/a/damus.io/g/dev;
+      }
+
       location /figma {
         return 301 https://www.figma.com/file/ORaT1T0Ywfbm0sIjwy5Rgq/Damus-iOS?type=design&node-id=0-1&t=AGpDcKb6rHfpQ9CA-0;
       }
