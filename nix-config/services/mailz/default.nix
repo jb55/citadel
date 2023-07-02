@@ -279,30 +279,8 @@ in
 
           ${mailbox "Alerts"}
           ${mailbox "Bulk"}
-          ${mailbox "RSS"}
           ${mailbox "GitHub"}
           ${mailbox "Lists"}
-          ${mailbox "YouTube"}
-          ${mailbox "Lists.ats"}
-          ${mailbox "Arxiv"}
-          ${mailbox "Reddit"}
-          ${mailbox "Lists.lobsters"}
-          ${mailbox "Lists.icn"}
-          ${mailbox "HackerNews"}
-          ${mailbox "Lists.craigslist"}
-          ${mailbox "Lists.bitcoin"}
-          ${mailbox "Lists.elm"}
-          ${mailbox "Lists.emacs"}
-          ${mailbox "Lists.guix"}
-          ${mailbox "Lists.haskell"}
-          ${mailbox "Lists.lkml"}
-          ${mailbox "Lists.nix"}
-          ${mailbox "Lists.nixpkgs"}
-          ${mailbox "Lists.shen"}
-          ${mailbox "Lists.spacemacs"}
-          ${mailbox "Monstercat"}
-          ${mailbox "Updates"}
-
         }
 
         protocol lmtp {
