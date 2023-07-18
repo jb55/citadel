@@ -9,11 +9,11 @@ let
   nix-bitcoin = import (pkgs.fetchFromGitHub {
     owner  = "fort-nix";
     repo   = "nix-bitcoin";
-    rev    = "v0.0.44";
-    sha256 = "08qn597r3xnqg9s7bnkssf4xcxvm0lf6xmisr86nkp2gammazc42";
+    rev    = "v0.0.89";
+    sha256 = "sha256-SMJW+QZt3iRuoezjE12sopBsdLHDihXe/RerLfRpqoI=";
   }) { inherit pkgs; };
 
-  plugins = ["summary" "rebalance"];
+  plugins = ["summary"];
 
   mkPluginCfg = name:
     "plugin=${builtins.getAttr name (nix-bitcoin.clightning-plugins)}/${name}.py";
@@ -91,25 +91,25 @@ in
     };
   };
 
-  services.clightning.networks = {
-    mainnet = {
-      dataDir = "/home/jb55/.lightning-bitcoin";
+  #services.clightning.networks = {
+  #  mainnet = {
+  #    dataDir = "/home/jb55/.lightning-bitcoin";
 
-      config = ''
-        bitcoin-rpcuser=rpcuser
-        bitcoin-rpcpassword=rpcpass
-        bitcoin-rpcconnect=127.0.0.1
-        bitcoin-rpcport=8332
-        fee-per-satoshi=900
-        bind-addr=0.0.0.0:9735
-        announce-addr=24.84.152.187:9735
-        network=bitcoin
-        alias=jb55.com
-        rgb=ff0000
-        proxy=127.0.0.1:9050
-        experimental-offers
-        ${lib.concatStringsSep "\n" (map mkPluginCfg plugins)}
-      '';
-    };
-  };
+  #    config = ''
+  #      bitcoin-rpcuser=rpcuser
+  #      bitcoin-rpcpassword=rpcpass
+  #      bitcoin-rpcconnect=127.0.0.1
+  #      bitcoin-rpcport=8332
+  #      fee-per-satoshi=900
+  #      bind-addr=0.0.0.0:9735
+  #      announce-addr=24.84.152.187:9735
+  #      network=bitcoin
+  #      alias=jb55.com
+  #      rgb=ff0000
+  #      proxy=127.0.0.1:9050
+  #      experimental-offers
+  #      ${lib.concatStringsSep "\n" (map mkPluginCfg plugins)}
+  #    '';
+  #  };
+  #};
 }

@@ -118,7 +118,7 @@ in {
     VK_ICD_FILENAMES = "/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json"; # radv
   };
 
-  programs.steam.enable = false;
+  programs.steam.enable = true;
 
   environment.systemPackages = if extra.is-minimal then (with pkgs; [
     #steam

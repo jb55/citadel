@@ -107,14 +107,9 @@ in
   services.dnsmasq.resolveLocalQueries = true;
   #services.dnsmasq.servers = ["127.0.0.1#43"];
   # services.dnsmasq.servers = ["127.0.0.1#43" "1.1.1.1" "8.8.8.8"];
-  services.dnsmasq.servers = ["8.8.8.8" "8.8.4.4" ];
-  services.dnsmasq.extraConfig = ''
-    cache-size=10000
-    addn-hosts=/var/hosts
-    conf-file=/var/dnsmasq-hosts
-    conf-file=/var/distracting-hosts
-  '';
-
+  services.dnsmasq.settings.server = ["8.8.8.8" "8.8.4.4" ];
+  services.dnsmasq.settings.conf-file = "/var/dnsmasq-hosts";
+  services.dnsmasq.settings.addn-hosts = "/var/hosts";
 
   services.bitlbee.plugins = with pkgs; [
     bitlbee-mastodon
@@ -141,7 +136,7 @@ in
   };
 
   systemd.user.services.bitcoin-contacts = {
-    enable = if extra.is-minimal then false else true;
+    enable = false;
     description = "Email bitcoin PR patches that have me as a git-contact";
 
     wantedBy    = [ "graphical-session.target" ];
@@ -322,6 +317,20 @@ in
   systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
   services.nginx.httpConfig = ''
       server {
+        listen 80 default_server;
+        listen ${extra.machine.ztip}:80 default_server;
+        listen 192.168.87.26 default_server;
+
+        server_name monad.jb55.com;
+
+        location / {
+          root                  /var/www/public;
+          autoindex on;
+          index index.html;
+        }
+      }
+
+      server {
         listen 80;
         listen ${extra.machine.ztip}:80;
         listen 192.168.87.26;
@@ -377,7 +386,7 @@ in
     serviceConfig.Type = "oneshot";
     serviceConfig.ExecStart = util.writeBash "disable-c6-state" ''
       ${pkgs.kmod}/bin/modprobe msr
-      ${pkgs.python2}/bin/python ${zenstates}/zenstates.py --c6-disable --list
+      ${pkgs.python3}/bin/python ${zenstates}/zenstates.py --c6-disable --list
     '';
   };
 

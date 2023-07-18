@@ -15,3 +15,4 @@ hardstatus string '%{= 9b}[ %{B}%H %{b}][%= %{= 9w}%?%-Lw%?%{=b 9R}(%{W}%n*%f %t
 
 maptimeout 0
 
+truecolor on

@@ -54,6 +54,7 @@ nt	notmuch threads	fuzz-notmuch-threads
 of	open file	fuzz-open-file
 olf	open last files	fuzz-last-files open
 pc	cat project file	fuzz-cat-file
+pr	cd project root	echo cd $(project-root)
 pf	edit project file	fuzz-edit-file
 ps	edit project skeletons	fuzz-edit-file --dir ~/dotfiles/skeletons
 rf	recent files	fuzz-recent-files
