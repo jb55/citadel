@@ -44,9 +44,17 @@ gpm	git mlap	echo git mlap
 h	run history	fuzz-run-hist
 jt	jump tag	fuzz-jump-tag
 nai	notmuch archive inbox	fuzz-notmuch-archive-inbox
+nep	notmuch edit poll	echo vim scp://charon//home/jb55/bin/notmuch-poll
 nam	notmuch am	fuzz-notmuch-am
 ng	notmuch github patch	fuzz-notmuch-gam
 nat	notmuch archive	fuzz-notmuch-archive
+nm	notmuch muchsync	echo muchsync charon
+m	mutt	echo neomutt
+mp	mutt prs	echo neomutt -f damus-prs
+mi	mutt issues	echo neomutt -f damus-issues
+min	mutt issues noelsat	echo neomutt -f damus-issues-no-elsat
+mai	mutt all issues	echo neomutt -f damus-all-issues
+main	mutt all issues noelsat	echo neomutt -f damus-all-issues-no-elsat
 Nc	new command	echo make-script
 ni	notmuch inbox	fuzz-notmuch-inbox
 nT	email today	echo f nt query:today

@@ -10,15 +10,24 @@ git_status () {
 	fi
 }
 
+mail_status() {
+	queued=$(msmtp-queue 2>&1| grep '^\s*mail' | wc -l)
+	if [[ $queued -gt 0 ]]
+	then
+		echo "${queued}x📤"
+	fi
+}
+
 USR=""
 if [ "$USER" != "jb55" ]; then
 	USR="$USER "
 fi
 
-printf "%s%s %s\n" \
+printf "%s%s %s %s\n" \
 	"$USR" \
 	"$PWD" \
-	"$(git_status)"
+	"$(git_status)" \
+	"$(mail_status)"
 
 #if git rev-parse --is-inside-work-tree >/dev/null 2>/dev/null; then
 #	printf "\n"

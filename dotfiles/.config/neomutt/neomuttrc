@@ -17,25 +17,21 @@ set reverse_name=yes
 set reverse_realname=no
 alternates ^jb55@jb55.com$ ^will.casarin@steamoji.com$
 
+
+set use_threads=yes
+
 #set sort = threads
 #set sort_aux = reverse-last-date-received
-#set sort = reverse-last-date-received
-set sort = last-date-received
+set sort = reverse-last-date-received
+#set sort = last-date-received
 
 virtual-mailboxes \
   "INBOX" "notmuch://?query=query:inbox" \
-  "nixpkgs-dev" "notmuch://?query=query:nixpkgs" \
-  "2day" "notmuch://?query=query:2day" \
-  "best" "notmuch://?query=query:best" \
-  "bitcoin" "notmuch://?query=query:bitcoin" \
-  "flagged" "notmuch://?query=query:flagged" \
-  "github" "notmuch://?query=query:github" \
-  "lightning" "notmuch://?query=query:lightning" \
-  "list" "notmuch://?query=query:list" \
-  "nixpkgs" "notmuch://?query=query:nixpkgs" \
-  "notmuch" "notmuch://?query=query:notmuch" \
-  "today" "notmuch://?query=query:today" \
-  "work" "notmuch://?query=query:work"
+  "damus-prs" "notmuch://?query=query:damusp" \
+  "damus-issues" "notmuch://?query=query:damusi" \
+  "damus-all-issues" "notmuch://?query=query:damus-all-issues" \
+  "damus-all-issues-no-elsat" "notmuch://?query=query:damus-all-issues-no-elsat" \
+  "damus-issues-no-elsat" "notmuch://?query=query:damusinoelsat"
 
 macro index,pager a "<modify-labels>-unread -inbox<enter>
 macro index,pager A "<create-alias>" "Create alias"
@@ -74,4 +70,3 @@ set collapse_unread=yes
 set uncollapse_jump=yes
 
 source ~/.mail_aliases
-

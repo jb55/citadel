@@ -1,0 +1,16 @@
+res=$(lcli decode "$@") 
+
+echo "$res"
+
+<<<"$res" jq -r '.created_at' | xargs -I{} datediff -f '%Hh %Mm %Ss created ago' -i '%s'  now {}
+<<<"$res" jq -r '.created_at + .expiry' | xargs -I{} datediff -f '%Hh %Mm %Ss until expiry' -i '%s'  now {}
+
+amount=$(<<<"$res" jq -r .amount_msat)
+
+if [[ $amount == "null" ]]
+then
+	echo "any amount"
+else
+	bcalc "$amount msat to sats"
+fi
+
