@@ -2,11 +2,6 @@
 
 set -eou pipefail
 
-args=$(
-tac |
-grep -E 'github\.com.*pull/' |
-head -n1 |
-sed -En 's,.*github.com/([^/]+)/([^/]+)/pull/([0-9]+).*,\3 \1/\2,p'
-)
+args=$(mail-prlink | sed -En 's,.*github.com/([^/]+)/([^/]+)/pull/([0-9]+).*,\3 \1/\2,p')
 
 prpatch $args
