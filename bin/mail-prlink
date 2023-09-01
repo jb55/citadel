@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+tac |
+grep -E '^https://github\.com.*pull/' |
+head -n1 |
+sed -En 's,^(.*github.com/[^/]+/[^/]+/pull/[0-9]+).*,\1,p'
