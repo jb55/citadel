@@ -15,7 +15,7 @@ function build_coverletter() {
 	<"$1" awk '/^$/ {exit} {print}' > "$PRPATCH"/header
 	<"$PRPATCH/mail" awk 'BEGIN {print_it=0;} skip > 0 {skip -= 1; next;} /^----==_mimepart/ {print_it=!print_it;skip=3;next;} print_it==1 {print;}' |
 		cat "$PRPATCH/header" - |
-		sed 's,PATCH 1,PATCH 0,' > "$PATCHES/0000"
+		sed -E 's,(PATCH[^1]+)1,\10,' > "$PATCHES/0000"
 }
 
 rm -rf "$PRPATCH"
