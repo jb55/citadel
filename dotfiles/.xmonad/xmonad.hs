@@ -9,7 +9,7 @@
 import Data.Ratio
 import Data.IORef
 import Data.List
-import Data.Default (def)
+--import Data.Default (def)
 import Control.Monad (when)
 import System.IO.Unsafe (unsafePerformIO)
 import System.Posix.Files (readSymbolicLink)
@@ -35,7 +35,7 @@ import XMonad.Layout.NoBorders
 import XMonad.Layout.ResizableTile
 import XMonad.Layout.ResizeScreen
 import XMonad.Layout.Spacing
-import XMonad.Layout.Spiral
+import XMonad.Layout.Spiral as S
 import XMonad.Layout.Tabbed
 import XMonad.Layout.ToggleLayouts (ToggleLayout(ToggleLayout))
 import XMonad.Prompt
@@ -152,7 +152,7 @@ baseLayout =
     let
         tall = ResizableTall 1 (3/100) (1/2) []
     in
-        Mirror tall -- ||| otherstuff
+        Mirror tall ||| S.spiral (4/3) --S.spiralWithDir S.South S.CW (4/3)
 
 layout theme
     = smartBorders

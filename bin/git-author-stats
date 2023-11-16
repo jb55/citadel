@@ -22,7 +22,7 @@ fi
 
 (printf $'name\tadded\tremoved\tcommits\n';
 
-git log --numstat --pretty=$'%aN' "$@" \
+git log --numstat --pretty=$'%aN <%aE>' "$@" \
     | awk -F$'\t' "$script" \
     | sort --field-separator=$'\t' -k${ASTATS_SORT_COLUMN:-2} -g${REVERSE}
 ) > /tmp/git-author-stats

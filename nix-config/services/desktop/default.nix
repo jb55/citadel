@@ -56,7 +56,7 @@ in
   services.redshift = {
     enable = if extra.is-minimal then false else true;
     temperature.day = 5500;
-    temperature.night = 4300;
+    temperature.night = 3800;
 
     brightness = {
       day = "1.0";
@@ -190,7 +190,7 @@ in
     wantedBy = [ "graphical-session.target" ];
     after    = [ "graphical-session.target" ];
     serviceConfig.ExecStart = "${pkgs.libnotify}/bin/notify-send -u critical standup";
-    startAt = "Mon..Fri *-*-* 8:58:00";
+    startAt = "Mon..Fri *-*-* 15:58:00";
   };
 
   systemd.user.services.urxvtd = {

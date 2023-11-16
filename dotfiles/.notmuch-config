@@ -12,7 +12,7 @@
 #
 
 [database]
-path=/Users/jb55/mail/personal
+path=/home/jb55/mail/personal
 
 # User configuration
 #
@@ -115,6 +115,7 @@ list=tag:list and not tag:github and tag:inbox and not tag:busy
 notmuch=tag:notmuch and tag:inbox
 today=date:today and tag:inbox
 work=tag:inbox and tag:work
+patches=subject:PATCH and tag:inbox and (to:jb55@jb55.com or to:patches@damus.io)
 damusp=(subject:PR or subject:PATCH) and subject:damus and tag:inbox
 damusi=subject:Issue and subject:damus-io and tag:inbox
 damus-all-issues=subject:Issue and subject:damus-io

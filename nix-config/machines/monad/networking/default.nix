@@ -99,18 +99,21 @@ in
         { publicKey = "vIh3IQgP92OhHaC9XBiJVDLlrs3GVcR6hlXaapjTiA0="; # phone
           allowedIPs = [ "10.100.0.3/32" ];
         }
-        { publicKey = "Dp8Df75X8Kh9gd33e+CWyyhOvT4mT0X9ToPwBUEBU1k="; # macos
-          allowedIPs = [ "10.100.0.4/32" ];
-        }
-        { publicKey = "N4bIpjNL/IzV59y5KWHiR54n0rAKYcr3/BkVLzCmBBA="; # old-mac
-          allowedIPs = [ "10.100.0.5/32" ];
-        }
-        { publicKey = "Ynuism5cSJYUrMF/gWZti8W+PztLufaB/3mQlXV6HyY="; # vanessa-phone
-          allowedIPs = [ "10.100.0.6/32" ];
-        } 
+        #{ publicKey = "Dp8Df75X8Kh9gd33e+CWyyhOvT4mT0X9ToPwBUEBU1k="; # macos
+        #  allowedIPs = [ "10.100.0.4/32" ];
+        #}
+        #{ publicKey = "N4bIpjNL/IzV59y5KWHiR54n0rAKYcr3/BkVLzCmBBA="; # old-mac
+        #  allowedIPs = [ "10.100.0.5/32" ];
+        #}
+        #{ publicKey = "Ynuism5cSJYUrMF/gWZti8W+PztLufaB/3mQlXV6HyY="; # vanessa-phone
+        #  allowedIPs = [ "10.100.0.6/32" ];
+        #} 
         { publicKey = "BklL4dTL8WK3xnmM899Hr50/UlXaLYhJQWllj2p4ZEg="; # charon
           allowedIPs = [ "10.100.0.7/32" ];
           endpoint = "45.79.91.128:51820";
+        }
+        { publicKey = "fj35gCObJ+uP/8tDpYsAD+b2XuSpa82umL/8LscIHwQ="; # pixel
+          allowedIPs = [ "10.100.0.9/32" ];
         }
         { publicKey = "oYTNuXPl5GQsz53cL55MO9MfI61DyZBrBDy9ZFBpDWU="; # cross (air)
           allowedIPs = [ "10.100.0.8/32" ];

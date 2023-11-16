@@ -9,7 +9,6 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
     }) {};
     myPackages = with jb55pkgs; [
        rsslink
-       nostril
        bcalc
        btcs
        csv-delim
@@ -35,9 +34,11 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
       tut
 
       python3Packages.num2words
-      #python3Packages.howdoi
+      python3Packages.howdoi
       tree
+      xsv
       datefmt
+      nostril
       nncp
       asciinema
       aspell

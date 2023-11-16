@@ -23,14 +23,17 @@ export PS0='\033[0m'
 #export PS1='$(printf "\x01\033[30;1m\x02%3.*s\x01\033[0m\x02> " $? $?)'
 
 # don't put duplicate lines in the history. See bash(1) for more options
-export HISTSIZE=50000
 #export HISTCONTROL=ignoredups
 # ... and ignore same sucessive entries.
 export HISTCONTROL=ignoreboth
+export HISTSIZE=50000
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
+
+# OMG
+shopt -s histappend
 
 DIRCOLORS="$HOME/.dircolors"
 UNDISTRACT="$HOME/dotfiles/bash-undistract-me/undistract-me.sh"
@@ -93,7 +96,7 @@ md () {
     mandown README*
 }
 
-function run_fuzzer() {
+function f() {
 	eval "$(fuzz-run-command "$@")"
 }
 
@@ -111,7 +114,7 @@ alias e="edit -n"
 alias emacs="env TERM=xterm-256color emacs"
 alias feh="feh --conversion-timeout 2"
 alias fixssh="source $HOME/bin/fixssh"
-alias f=run_fuzzer
+#alias f=run_fuzzer
 alias fzf="fzf --exact"
 alias g=git
 alias githist="git reflog show | grep '}: commit' | nl | sort -nr | nl | sort -nr | cut --fields=1,3 | sed s/commit://g | sed -e 's/HEAD*@{[0-9]*}://g'"
@@ -305,10 +308,12 @@ bind '"\C-x\C-e": shell-expand-line'
 bind '"\C-x\C-r": redraw-current-line'
 bind '"\C-x^": history-expand-line'
 
-bind '"\C-f": "\C-x\C-addi`fuzz-run-command`\C-x\C-e\C-x^\C-x\C-a$a\C-x\C-r"'
+bind '"\C-f": "`fuzz-run-command`\C-x\C-e"'
 bind -m vi-command '"\C-f": "i\C-f"'
-bind '"\C-g": "\C-x\C-addi`fuzz-run-command sh`\C-x\C-e\C-x^\C-x\C-a$a\C-x\C-r"'
+bind '"\C-g": "`fuzz-run-command sh`\C-x\C-e"'
 bind -m vi-command '"\C-h": "i\C-h"'
+bind '"\C-e": "!!\C-x\C-e"'
+bind -m vi-command '"\C-e": "i\C-e"'
 bind '"\C-l":clear-screen'
 
 

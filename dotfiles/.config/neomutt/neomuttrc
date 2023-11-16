@@ -3,13 +3,14 @@ set nm_default_uri="notmuch:///home/jb55/mail/personal"
 set sendmail="/home/jb55/bin/sendmail"
 set virtual_spoolfile=yes
 set folder="/home/jb55/mail/personal"
+set beep=no
 set wait_key=no
 set pager_stop=yes
 set from="jb55@jb55.com"
 set pipe_decode=yes
 set pipe_split=no
 set envelope_from=yes
-set mime_forward=no
+set mime_forward=yes
 unset markers
 set text_flowed
 
@@ -31,6 +32,7 @@ virtual-mailboxes \
   "damus-issues" "notmuch://?query=query:damusi" \
   "damus-all-issues" "notmuch://?query=query:damus-all-issues" \
   "damus-all-issues-no-elsat" "notmuch://?query=query:damus-all-issues-no-elsat" \
+  "patches" "notmuch://?query=query:patches" \
   "damus-issues-no-elsat" "notmuch://?query=query:damusinoelsat"
 
 macro index,pager a "<modify-labels>-unread -inbox<enter>
@@ -43,7 +45,7 @@ macro index \\\\ "<vfolder-from-query>" "Search mailbox"
 macro pager p "|delta --paging always<enter>"
 macro pager d "<next-page>"
 macro pager u "<previous-page>"
-macro pager c "|cols|less<enter>"
+#macro pager c "|cols|less<enter>"
 macro pager t "|collapse|less<enter>"
 macro attach h "|w3m -dump -T text/html | less<enter>" "View text/html with w3m"
 #macro pager P "|grep patch$ | xargs curl -sL | delta --paging always<enter>"
