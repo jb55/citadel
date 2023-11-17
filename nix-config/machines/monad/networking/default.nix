@@ -46,6 +46,8 @@ let
     "nixos-fw -s 10.100.0.0/24,192.168.87.1/24 -p tcp --dport 5442 -j nixos-fw-accept"
     "nixos-fw -s 10.100.0.0/24 -p tcp --dport 80 -j nixos-fw-accept"
     "nixos-fw -s 10.100.0.0/24 -p tcp --dport 3000 -j nixos-fw-accept"
+    "nixos-fw -s 10.100.0.0/24 -p tcp --dport 25565 -j nixos-fw-accept"
+    "nixos-fw -s 10.100.0.0/24 -p tcp --dport 25575 -j nixos-fw-accept"
     "nixos-fw -s 10.100.0.2/32 -p tcp --dport ${toString ports.lntun} -j nixos-fw-accept"
     "nixos-fw -s 10.100.0.0/24 -p tcp --dport ${toString ports.weechat} -j nixos-fw-accept"
     "nixos-fw -s 10.100.0.0/24,192.168.87.1/24 -p tcp --dport 8333 -j nixos-fw-accept" # bitcoin
@@ -118,6 +120,12 @@ in
         { publicKey = "oYTNuXPl5GQsz53cL55MO9MfI61DyZBrBDy9ZFBpDWU="; # cross (air)
           allowedIPs = [ "10.100.0.8/32" ];
         } 
+        { publicKey = "kBTRfnUGBwbTlyazK1J67VVpzNg/wLjgmSfI9+1J6S4="; # ipad-air
+          allowedIPs = [ "10.100.0.12/32" ];
+        } 
+        { publicKey = "fj35gCObJ+uP/8tDpYsAD+b2XuSpa82umL/8LscIHwQ="; # pixel6-android
+          allowedIPs = [ "10.100.0.9/32" ];
+        }
       ];
     };
 
@@ -186,6 +194,10 @@ in
       # server names for this server.
       # any requests that come in that match any these names will use the proxy.
       server_name plex.jb55.com plez.jb55.com media.home plex.home;
+
+      location = / {
+          return 302 http://plex.jb55.com/web/index.html;
+      }
 
       # this is where everything cool happens (you probably don't need to change anything here):
       location / {
@@ -273,6 +285,7 @@ in
     }
   '';
 
+  systemd.services.transmission.enable = false;
   systemd.services.transmission.requires = [ "openvpn-pia.service" ];
   systemd.services.transmission.after    = [ "openvpn-pia.service" ];
   systemd.services.transmission.serviceConfig.User = lib.mkForce "root";

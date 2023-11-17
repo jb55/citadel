@@ -16,8 +16,13 @@ export NIX_PATH="dotfiles=$HOME/dotfiles:$NIX_PATH"
 #[ -z "$PS1" ] && return
 
 export HOST=$(hostname)
+export IGNORE_WINDOW_CHECK=1
 export LONG_RUNNING_COMMAND_TIMEOUT=3
-export PS1='$(printf "\x01\033[30;1m\x02%3.*s\x01\033[0m\x02 %s> \x01\033[33m\x02" $? $? $HOST)'
+IN_NIX=""
+if [ -n "$IN_NIX_SHELL" ]; then
+	IN_NIX="-nix"
+fi
+export PS1='$(printf "\x01\033[30;1m\x02%3.*s\x01\033[0m\x02 %s%s> \x01\033[33m\x02" $? $? $HOST $IN_NIX)'
 export PS0='\033[0m'
 
 #export PS1='$(printf "\x01\033[30;1m\x02%3.*s\x01\033[0m\x02> " $? $?)'

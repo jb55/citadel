@@ -13,7 +13,7 @@ document=$(find "$BOOKS_DIR" \( -iname '*.txt' -o -iname '*.epub' -o -iname '*.p
 name="$(basename "$document")"
 noext="${name%.*}"
 
-wname "$noext"
+#wname "$noext"
 ext="$(extname "$document")"
 if [ "$ext" == ".txt" ] || [ "$ext" == ".md" ] || [ "$ext" == ".mediawiki" ]; then
 	echo lessr "$document"

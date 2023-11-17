@@ -37,6 +37,7 @@ eG	edit gemmarks	echo edit ~/dotfiles/gemmarks
 elf	edit last files	fuzz-last-files edit
 eM	edit mimi	echo edit ~/.config/mimi/mime.conf
 em	edit mutt config	echo edit ~/.config/neomutt/neomuttrc
+ea	edit mail aliases	echo edit ~/.mail_aliases
 et	edit todo	echo edit ~/docs/todo/todo.txt
 ff	create file	echo fuzz-create-file
 gb	git branches	echo git bvr
@@ -57,9 +58,6 @@ m	mutt	echo neomutt
 mP	mutt prs	echo neomutt -f damus-prs
 mp	mutt patches	echo neomutt -f patches
 mi	mutt issues	echo neomutt -f damus-issues
-min	mutt issues noelsat	echo neomutt -f damus-issues-no-elsat
-mai	mutt all issues	echo neomutt -f damus-all-issues
-main	mutt all issues noelsat	echo neomutt -f damus-all-issues-no-elsat
 Nc	new command	echo make-script
 ni	notmuch inbox	fuzz-notmuch-inbox
 nT	email today	echo f nt query:today
@@ -68,6 +66,7 @@ of	open file	fuzz-open-file
 olf	open last files	fuzz-last-files open
 pr	cd project root	echo cd \"$(project-root)\"
 pc	cat project file	fuzz-cat-file
+pr	cd project root	echo cd $(project-root)
 pf	edit project file	fuzz-edit-file
 ps	edit project skeletons	fuzz-edit-file --dir ~/dotfiles/skeletons
 rf	recent files	fuzz-recent-files

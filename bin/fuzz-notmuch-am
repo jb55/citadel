@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 set -eou pipefail
 
-echo notmuch am query:patches
+echo notmuch am -s --am -f ${1:-query:patches}

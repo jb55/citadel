@@ -70,7 +70,7 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
       linuxPackages.bpftrace
       linuxPackages.perf
       lsof
-      mailutils
+      #mailutils
       man-pages
       mdcat
       minisign

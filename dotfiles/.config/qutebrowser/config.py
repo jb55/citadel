@@ -75,6 +75,13 @@ config.bind('e', 'open-editor')
 config.bind('co', 'tab-only')
 config.bind('gl', 'tab-move +')
 config.bind('gh', 'tab-move -')
+
+# Remove fixed, sticky elements from pages.
+# This is useful to recover full page scrolling
+#config.bind(',s', 'jseval javascript:(function(){x=document.querySelectorAll(`*`);for(i=0;i<x.length;i++){elementStyle=getComputedStyle(x[i]);if(elementStyle.position.startsWith("fixed")||elementStyle.position.startsWith("sticky")){x[i].style.position=`absolute`;}}}())')
+
+config.bind(',s', "jseval javascript:(function(){var elements=document.querySelectorAll(`*`);Array.from(elements).forEach(function(element){var style=getComputedStyle(element);if(style.position.startsWith(`fixed`)||style.position.startsWith(`sticky`)){element.style.cssText+=`position: absolute !important;`;}});})()")
+
 config.bind('gF', 'hint all tab-bg')
 config.unbind('D')
 config.bind('Do', 'download-open')

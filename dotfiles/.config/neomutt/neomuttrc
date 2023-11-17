@@ -8,6 +8,7 @@ set wait_key=no
 set pager_stop=yes
 set from="jb55@jb55.com"
 set pipe_decode=yes
+set sig_dashes=no
 set pipe_split=no
 set envelope_from=yes
 set mime_forward=yes
@@ -28,14 +29,13 @@ set sort = reverse-last-date-received
 
 virtual-mailboxes \
   "INBOX" "notmuch://?query=query:inbox" \
-  "damus-prs" "notmuch://?query=query:damusp" \
-  "damus-issues" "notmuch://?query=query:damusi" \
-  "damus-all-issues" "notmuch://?query=query:damus-all-issues" \
-  "damus-all-issues-no-elsat" "notmuch://?query=query:damus-all-issues-no-elsat" \
   "patches" "notmuch://?query=query:patches" \
-  "damus-issues-no-elsat" "notmuch://?query=query:damusinoelsat"
+  "today" "notmuch://?query=date:today" \
+  "damus-prs" "notmuch://?query=query:damusp" \
+  "damus-issues" "notmuch://?query=query:damusi"
 
 macro index,pager a "<modify-labels>-unread -inbox<enter>
+macro index,pager i "<modify-labels>+inbox<enter>
 macro index,pager A "<create-alias>" "Create alias"
 macro index,pager F "<modify-labels>+filed" "File message"
 macro index,pager + "<modify-labels>+"
@@ -49,7 +49,8 @@ macro pager u "<previous-page>"
 macro pager t "|collapse|less<enter>"
 macro attach h "|w3m -dump -T text/html | less<enter>" "View text/html with w3m"
 #macro pager P "|grep patch$ | xargs curl -sL | delta --paging always<enter>"
-macro pager P "| mail-prpatch | delta --paging always"
+macro pager P ":set pipe_decode=no<enter> | mail-prpatch | delta --paging always"
+macro pager G ":set pipe_decode=no<enter> | mail-prpatch-insert"
 
 my_hdr Bcc: William Casarin <jb55@jb55.com>
 
@@ -70,5 +71,6 @@ color header            brightcyan          default        '^Subject:'
 folder-hook . "push \eV"
 set collapse_unread=yes
 set uncollapse_jump=yes
+set display_filter=~/bin/mutt-local-date
 
 source ~/.mail_aliases
