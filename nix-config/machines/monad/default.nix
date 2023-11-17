@@ -33,12 +33,14 @@ in
     #(import ../../misc/dnsmasq-adblock.nix)
     (import ../../misc/msmtp extra)
     (import ./networking extra)
-    #(import ../../misc/imap-notifier extra)
+    (import ../../misc/imap-notifier extra)
   ] ++ (if !extra.is-minimal then [ (import ./bitcoin extra) ] else []);
 
   #hardware.steam-hardware.enable = true;
 
-  #boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.zfs.enableUnstable = true;
+  boot.zfs.removeLinuxDRM = true;
+  boot.kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
 
   services.ofono.enable = false;
   services.ofono.plugins = with pkgs; [ ofono-phonesim ];
@@ -110,6 +112,7 @@ in
   services.dnsmasq.settings.server = ["8.8.8.8" "8.8.4.4" ];
   services.dnsmasq.settings.conf-file = "/var/dnsmasq-hosts";
   services.dnsmasq.settings.addn-hosts = "/var/hosts";
+  services.dnsmasq.settings.dns-forward-max = 1024;
 
   services.bitlbee.plugins = with pkgs; [
     bitlbee-mastodon
@@ -219,20 +222,20 @@ in
     '';
   };
 
-  virtualisation.libvirtd.enable = false;
-  virtualisation.libvirtd.qemuOvmf = false;
-  virtualisation.libvirtd.qemuVerbatimConfig = ''
-    user = "jb55"
-    group = "kvm"
-    cgroup_device_acl = [
-      "/dev/input/by-id/usb-Topre_Corporation_Realforce-event-kbd",
-      "/dev/input/by-id/usb-Razer_Razer_DeathAdder_2013-event-mouse",
-      "/dev/null", "/dev/full", "/dev/zero",
-      "/dev/random", "/dev/urandom",
-      "/dev/ptmx", "/dev/kvm", "/dev/kqemu",
-      "/dev/rtc","/dev/hpet", "/dev/sev"
-    ]
-  '';
+  #virtualisation.libvirtd.enable = false;
+  #virtualisation.libvirtd.qemuOvmf = false;
+  #virtualisation.libvirtd.qemuVerbatimConfig = ''
+  #  user = "jb55"
+  #  group = "kvm"
+  #  cgroup_device_acl = [
+  #    "/dev/input/by-id/usb-Topre_Corporation_Realforce-event-kbd",
+  #    "/dev/input/by-id/usb-Razer_Razer_DeathAdder_2013-event-mouse",
+  #    "/dev/null", "/dev/full", "/dev/zero",
+  #    "/dev/random", "/dev/urandom",
+  #    "/dev/ptmx", "/dev/kvm", "/dev/kqemu",
+  #    "/dev/rtc","/dev/hpet", "/dev/sev"
+  #  ]
+  #'';
 
   systemd.user.services.btc-ban-aws = {
     enable   = if extra.is-minimal then false else true;
@@ -251,7 +254,7 @@ in
 
   environment.systemPackages = [ pkgs.virt-manager ];
 
-  services.minecraft-server.enable = true;
+  services.minecraft-server.enable = false;
   services.minecraft-server.eula = true;
   services.minecraft-server.openFirewall = true;
   services.minecraft-server.declarative = true;

@@ -83,7 +83,7 @@
   chp = cherry-pick
   sw = switch
   fixes = !git --no-pager show -s --pretty=fixes
-	pushall = !git remote | parallel -L1 -I R git push R master
+  pushall = !git remote | parallel -L1 -I R git push R master
 [rebase]
   autosquash = true
 [pretty]

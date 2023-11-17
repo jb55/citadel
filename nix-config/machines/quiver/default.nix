@@ -11,7 +11,7 @@ extra:
 
   environment.systemPackages = with pkgs; [ acpi xorg.xbacklight sshuttle ];
 
-  virtualisation.docker.enable = true;
+  virtualisation.docker.enable = false;
   virtualisation.virtualbox.host.enable = false;
   users.extraGroups.vboxusers.members = [ "jb55" ];
 

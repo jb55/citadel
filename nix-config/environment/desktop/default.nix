@@ -119,6 +119,7 @@ in {
   };
 
   programs.steam.enable = true;
+  programs.gamemode.enable = true;
 
   environment.systemPackages = if extra.is-minimal then (with pkgs; [
     #steam

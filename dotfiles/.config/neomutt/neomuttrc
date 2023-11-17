@@ -34,12 +34,12 @@ virtual-mailboxes \
   "damus-prs" "notmuch://?query=query:damusp" \
   "damus-issues" "notmuch://?query=query:damusi"
 
-macro index,pager a "<modify-labels>-unread -inbox<enter>
-macro index,pager i "<modify-labels>+inbox<enter>
+macro index,pager a "<modify-labels-then-hide>-unread -inbox<enter>"
+macro index,pager i "<modify-labels>+inbox<enter>"
 macro index,pager A "<create-alias>" "Create alias"
-macro index,pager F "<modify-labels>+filed" "File message"
+macro index,pager F "<modify-labels-then-hide>+filed" "File message"
 macro index,pager + "<modify-labels>+"
-macro index,pager S "<modify-labels>+spam -unread -inbox<enter>
+macro index,pager S "<modify-labels-then-hide>+spam -unread -inbox<enter>"
 macro index c "<change-vfolder>?" "Change to vfolder overview"
 macro index \\\\ "<vfolder-from-query>" "Search mailbox"
 macro pager p "|delta --paging always<enter>"
@@ -68,9 +68,9 @@ color quoted9       blue                default # Quoting Ebene 10
 color header            brightcyan          default        '^Subject:'
 
 #collapse threads
-folder-hook . "push \eV"
-set collapse_unread=yes
-set uncollapse_jump=yes
+#folder-hook . "push \eV"
+#set collapse_unread=yes
+#set uncollapse_jump=yes
 #set display_filter=~/bin/mutt-local-date
 
 source ~/.mail_aliases
