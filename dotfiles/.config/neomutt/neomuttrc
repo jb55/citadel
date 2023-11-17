@@ -71,6 +71,6 @@ color header            brightcyan          default        '^Subject:'
 folder-hook . "push \eV"
 set collapse_unread=yes
 set uncollapse_jump=yes
-set display_filter=~/bin/mutt-local-date
+#set display_filter=~/bin/mutt-local-date
 
 source ~/.mail_aliases
