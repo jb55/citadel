@@ -1,14 +1,20 @@
 #!/usr/bin/env bash
 #btc coins | awk '{print $3}' | xargs printf '%.8f * 100000000\n' | bc -l | xargs printf '%.0f\n' | paste -sd+ | bc -l | xargs printf '%s sats to btc\n' | bcalc -n
 
+set -e
+
 for wallet in personal vanessa multisig bare clightning
 do
 	echo -n "$wallet "
 	bcli -rpcwallet="$wallet" getbalance
 done
 
-echo -n "cln-availout "
-lcli summary | grep avail_out | cut -d= -f2 | cut -d" " -f1 | xargs printf '%s to btc\n' | bcalc -n
+summary=$(lcli summary)
+if [ -n "$summary" ]
+then
+	echo -n "cln-availout "
+	<<<"$summary" grep avail_out | cut -d= -f2 | cut -d" " -f1 | xargs printf '%s to btc\n' | bcalc -n
+fi
 
 #if [ -n "$1" ]; then
 #  FIAT=$(printf '%s sats to fiat\n' "$SATS" | bcalc --price "$1")

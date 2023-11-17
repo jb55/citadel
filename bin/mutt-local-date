@@ -1,4 +1,4 @@
-#!/usr/bin/perl -n
+#!/home/jb55/bin/perln
 
 use Date::Parse;
 use POSIX;

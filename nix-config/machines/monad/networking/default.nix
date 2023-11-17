@@ -31,34 +31,36 @@ let
   ports = {
     lightning = 9735;
     lightningt = 9736;
-    lightning_websocket = 8756;
+    lightning_websocket = 8324;
     lntun = 7878;
     dns = 53;
     http = 80;
     wireguard = 51820;
     weechat = 9000;
     nncp = 5442;
+    starbound = 21025;
     inherit (extra.private) notify-port;
   };
 
-  firewallRules = [
-    "nixos-fw -s 10.100.0.0/24,192.168.87.1/24 -p tcp --dport 8080 -j nixos-fw-accept" # dev
-    "nixos-fw -s 10.100.0.0/24,192.168.87.1/24 -p tcp --dport 5442 -j nixos-fw-accept"
+  firewallRules = (with ports; [
+    "nixos-fw -s 10.100.0.0/24,192.168.86.1/24 -p tcp --dport 8080 -j nixos-fw-accept" # dev
+    "nixos-fw -s 10.100.0.0/24,192.168.86.1/24 -p tcp --dport 5442 -j nixos-fw-accept"
+    "nixos-fw -s 10.100.0.0/24,192.168.86.1/24 -p tcp --dport ${toString starbound} -j nixos-fw-accept"
     "nixos-fw -s 10.100.0.0/24 -p tcp --dport 80 -j nixos-fw-accept"
     "nixos-fw -s 10.100.0.0/24 -p tcp --dport 3000 -j nixos-fw-accept"
     "nixos-fw -s 10.100.0.0/24 -p tcp --dport 25565 -j nixos-fw-accept"
     "nixos-fw -s 10.100.0.0/24 -p tcp --dport 25575 -j nixos-fw-accept"
-    "nixos-fw -s 10.100.0.2/32 -p tcp --dport ${toString ports.lntun} -j nixos-fw-accept"
-    "nixos-fw -s 10.100.0.0/24 -p tcp --dport ${toString ports.weechat} -j nixos-fw-accept"
-    "nixos-fw -s 10.100.0.0/24,192.168.87.1/24 -p tcp --dport 8333 -j nixos-fw-accept" # bitcoin
-    "nixos-fw -s 10.100.0.0/24,192.168.87.1/24 -p tcp --dport 8332 -j nixos-fw-accept" # bitcoin-rpc
+    "nixos-fw -s 10.100.0.2/32 -p tcp --dport ${toString lntun} -j nixos-fw-accept"
+    "nixos-fw -s 10.100.0.0/24 -p tcp --dport ${toString weechat} -j nixos-fw-accept"
+    "nixos-fw -s 10.100.0.0/24,192.168.86.1/24 -p tcp --dport 8333 -j nixos-fw-accept" # bitcoin
+    "nixos-fw -s 10.100.0.0/24,192.168.86.1/24 -p tcp --dport 8332 -j nixos-fw-accept" # bitcoin-rpc
     "nixos-fw -s 192.168.122.218 -p udp --dport 137 -j nixos-fw-accept"
     "nixos-fw -s 192.168.122.218 -p udp --dport 138 -j nixos-fw-accept"
     "nixos-fw -s 192.168.122.218 -p tcp --dport 139 -j nixos-fw-accept"
     "nixos-fw -s 192.168.122.218 -p tcp --dport 445 -j nixos-fw-accept"
     "OUTPUT -t mangle   -m cgroup --cgroup 11 -j MARK --set-mark 11"
     "POSTROUTING -t nat -m cgroup --cgroup 11 -o tun0 -j MASQUERADE"
-  ];
+  ]);
 
   addRule = rule: "iptables -A ${rule}";
   rmRule = rule: "iptables -D ${rule} || true";

@@ -3,13 +3,20 @@
 set -e
 
 function new_msgid() {
-	echo "<$(sha256sum "$file" | awk '{ print $1 }')-$(date +%s)>"
+	echo "<$(sha256sum "$1" | awk '{ print $1 }')-$(date +%s)>"
 }
 
 TO="jb55@jb55.com"
 PRPATCH="$HOME/var/prpatch"
 MBOX="$PRPATCH/out.mbox"
 PATCHES="$PRPATCH/out"
+
+function build_coverletter() {
+	<"$1" awk '/^$/ {exit} {print}' > "$PRPATCH"/header
+	<"$PRPATCH/mail" awk 'BEGIN {print_it=0;} skip > 0 {skip -= 1; next;} /^----==_mimepart/ {print_it=!print_it;skip=3;next;} print_it==1 {print;}' |
+		cat "$PRPATCH/header" - |
+		sed -E 's,(PATCH[^1]+)1,\10,' > "$PATCHES/0000"
+}
 
 rm -rf "$PRPATCH"
 mkdir -p "$PATCHES"
@@ -22,13 +29,14 @@ replyto="$(grep -i '^reply-to:' <<<"$mail" | cut -d":" -f2- | tr -d '\n' || :)"
 echo "$mail" > "$PRPATCH/mail"
 <<<"$mail" mail-prpatch > "$MBOX"
 
-#sed -i"" '/^Subject:/ {N; s/\n / /}' "$MBOX"
+# pull out the cover letter
 
 git mailsplit -o"$PATCHES" "$MBOX"
 
-file="$PATCHES"/0001
+$(build_coverletter "$PATCHES/0001")
 
-msgid=$(new_msgid)
+file="$PATCHES"/0000
+msgid=$(new_msgid "$file")
 threadid=$msgid
 for file in "$PATCHES/"*
 do
@@ -53,6 +61,10 @@ do
 		sed -i"" "s,\[PATCH,\[PATCH $target," "$file"
 	fi
 
+	if [[ "$prlink" =~ "damus-io" ]]; then
+		TO="patches@damus.io"
+	fi
+
 	sed -i"" "1 a To: $TO" "$file" 
 	sed -i"" "1 a Message-ID: $msgid" "$file" 
 
@@ -62,5 +74,5 @@ do
 
 	notmuch insert +inbox < "$file"
 
-	msgid=$(new_msgid)
+	msgid=$(new_msgid "$file")
 done
