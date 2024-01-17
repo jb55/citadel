@@ -1,8 +1,6 @@
 inoremap <Esc> <Nop>
 inoremap <special> fd <Esc>
 
-execute pathogen#infect()
-
 set tabstop=8
 set shiftwidth=8
 set ai

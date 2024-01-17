@@ -5,7 +5,7 @@
 { config, pkgs, ... }:
 
 let machine = extra.private.machine;
-    isDesktop = machine != "charon";
+    isDesktop = machine != "purple";
     machinePath = p: let m = "/" + machine;
                      in ./machines + m + p;
     machineConfig = import (machinePath "/config") pkgs;

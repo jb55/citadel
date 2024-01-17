@@ -8,18 +8,18 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
       sha256 = "0xd86s2smjvlc7rlb6rkgx2hj3c3sbcz3gs8rf93x69jqdvwb6rr";
     }) {};
     myPackages = with jb55pkgs; [
-       rsslink
-       bcalc
-       btcs
-       csv-delim
-       csv-scripts
-       extname
-       mandown
-       ratio
-       samp
-       sharefile
-       zebra
-       define
+       #rsslink
+       #bcalc
+       #btcs
+       #csv-delim
+       #csv-scripts
+       #extname
+       #mandown
+       #ratio
+       #samp
+       #sharefile
+       #zebra
+       #define
        #nixpkgs-ml-tools
     ];
 
@@ -38,7 +38,7 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
       tree
       xsv
       datefmt
-      nostril
+      #nostril
       nncp
       asciinema
       aspell
