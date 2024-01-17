@@ -30,8 +30,19 @@ export PS0='\033[0m'
 # don't put duplicate lines in the history. See bash(1) for more options
 #export HISTCONTROL=ignoredups
 # ... and ignore same sucessive entries.
-export HISTCONTROL=ignoreboth
+export HISTCONTROL=ignoreboth:erasedups
 export HISTSIZE=50000
+
+update_terminal_title() {
+	if [ -z "$LAST_APPNAME" ]
+	then
+		echo -ne "\033]0;./$(basename $PWD)\007"
+	else
+		echo -ne "\033]0;./$(basename $PWD)>${LAST_APPNAME}\007"
+	fi
+}
+
+export PROMPT_COMMAND='update_terminal_title' 
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.

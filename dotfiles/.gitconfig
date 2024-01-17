@@ -12,7 +12,7 @@
 	pager = delta --paging=always
 [sendemail]
   smtpServer=/home/jb55/bin/sendmail
-  aliasesFile= /home/jb55/.mail_aliases
+  aliasesFile=/home/jb55/.mail_aliases
   aliasFileType=mutt
 [url "git@github.com:"]
   insteadOf = gh:
@@ -88,9 +88,9 @@
   autosquash = true
 [pretty]
   fixes = Fixes: %h (\"%s\")
-[diff]
-	colorMoved = dimmed-zebra
-	colorMovedWs = allow-indentation-change
+#[diff]
+	#colorMoved = dimmed-zebra
+	#colorMovedWs = allow-indentation-change
 [push]
 	default = simple
 [rerere]

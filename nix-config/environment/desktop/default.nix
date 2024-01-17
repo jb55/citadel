@@ -13,6 +13,10 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
       class "GtkMenuShell" binding "gtk-binding-menu"
     '';
 
+    mytexlive =  pkgs.texlive.combine {
+      inherit (pkgs.texlive) scheme-basic xetex unicode-math libertine xcolor fancyvrb;
+    };
+
     jb55pkgs = import <jb55pkgs> { inherit pkgs; };
 
     jbpkgs = with jb55pkgs; [
@@ -85,11 +89,14 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
       zathura
       zoom-us
 
+      #texlive.combined.scheme-full # needed for pandoc (xelatex)
+      mytexlive
+      librsvg
+
       #aerc 
       #bitcoin     --- probably don't want a binary substitute of this
       #khal
       #python37Packages.trezor
-      #texlive.combined.scheme-full
       #steam
       #wine
       #df

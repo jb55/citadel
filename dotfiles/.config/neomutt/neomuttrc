@@ -17,8 +17,7 @@ set text_flowed
 
 set reverse_name=yes
 set reverse_realname=no
-alternates ^jb55@jb55.com$ ^will.casarin@steamoji.com$
-
+#alternates ^jb55@jb55.com$ ^will.casarin@steamoji.com$
 
 set use_threads=yes
 
@@ -32,12 +31,13 @@ virtual-mailboxes \
   "patches" "notmuch://?query=query:patches" \
   "today" "notmuch://?query=date:today" \
   "damus-prs" "notmuch://?query=query:damusp" \
+  "designs" "notmuch://?query=query:designs" \
   "damus-issues" "notmuch://?query=query:damusi"
 
-macro index,pager a "<modify-labels-then-hide>-unread -inbox<enter>"
+macro index,pager a "<modify-labels>-unread -inbox<enter>"
 macro index,pager i "<modify-labels>+inbox<enter>"
 macro index,pager A "<create-alias>" "Create alias"
-macro index,pager F "<modify-labels-then-hide>+filed" "File message"
+macro index,pager F "<modify-labels>+filed<enter>" "File message"
 macro index,pager + "<modify-labels>+"
 macro index,pager S "<modify-labels-then-hide>+spam -unread -inbox<enter>"
 macro index c "<change-vfolder>?" "Change to vfolder overview"

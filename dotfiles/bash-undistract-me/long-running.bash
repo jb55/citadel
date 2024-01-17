@@ -87,6 +87,7 @@ function notify_when_long_running_commands_finish_install() {
                 local timeout="$(btcs -t 15000 $longtimeout min)"
                 local time_taken_human=$(sec_to_human $time_taken)
                 local appname=$(basename "${__udm_last_command%% *}")
+		export LAST_APPNAME="$appname"
                 if [[ $time_taken -gt $LONG_RUNNING_COMMAND_TIMEOUT ]] &&
                     [[ -n $DISPLAY ]] &&
                     [[ ! " $LONG_RUNNING_IGNORE_LIST " == *" $appname "* ]] ; then

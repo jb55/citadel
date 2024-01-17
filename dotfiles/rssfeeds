@@ -16,7 +16,6 @@ lexfridman	@yt	https://www.youtube.com/feeds/videos.xml?channel_id=UCSHZKyawb77i
 lobsters	@busy	https://lobste.rs/rss
 mittechreview	@blog,@busy	https://www.technologyreview.com/feed
 mit-tokamak	@yt	https://www.youtube.com/feeds/videos.xml?channel_id=UCMFsHceLUJNkXMiCMFNnvkA
-nature	@blog,@busy	http://feeds.nature.com/nature/rss/current
 nileblue	@yt	https://www.youtube.com/feeds/videos.xml?channel_id=UC1D3yD4wlPMico0dss264XA
 nilered	@yt	https://www.youtube.com/feeds/videos.xml?channel_id=UCFhXFikryT4aFcLkLw2LBLA
 noagenda	@pod	http://feed.nashownotes.com/rss.xml
@@ -41,5 +40,7 @@ scott-aaronson	@blog @physics	https://scottaaronson.blog/?feed=rss2
 dietterich-labs	@yt	https://www.youtube.com/feeds/videos.xml?channel_id=UCd02pSRrecAVFOPjB-bfv-Q
 allen-farrington	@blog	https://medium.com/feed/@allenfarrington
 woit	@blog	https://www.math.columbia.edu/~woit/wordpress/?feed=rss2
+woit	@arxiv @physics	'http://export.arxiv.org/api/query?search_query=au:woit_p&sortBy=lastUpdatedDate&sortOrder=descending'
 stabilityai	@blog @ai	https://stability.ai/blog?format=rss
 algorithmic-bridge	@blog @ai	https://thealgorithmicbridge.substack.com/feed
+macrumors	@blog @busy	https://feeds.macrumors.com/MacRumors-All

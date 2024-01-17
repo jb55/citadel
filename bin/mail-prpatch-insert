@@ -50,7 +50,7 @@ do
 	mv "$file".2 "$file"
 
 	if [ -n "$replyto" ]; then
-		sed -i"" "1 a Cc: $replyto" "$file" 
+		sed -i"" "1 a Bcc: $replyto" "$file" 
 	fi
 
 	if [ -n "$prlink" ]; then

@@ -21,7 +21,7 @@ cdpr	cd project root	echo cd $(project-root)
 ce	compile error	fuzz-compile-error
 cR	compile repeat error	fuzz-compile-repeat-error
 cr	compile repeat	fuzz-compile-repeat
-cs	compile show build	echo cat .build-result
+cs	compile show build	echo less .build-result
 dsa	docs->stripe->api	~/docs/stripe/jumpapi
 dsg	docs->stripe->go	fuzzdoc ~/docs/stripe/go-v72.txt '^type '
 dgt	docs->go->testing	fuzzdoc ~/docs/godoc/testing.txt '^func '
@@ -39,6 +39,7 @@ eM	edit mimi	echo edit ~/.config/mimi/mime.conf
 em	edit mutt config	echo edit ~/.config/neomutt/neomuttrc
 ea	edit mail aliases	echo edit ~/.mail_aliases
 et	edit todo	echo edit ~/docs/todo/todo.txt
+ev	edit vim config	echo edit ~/.config/nvim/init.vim
 ff	create file	echo fuzz-create-file
 gb	git branches	echo git bvr
 G	gemini	gemmark
@@ -58,6 +59,7 @@ m	mutt	echo neomutt
 mP	mutt prs	echo neomutt -f damus-prs
 mp	mutt patches	echo neomutt -f patches
 mi	mutt issues	echo neomutt -f damus-issues
+md	mutt designs	echo neomutt -f designs
 Nc	new command	echo make-script
 ni	notmuch inbox	fuzz-notmuch-inbox
 nT	email today	echo f nt query:today
@@ -82,7 +84,6 @@ sh	show history	fuzz-show-hist
 sp	search project	fuzz-search-files
 ss	search project file	fuzz-search-file
 st	search TODOs	fuzz-search-files TODO
-vim	edit vim config	echo edit ~/.config/nvim/init.vim
 wsg	work service gql	fuzzedit schema '^'
 wsm	work service mutations	fuzzedit mutation '^func '
 wsq	work service queries	fuzzedit query '^func '

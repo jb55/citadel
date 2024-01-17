@@ -27,7 +27,7 @@ extra:
 
   services.teamviewer.enable = false;
 
-  services.synergy.server.enable = true;
+  services.synergy.server.enable = false;
   services.synergy.server.tls.enable = false;
   services.synergy.server.screenName = "quiver";
   services.synergy.server.autoStart = true;

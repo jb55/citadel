@@ -2,4 +2,4 @@
 set -eou pipefail
 
 query=${FUZZ_QUERY:-$(notmuch queries | fuzzer ^query:)}
-echo notmuch search "$@" "$query"
+echo notmuch search "$@" "'$query'"

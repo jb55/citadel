@@ -34,7 +34,7 @@ config.set('fonts.default_family', 'terminus')
 if hostname == 'monad':
     config.set('zoom.default', 125)
 else:
-    config.set('zoom.default', 125)
+    config.set('zoom.default', 150)
 
 
 # Editor (and arguments) to use for the `open-editor` command. The
@@ -91,12 +91,11 @@ config.set('tabs.select_on_remove', 'last-used')
 
 config.set('url.default_page', 'about:blank')
 #config.set('colors.webpage.darkmode.enabled', True)
-config.set('colors.webpage.preferred_color_scheme', 'dark')
-
+config.set('colors.webpage.preferred_color_scheme', 'light')
 
 config.set('url.searchengines', {
-  #'DEFAULT': 'https://google.com/search?q={}',
-  'DEFAULT': 'http://duckduckgo.com/?q={}',
+  'DEFAULT': 'https://google.com/search?q={}',
+  #'DEFAULT': 'http://duckduckgo.com/?q={}',
   'star': 'https://github.com/stars?utf8=%E2%9C%93&q={}',
   'so': 'https://google.com/search?q=site:stackoverflow.com {}',
   'gl': 'http://www.google.com/search?q={}&btnI=Im+Feeling+Lucky',

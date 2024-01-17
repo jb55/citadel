@@ -115,4 +115,5 @@ list=tag:list and not tag:github and tag:inbox and not tag:busy
 notmuch=tag:notmuch and tag:inbox
 patches=subject:PATCH and tag:inbox
 damusp=(subject:PR or subject:PATCH) and subject:damus and tag:inbox
+designs=tag:design and tag:inbox
 damusi=subject:Issue and subject:damus-io and tag:inbox

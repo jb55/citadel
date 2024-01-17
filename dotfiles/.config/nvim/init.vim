@@ -1,7 +1,7 @@
 inoremap <Esc> <Nop>
 inoremap <special> fd <Esc>
 
-execute pathogen#infect()
+"execute pathogen#infect()
 
 set tabstop=8
 set shiftwidth=8
@@ -13,7 +13,13 @@ set hidden
 set rnu nu
 set wrap
 
-hi ColorColumn ctermbg=254
+
+" set this when theme is dark
+"hi ColorColumn ctermbg=235
+
+" set this when theme is light
+"hi ColorColumn ctermbg=255
+
 hi StatusLine ctermbg=254
 
 map Y y$
@@ -51,6 +57,28 @@ imap <A-i> -
 imap <A-o> +
 imap <A-,> =
 imap <A-Space> <CR>
+
+" Function to set ColorColumn based on the current theme
+function! SetColorColumn()
+    " Read the current theme from the symlink
+    let theme = system("readlink ~/.Xresources.d/themes/current")
+
+    " Trim any trailing whitespace or newline
+    let theme = substitute(theme, '\n\+$', '', '')
+
+    " Check if the theme is dark or light and set ColorColumn
+    if theme =~ 'dark'
+        " Set for dark theme
+        hi ColorColumn ctermbg=235
+    elseif theme =~ 'light'
+        " Set for light theme
+        hi ColorColumn ctermbg=255
+    else
+        " Default setting or error handling
+    endif
+endfunction
+
+autocmd VimEnter * call SetColorColumn()
 
 autocmd FileType go autocmd BufWritePre <buffer> execute "normal! mz:mkview\<esc>:%!fmtsafe gofmt\<esc>:loadview\<esc>`z"
 autocmd FileType go set wrap
