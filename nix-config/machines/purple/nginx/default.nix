@@ -3,23 +3,6 @@ extra:
 let sites = [ ];
     logDir = "/var/log/nginx";
 in {
-  services.logrotate.config = ''
-    ${logDir}/*.log {
-      daily
-      missingok
-      rotate 52
-      compress
-      delaycompress
-      notifempty
-      # 20MB
-      minsize 20971520
-      create 640 root adm
-      sharedscripts
-      postrotate
-              ${pkgs.procps}/bin/pkill -USR1 nginx
-      endscript
-    }
-  '';
 
   services.nginx = {
     enable = true;
@@ -46,7 +29,6 @@ in {
       tcp_nopush on;
       tcp_nodelay on;
       keepalive_timeout 65;
-      types_hash_max_size 2048;
       # server_tokens off;
       proxy_buffering off;
       proxy_read_timeout 300s;
@@ -64,7 +46,93 @@ in {
         return      444;
       }
 
-      ${lib.concatStringsSep "\n\n" (map builtins.readFile sites)}
+      server {
+        listen 80;
+
+        server_name damus.io;
+
+        location / {
+          autoindex on;
+          root /www/damus.io;
+
+          add_header 'Access-Control-Allow-Origin' '*' always;
+          add_header 'Access-Control-Expose-Headers' 'Content-Length' always;
+        }
+
+        location ~* "^/(?<note>note1[qpzry9x8gf2tvdw0s3jn54khce6mua7l]+)(?<end>.png)?/?$" {
+          proxy_pass http://localhost:3000;
+        }
+
+        location ~* "^/(?<nevent>nevent1[qpzry9x8gf2tvdw0s3jn54khce6mua7l]+)(?<end>.png)?/?$" {
+          proxy_pass http://localhost:3000;
+        }
+
+        location ~* "^/(?<pk>npub1[qpzry9x8gf2tvdw0s3jn54khce6mua7l]+)(?<end>.png)?/?$" {
+          proxy_pass http://localhost:3000;
+        }
+
+        location ~* "^/(?<pk>nprofile1[qpzry9x8gf2tvdw0s3jn54khce6mua7l]+)(?<end>.png)?/?$" {
+          proxy_pass http://localhost:3000;
+        }
+
+        location /github-hook {
+          proxy_pass http://localhost:3111;
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+        }
+
+        location /appstore {
+          return 301 https://apps.apple.com/us/app/damus/id1628663131;
+        }
+
+        location /devchat {
+          return 301 https://t.me/+abMSAEO6ho8xYjdh;
+        }
+
+        location /testflight {
+          return 301 https://testflight.apple.com/join/CLwjLxWl;
+        }
+
+        location /code {
+          return 301 https://github.com/damus-io/damus/pulls;
+        }
+
+        location /list/patches {
+          return 301 https://groups.google.com/a/damus.io/g/patches;
+        }
+
+        location /list/product {
+          return 301 https://groups.google.com/a/damus.io/g/product;
+        }
+
+        location /list/design {
+          return 301 https://groups.google.com/a/damus.io/g/design;
+        }
+
+        location /list/dev {
+          return 301 https://groups.google.com/a/damus.io/g/dev;
+        }
+
+        location /figma {
+          return 301 https://www.figma.com/file/ORaT1T0Ywfbm0sIjwy5Rgq/Damus-iOS?type=design&node-id=0-1&t=AGpDcKb6rHfpQ9CA-0;
+        }
+
+        location /merch/hat {
+          return 302 http://lnlink.org/?d=ASED88EIzNU2uFJoQfClxYISu55lhKHrSTCA58HMNPgtrXECMjQuODQuMTUyLjE4Nzo4MzI0AANgB6Cj2QCeZAFOZ1nS6qGuRe4Vf6qzwJyQ5Qo3b0HRt_w9MTIwJm1ldGhvZD1pbnZvaWNlfG1ldGhvZD13YWl0aW52b2ljZSZwbmFtZWxhYmVsXmxubGluay0mcmF0ZT04BERhbXVzIEhhdAAFAALG8AZUaGFua3MgZm9yIHN1cHBvcnRpbmcgRGFtdXMhAA==;
+        }
+
+        location /merch {
+          return 302 http://lnlink.org/?d=ASED88EIzNU2uFJoQfClxYISu55lhKHrSTCA58HMNPgtrXECMjQuODQuMTUyLjE4Nzo4MzI0AANgB6Cj2QCeZAFOZ1nS6qGuRe4Vf6qzwJyQ5Qo3b0HRt_w9MTIwJm1ldGhvZD1pbnZvaWNlfG1ldGhvZD13YWl0aW52b2ljZSZwbmFtZWxhYmVsXmxubGluay0mcmF0ZT04BERhbXVzIE1lcmNoAAUAAfvQBlRoYW5rcyBmb3Igc3VwcG9ydGluZyBkYW11cyEA;
+        }
+      }
+
+      server {
+        listen 80;
+        listen [::]:80;
+
+        server_name www.damus.io;
+        return 301 https://damus.io$request_uri;
+      }
     '';
   };
 }
