@@ -92,18 +92,37 @@ in {
           proxy_pass http://localhost:${toString damus-api-port};
           proxy_set_header Host $host;
           proxy_set_header X-Real-IP $remote_addr;
+
+          add_header 'Access-Control-Allow-Origin' 'https://damus.io' always;
+          add_header 'Access-Control-Expose-Headers' 'Content-Length' always;
         }
       }
 
       server {
         listen 80;
 
-        server_name api.staging.damus.io;
+        server_name api-staging.damus.io;
 
         location / {
           proxy_pass http://localhost:${toString damus-api-staging-port};
           proxy_set_header Host $host;
           proxy_set_header X-Real-IP $remote_addr;
+
+          add_header 'Access-Control-Allow-Origin' 'https://staging.damus.io' always;
+          add_header 'Access-Control-Expose-Headers' 'Content-Length' always;
+        }
+      }
+
+      server {
+        listen 80;
+
+        server_name staging.damus.io;
+
+        location / {
+          root /www/staging.damus.io;
+
+          add_header 'Access-Control-Allow-Origin' '*' always;
+          add_header 'Access-Control-Expose-Headers' 'Content-Length' always;
         }
       }
 
@@ -113,7 +132,6 @@ in {
         server_name damus.io;
 
         location / {
-          autoindex on;
           root /www/damus.io;
 
           add_header 'Access-Control-Allow-Origin' '*' always;
