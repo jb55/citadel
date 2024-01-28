@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -e
+
+curl -sL $(bech32 -d "$1") |
+jq -rc .callback |
+xargs -I{} printf '%s?amount=%d\n' {} "$(bcalc -n "$2" to msats)" |
+xargs curl -sL |
+jq -cr .pr

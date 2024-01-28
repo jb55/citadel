@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -e
+
+name=$(cut -f1 -d@ <<<"$1")
+host=$(cut -f2 -d@ <<<"$1")
+
+curl -sL "https://$host/.well-known/lnurlp/$name" |
+jq -rc .callback |
+xargs -I{} printf '%s?amount=%d\n' {} "$(bcalc -n "$2" to msats)" |
+xargs curl -sL |
+jq -cr .pr
