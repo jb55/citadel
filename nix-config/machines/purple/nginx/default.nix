@@ -1,8 +1,44 @@
 extra:
 { config, lib, pkgs, ... }:
-let sites = [ ];
-    logDir = "/var/log/nginx";
+let logDir = "/var/log/nginx";
+
+    damus-api = (import (pkgs.fetchFromGitHub {
+      owner  = "damus-io";
+      repo   = "api";
+      rev    = "68a4aafbf284ec2281e1a842177c8fd1386586c1";
+      sha256 = "sha256-fxDrV2J8DtwVlU9hq2DRkQGLrarJMh3VxifouQeryEU=";
+    }) {}).package;
+
+    damus-api-port = 4000;
+    damus-api-staging-port = 4001;
+    damus-api-service = {env, port, db}: {
+      description = "damus-api-${env}";
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig.Type = "simple";
+      serviceConfig.ExecStart = "${damus-api}/bin/damus-api";
+
+      environment = {
+        PORT="${toString port}";
+        DEEPL_KEY=extra.private.deepl_key;
+        LN_NODE_ID=extra.private.ln_node_id;
+        LN_NODE_ADDRESS=extra.private.ln_node_address;
+        LN_RUNE=extra.private.ln_rune;
+        LN_WS_PROXY=extra.private.ln_ws_proxy;
+        DB_PATH=db;
+      };
+    };
 in {
+  systemd.services.damus-api-staging = damus-api-service {
+    env = "staging";
+    port = damus-api-staging-port;
+    db = "/home/purple/api/staging";
+  };
+
+  systemd.services.damus-api = damus-api-service {
+    env = "production";
+    port = damus-api-port;
+    db = "/home/purple/api/production";
+  };
 
   services.nginx = {
     enable = true;
@@ -44,6 +80,30 @@ in {
         listen      80 default_server;
         server_name "";
         return      444;
+      }
+
+      server {
+        listen 80;
+
+        server_name api.damus.io;
+
+        location / {
+          proxy_pass http://localhost:${toString damus-api-port};
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+        }
+      }
+
+      server {
+        listen 80;
+
+        server_name api.staging.damus.io;
+
+        location / {
+          proxy_pass http://localhost:${toString damus-api-staging-port};
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+        }
       }
 
       server {
