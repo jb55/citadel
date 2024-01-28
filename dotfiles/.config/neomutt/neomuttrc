@@ -1,6 +1,6 @@
 set realname='William Casarin'
 set nm_default_uri="notmuch:///home/jb55/mail/personal"
-set sendmail="/home/jb55/bin/sendmail"
+set sendmail="/home/jb55/bin/sendmail-mutt"
 set virtual_spoolfile=yes
 set folder="/home/jb55/mail/personal"
 set wait_key=no
@@ -33,20 +33,23 @@ virtual-mailboxes \
   "damus-prs" "notmuch://?query=query:damusp" \
   "damus-issues" "notmuch://?query=query:damusi"
 
-macro index,pager a "<modify-labels-then-hide>-unread -inbox<enter>"
+macro index,pager a "<modify-labels>-unread -inbox<enter>"
 macro index,pager i "<modify-labels>+inbox<enter>"
-macro index,pager A "<create-alias>" "Create alias"
-macro index,pager F "<modify-labels-then-hide>+filed" "File message"
+macro index,pager F "<modify-labels>+filed<enter>" "File message"
 macro index,pager + "<modify-labels>+"
-macro index,pager S "<modify-labels-then-hide>+spam -unread -inbox<enter>"
-macro index c "<change-vfolder>?" "Change to vfolder overview"
+macro index,pager S "<modify-labels>+spam -unread -inbox<enter>"
+macro index C "<collapse-all>" "Collapse all threads"
+macro index c "<collapse-thread>" "Collapse thread"
+macro index T "<tag-thread>" "Tag thread"
 macro index \\\\ "<vfolder-from-query>" "Search mailbox"
 macro pager p "|delta --paging always<enter>"
 macro pager d "<next-page>"
 macro pager u "<previous-page>"
 macro pager c "|cols|less<enter>"
 macro pager t "|collapse|less<enter>"
-macro attach h "|w3m -dump -T text/html | less<enter>" "View text/html with w3m"
+
+macro attach o "<save-entry><enter>open %s<enter>"
+#macro attach h "|w3m -dump -T text/html | less<enter>" "View text/html with w3m"
 #macro pager P "|grep patch$ | xargs curl -sL | delta --paging always<enter>"
 macro pager P ":set pipe_decode=no<enter> | mail-prpatch | delta --paging always"
 macro pager G ":set pipe_decode=no<enter> | mail-prpatch-insert"
@@ -72,4 +75,6 @@ color header            brightcyan          default        '^Subject:'
 #set uncollapse_jump=yes
 #set display_filter=~/bin/mutt-local-date
 
+auto_view text/html
+alternative_order text/plain text/html
 source ~/.mail_aliases

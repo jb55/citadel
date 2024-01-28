@@ -11,6 +11,7 @@
 	pager = delta --max-line-length=4096 --file-style=box --paging=always
 [sendemail]
   smtpServer=/home/jb55/bin/sendmail
+	ccCmd = git-contacts
 [url "git@github.com:"]
   insteadOf = gh:
 [url "git@git.sr.ht:~"]
@@ -32,6 +33,7 @@
 [gui]
   recentrepo = /Users/jb55/src/js/titania
 [alias]
+  dft = difftool
   s = show
   a = add
   ap = add -p
@@ -103,6 +105,14 @@
 	helper = !gh auth git-credential
 [init]
 	defaultBranch = master
+[difftool "difftastic"]
+	cmd = difft "$LOCAL" "$REMOTE"
+[difftool]
+        prompt = false
+[pager]
+        difftool = true
+[diff]
+	tool = difftastic
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f

@@ -6,5 +6,5 @@
 
 config_version: 2
 settings:
-  colors.webpage.darkmode.enabled:
-    global: true
+  content.javascript.clipboard:
+    global: access

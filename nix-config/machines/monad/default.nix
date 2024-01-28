@@ -198,7 +198,7 @@ in
     startAt = "Mon..Fri *-*-* 17:00:00";
   };
 
-  virtualisation.docker.enable = if extra.is-minimal then false else true;
+  #virtualisation.docker.enable = if extra.is-minimal then false else true;
 
   boot.kernelPatches = [
     #{ # pci acs hack, not really safe or a good idea

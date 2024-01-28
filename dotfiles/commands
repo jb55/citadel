@@ -1,6 +1,6 @@
 aci	app > cal > interactive	echo pcal interactive
 acl	app > cal > list	echo pcal list
-afb	app > feeds > blogs	fuzz-rss "grep @blog"
+afb	app > feeds > blogs	fuzz-rss "grep @blog | grep -v @busy"
 afe	app > edit feeds	echo edit ~/dotfiles/rssfeeds
 aff	app > feeds	fuzz-rss "grep -v @busy"
 afp	app > feeds > podcasts	fuzz-rss "grep @pod"
@@ -19,7 +19,7 @@ cdpr	cd project root	echo cd $(project-root)
 ce	compile error	fuzz-compile-error
 cR	compile repeat error	fuzz-compile-repeat-error
 cr	compile repeat	fuzz-compile-repeat
-cs	compile show build	echo cat .build-result
+cs	compile show build	echo less .build-result
 dsa	docs->stripe->api	~/docs/stripe/jumpapi
 dsg	docs->stripe->go	fuzzdoc ~/docs/stripe/go-v72.txt '^type '
 dgt	docs->go->testing	fuzzdoc ~/docs/godoc/testing.txt '^func '

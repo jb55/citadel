@@ -74,6 +74,7 @@ config.bind('<Ctrl-e>', 'edit-text')
 config.bind('e', 'open-editor')
 config.bind('co', 'tab-only')
 config.bind('gl', 'tab-move +')
+config.bind('E', 'tab-focus last')
 config.bind('gh', 'tab-move -')
 
 # Remove fixed, sticky elements from pages.
@@ -90,11 +91,13 @@ config.set('downloads.position', 'bottom')
 config.set('tabs.select_on_remove', 'last-used')
 
 config.set('url.default_page', 'about:blank')
+#config.set('colors.webpage.darkmode.enabled', True)
+#config.set('colors.webpage.preferred_color_scheme', 'light')
 
 
 config.set('url.searchengines', {
-  #'DEFAULT': 'https://google.com/search?q={}',
-  'DEFAULT': 'http://duckduckgo.com/?q={}',
+  'DEFAULT': 'https://google.com/search?q={}',
+  #'DEFAULT': 'http://duckduckgo.com/?q={}',
   'star': 'https://github.com/stars?utf8=%E2%9C%93&q={}',
   'so': 'https://google.com/search?q=site:stackoverflow.com {}',
   'gl': 'http://www.google.com/search?q={}&btnI=Im+Feeling+Lucky',

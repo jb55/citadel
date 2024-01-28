@@ -11,8 +11,9 @@ set hidden
 set rnu nu
 set wrap
 
-hi ColorColumn ctermbg=254
-hi StatusLine ctermbg=254
+hi ColorColumn ctermbg=237
+"hi ColorColumn ctermbg=254
+"hi StatusLine ctermbg=254
 
 map Y y$
 
