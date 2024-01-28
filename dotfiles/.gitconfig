@@ -6,12 +6,15 @@
   diff = auto
   status = auto
 [core]
+  abbrev = 12
   excludesfile = /Users/jb55/.gitignore_global
   editor = edit
-	pager = delta --max-line-length=4096 --file-style=box --paging=always
+	pager = delta --paging=always
 [sendemail]
   smtpServer=/home/jb55/bin/sendmail
-	ccCmd = git-contacts
+  ccCmd = git-contacts
+  aliasesFile= ~/.mail_aliases
+  aliasFileType=mutt
 [url "git@github.com:"]
   insteadOf = gh:
 [url "git@git.sr.ht:~"]
@@ -36,6 +39,7 @@
   dft = difftool
   s = show
   a = add
+  amw = am --whitespace=fix
   ap = add -p
   b = branch
   au = add -u
@@ -78,11 +82,14 @@
   tg = log --date-order --tags --simplify-by-decoration --pretty=format:'%ai %h %d'
   try = merge --no-commit --no-ff
   co = checkout
+  chp = cherry-pick
   sw = switch
-  fixes = !git --no-pager show -s --pretty='format:Fixes: %h (\"%s\")\n'
+  fixes = !git --no-pager show -s --pretty=fixes
   pushall = !git remote | parallel -L1 -I R git push R master
 [rebase]
   autosquash = true
+[pretty]
+  fixes = Fixes: %h (\"%s\")
 [diff]
 	colorMoved = dimmed-zebra
 	colorMovedWs = allow-indentation-change
@@ -96,7 +103,6 @@
 [magit]
 	hideCampaign = true
 [nostr]
-	relays = wss://relay.damus.io wss://nos.lol wss://nostr.wine
 [github]
 	user = jb55
 [grep]
@@ -113,6 +119,8 @@
         difftool = true
 [diff]
 	tool = difftastic
+[nostr]
+	relays = wss://relay.damus.io wss://nos.lol wss://nostr.wine
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f

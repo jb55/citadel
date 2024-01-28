@@ -11,10 +11,11 @@ let #monstercatPkgs = import <monstercatpkgs> { inherit pkgs; };
 in {
   allowUnfree = true;
   allowUnfreeRedistributable = true;
+  android_sdk.accept_license = true;
   allowBroken = false;
   checkMeta = true;
   zathura.useMupdf = true;
-  android_sdk.accept_license = true;
+  #android_sdk.accept_license = true;
 
   packageOverrides = super: rec {
     qemu = super.qemu.override {

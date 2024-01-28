@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#set -eou pipefail
+set -eo pipefail
 #slug=""
 slug=${1:-$(github-project-slug)}
 if [ $slug != "" ]
@@ -14,4 +14,4 @@ fzf --no-sort -m |
 cutt -f2 |
 xargs -I{} printf 'thread:{}\n')
 
-echo "notmuch show $thread | mail-prpatch"
+echo "notmuch show $thread | mail-prpatch | $(git config core.pager)"

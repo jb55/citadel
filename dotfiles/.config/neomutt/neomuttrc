@@ -3,6 +3,7 @@ set nm_default_uri="notmuch:///home/jb55/mail/personal"
 set sendmail="/home/jb55/bin/sendmail-mutt"
 set virtual_spoolfile=yes
 set folder="/home/jb55/mail/personal"
+set beep=no
 set wait_key=no
 set pager_stop=yes
 set from="jb55@jb55.com"
@@ -10,7 +11,7 @@ set pipe_decode=yes
 set sig_dashes=no
 set pipe_split=no
 set envelope_from=yes
-set mime_forward=no
+set mime_forward=yes
 unset markers
 set text_flowed
 
@@ -45,7 +46,7 @@ macro index \\\\ "<vfolder-from-query>" "Search mailbox"
 macro pager p "|delta --paging always<enter>"
 macro pager d "<next-page>"
 macro pager u "<previous-page>"
-macro pager c "|cols|less<enter>"
+#macro pager c "|cols|less<enter>"
 macro pager t "|collapse|less<enter>"
 
 macro attach o "<save-entry><enter>open %s<enter>"

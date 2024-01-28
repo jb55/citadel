@@ -93,6 +93,7 @@ config.set('tabs.select_on_remove', 'last-used')
 config.set('url.default_page', 'about:blank')
 #config.set('colors.webpage.darkmode.enabled', True)
 #config.set('colors.webpage.preferred_color_scheme', 'light')
+config.set('colors.webpage.preferred_color_scheme', 'dark')
 
 
 config.set('url.searchengines', {

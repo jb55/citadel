@@ -116,6 +116,9 @@ in
           allowedIPs = [ "10.100.0.7/32" ];
           endpoint = "45.79.91.128:51820";
         }
+        { publicKey = "fj35gCObJ+uP/8tDpYsAD+b2XuSpa82umL/8LscIHwQ="; # pixel
+          allowedIPs = [ "10.100.0.9/32" ];
+        }
         { publicKey = "oYTNuXPl5GQsz53cL55MO9MfI61DyZBrBDy9ZFBpDWU="; # cross (air)
           allowedIPs = [ "10.100.0.8/32" ];
         } 

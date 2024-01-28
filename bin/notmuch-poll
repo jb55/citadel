@@ -11,80 +11,23 @@ notmuchcmd tag +filed +bulk 'folder:".Bulk"'
 # sent
 notmuchcmd tag +sent tag:inbox and not tag:sent and folder:".Sent"
 
-# lobsters, ycombinator
-notmuchcmd tag +lobsters +rss +tech +busy tag:inbox and not tag:lobsters and folder:".Lists.lobsters"
-
-# promote from busy if its interesting
-notmuchcmd tag -busy +haskell tag:inbox and not tag:haskell and '(tag:lobsters or tag:hn)' and subject:haskell
-notmuchcmd tag -busy +nix tag:inbox and not tag:nix and '(tag:lobsters or tag:hn)' and subject:nix
-notmuchcmd tag +list tag:inbox and to:"groups.io"
-
-# notmuch stuff
-notmuchcmd tag +francesc \(from:elies@posteo.net or from:francesc.elies@gmail.com\) and not tag:francesc
-notmuchcmd tag +notmuch +list to:notmuch and tag:inbox and not tag:notmuch
-
 # me
-notmuchcmd tag +to-me not tag:to-me and and tag:inbox and \(to:jackbox55@gmail.com or to:jb55@jb55.com\)
-notmuchcmd tag -to-me tag:to-me and tag:inbox and from:discoursemail.com
-
-notmuchcmd tag +flagged tag:inbox and not tag:flagged and to:jackbox55+star@gmail.com
-
-# annoying
-notmuchcmd tag +alert tag:inbox and folder:".Alerts"
-notmuchcmd tag +update tag:inbox and folder:".Update"
-notmuchcmd tag +alert +circleci tag:inbox and from:builds@circleci.com
-notmuchcmd tag +alert +trello tag:inbox and from:trello
-notmuchcmd tag +alert +sentry tag:inbox and from:noreply@md.getsentry.com or from:noreply@outbound.getsentry.com
-notmuchcmd tag +ci tag:inbox and from:gl@blockstream.io and subject:Pipeline
-
-# linux
-notmuchcmd tag +linux +list to:vger.kernel.org and tag:inbox and not tag:linux
-notmuchcmd tag +mesa +linux +list to:mesa-dev and tag:inbox and not tag:mesa
-notmuchcmd tag +git +list to:git@vger.kernel.org and tag:inbox and not tag:git
-
-
-# forums
-notmuchcmd tag +bitcoin +list folder:".Lists.bitcoin" and tag:inbox
-notmuchcmd tag +best -filed +bitcoin-dev +bitcoin +list to:"bitcoin-dev@lists.linuxfoundation.org" and tag:inbox and not tag:bitcoin-dev
-notmuchcmd tag +cypherpunks +list 'from:cypherpunks@lists.cpunks.org' and tag:inbox
-notmuchcmd tag +bitcoin +core to:bitcoin@noreply.github.com and tag:inbox and subject:bitcoin/bitcoin
-notmuchcmd tag +bitcoin +core +gui to:bitcoin-core/gui and tag:inbox
-notmuchcmd tag +bitcoin +busy +bips to:"bitcoin/bips" and tag:inbox
-notmuchcmd tag +lightning to:"lightningnetwork/" and tag:inbox
-notmuchcmd tag +crypto +list to:cryptography.metzdowd.com and tag:inbox
-notmuchcmd tag +github +filed \(folder:".GitHub" or from:github.com\) and tag:inbox
-notmuchcmd tag -filed '(to:workflows@vger.kernel.org)' and tag:inbox
-
-notmuchcmd tag -filed +lightning +lightning-dev +list to:lightning-dev
-notmuchcmd tag -filed +lightning +clightning +list to:"c-lightning@lists.ozlabs.org" and tag:inbox
-notmuchcmd tag +lightning +clightning '(to:"ElementsProject/lightning" or to:"lightningd/plugins")' and tag:inbox
-
-notmuchcmd tag +nix-dev +nix +list \(to:nix-dev@lists.science.uu.nl OR to:nix-dev@cs.uu.nl OR to:nix-devel@googlegroups.com OR from:nixos1@discoursemail.com\) and tag:inbox
-notmuchcmd tag +redo +list to:redo-list.googlegroups.com and tag:inbox
-
-# file busy
-notmuchcmd tag +filed tag:busy and not tag:filed and not tag:best and not tag:flagged and tag:inbox
-
-# more contracting stuff
-notmuchcmd tag +work +steamoji tag:inbox and to:steamoji
-notmuchcmd tag +alert to:notifications.heroku.com
-
-notmuchcmd tag +work +commit -filed tag:inbox and to:will.casarin@commit.dev
-notmuchcmd tag +work +commit tag:github and tag:inbox and to:commitdev
+#notmuchcmd tag +to-me not tag:to-me and and tag:inbox and \(to:jackbox55@gmail.com or to:jb55@jb55.com\)
+#notmuchcmd tag +flagged tag:inbox and not tag:flagged and to:jackbox55+star@gmail.com
 
 # except if someone mentions e
-notmuchcmd tag +flagged -busy -filed tag:inbox and '(tag:list and tag:to-me) or to:mention@noreply.github.com or author@noreply.github.com or to:review_requested@noreply.github.com or to:comment@noreply.github.com or (subject:jb55 and tag:github)'
+notmuchcmd tag +flagged -busy -filed tag:inbox and '(tag:list and tag:to-me) or to:mention@noreply.github.com or author@noreply.github.com or to:ci_activity@noreply.github.com or to:review_requested@noreply.github.com or to:comment@noreply.github.com or (subject:jb55 and tag:github) or ((usdt or ebpf or bpf or tracepoints) and bitcoin)'
+
+# don't really need this in my inbox
+notmuchcmd tag +filed to:push@noreply.github.com
 
 # spam
-notmuchcmd tag +spam -inbox 'from:"BOOM OF SALES"' and tag:inbox
+notmuchcmd tag -inbox from:Giveaway or 'from:"BOOM OF SALES"' or 'from:Ray Ban' or from:.lat or from:163.com or from:.homes or from:.bio or from:.biz or from:.world or from:.boats or from:.bond or from:.cfd or from:.xyz or from:.pro or from:.beauty or from:.fun or from:.shop or from:.yeah.net or from:.sbs or from:.one or from:.bet or from:.best or from:.info or from:.online or from:.ltd or from:.live or from:.club or from:.life or from:.top or from:126.com or from:.wiki or from:.monster or from:.ru or from:.mom or from:.us or from:.click or from:.today or from:.autos or from:.co or from:.buzz or from:.quest or 'from:Home Depot' or from:resistthemainstream.com or from:sugarmat or 'from:Malware Alert' or 'from:Lowes' or from:IServiced and tag:inbox
 
 # not spam
 notmuchcmd tag +inbox -spam +flagged "bitcoin wizard" and tag:spam
 
 # phone mail
 notmuchcmd tag -inbox tag:inbox and '(folder:".Archive" or folder:".Trash" or folder:".Archives")'
-
-# bulk bs
-notmuchcmd tag +filed +bulk 'folder:".Bulk"'
 
 printf "notmuch tagging done.\n"

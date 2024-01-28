@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 set -eou pipefail
 
-notmuch am -s --am -f ${1:-'tag:inbox and subject:PATCH'}
+echo notmuch am -s --am -f ${1:-query:patches}

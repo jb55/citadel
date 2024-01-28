@@ -1,3 +1,5 @@
+ans	app > note scratch	echo scratch-note
+ane	app > note edit	fuzz-note-edit
 aci	app > cal > interactive	echo pcal interactive
 acl	app > cal > list	echo pcal list
 afb	app > feeds > blogs	fuzz-rss "grep @blog | grep -v @busy"
@@ -25,6 +27,7 @@ dsg	docs->stripe->go	fuzzdoc ~/docs/stripe/go-v72.txt '^type '
 dgt	docs->go->testing	fuzzdoc ~/docs/godoc/testing.txt '^func '
 ecc	edit vdirsyncer config	echo edit ~/.config/vdirsyncer/config
 ec	edit commands	fuzz-edit-scripts
+ebc	edit build command	echo edit .buildcmd
 ed	edit default.nix	echo edit default.nix
 es	edit shell.nix	echo edit shell.nix
 eFc	edit fuzz command	fuzz-edit-command
@@ -41,6 +44,7 @@ gb	git branches	echo git bvr
 G	gemini	gemmark
 ghi	github issues	fuzz-gh-issue-list
 ghp	github prf	fuzz-gh-pr-list
+gcp	github cherry-pick	echo git cherry-pick
 gpm	git mlap	echo git mlap
 h	run history	fuzz-run-hist
 jt	jump tag	fuzz-jump-tag
@@ -60,6 +64,7 @@ nT	email today	echo f nt query:today
 nt	notmuch threads	fuzz-notmuch-threads
 of	open file	fuzz-open-file
 olf	open last files	fuzz-last-files open
+pr	cd project root	echo cd \"$(project-root)\"
 pc	cat project file	fuzz-cat-file
 pr	cd project root	echo cd $(project-root)
 pf	edit project file	fuzz-edit-file
@@ -78,7 +83,6 @@ sp	search project	fuzz-search-files
 ss	search project file	fuzz-search-file
 st	search TODOs	fuzz-search-files TODO
 vim	edit vim config	echo edit ~/.config/nvim/init.vim
-wn	work notes	echo edit /home/jb55/projects/steamoji/doc/$(ls -1pt /home/jb55/projects/steamoji/doc | grep -v / | head -n1)
 wsg	work service gql	fuzzedit schema '^'
 wsm	work service mutations	fuzzedit mutation '^func '
 wsq	work service queries	fuzzedit query '^func '
@@ -89,4 +93,6 @@ wti	work trello inprogress	fuzz-trello-sprint "^In Progress "
 wtr	work trello refresh	echo trello refresh
 wts	work trello sprint	fuzz-trello-sprint
 wtt	work trello todo	fuzz-trello-sprint "^Todo "
+wn	work notes	echo edit /home/jb55/projects/steamoji/doc/$(ls -1pt /home/jb55/projects/steamoji/doc | grep -v / | head -n1)
+wm	work mail	echo neomutt -f \"notmuch://?query=query:work\"
 z	fz	echo fz

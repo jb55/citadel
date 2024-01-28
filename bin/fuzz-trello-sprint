@@ -2,30 +2,10 @@
 
 set -eo pipefail
 
-board=${TRELLO_BOARD:-Sprint}
-
-all=$(cat <<\EOS
-/^[^*]/ {
-	list=""
-	for(i=6;i<=NF;i++) {
-		list = list" "$i
-	}
-}
-
-/^\*/ {
-	print list " " $0
-}
-EOS
-)
-
-stripansi() {
-	sed 's/\x1b\[[0-9;]*m//g'
-}
-
-card=$(trello show-cards -b $board | stripansi | awk "$all" | fuzzer "$1")
+card=$(trello-cards | fuzzer "$1")
 #list=$(trello show-lists -b $board | grep ID | fuzzer "$1" | sed -En 's,^([^(]+) \(ID:.*,\1,p')
 #card=$(trello show-cards -b $board -l "$list" | grep '^\*' | fzf)
-card_id=$(sed -En 's,.*\* ([^ ]+).*,\1,p' <<<"$card")
+card_id=$(trello-card-id <<<"$card")
 card_name=$(cut -d- -f 2- <<<"$card")
 list=$(cut -d\* -f1 <<<"$card")
 echo "trello card-details $card_id | less --quit-if-one-screen # $list > $card_name"
