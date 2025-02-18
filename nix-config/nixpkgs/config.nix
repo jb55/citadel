@@ -15,16 +15,24 @@ in {
   allowBroken = false;
   checkMeta = true;
   zathura.useMupdf = true;
+  cudaSupport = false;
+  rocmSupport = false;
   #android_sdk.accept_license = true;
 
   packageOverrides = super: rec {
-    qemu = super.qemu.override {
-      smbdSupport = true;
+    qutebrowser = super.qutebrowser.override {
+      enableWideVine = true;
     };
 
+    #qemu = super.qemu.override {
+    #  smbdSupport = true;
+    #};
+
+/*
     mpv = pkgs.wrapMpv pkgs.mpv-unwrapped {
       scripts = [ pkgs.mpvScripts.mpris ];
     };
+    */
 
     # /run/current-system/sw/bin/ls $HOME/.emacs.d/elpa | sed 's/-[[:digit:]].*//g;s/\+$/-plus/g' | sort -u
     #emacs = super.emacsHead;

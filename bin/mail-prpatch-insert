@@ -41,16 +41,16 @@ threadid=$msgid
 for file in "$PATCHES/"*
 do
 	# mailsplit introduces linebreaks from some reason
-	awk '
-	  /^Subject:/ { subj = 1; printf "%s", $0; next }
-	  subj && !/^$/ { printf " %s", $0; next }
-	  /^$/ && subj { subj = 0; print ""; next }
-	  { print }
-	' < "$file" > "$file".2
-	mv "$file".2 "$file"
+	#awk '
+	#  /^Subject:/ { subj = 1; printf "%s", $0; next }
+	#  subj && !/^$/ { printf " %s", $0; next }
+	#  /^$/ && subj { subj = 0; print ""; next }
+	#  { print }
+	#' < "$file" > "$file".2
+	#mv "$file".2 "$file"
 
 	if [ -n "$replyto" ]; then
-		sed -i"" "1 a Cc: $replyto" "$file" 
+		sed -i"" "1 a Bcc: $replyto" "$file" 
 	fi
 
 	if [ -n "$prlink" ]; then
@@ -72,7 +72,7 @@ do
 	sed -i"" "1 a In-Reply-To: $threadid" "$file" 
 	sed -i"" "1 a References: $threadid" "$file" 
 
-	notmuch insert +inbox < "$file"
+	notmuch insert +work +inbox < "$file"
 
 	msgid=$(new_msgid "$file")
 done

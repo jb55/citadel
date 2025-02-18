@@ -27,6 +27,7 @@ in
 {
   imports = [
     ./hardware
+    (import ./rocksmith.nix)
     # ./contracts/commit
     # ./contracts/plastiq
 
@@ -38,12 +39,31 @@ in
 
   #hardware.steam-hardware.enable = true;
 
-  boot.zfs.enableUnstable = true;
+  #boot.zfs.enableUnstable = true;
   boot.zfs.removeLinuxDRM = true;
-  boot.kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
+  #boot.kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
+
+  # ai
+  #services.comfyui.enable = false;
+  #services.comfyui.rocmSupport = true;
+  #services.comfyui.dataPath = "/titan/ai/comfyui";
+  services.ollama = {
+    enable = true;
+    host = "0.0.0.0";
+    acceleration = "rocm";
+    environmentVariables = {
+      HCC_AMDGPU_TARGET = "gfx1010"; # used to be necessary, but doesn't seem to anymore
+    };
+    rocmOverrideGfx = "10.1.0";
+  };
+
+  services.n8n.enable = true;
 
   services.ofono.enable = false;
   services.ofono.plugins = with pkgs; [ ofono-phonesim ];
+
+  services.open-webui.enable = true;
+  services.open-webui.port = 8090;
 
   services.prometheus.enable = false;
   # services.prometheus.dataDir = "/zbig/data/prometheus";
@@ -58,7 +78,7 @@ in
   ];
 
   # services.guix.enable = true;
-  services.synergy.client.enable = if extra.is-minimal then false else true;
+  services.synergy.client.enable = if extra.is-minimal then false else false;
   services.synergy.client.autoStart = true;
   services.synergy.client.serverAddress = "10.100.0.2";
   services.synergy.client.screenName = "monad";
@@ -106,13 +126,15 @@ in
   };
 
   services.dnsmasq.enable = true;
-  services.dnsmasq.resolveLocalQueries = true;
+  services.dnsmasq.resolveLocalQueries = false;
   #services.dnsmasq.servers = ["127.0.0.1#43"];
   # services.dnsmasq.servers = ["127.0.0.1#43" "1.1.1.1" "8.8.8.8"];
   services.dnsmasq.settings.server = ["8.8.8.8" "8.8.4.4" ];
   services.dnsmasq.settings.conf-file = "/var/dnsmasq-hosts";
   services.dnsmasq.settings.addn-hosts = "/var/hosts";
-  services.dnsmasq.settings.dns-forward-max = 1024;
+  services.dnsmasq.settings.dns-forward-max = 12000;
+  services.dnsmasq.settings.min-cache-ttl = 300;
+  services.dnsmasq.settings.rebind-domain-ok = "";
 
   services.bitlbee.plugins = with pkgs; [
     bitlbee-mastodon
@@ -132,7 +154,6 @@ in
 
       # crude way to clear the cache...
       systemctl restart dnsmasq
-      pkill qutebrowser
     '';
 
     startAt = "Mon..Fri *-*-* 09:00:00";
@@ -222,20 +243,21 @@ in
     '';
   };
 
-  #virtualisation.libvirtd.enable = false;
-  #virtualisation.libvirtd.qemuOvmf = false;
-  #virtualisation.libvirtd.qemuVerbatimConfig = ''
-  #  user = "jb55"
-  #  group = "kvm"
-  #  cgroup_device_acl = [
-  #    "/dev/input/by-id/usb-Topre_Corporation_Realforce-event-kbd",
-  #    "/dev/input/by-id/usb-Razer_Razer_DeathAdder_2013-event-mouse",
-  #    "/dev/null", "/dev/full", "/dev/zero",
-  #    "/dev/random", "/dev/urandom",
-  #    "/dev/ptmx", "/dev/kvm", "/dev/kqemu",
-  #    "/dev/rtc","/dev/hpet", "/dev/sev"
-  #  ]
-  #'';
+  virtualisation.libvirtd = {
+    enable = false;
+    qemu = {
+      package = pkgs.qemu_kvm;
+      runAsRoot = true;
+      swtpm.enable = true;
+      ovmf = {
+        enable = false;
+        #packages = [(pkgs.OVMF.override {
+        #  secureBoot = true;
+        #  tpmSupport = true;
+        #}).fd];
+      };
+    };
+  };
 
   systemd.user.services.btc-ban-aws = {
     enable   = if extra.is-minimal then false else true;
@@ -270,11 +292,11 @@ in
     "rcon.password" = "minecraft";
   };
 
-  virtualisation.virtualbox.host.enable = false;
+  virtualisation.virtualbox.host.enable = true;
   virtualisation.virtualbox.host.enableHardening = false;
   #virtualization.virtualbox.host.enableExtensionPack = true;
 
-  users.extraUsers.jb55.extraGroups = [ "vboxusers" "bitcoin" "kvm" "input" ];
+  users.extraUsers.jb55.extraGroups = [ "vboxusers" "bitcoin" "kvm" "qemu-libvirtd" "libvirtd" "input" ];
 
   services.xserver.videoDrivers = [ ];
 
@@ -304,8 +326,6 @@ in
   services.tor.controlPort = 9051;
   services.tor.client.enable = true;
   services.tor.settings = extra.private.tor.settings;
-
-  services.fcgiwrap.enable = if extra.is-minimal then false else true;
 
   services.nix-serve.enable = false;
   services.nix-serve.bindAddress = nix-serve.bindAddress;

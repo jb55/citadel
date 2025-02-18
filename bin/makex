@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-exec chmod +x "$1"
+chmod +x "$1"

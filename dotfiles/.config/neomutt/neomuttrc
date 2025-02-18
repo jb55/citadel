@@ -32,17 +32,19 @@ virtual-mailboxes \
   "patches" "notmuch://?query=query:patches" \
   "today" "notmuch://?query=date:today" \
   "damus-prs" "notmuch://?query=query:damusp" \
-  "damus-issues" "notmuch://?query=query:damusi"
+  "damus-issues" "notmuch://?query=query:damusi" \
+  "work" "notmuch://?query=query:work" \
+  "notwork" "notmuch://?query=query:notwork"
 
 macro index,pager a "<modify-labels>-unread -inbox<enter>"
 macro index,pager i "<modify-labels>+inbox<enter>"
 macro index,pager F "<modify-labels>+filed<enter>" "File message"
 macro index,pager + "<modify-labels>+"
-macro index,pager S "<modify-labels>+spam -unread -inbox<enter>"
 macro index C "<collapse-all>" "Collapse all threads"
 macro index c "<collapse-thread>" "Collapse thread"
 macro index T "<tag-thread>" "Tag thread"
 macro index \\\\ "<vfolder-from-query>" "Search mailbox"
+macro index = "<mark-message>z<enter><change-folder>^<enter>'z"
 macro pager p "|delta --paging always<enter>"
 macro pager d "<next-page>"
 macro pager u "<previous-page>"
@@ -50,7 +52,7 @@ macro pager u "<previous-page>"
 macro pager t "|collapse|less<enter>"
 
 #macro attach h "|w3m -dump -T text/html | less<enter>" "View text/html with w3m"
-#macro pager P "|grep patch$ | xargs curl -sL | delta --paging always<enter>"
+macro pager O "|grep patch$ | xargs curl -sL | delta --paging always<enter>"
 macro pager P ":set pipe_decode=no<enter> | mail-prpatch | delta --paging always"
 macro pager G ":set pipe_decode=no<enter> | mail-prpatch-insert"
 
@@ -78,3 +80,6 @@ color header            brightcyan          default        '^Subject:'
 auto_view text/html
 alternative_order text/plain text/html
 source ~/.mail_aliases
+
+ignore *                # Ignore all headers
+unignore from to subject date cc bcc  # Unignore specific headers

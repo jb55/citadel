@@ -98,7 +98,17 @@ in
       open-sans
       raleway
       profont
+
+      # chinese
+      noto-fonts-cjk-sans
+      source-han-sans
+      source-han-serif
+
+      # pixel fonts
       terminus_font
+      cozette
+      #ark-pixel-font
+
       paratype-pt-mono
       source-code-pro
       ubuntu_font_family

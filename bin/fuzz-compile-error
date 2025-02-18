@@ -2,7 +2,7 @@
 
 set -eou pipefail
 
-if [ ! -f .build-result ]; then
+if [ ! -f build.log ]; then
 	printf "no build result found\n" >&2
 	exit 1
 fi
@@ -11,6 +11,6 @@ fi
 PLANG=rust
 ERR_OPTS="--exit-0 --tac --ansi --preview 'build-preview {}' --preview-window=top"
 
-<.build-result grep -E '[[:space:]]*[^: ]+:[0-9]+.*' | 
+<build.log grep -E '[[:space:]]*[^: ]+:[0-9]+.*' | 
 env FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS $ERR_OPTS" fuzzer "$@" | 
 file-jump

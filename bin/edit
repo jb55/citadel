@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-exec nvim "$@"
+exec vim "$@"
 
 #if [ -t 0 ]; then
 #else

@@ -3,8 +3,8 @@ extra:
 let
   chromecastIP = "192.168.87.190";
   iptables = "iptables -A nixos-fw";
-  ipr = "${pkgs.iproute}/bin/ip";
-  hasVPN = true;
+  ipr = "${pkgs.iproute2}/bin/ip";
+  hasVPN = false;
   writeBash = extra.util.writeBash;
   transmission-dir = "/zbig/torrents";
   download-dir = "${transmission-dir}/Downloads";
@@ -21,7 +21,7 @@ let
       ${extra.private.vpncred.pass}
     '';
     routeup = writeBash "openvpn-pia-routeup" ''
-      ${pkgs.iproute}/bin/ip route add default via $route_vpn_gateway dev $dev metric 1 table ${vpn.table}
+      ${ipr} route add default via $route_vpn_gateway dev $dev metric 1 table ${vpn.table}
       exit 0
     '';
 #    up = writeBash "openvpn-pia-preup" config.services.openvpn.servers.pia.up;
@@ -35,25 +35,36 @@ let
     lntun = 7878;
     dns = 53;
     http = 80;
+    ssh = 22;
     wireguard = 51820;
     weechat = 9000;
+    webdev = 8080;
+    testdamuspush = 8766;
     nncp = 5442;
     starbound = 21025;
+    terraria = 7777;
+    ollama = 11434;
+    bg3 = 23253;
     inherit (extra.private) notify-port;
   };
 
   firewallRules = (with ports; [
-    "nixos-fw -s 10.100.0.0/24,192.168.86.1/24 -p tcp --dport 8080 -j nixos-fw-accept" # dev
-    "nixos-fw -s 10.100.0.0/24,192.168.86.1/24 -p tcp --dport 5442 -j nixos-fw-accept"
-    "nixos-fw -s 10.100.0.0/24,192.168.86.1/24 -p tcp --dport ${toString starbound} -j nixos-fw-accept"
+    "nixos-fw -s 10.100.0.0/24,${extra.machine.subnet} -p tcp --dport ${toString webdev} -j nixos-fw-accept" # dev
+    "nixos-fw -s 10.100.0.0/24,${extra.machine.subnet} -p tcp --dport ${toString testdamuspush} -j nixos-fw-accept" # damus push notification test server
+    "nixos-fw -s 10.100.0.0/24,${extra.machine.subnet} -p tcp --dport ${toString nncp} -j nixos-fw-accept"
+    "nixos-fw -s 10.100.0.0/24,${extra.machine.subnet} -p tcp --dport ${toString terraria} -j nixos-fw-accept"
+    "nixos-fw -s 10.100.0.0/24,${extra.machine.subnet} -p tcp --dport ${toString ollama} -j nixos-fw-accept"
+    "nixos-fw -s 192.168.86.1/24 -p udp --dport ${toString wireguard} -j nixos-fw-accept"
+    "nixos-fw -s 192.168.86.1/24 -p tcp --dport ${toString bg3} -j nixos-fw-accept"
+    "nixos-fw -s 192.168.86.1/24 -p udp --dport ${toString bg3} -j nixos-fw-accept"
     "nixos-fw -s 10.100.0.0/24 -p tcp --dport 80 -j nixos-fw-accept"
     "nixos-fw -s 10.100.0.0/24 -p tcp --dport 3000 -j nixos-fw-accept"
     "nixos-fw -s 10.100.0.0/24 -p tcp --dport 25565 -j nixos-fw-accept"
     "nixos-fw -s 10.100.0.0/24 -p tcp --dport 25575 -j nixos-fw-accept"
     "nixos-fw -s 10.100.0.2/32 -p tcp --dport ${toString lntun} -j nixos-fw-accept"
     "nixos-fw -s 10.100.0.0/24 -p tcp --dport ${toString weechat} -j nixos-fw-accept"
-    "nixos-fw -s 10.100.0.0/24,192.168.86.1/24 -p tcp --dport 8333 -j nixos-fw-accept" # bitcoin
-    "nixos-fw -s 10.100.0.0/24,192.168.86.1/24 -p tcp --dport 8332 -j nixos-fw-accept" # bitcoin-rpc
+    "nixos-fw -s 10.100.0.0/24,${extra.machine.subnet} -p tcp --dport 8333 -j nixos-fw-accept" # bitcoin
+    "nixos-fw -s 10.100.0.0/24,${extra.machine.subnet} -p tcp --dport 8332 -j nixos-fw-accept" # bitcoin-rpc
     "nixos-fw -s 192.168.122.218 -p udp --dport 137 -j nixos-fw-accept"
     "nixos-fw -s 192.168.122.218 -p udp --dport 138 -j nixos-fw-accept"
     "nixos-fw -s 192.168.122.218 -p tcp --dport 139 -j nixos-fw-accept"
@@ -167,7 +178,7 @@ in
   services.jellyfin.enable = false;
 
   services.plex = {
-    enable = true;
+    enable = false;
     group = "transmission";
     openFirewall = true;
   };
@@ -287,13 +298,13 @@ in
     }
   '';
 
-  systemd.services.transmission.enable = false;
+  systemd.services.transmission.enable = hasVPN;
   systemd.services.transmission.requires = [ "openvpn-pia.service" ];
   systemd.services.transmission.after    = [ "openvpn-pia.service" ];
   systemd.services.transmission.serviceConfig.User = lib.mkForce "root";
   systemd.services.transmission.serviceConfig.ExecStart = lib.mkForce (
     writeBash "start-transmission-under-vpn" ''
-      exec ${pkgs.libcgroup}/bin/cgexec --sticky -g net_cls:pia \
+      ${pkgs.libcgroup}/bin/cgexec --sticky -g net_cls:pia \
       ${pkgs.sudo}/bin/sudo -u transmission \
       ${pkgs.transmission}/bin/transmission-daemon \
         -f \
@@ -324,7 +335,7 @@ in
   users.extraGroups.tor.members = [ "jb55" ];
 
   systemd.services.openvpn-pia.path = [ pkgs.libcgroup ];
-  services.openvpn.servers = {
+  services.openvpn.servers = if hasVPN then {
     pia = {
       autoStart = false;
 
@@ -332,7 +343,7 @@ in
         client
         dev tun
         proto udp
-        remote 66.115.146.27 1194
+        remote 37.19.212.142 1194
         resolv-retry infinite
         remote-random
         nobind
@@ -346,17 +357,19 @@ in
         ping-timer-rem
         reneg-sec 0
         comp-lzo no
+        verify-x509-name CN=ca1515.nordvpn.com
 
         remote-cert-tls server
 
         auth-user-pass ${vpn.credfile}
-        fast-io
-        cipher AES-256-CBC
-        auth SHA512
-
         route-noexec
         route-up ${vpn.routeup}
 
+        verb 3
+        pull
+        fast-io
+        cipher AES-256-CBC
+        auth SHA512
         <ca>
         -----BEGIN CERTIFICATE-----
         MIIFCjCCAvKgAwIBAgIBATANBgkqhkiG9w0BAQ0FADA5MQswCQYDVQQGEwJQQTEQ
@@ -440,7 +453,7 @@ in
         rm -rf /sys/fs/cgroup/net_cls/${vpn.name}
       '';
     };
-  };
+  } else {};
 
   networking.firewall.checkReversePath = false;
   networking.firewall.logReversePathDrops = true;

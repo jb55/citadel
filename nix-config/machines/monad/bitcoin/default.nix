@@ -18,7 +18,7 @@ let
   mkPluginCfg = name:
     "plugin=${builtins.getAttr name (nix-bitcoin.clightning-plugins)}/${name}.py";
 
-  bitcoinDataDir = "/zbig/bitcoin";
+  bitcoinDataDir = "/titan/bitcoin";
 
   base-bitcoin-conf = extra.private.bitcoin;
 
@@ -38,7 +38,10 @@ let
     addr = extra.private.btc-supplier-addr;
   };
 
-  walletemail = import ./walletemail.nix { inherit pkgs bcli nostril; inherit (extra) private; };
+  walletemail = import ./walletemail.nix {
+    inherit pkgs bcli nostril;
+    inherit (extra) private;
+  };
 
   spark-module = import ./modules/spark-wallet.nix nix-bitcoin.spark-wallet;
   spark-port = 9962;

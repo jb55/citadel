@@ -2,5 +2,5 @@
 
 set -eou pipefail
 
-sed -E -n "s,[[:space:]]*([^: ]+):([0-9]+).*,\x1Eedit \"\\1\" +\\2,p" | 
+sed -E -n "s,[[:space:]]*([^: ]+):([0-9]+).*,\x1Eedit -c \":cfile build.log | copen | wincmd k\" \"\\1\" +\\2,p" | 
 cut -d $'\x1E' -f2-

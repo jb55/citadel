@@ -30,8 +30,11 @@ URxvt.resize-font.bigger:  M-0
 !URxvt*font: xft:Source Code Pro:size=13:antialias=true;hinting=true,\
 !            xft:Kochi Gothic:antialias=true,hinting=true
 !URxvt*font: xft:PT Mono:size=11
-URxvt*font: xft:Inconsolata:size=18:hinting=true
+URxvt*font: xft:Inconsolata:size=14:hinting=true
+!URxvt*font: xft:Inconsolata:size=18:hinting=true
 !urxvt.font: xft:terminus:antialias=false:pixelsize=16
+!urxvt.font: xft:cozette:antialias=false:pixelsize=16
+!URxvt*font: xft:Cozette:style=Medium
 
 !xft:Inconsolata:size=18:antialias=true;hinting=true
 !

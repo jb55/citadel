@@ -75,6 +75,13 @@ in
     EndSection
 
     Section "InputClass"
+      Identifier "Lenovo ThinkPad Compact USB Keyboard with TrackPoint"
+      MatchProduct "Lenovo ThinkPad Compact USB Keyboard with TrackPoint"
+      Driver "libinput"
+      Option "AccelSpeed" "0.1"
+    EndSection
+
+    Section "InputClass"
       Identifier "Razer Razer DeathAdder 2013"
       MatchIsPointer "yes"
       Option "AccelerationProfile" "-1"
@@ -100,7 +107,7 @@ in
     };
 
 
-  hardware.pulseaudio.enable = true;
+  hardware.pulseaudio.enable = false;
   hardware.pulseaudio.support32Bit = true;
   hardware.pulseaudio.package = if extra.is-minimal then pkgs.pulseaudio else pkgs.pulseaudioFull;
   hardware.pulseaudio.daemon.config = {
@@ -109,7 +116,16 @@ in
 
   hardware = {
     bluetooth.enable = true;
-    opengl.driSupport32Bit = true;
-    opengl.driSupport = true;
+    #opengl.driSupport32Bit = true;
+
+    graphics = {
+        enable = true;
+        enable32Bit = true;
+    };
+
+    #amdgpu.amdvlk = {
+    #    enable = true;
+    #    support32Bit.enable = true;
+    #};
   };
 }

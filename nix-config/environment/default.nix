@@ -8,19 +8,19 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
       sha256 = "0xd86s2smjvlc7rlb6rkgx2hj3c3sbcz3gs8rf93x69jqdvwb6rr";
     }) {};
     myPackages = with jb55pkgs; [
-       #rsslink
+       rsslink
        #bcalc
-       #btcs
-       #csv-delim
-       #csv-scripts
-       #extname
-       #mandown
-       #ratio
-       #samp
-       #sharefile
-       #zebra
-       #define
-       #nixpkgs-ml-tools
+       btcs
+       csv-delim
+       csv-scripts
+       extname
+       mandown
+       ratio
+       samp
+       sharefile
+       zebra
+       define
+       nixpkgs-ml-tools
     ];
 
     minimal-pkgs = with pkgs; [
@@ -33,10 +33,11 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
       yq
       tut
 
+      curlHTTP3
       python3Packages.num2words
-      python3Packages.howdoi
+      #python3Packages.howdoi
       tree
-      xsv
+      b4
       datefmt
       #nostril
       nncp
@@ -65,7 +66,7 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
       imagemagick
       jq
       lesspipe
-      libbitcoin-explorer
+      #libbitcoin-explorer
       libqalculate
       linuxPackages.bpftrace
       linuxPackages.perf
@@ -74,7 +75,9 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
       man-pages
       mdcat
       minisign
-      neovim
+      vim-full
+      rustup
+      playerctl
       nethack
       network-tools
       nix-direnv 

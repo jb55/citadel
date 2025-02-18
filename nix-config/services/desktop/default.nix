@@ -46,7 +46,7 @@ in
   '';
 
   programs.gnupg.agent.enable = true;
-  programs.gnupg.agent.pinentryFlavor = "gtk2";
+  #programs.gnupg.agent.pinentryFlavor = "gtk2";
 
   # programs.gnupg.trezor-agent = {
   #   enable = if extra.is-minimal then false else true;
