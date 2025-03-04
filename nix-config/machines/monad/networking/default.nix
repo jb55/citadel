@@ -165,7 +165,7 @@ in
 
 
   services.transmission = {
-    enable = true;
+    enable = false;
     home = transmission-dir;
     settings = {
       incomplete-dir-enable = true;
@@ -202,7 +202,7 @@ in
     server {
       listen 80;
       listen ${extra.machine.ztip}:80;
-      listen 192.168.87.26;
+      listen ${extra.machine.ip};
 
       # server names for this server.
       # any requests that come in that match any these names will use the proxy.
@@ -267,7 +267,7 @@ in
     server {
       listen 80;
       listen ${extra.machine.ztip}:80;
-      listen 192.168.87.26;
+      listen ${extra.machine.ip};
       server_name torrents.jb55.com torrentz.jb55.com torrents.home torrent.home;
 
       location = /download {

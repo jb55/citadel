@@ -2,6 +2,12 @@ extra:
 { config, lib, pkgs, ... }:
 let util = extra.util;
     nix-serve = extra.machine.nix-serve;
+    open-webui-port = 8090;
+    ollama-port = 11234;
+    prefect-port = 4200;
+    n8n-port = 5678;
+    nostr-relay-port = 8080;
+    notepush-port = 8766;
     zenstates = pkgs.fetchFromGitHub {
       owner  = "r4m0n";
       repo   = "ZenStates-Linux";
@@ -49,7 +55,8 @@ in
   #services.comfyui.dataPath = "/titan/ai/comfyui";
   services.ollama = {
     enable = true;
-    host = "0.0.0.0";
+    host = "127.0.0.1";
+    port = ollama-port;
     acceleration = "rocm";
     environmentVariables = {
       HCC_AMDGPU_TARGET = "gfx1010"; # used to be necessary, but doesn't seem to anymore
@@ -58,12 +65,15 @@ in
   };
 
   services.n8n.enable = true;
+  services.n8n.webhookUrl = "http://n8n.jb55.com/";
 
   services.ofono.enable = false;
   services.ofono.plugins = with pkgs; [ ofono-phonesim ];
 
   services.open-webui.enable = true;
-  services.open-webui.port = 8090;
+  services.open-webui.port = open-webui-port;
+  services.open-webui.url = "http://ai.jb55.com";
+  services.open-webui.host = "127.0.0.1";
 
   services.prometheus.enable = false;
   # services.prometheus.dataDir = "/zbig/data/prometheus";
@@ -78,7 +88,7 @@ in
   ];
 
   # services.guix.enable = true;
-  services.synergy.client.enable = if extra.is-minimal then false else false;
+  services.synergy.client.enable = false; #if extra.is-minimal then false else false;
   services.synergy.client.autoStart = true;
   services.synergy.client.serverAddress = "10.100.0.2";
   services.synergy.client.screenName = "monad";
@@ -342,13 +352,14 @@ in
       server {
         listen 80 default_server;
         listen ${extra.machine.ztip}:80 default_server;
-        listen 192.168.87.26 default_server;
+        listen ${extra.machine.ip} default_server;
 
         server_name monad.jb55.com;
 
         location / {
           root                  /var/www/public;
           autoindex on;
+          disable_symlinks off;
           index index.html;
         }
       }
@@ -356,7 +367,7 @@ in
       server {
         listen 80;
         listen ${extra.machine.ztip}:80;
-        listen 192.168.87.26;
+        listen ${extra.machine.ip};
 
 	server_name notes.jb55.com;
 
@@ -377,6 +388,142 @@ in
 	}
       }
 
+      server {
+        listen 80;
+        listen ${extra.machine.ztip}:80;
+        listen ${extra.machine.ip};
+
+        server_name notify.jb55.com;
+
+        location / {
+          proxy_pass http://127.0.0.1:${toString notepush-port};
+
+          # Required for WebSocket support
+          proxy_http_version 1.1;
+          proxy_set_header Upgrade $http_upgrade;
+          proxy_set_header Connection "upgrade";
+
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+        }
+      }
+
+      server {
+        listen 80;
+        listen ${extra.machine.ztip}:80;
+        listen ${extra.machine.ip};
+
+        server_name relay.jb55.com;
+
+        location / {
+          proxy_pass http://127.0.0.1:${toString nostr-relay-port};
+
+          # Required for WebSocket support
+          proxy_http_version 1.1;
+          proxy_set_header Upgrade $http_upgrade;
+          proxy_set_header Connection "upgrade";
+
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+        }
+      }
+
+      server {
+        listen 80;
+        listen ${extra.machine.ztip}:80;
+        listen ${extra.machine.ip};
+
+        server_name n8n.jb55.com;
+
+        location / {
+          proxy_pass http://localhost:${toString n8n-port};
+
+          # Required for WebSocket support
+          proxy_http_version 1.1;
+          proxy_set_header Upgrade $http_upgrade;
+          proxy_set_header Connection "upgrade";
+
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+        }
+      }
+
+      server {
+        listen 80;
+        listen ${extra.machine.ztip}:80;
+        listen ${extra.machine.ip};
+
+        server_name ai.jb55.com;
+
+        location / {
+          proxy_pass http://localhost:${toString open-webui-port};
+
+          client_max_body_size 0;
+
+          # Required for WebSocket support
+          proxy_http_version 1.1;
+          proxy_set_header Upgrade $http_upgrade;
+          proxy_set_header Connection "upgrade";
+
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+        }
+      }
+
+      server {
+        listen 80;
+        listen ${extra.machine.ztip}:80;
+        listen ${extra.machine.ip};
+
+        server_name prefect.jb55.com;
+
+        location / {
+          proxy_pass http://127.0.0.1:${toString prefect-port};
+
+          # Required for WebSocket support
+          proxy_http_version 1.1;
+          proxy_set_header Upgrade $http_upgrade;
+          proxy_set_header Connection "upgrade";
+
+          #proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+        }
+      }
+
+      server {
+        listen 80;
+        listen ${extra.machine.ztip}:80;
+        listen ${extra.machine.ip};
+
+        server_name ollama.jb55.com;
+
+        location / {
+          proxy_pass http://localhost:${toString ollama-port};
+
+          # Required for WebSocket support
+          proxy_http_version 1.1;
+          proxy_set_header Upgrade $http_upgrade;
+          proxy_set_header Connection "upgrade";
+
+          #proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+        }
+      }
+
+
+
     '' + (if config.services.nix-serve.enable then ''
       server {
         listen ${nix-serve.bindAddress}:80;
@@ -393,12 +540,6 @@ in
         }
       }
     '' else "") + (if config.services.tor.enable then extra.private.tor.nginx else "");
-
-  # services.footswitch = {
-  #   enable = false;
-  #   enable-led = true;
-  #   led = "input5::numlock";
-  # };
 
   systemd.services.disable-c6 = {
     description = "Ryzen Disable C6 State";
@@ -449,12 +590,12 @@ in
   # };
 
   # for kmsgrab streaming
-  security.wrappers.ffmpeg = {
-    source = "${pkgs.ffmpeg}/bin/ffmpeg";
-    capabilities = "cap_sys_admin+ep";
-    owner = "root";
-    group = "root";
-  };
+  #security.wrappers.ffmpeg = {
+  #  source = "${pkgs.ffmpeg}/bin/ffmpeg";
+  #  capabilities = "cap_sys_admin+ep";
+  #  owner = "root";
+  #  group = "root";
+  #};
 
   # security.pam.u2f = {
   #   enable = true;

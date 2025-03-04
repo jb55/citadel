@@ -76,6 +76,7 @@ export GNUPGHOME="$HOME/.gnupg"
 export SHAREFILE_HOST='charon:/www/cdn.jb55.com/s/'
 export SHAREFILE_URL='https://cdn.jb55.com/s/'
 export SHARE_SS_DIR="$HOME/var/img/ss"
+export OLLAMA_HOST=http://ollama.jb55.com
 export DOTFILES=${DOTFILES:-$HOME/dotfiles}
 export VI_MODE=1
 export XZ=pxz

@@ -65,7 +65,7 @@ ignore=
 #
 
 [search]
-exclude_tags=deleted;spam;
+exclude_tags=deleted;
 
 # Maildir compatibility configuration
 #
