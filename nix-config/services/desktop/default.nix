@@ -80,7 +80,7 @@ in
   };
 
   systemd.user.services.udp-notify-daemon = {
-    enable = true;
+    enable = false;
     description = "udp notification daemon";
     wantedBy = [ "default.target" ];
     after    = [ "default.target" ];
@@ -190,7 +190,7 @@ in
     wantedBy = [ "graphical-session.target" ];
     after    = [ "graphical-session.target" ];
     serviceConfig.ExecStart = "${pkgs.libnotify}/bin/notify-send -u critical standup";
-    startAt = "Mon..Fri *-*-* 15:58:00";
+    startAt = "Mon..Fri *-*-* 7:57:00";
   };
 
   systemd.user.services.urxvtd = {

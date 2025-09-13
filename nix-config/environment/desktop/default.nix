@@ -28,6 +28,7 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
     mypkgs = (with pkgs; [
       blender
       clipmenu
+      chromium
       #colorpicker
       dasht
       dmenu
@@ -54,7 +55,7 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
       pinentry
       postgresql # psql
       qalculate-gtk
-      qutebrowser
+      #qutebrowser
       rxvt-unicode
       signal-desktop
       simplescreenrecorder

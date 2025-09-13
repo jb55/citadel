@@ -37,6 +37,8 @@ let
     http = 80;
     ssh = 22;
     wireguard = 51820;
+    wireguard-tb = 51821;
+    tigerbeetle = 3000;
     weechat = 9000;
     webdev = 8080;
     testdamuspush = 8766;
@@ -45,6 +47,8 @@ let
     terraria = 7777;
     ollama = 11434;
     bg3 = 23253;
+    notedeck-multicast = 9797;
+    mumble-server = 64738;
     inherit (extra.private) notify-port;
   };
 
@@ -54,7 +58,11 @@ let
     "nixos-fw -s 10.100.0.0/24,${extra.machine.subnet} -p tcp --dport ${toString nncp} -j nixos-fw-accept"
     "nixos-fw -s 10.100.0.0/24,${extra.machine.subnet} -p tcp --dport ${toString terraria} -j nixos-fw-accept"
     "nixos-fw -s 10.100.0.0/24,${extra.machine.subnet} -p tcp --dport ${toString ollama} -j nixos-fw-accept"
+    "nixos-fw -s 10.100.0.0/24,${extra.machine.subnet} -p tcp --dport ${toString starbound} -j nixos-fw-accept"
+    "nixos-fw -s 10.100.0.0/24,${extra.machine.subnet} -p tcp --dport ${toString mumble-server} -j nixos-fw-accept"
+    "nixos-fw -s 10.100.0.0/24,${extra.machine.subnet} -p udp -d 224.0.0.0/4 --dport ${toString notedeck-multicast} -j nixos-fw-accept"
     "nixos-fw -s 192.168.86.1/24 -p udp --dport ${toString wireguard} -j nixos-fw-accept"
+    "nixos-fw -s 192.168.86.1/24 -p udp --dport ${toString wireguard-tb} -j nixos-fw-accept"
     "nixos-fw -s 192.168.86.1/24 -p tcp --dport ${toString bg3} -j nixos-fw-accept"
     "nixos-fw -s 192.168.86.1/24 -p udp --dport ${toString bg3} -j nixos-fw-accept"
     "nixos-fw -s 10.100.0.0/24 -p tcp --dport 80 -j nixos-fw-accept"
@@ -82,15 +90,31 @@ in
   networking.hostId = extra.machine.hostId;
 
   #networking.firewall.trustedInterfaces = ["wg0"];
-  networking.firewall.allowedTCPPorts = with ports; [ lightning lightning_websocket http ];
-  networking.firewall.allowedUDPPorts = with ports; [ dns wireguard ];
+  networking.firewall.allowedTCPPorts = with ports; [ lightning lightning_websocket ];
+  networking.firewall.allowedUDPPorts = with ports; [ dns wireguard wireguard-tb ];
 
   networking.nat.enable = true;
   networking.nat.externalInterface = "eth0";
-  networking.nat.internalInterfaces = [ "wg0" ];
+  networking.nat.internalInterfaces = [ "wg0" "wgtb" ];
 
   networking.wireguard.interfaces = {
-    # "wg0" is the network interface name. You can name the interface arbitrarily.
+    # tigerbeetle. this will be running on cloud servers that I might not necessarily trust
+    # running on my main wireguard interface
+    wgtb = {
+      ips = [ "10.101.0.1/24" ];
+
+      listenPort = ports.wireguard-tb;
+
+      privateKeyFile = "/home/jb55/.wg/tb/private";
+
+      peers = [
+        { publicKey = "qWzNrR8/6g9yL2uNS5YT/Nx07tfMT69bIT+fv1E83V8="; # purple
+          allowedIPs = [ "10.101.0.2/32" ];
+          endpoint = "74.207.252.32:${toString ports.wireguard}";
+        }
+      ];
+    };
+
     wg0 = {
       # Determines the IP address and subnet of the server's end of the tunnel interface.
       ips = [ "10.100.0.1/24" ];
@@ -142,25 +166,25 @@ in
       ];
     };
 
-    rcx0 = {
-     # Determines the IP address and subnet of the server's end of the tunnel interface.
-     ips = [ "10.200.0.2/32" ];
+    #rcx0 = {
+    # # Determines the IP address and subnet of the server's end of the tunnel interface.
+    # ips = [ "10.200.0.2/32" ];
 
-     privateKeyFile = "/home/jb55/.wg/rcx/private";
+    # privateKeyFile = "/home/jb55/.wg/rcx/private";
 
-     peers = [
-       { publicKey = "wC+mEE9/PJDuIfr7DFZWnM8HbQz5fSOFHmmzQRxULzM="; # server
-         allowedIPs = [ "10.200.0.1/32" ];
-         endpoint = "159.89.143.225:53";
-         persistentKeepalive = 25;
-       }
-       { publicKey = "vrKDdLPXAXAPP7XuuQl/dsD+z3dV/Z0uhgc+yjJ4Nys="; # winvm
-         allowedIPs = [ "10.200.0.3/32" ];
-         endpoint = "192.168.122.218:51820";
-         persistentKeepalive = 25;
-       }
-     ];
-    };
+    # peers = [
+    #   { publicKey = "wC+mEE9/PJDuIfr7DFZWnM8HbQz5fSOFHmmzQRxULzM="; # server
+    #     allowedIPs = [ "10.200.0.1/32" ];
+    #     endpoint = "159.89.143.225:53";
+    #     persistentKeepalive = 25;
+    #   }
+    #   { publicKey = "vrKDdLPXAXAPP7XuuQl/dsD+z3dV/Z0uhgc+yjJ4Nys="; # winvm
+    #     allowedIPs = [ "10.200.0.3/32" ];
+    #     endpoint = "192.168.122.218:51820";
+    #     persistentKeepalive = 25;
+    #   }
+    # ];
+    #};
   };
 
 

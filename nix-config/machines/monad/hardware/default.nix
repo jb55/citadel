@@ -11,6 +11,10 @@
   #'';
 
   boot.kernelParams = [ "amdgpu.gpu_recovery=1" ];
+
+  # speed(?)
+  #boot.kernelParams = [ "mitigations=off" "split_lock_detect=0" "split_lock_mitigate=0" ];
+
   boot.kernelModules = [ "kvm-amd" "kvm-intel" ];
   boot.loader.grub.copyKernels = true;
   #boot.extraModulePackages = [ config.boot.kernelPackages.rtl8188eus-aircrack ];
@@ -30,15 +34,15 @@
   #    fsType = "zfs";
   #  };
 
-  fileSystems."/chonk" =
-    { device = "chonk";
-      fsType = "zfs";
-    };
+  #fileSystems."/chonk" =
+  #  { device = "chonk";
+  #    fsType = "zfs";
+  #  };
 
-  fileSystems."/titan" =
-    { device = "titan";
-      fsType = "zfs";
-    };
+  #fileSystems."/titan" =
+  #  { device = "titan";
+  #    fsType = "zfs";
+  #  };
 
   # swapDevices =
   #   [ { device = "/dev/disk/by-uuid/d4e4ae51-9179-439d-925b-8df42dd1bfc5"; }

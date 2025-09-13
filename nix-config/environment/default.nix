@@ -24,7 +24,7 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
     ];
 
     minimal-pkgs = with pkgs; [
-      git-tools
+      git
       fzf
       ripgrep
     ];
@@ -56,7 +56,7 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
       du-dust
       file
       fzf
-      git-tools
+      git
       gnumake
       gnupg
       groff

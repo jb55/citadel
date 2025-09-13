@@ -8,7 +8,8 @@ pkgs: rec {
     bindAddress = ztip;
   };
   sessionCommands = ''
-    ${pkgs.xorg.xrandr}/bin/xrandr -r 144
+    ${pkgs.xorg.xrandr}/bin/xrandr -r 240
     ${pkgs.xorg.xgamma}/bin/xgamma -gamma 0.8
   '';
+
 }

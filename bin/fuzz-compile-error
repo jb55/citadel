@@ -11,6 +11,6 @@ fi
 PLANG=rust
 ERR_OPTS="--exit-0 --tac --ansi --preview 'build-preview {}' --preview-window=top"
 
-<build.log grep -E '[[:space:]]*[^: ]+:[0-9]+.*' | 
+<build.log grep -E '[[:space:]]*[^: ]+:[0-9]+.*' |
 env FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS $ERR_OPTS" fuzzer "$@" | 
 file-jump

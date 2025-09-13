@@ -5,6 +5,8 @@ acbd	app > cargo build	echo cargo build
 acbr	app > cargo build --release	echo cargo build --release
 acr 	app > cargo run	echo cargo run
 acrr	app > cargo run --release	echo cargo run --release
+actr	app > cargo test --release	echo cargo test --release
+act 	app > cargo test	echo cargo test
 ada	app > direnv > allow	echo direnv allow
 afa	app > feeds > arxiv	fuzz-rss "grep @arxiv"
 afb	app > feeds > blogs	fuzz-rss "grep @blog | grep -v @busy"
@@ -17,8 +19,7 @@ afy	app > feeds > youtube	fuzz-rss "grep @yt"
 ane	app > note edit	fuzz-note-edit
 ans	app > note scratch	echo scratch-note
 ar	app > reader	fuzz-reader
-ash	app > social > home	echo fedi-timeline home
-asi	app > social > interesting	echo fedi-timeline list/260
+asn	app > skel > nix	echo "skel nix && direnv allow"
 bt	btc txs	fuzz-btc-txs
 cR	compile repeat error	fuzz-compile-repeat-error
 cc	compile	fuzz-compile
@@ -34,6 +35,7 @@ eFl	edit fuzz command list	fuzz-edit-command-list
 eG	edit gemmarks	echo edit ~/dotfiles/gemmarks
 eM	edit mimi	echo edit ~/.config/mimi/mime.conf
 ea	edit mail aliases	echo edit ~/.mail_aliases
+eenv	edit envrc	echo edit .envrc
 ebc	edit build command	echo edit .buildcmd
 ec	edit commands	fuzz-edit-scripts
 ecc	edit vdirsyncer config	echo edit ~/.config/vdirsyncer/config
@@ -45,7 +47,7 @@ es	edit shell.nix	echo edit shell.nix
 et	edit todo	echo edit ~/docs/todo/todo.txt
 ev	edit vim config	echo edit ~/.vimrc
 ff	create file	echo fuzz-create-file
-gb	git branches	echo git bvr
+gb	git branches	git bvr --no-merged
 gcp	github cherry-pick	echo git cherry-pick
 ghi	github issues	fuzz-gh-issue-list
 ghp	github prf	fuzz-gh-pr-list

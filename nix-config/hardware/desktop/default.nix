@@ -8,7 +8,7 @@ in
 
   services.udev.extraRules = ''
     # coldcard
-    KERNEL=="hidraw*", ATTRS{idVendor}=="d13e", ATTRS{idProduct}=="cc10", GROUP="plugdev", MODE="0666", SYMLINK+="coldcard
+    KERNEL=="hidraw*", ATTRS{idVendor}=="d13e", ATTRS{idProduct}=="cc10", GROUP="plugdev", MODE="0666", SYMLINK+="coldcard"
 
     # yubikey neo
     KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="1050", ATTRS{idProduct}=="0116", MODE="0666", SYMLINK+="yubikey-neo"
@@ -67,7 +67,7 @@ in
   services.xserver.config = ''
     Section "InputClass"
       Identifier "Logitech M705"
-      MatchIsPointer "yes"
+      MatchIsPointer "on"
       Option "AccelerationProfile" "-1"
       Option "ConstantDeceleration" "5"
       Option "AccelerationScheme" "none"
@@ -76,14 +76,15 @@ in
 
     Section "InputClass"
       Identifier "Lenovo ThinkPad Compact USB Keyboard with TrackPoint"
-      MatchProduct "Lenovo ThinkPad Compact USB Keyboard with TrackPoint"
+      MatchProduct "TrackPoint"
+      MatchIsPointer "on"
       Driver "libinput"
       Option "AccelSpeed" "0.1"
     EndSection
 
     Section "InputClass"
-      Identifier "Razer Razer DeathAdder 2013"
-      MatchIsPointer "yes"
+      Identifier "DeathAdder"
+      MatchIsPointer "on"
       Option "AccelerationProfile" "-1"
       Option "ConstantDeceleration" "5"
       Option "AccelerationScheme" "none"

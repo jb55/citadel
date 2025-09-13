@@ -13,10 +13,10 @@ END {
 EOF
 )
 
-REVERSE=r
+REVERSE=
 
 if [ -z $ASTATS_REVERSE ]; then
-    REVERSE=""
+    REVERSE="r"
 fi
 
 

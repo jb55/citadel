@@ -29,6 +29,19 @@ let maplocalleader = "\\"
 nmap <Leader>xda ma:%s/\s\+$//g<CR>`a
 nmap <Leader>f ma:%!
 
+" quick switch between buffers
+" 1) Pick a key to act as Tab *from mappings* in the cmdline
+set wildcharm=<C-Z>
+
+" 2) (Optional but nice) show a completion menu and cycle through matches
+set wildmenu
+set wildmode=longest:full,full
+" In Neovim you can also do:
+" set wildoptions=pum
+
+" 3) Now map Tab in NORMAL mode to start :b and invoke completion
+nnoremap <Tab> :b <C-Z>
+
 nmap <Leader>co :cfile build.log<CR>:copen<CR>:wincmd k<CR>
 nmap <Leader>cl :close<CR>:q<CR>
 nmap <Leader>cx :close<CR>:x<CR>
@@ -63,6 +76,8 @@ autocmd FileType go set wrap rnu
 "autocmd FileType rust nnoremap <buffer> <leader>f :mkview<CR>:%!fmtsafe rustfmt<CR>:loadview<CR>
 autocmd FileType rust setlocal tags=./rusty-tags.vi;/
 autocmd FileType rust nnoremap <buffer> <leader>f :call RustFormat()<CR>
+autocmd FileType c nnoremap <buffer> <leader>f :call ClangFormat()<CR>
+autocmd FileType cpp nnoremap <buffer> <leader>f :call ClangFormat()<CR>
 "autocmd VimEnter *.rs cgetfile build.log
 "autocmd QuickFixCmdPost [^l]* nested cwindow
 autocmd filetype js set sw=2 ts=2 expandtab
@@ -83,9 +98,16 @@ if has("autocmd")
     \| exe "normal! g'\"" | endif
 endif
 
+function! ClangFormat()
+    let l:view = winsaveview()
+    silent! mkview
+    silent! %!fmtsafe clang-format
+    call winrestview(l:view)
+endfunction
+
 function! RustFormat()
     let l:view = winsaveview()
     silent! mkview
-    silent! %!fmtsafe rustfmt
+    silent! %!fmtsafe rustfmt-latest
     call winrestview(l:view)
 endfunction

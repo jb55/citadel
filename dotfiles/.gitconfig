@@ -9,7 +9,7 @@
   abbrev = 12
   excludesfile = /Users/jb55/.gitignore_global
   editor = edit
-  pager = delta --dark --paging=always --navigate
+  pager = delta --paging=always --navigate
 [sendemail]
   smtpServer=/home/jb55/bin/sendmail
   ccCmd = git-contacts
@@ -17,6 +17,8 @@
   aliasFileType=mutt
 [url "git@github.com:"]
   insteadOf = gh:
+[url "git@gitlab.com:"]
+  insteadOf = gl:
 [url "git@git.sr.ht:~"]
   insteadOf = srht:
 [url "git@gitlab.com:"]

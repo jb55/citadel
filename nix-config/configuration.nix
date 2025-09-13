@@ -70,10 +70,10 @@ in {
   # Use the GRUB 2 boot loader.
   boot.loader.grub.enable = true;
   #environment.ld-linux = false;
-  systemd.extraConfig = ''
-    DefaultTimeoutStopSec=10s
-    DefaultTimeoutStartSec=20s
-  '';
+  #systemd.extraConfig = ''
+  #  DefaultTimeoutStopSec=10s
+  #  DefaultTimeoutStartSec=20s
+  #'';
 
   i18n.inputMethod = {
     enabled = "fcitx5";
@@ -94,6 +94,7 @@ in {
   #documentation.man.generateCaches = true; # list manpages
 
   programs.ssh.startAgent = true;
+  services.gnome.gcr-ssh-agent.enable = false;
 
   time.timeZone = "America/Vancouver";
   system.stateVersion = "24.11";
@@ -119,5 +120,6 @@ in {
 
   programs.zsh.enable = false;
   programs.direnv.enable = true;
+  programs.direnv.nix-direnv.enable = true;
 
 }
