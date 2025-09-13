@@ -4,6 +4,13 @@ extra:
 let
   jb55pkgs = import <jb55pkgs> { inherit pkgs; };
 
+  asmap = (import (pkgs.fetchFromGitHub {
+    owner  = "0xb10c";
+    repo   = "nix";
+    rev    = "507d0998263fee03bd4a0a00f2de5649629daac3";
+    sha256 = "sha256-Pxm9iCFD1gfC/gJ2XSwPSjnFxbCo6gZNdTmohjOrQ0o=";
+  }) { inherit pkgs; }).asmap-data;
+
   nostril = jb55pkgs.nostril;
 
   nix-bitcoin = import (pkgs.fetchFromGitHub {
@@ -27,6 +34,7 @@ let
   bitcoin-conf = ''
     ${base-bitcoin-conf}
     walletnotify=${walletemail} %s %w
+    asmap=${asmap}
   '';
 
   base-bitcoin-conf-file = pkgs.writeText "bitcoin-base.conf" base-bitcoin-conf;
