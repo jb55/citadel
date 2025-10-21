@@ -70,10 +70,6 @@ in {
   # Use the GRUB 2 boot loader.
   boot.loader.grub.enable = true;
   #environment.ld-linux = false;
-  systemd.extraConfig = ''
-    DefaultTimeoutStopSec=10s
-    DefaultTimeoutStartSec=20s
-  '';
 
   i18n.extraLocaleSettings = {
     LC_TIME="en_DK.UTF-8";
@@ -86,6 +82,9 @@ in {
   programs.ssh.startAgent = true;
 
   time.timeZone = "America/Vancouver";
+  #time.timeZone = "Atlantic/Madeira";
+  #time.timeZone = "Europe/Madrid";
+  #time.timeZone = "America/Chicago";
 
   nixpkgs.config = import ./nixpkgs/config.nix;
 

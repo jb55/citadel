@@ -27,7 +27,7 @@ extra:
 
   services.teamviewer.enable = false;
 
-  services.synergy.server.enable = true;
+  services.synergy.server.enable = false;
   services.synergy.server.tls.enable = false;
   services.synergy.server.screenName = "quiver";
   services.synergy.server.autoStart = true;
@@ -125,30 +125,6 @@ extra:
       }
     }
   '';
-
-  systemd.user.services.clightning-rpc-tunnel = {
-    description = "clightning mainnet rpc tunnel";
-    wantedBy = [ "default.target" ];
-    after    = [ "default.target" ];
-
-    serviceConfig.ExecStart = extra.util.writeBash "lightning-tunnel" ''
-      socket=/home/jb55/.lightning-bitcoin-rpc
-      rm -f $socket
-      ${pkgs.socat}/bin/socat -d -d UNIX-LISTEN:$socket,reuseaddr,fork TCP:10.100.0.1:7878
-    '';
-  };
-
-  systemd.user.services.clightning-testnet-rpc-tunnel = {
-    description = "clightning testnet rpc tunnel";
-    wantedBy = [ "default.target" ];
-    after    = [ "default.target" ];
-
-    serviceConfig.ExecStart = extra.util.writeBash "lightning-testnet-tunnel" ''
-      socket=/home/jb55/.lightning-testnet-rpc
-      rm -f $socket
-      ${pkgs.socat}/bin/socat -d -d UNIX-LISTEN:$socket,reuseaddr,fork TCP:10.100.0.1:7879
-    '';
-  };
 
   systemd.services.blink-led-battery-low = {
     description = "blink power led when battery is low";

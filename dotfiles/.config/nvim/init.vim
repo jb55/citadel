@@ -11,8 +11,10 @@ set hidden
 set rnu nu
 set wrap
 
-hi ColorColumn ctermbg=254
-hi StatusLine ctermbg=254
+"hi ColorColumn ctermbg=254
+"hi StatusLine ctermbg=254
+hi ColorColumn ctermbg=240
+hi StatusLine ctermbg=240
 
 map Y y$
 
@@ -52,9 +54,11 @@ imap <A-Space> <CR>
 
 autocmd FileType go autocmd BufWritePre <buffer> execute "normal! mz:mkview\<esc>:%!fmtsafe gofmt\<esc>:loadview\<esc>`z"
 autocmd FileType go set wrap
-autocmd FileType rust autocmd BufWritePre <buffer> execute "normal! mz:mkview\<esc>:%!fmtsafe rustfmt\<esc>:loadview\<esc>`z"
+"autocmd FileType rust autocmd BufWritePre <buffer> execute "normal! mz:mkview\<esc>:%!fmtsafe rustfmt\<esc>:loadview\<esc>`z"
 "autocmd FileType javascript autocmd BufWritePre <buffer> execute "normal! mz:mkview\<esc>:%!fmtsafe jsfmt\<esc>:loadview\<esc>`z"
 "autocmd BufEnter,BufNew *.js set sw=2 ts=2 expandtab
+
+autocmd FileType rust nnoremap <buffer> <leader>f :call RustFormat()<CR>
 
 "autocmd filetype html set sw=2 ts=2 expandtab
 
@@ -67,3 +71,11 @@ if has("autocmd")
   au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
     \| exe "normal! g'\"" | endif
 endif
+
+function! RustFormat()                                                          
+    let l:view = winsaveview()                                                  
+    silent! mkview                                                              
+    silent! %!fmtsafe rustfmt                                                   
+    call winrestview(l:view)                                                    
+endfunction                                                                     
+

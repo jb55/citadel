@@ -1,98 +1,101 @@
-ans	app > note scratch	echo scratch-note
-ane	app > note edit	fuzz-note-edit
-aci	app > cal > interactive	echo pcal interactive
-acl	app > cal > list	echo pcal list
-afb	app > feeds > blogs	fuzz-rss "grep @blog"
+G	gemini	gemmark
+Nc	new command	echo make-script
+acar	app > cargo apk run --release 	echo cargo apk run --release
+acbd	app > cargo build	echo cargo build
+acbr	app > cargo build --release	echo cargo build --release
+acbrp	app > cargo build --release profiling	echo cargo build --release --features puffin
+acr 	app > cargo run	echo cargo run
+acrr	app > cargo run --release	echo cargo run --release
+ada	app > direnv > allow	echo direnv allow
+afa	app > feeds > arxiv	fuzz-rss "grep @arxiv"
+afb	app > feeds > blogs	fuzz-rss "grep @blog | grep -v @busy"
 afe	app > edit feeds	echo edit ~/dotfiles/rssfeeds
 aff	app > feeds	fuzz-rss "grep -v @busy"
 afp	app > feeds > podcasts	fuzz-rss "grep @pod"
-afu	app > update feeds	echo rssfeeds
-ada	app > direnv > allow	echo direnv allow
 afs	app > feeds > busy	fuzz-rss
-afa	app > feeds > arxiv	fuzz-rss "grep @arxiv"
+afu	app > update feeds	echo rssfeeds
 afy	app > feeds > youtube	fuzz-rss "grep @yt"
+ane	app > note edit	fuzz-note-edit
+ans	app > note scratch	echo scratch-note
 ar	app > reader	fuzz-reader
-ash	app > social > home	echo fedi-timeline home
-asi	app > social > interesting	echo fedi-timeline list/260
+asn	app > skel > nix	echo "skel nix && direnv allow"
 bt	btc txs	fuzz-btc-txs
+cR	compile repeat error	fuzz-compile-repeat-error
 cc	compile	fuzz-compile
 cd	change directory	fuzz-cd-dirname
 cdpr	cd project root	echo cd $(project-root)
 ce	compile error	fuzz-compile-error
-cR	compile repeat error	fuzz-compile-repeat-error
 cr	compile repeat	fuzz-compile-repeat
-cs	compile show build	echo cat .build-result
-dsa	docs->stripe->api	~/docs/stripe/jumpapi
-dsg	docs->stripe->go	fuzzdoc ~/docs/stripe/go-v72.txt '^type '
-dgt	docs->go->testing	fuzzdoc ~/docs/godoc/testing.txt '^func '
-ecc	edit vdirsyncer config	echo edit ~/.config/vdirsyncer/config
-ec	edit commands	fuzz-edit-scripts
-ebc	edit build command	echo edit .buildcmd
-ed	edit default.nix	echo edit default.nix
-es	edit shell.nix	echo edit shell.nix
+cs	compile show build	echo less .build-result
+co	compile open vim	echo vim -c \"":cfile build.log | copen | wincmd k\""
+eC	edit Cargo.toml	echo edit Cargo.toml
 eFc	edit fuzz command	fuzz-edit-command
 eFl	edit fuzz command list	fuzz-edit-command-list
-egc	edit git config	echo edit ~/.gitconfig
 eG	edit gemmarks	echo edit ~/dotfiles/gemmarks
-elf	edit last files	fuzz-last-files edit
 eM	edit mimi	echo edit ~/.config/mimi/mime.conf
-em	edit mutt config	echo edit ~/.config/neomutt/neomuttrc
 ea	edit mail aliases	echo edit ~/.mail_aliases
+ebc	edit build command	echo edit .buildcmd
+ec	edit commands	fuzz-edit-scripts
+ecc	edit vdirsyncer config	echo edit ~/.config/vdirsyncer/config
+ed	edit default.nix	echo edit default.nix
+egc	edit git config	echo edit ~/.gitconfig
+elf	edit last files	fuzz-last-files edit
+em	edit mutt config	echo edit ~/.config/neomutt/neomuttrc
+es	edit shell.nix	echo edit shell.nix
 et	edit todo	echo edit ~/docs/todo/todo.txt
+ev	edit vim config	echo edit ~/.vimrc
 ff	create file	echo fuzz-create-file
 gb	git branches	echo git bvr
-G	gemini	gemmark
+gcp	github cherry-pick	echo git cherry-pick
 ghi	github issues	fuzz-gh-issue-list
 ghp	github prf	fuzz-gh-pr-list
-gcp	github cherry-pick	echo git cherry-pick
 gpm	git mlap	echo git mlap
 h	run history	fuzz-run-hist
 jt	jump tag	fuzz-jump-tag
-nai	notmuch archive inbox	fuzz-notmuch-archive-inbox
-nep	notmuch edit poll	echo vim scp://charon//home/jb55/bin/notmuch-poll
-nam	notmuch am	fuzz-notmuch-am
-ng	notmuch github patch	fuzz-notmuch-gam
-nat	notmuch archive	fuzz-notmuch-archive
-nm	notmuch muchsync	echo muchsync charon
 m	mutt	echo neomutt
 mP	mutt prs	echo neomutt -f damus-prs
-mp	mutt patches	echo neomutt -f patches
 mi	mutt issues	echo neomutt -f damus-issues
-Nc	new command	echo make-script
-ni	notmuch inbox	fuzz-notmuch-inbox
+mp	mutt patches	echo neomutt -f patches
+mw	mutt work	echo neomutt -f work
 nT	email today	echo f nt query:today
+nai	notmuch archive inbox	fuzz-notmuch-archive-inbox
+nam	notmuch am	fuzz-notmuch-am
+nat	notmuch archive	fuzz-notmuch-archive
+nep	notmuch edit poll	echo vim scp://charon//home/jb55/bin/notmuch-poll
+ng	notmuch github patch	fuzz-notmuch-gam
+ni	notmuch inbox	fuzz-notmuch-inbox
+nm	notmuch muchsync	echo muchsync charon
 nt	notmuch threads	fuzz-notmuch-threads
 of	open file	fuzz-open-file
 olf	open last files	fuzz-last-files open
-pr	cd project root	echo cd \"$(project-root)\"
 pc	cat project file	fuzz-cat-file
-pr	cd project root	echo cd $(project-root)
 pf	edit project file	fuzz-edit-file
+pr	cd project root	echo cd $(project-root)
+pr	cd project root	echo cd \"$(project-root)\"
 ps	edit project skeletons	fuzz-edit-file --dir ~/dotfiles/skeletons
 rf	recent files	fuzz-recent-files
-sc	show command	fuzz-show-script
 sFc	show fuzz command	fuzz-show-fuzz-command
+sc	show command	fuzz-show-script
 sf	search project file funcs	fuzz-funcs
 sgb	search git branch	fuzz-jump-branchdiff
 sgd	search git diff	fuzz-edit-diff-line
 sgh	search git head	fuzz-edit-diff-line HEAD^-
-sgs	search git staged diff	fuzz-edit-diff-line --staged
 sgm	search git modified files	fuzz-git-modified
+sgs	search git staged diff	fuzz-edit-diff-line --staged
 sh	show history	fuzz-show-hist
 sp	search project	fuzz-search-files
 ss	search project file	fuzz-search-file
 st	search TODOs	fuzz-search-files TODO
-vim	edit vim config	echo edit ~/.config/nvim/init.vim
+wdq	work dashboard queries	fuzzedit queries '^'
+wm	work mail	echo neomutt -f \"notmuch://?query=query:work\"
+wn	work notes	echo edit /home/jb55/projects/steamoji/doc/$(ls -1pt /home/jb55/projects/steamoji/doc | grep -v / | head -n1)
 wsg	work service gql	fuzzedit schema '^'
 wsm	work service mutations	fuzzedit mutation '^func '
-wsq	work service queries	fuzzedit query '^func '
 wsp	work service permissions	fuzzedit permission.go '^"'
-wdq	work dashboard queries	fuzzedit queries '^'
+wsq	work service queries	fuzzedit query '^func '
 wtb	work trello backlog	fuzz-trello-sprint "^Backlog "
 wti	work trello inprogress	fuzz-trello-sprint "^In Progress "
 wtr	work trello refresh	echo trello refresh
 wts	work trello sprint	fuzz-trello-sprint
 wtt	work trello todo	fuzz-trello-sprint "^Todo "
-wn	work notes	echo edit /home/jb55/projects/steamoji/doc/$(ls -1pt /home/jb55/projects/steamoji/doc | grep -v / | head -n1)
-wm	work mail	echo neomutt -f \"notmuch://?query=query:work\"
 z	fz	echo fz

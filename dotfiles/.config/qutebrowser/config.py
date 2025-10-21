@@ -29,12 +29,12 @@ config.set('content.javascript.enabled', True, 'chrome://*/*')
 # Type: Bool
 config.set('content.javascript.enabled', True, 'qute://*/*')
 
-config.set('fonts.default_family', 'terminus')
+#config.set('fonts.default_family', 'terminus')
 
 if hostname == 'monad':
     config.set('zoom.default', 125)
 else:
-    config.set('zoom.default', 125)
+    config.set('zoom.default', 150)
 
 
 # Editor (and arguments) to use for the `open-editor` command. The

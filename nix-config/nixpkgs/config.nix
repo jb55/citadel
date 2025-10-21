@@ -18,13 +18,17 @@ in {
   #android_sdk.accept_license = true;
 
   packageOverrides = super: rec {
+    qutebrowser = super.qutebrowser.override {                                  
+      enableWideVine = true;                                                    
+    };                                                                          
+     
     qemu = super.qemu.override {
       smbdSupport = true;
     };
 
-    mpv = pkgs.wrapMpv pkgs.mpv-unwrapped {
-      scripts = [ pkgs.mpvScripts.mpris ];
-    };
+    #mpv = pkgs.wrapMpv pkgs.mpv-unwrapped {
+    #  scripts = [ pkgs.mpvScripts.mpris ];
+    #};
 
     # /run/current-system/sw/bin/ls $HOME/.emacs.d/elpa | sed 's/-[[:digit:]].*//g;s/\+$/-plus/g' | sort -u
     #emacs = super.emacsHead;
@@ -44,11 +48,11 @@ in {
       ];
     });
 
-    neomutt = pkgs.lib.overrideDerivation super.neomutt (attrs: {
-      postConfigure = ''
-        sed -i '/HAVE_CURS_SET 1/d' config.h
-      '';
-    });
+    #neomutt = pkgs.lib.overrideDerivation super.neomutt (attrs: {
+    #  postConfigure = ''
+    #    sed -i '/HAVE_CURS_SET 1/d' config.h
+    #  '';
+    #});
 
     #weechat = super.weechat.override {configure = {availablePlugins, ...}: {
     #    scripts = with super.weechatScripts; [ wee-slack weechat-matrix ];

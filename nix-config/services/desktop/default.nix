@@ -14,6 +14,7 @@ in
 {
   imports = [
     (import ./networking extra)
+    (import ./rocksmith.nix)
   ];
 
   services.hoogle = {
@@ -24,7 +25,7 @@ in
   };
 
   services.pcscd.enable = true;
-  services.gnome.gnome-keyring.enable = if extra.is-minimal then false else true;
+  services.gnome.gnome-keyring.enable = false;
 
   services.trezord.enable = true;
 
@@ -46,7 +47,6 @@ in
   '';
 
   programs.gnupg.agent.enable = true;
-  programs.gnupg.agent.pinentryFlavor = "gtk2";
 
   # programs.gnupg.trezor-agent = {
   #   enable = if extra.is-minimal then false else true;

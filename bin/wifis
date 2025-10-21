@@ -12,7 +12,7 @@ s,;,\t,g
 EOF
 )
 
-sudo echo hello
+sudo echo hello >/dev/null
 
 sudo iwlist wlp4s0 scan \
     | grep -A6 -i -e key \
@@ -20,7 +20,8 @@ sudo iwlist wlp4s0 scan \
     | sed "$script" \
     | sort -u \
     | columnt "$@" \
-    | less -R -S
+    | fzf
+    #| less -R -S
 
 
 

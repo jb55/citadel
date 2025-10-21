@@ -9,7 +9,15 @@
   abbrev = 12
   excludesfile = /Users/jb55/.gitignore_global
   editor = edit
-	pager = delta --paging=always
+  pager = delta
+[delta]
+  navigate = true  # use n and N to move between diff sections
+  #dark = true
+  paging = always
+[interactive]
+  diffFilter = delta --color-only
+[merge]
+  conflictstyle = zdiff3
 [sendemail]
   smtpServer=/home/jb55/bin/sendmail
   aliasesFile= /home/jb55/.mail_aliases
@@ -37,7 +45,7 @@
 [alias]
   s = show
   a = add
-  amw = am --whitespace=fix
+  amw = am --whitespace=fix 
   ap = add -p
   b = branch
   au = add -u

@@ -36,7 +36,7 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
     mypkgs = (with pkgs; [
       obs-studio
       clipmenu
-      colorpicker
+      xcolor
       dasht
       dmenu
       xdragon
@@ -44,11 +44,11 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
       dynamic-colors
       feh
       getmail6 # for getmail-gmail-xoauth-tokens
-      gnome.gnome-calculator
+      gnome-calculator
       gtk-engine-murrine
       hwi
       lagrange
-      lastpass-cli
+      #lastpass-cli
       libnotify
       mpv
       msmtp
@@ -70,7 +70,7 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
       spotify
       sxiv
       todo-txt-cli
-      tdesktop
+      #tdesktop
       userConfig
       vdirsyncer
       w3m
@@ -126,7 +126,7 @@ in {
     #steam-run
     #wine
     
-    lastpass-cli
+    #lastpass-cli
     rxvt-unicode
   ]) else mypkgs;
 

@@ -3,6 +3,7 @@
 # for examples
 set -o vi
 
+export JB55=32e1827635450ebb3c5a7d12c1f8e7b2b514439ac10a67eef3d9fd9c5c68e245
 export LANGUAGE="en_US.UTF-8"
 export LANG="en_US.UTF-8"
 export LC_CTYPE="en_US.UTF-8"
@@ -43,8 +44,9 @@ shopt -s histappend
 DIRCOLORS="$HOME/.dircolors"
 UNDISTRACT="$HOME/dotfiles/bash-undistract-me/undistract-me.sh"
 
+#export TERM=rxvt-unicode
 export PAGER="less"
-export LESS="-cix8RM --save-marks"
+export LESS="-cix8Rm --save-marks"
 
 TERM_THEME="dark"
 if [ -f ~/.Xresources.d/themes/current ]; then
@@ -96,6 +98,8 @@ export PATH=$HOME/bin:$PATH
 export PATH=$HOME/.local/bin:$PATH
 export PATH=$HOME/.npm/bin:$PATH
 export PATH=$GOPATH/bin:$PATH
+export PATH=$HOME/.cargo/bin:$PATH
+export PATH=$HOME/.modular/bin:$PATH
 
 md () {
     mandown README*
@@ -148,7 +152,6 @@ alias tmuxa="tmux a -d -t "
 alias tmux="tmux -2"
 alias t="todo.sh"
 alias u="cd .."
-alias vim=nvim
 alias vless="/usr/share/vim/vim72/macros/less.sh"
 alias vnc_once="x11vnc -safer -nopw -once -display :0"
 alias wanip=myip
@@ -322,3 +325,5 @@ bind -m vi-command '"\C-e": "i\C-e"'
 bind '"\C-l":clear-screen'
 
 
+
+export PATH="$PATH:/home/jb55/.modular/bin"
