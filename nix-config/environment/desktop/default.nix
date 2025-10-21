@@ -57,6 +57,7 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
       qalculate-gtk
       #qutebrowser
       rxvt-unicode
+      recoll
       signal-desktop
       simplescreenrecorder
       slock
@@ -112,7 +113,7 @@ in {
   };
 
   programs.steam.enable = true;
-
+  programs.steam.extraPackages = [ pkgs.xorg.libXScrnSaver ];
   programs.gamemode.enable = true;
 
   environment.systemPackages = if extra.is-minimal then (with pkgs; [

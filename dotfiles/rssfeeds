@@ -21,7 +21,6 @@ noagenda	@pod	http://feed.nashownotes.com/rss.xml
 peakpropsperity	@blog,@busy	https://feeds.feedburner.com/PeakProsperity
 portal	@pod	https://www.omnycontent.com/d/playlist/9b7dacdf-a925-4f95-84dc-ac46003451ff/1713c520-edb6-43a3-b1b9-acb8002fdae7/58e33a0c-f86b-41c5-a11c-acb8002fdaf5/podcast.rss
 quanta	@blog	https://api.quantamagazine.org/feed/
-sabine	@yt	https://www.youtube.com/feeds/videos.xml?channel_id=UC1yNl2E66ZzKApQdRuTQ4tw
 samharris	@pod	https://wakingup.libsyn.com/rss
 shitcoinchron	@blog	https://chainfail.substack.com/feed
 squarebitcoin	@blog	https://squareselfcustody.substack.com/feed.xml
@@ -42,3 +41,4 @@ woit	@blog	https://www.math.columbia.edu/~woit/wordpress/?feed=rss2
 stabilityai	@blog @ai	https://stability.ai/blog?format=rss
 algorithmic-bridge	@blog @ai	https://thealgorithmicbridge.substack.com/feed
 will-ai-pod	@pod	http://podcast.jb55.com/podcast.xml
+baez	@blog	https://johncarlosbaez.wordpress.com/feed/
