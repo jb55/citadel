@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+bech32 -d <<<"$1" |
+xxd -p -c1000 |
+xargs -I{} nostril query -i {}

@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+for peer in $(bcli getpeerinfo | jq -r '.[].addr'); do
+  bcli disconnectnode $peer
+done
+

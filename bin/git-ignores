@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# our ignores
+
+echo .buildcmd >> .git/info/exclude
+echo .direnv/ >> .git/info/exclude
+echo .envrc/ >> .git/info/exclude
+echo build.log >> .git/info/exclude

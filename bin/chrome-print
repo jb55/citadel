@@ -1,0 +1,4 @@
+tmp="$(mktemp).pdf"
+chromium --headless --disable-gpu --print-to-pdf=$tmp "$@"
+printf "%s\n" "$tmp"
+open "$tmp"

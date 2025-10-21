@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+action=${1:-connect}
+
+bluetoothctl <<<"$action 08:FF:44:54:2F:D8"

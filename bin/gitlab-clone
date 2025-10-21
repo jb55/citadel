@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+
+set -e
+
+usage () {
+  printf "usage: gitlab-clone <owner>[/]<repo>\n" >&2
+  exit 1
+}
+
+already_exists () {
+  printf "%s\n" "$2"
+  exit 2
+}
+
+root=${GITLAB_ROOT:-"$HOME/dev/gitlab"}
+owner="$1"
+
+shift
+
+[ -z "$owner" ] && usage
+
+IFS='/' read -ra parsed <<< "$owner"
+owner="${parsed[0]}"
+repo="${parsed[1]}"
+if [ -z "$owner" ] || [ -z "$repo" ]; then
+    usage
+fi
+
+dest="$root/$owner"
+dir="$dest/$repo"
+
+[ -d "$dir" ] && already_exists "$owner/$repo" "$dir"
+
+mkdir -p "$dest"
+
+cd "$dest"
+
+git clone "$@" "gl:$owner/$repo"
+
+cd "$dir"
+
+git remote rename origin github

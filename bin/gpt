@@ -1,0 +1,9 @@
+
+PROMPT="$(cat - | jq -sR '{echo: true, best_of: 1, frequency_penalty: 0, presence_penalty: 0, prompt: "\(.)", max_tokens: 512}')"
+
+#echo "$PROMPT"
+
+curl -sL https://api.openai.com/v1/engines/code-davinci-002/completions \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $OPENAI_API_KEY" \
+  -d "$PROMPT" | jq -r '.choices[].text'
