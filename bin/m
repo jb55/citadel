@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+hour=$(date +%H)
+
+if [ $hour -gt 9 ] && [ $hour -le 16 ]; then
+  echo "Please only check email outside of work hours"
+else
+  neomutt
+fi

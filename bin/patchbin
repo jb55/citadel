@@ -1,0 +1,6 @@
+#! /usr/bin/env nix-shell
+#! nix-shell -i bash -p patchelf
+set -e
+
+printf "NIX_CC: $NIX_CC\n" >&2
+patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$@"

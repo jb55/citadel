@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+jq --argjson n ${1:-50} '.content | if length > $n then .[:$n] + "..." else . end'

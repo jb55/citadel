@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 pandoc \
 	--pdf-engine=xelatex \
-	--metadata=fontfamily:libertine \
 	-V geometry:margin=1.2in \
 	--variable urlcolor=cyan \
 	"$@"
+
+#--metadata=fontfamily:libertine \

@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+set -e
+note=$(ls -1 ~/var/notes | fzf)
+echo edit ~/var/notes/$note

@@ -1,2 +1,7 @@
 #!/usr/bin/env sh
-exec git branch -vr --sort=-committerdate "$@" | $FUZZER --no-sort --exact | awk '{ print $1 }'
+branches=$(git branch -vr --sort=-committerdate "$@" |
+fzf --multi --no-sort --exact |
+awk '{ print $1 }' |
+paste -sd " ")
+
+echo "git merge $branches"

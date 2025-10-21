@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+DEV="0000:26:00.0"   # change to match your xHCI device
+
+echo -n "$DEV" | sudo tee /sys/bus/pci/drivers/xhci_hcd/unbind
+sleep 1
+echo -n "$DEV" | sudo tee /sys/bus/pci/drivers/xhci_hcd/bind

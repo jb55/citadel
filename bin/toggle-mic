@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+# Get the name of the default source
+default_source=$(pactl info | grep 'Default Source' | awk '{print $3}')
+
+# Get the current mute state of the default source
+mute_state=$(pactl list sources | grep -A 15 "$default_source" | grep 'Mute' | awk '{print $2}')
+
+# Toggle the mute state
+pactl set-source-mute "$default_source" toggle
+
+# Send a notification based on the new mute state
+if [ "$mute_state" = "yes" ]; then
+    notify-send "Microphone" "Unmuted"
+else
+    notify-send "Microphone" "Muted"
+fi

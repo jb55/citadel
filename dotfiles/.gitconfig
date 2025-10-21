@@ -1,7 +1,7 @@
 [user]
   name = William Casarin
   email = jb55@jb55.com
-	signingkey = 0x90EEB2149F6689622EFF595FA13C2E3632EA34D7!
+  signingkey = 0x90EEB2149F6689622EFF595FA13C2E3632EA34D7!
 [color]
   diff = auto
   status = auto
@@ -18,12 +18,16 @@
   diffFilter = delta --color-only
 [merge]
   conflictstyle = zdiff3
+  pager = delta --paging=always --navigate
 [sendemail]
   smtpServer=/home/jb55/bin/sendmail
-  aliasesFile= /home/jb55/.mail_aliases
+  ccCmd = git-contacts
+  aliasesFile= ~/.mail_aliases
   aliasFileType=mutt
 [url "git@github.com:"]
   insteadOf = gh:
+[url "git@gitlab.com:"]
+  insteadOf = gl:
 [url "git@git.sr.ht:~"]
   insteadOf = srht:
 [url "git@gitlab.com:"]
@@ -43,6 +47,7 @@
 [gui]
   recentrepo = /Users/jb55/src/js/titania
 [alias]
+  dft = difftool
   s = show
   a = add
   amw = am --whitespace=fix 
@@ -96,9 +101,9 @@
   autosquash = true
 [pretty]
   fixes = Fixes: %h (\"%s\")
-[diff]
-	colorMoved = dimmed-zebra
-	colorMovedWs = allow-indentation-change
+#[diff]
+	#colorMoved = dimmed-zebra
+	#colorMovedWs = allow-indentation-change
 [push]
 	default = simple
 [rerere]
@@ -108,7 +113,6 @@
 	program = /home/jb55/bin/ots-git
 [magit]
 	hideCampaign = true
-[nostr]
 [github]
 	user = jb55
 [grep]
@@ -117,10 +121,23 @@
 	helper = !gh auth git-credential
 [init]
 	defaultBranch = master
+[difftool "difftastic"]
+	cmd = difft "$LOCAL" "$REMOTE"
+[difftool]
+        prompt = false
+[pager]
+        difftool = true
+[diff]
+	tool = difftastic
 [nostr]
-	relays = wss://relay.damus.io wss://nos.lol wss://nostr.wine
+	relays = wss://relay.damus.io wss://nostr.mom wss://nos.lol wss://nostr.wine ws://localhost:8080
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
+[commit]
+	template = ~/.git-template
+[maintenance]
+	repo = /home/jb55/nixpkgs
+	repo = /home/jb55/dev/linux

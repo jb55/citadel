@@ -1,0 +1,95 @@
+#!/usr/bin/env nix-shell
+#!nix-shell -p python3Packages.pygit2
+#!nix-shell -i xonsh
+
+import fileinput
+import pygit2
+import sys
+import os
+import json
+import re
+from dataclasses import dataclass
+
+@dataclass
+class TrelloCard:
+    card_id: str
+    list_name: str
+    title: str
+
+def get_trello_card(title):
+	card=$(trello-cards | grep @(title)).strip()
+	if card == "":
+		return None
+	return parse_trello_card(card)
+
+def github_project_slug():
+	return $(git remote -v | grep ^origin | head -n1 | sed -En 's,.*github.com:([^/]+)/([^/[:space:]]+) .*$,\\1/\\2,p').strip()
+
+def get_commit_body(commit):
+	lines = commit.message.split("\n")[2:]
+	body = ("\n".join([line for line in lines if 'Trello-Card' not in line])).strip()
+	slug = github_project_slug()
+	commit_link = "Code changes: https://github.com/{}/commit/{}".format(slug, commit.id)
+	return "{}\n\n{}".format(body, commit_link)
+
+def get_card_title(commit):
+	title = commit.message_trailers.get('Trello-Card')
+	if title is None:
+		title = commit.message.split("\n")[0]
+	return title
+
+
+def ensure_trello_card(commit):
+	title = get_card_title(commit)
+	card = get_trello_card(title)
+	if card is None:
+		body = get_commit_body(commit)
+		trello add-card -b Sprint -l Done @(title) @(body)
+		return get_trello_card(title)
+	return card
+
+def parse_trello_card(c):
+	parts = re.split(' [*-] ', c)
+	title = " - ".join(parts[2:]).strip()
+
+	list_name = parts[0].strip()
+	card_id = parts[1].strip()
+	return TrelloCard(card_id=card_id, list_name=list_name, title=title)
+
+def run_prepush_hook(repo):
+	for line in sys.stdin:
+		[local_ref, local_obj, remote_ref, remote_obj] = line.split(" ")
+		if remote_ref != "refs/heads/master":
+			return 0
+		range = "origin/master..{}".format(local_obj)
+		commits=$(git log --format=%H @(range)).split("\n")
+		for hash in [x for x in commits if x.strip() != ""]:
+			commit = repo.revparse_single(hash)
+			card = ensure_trello_card(commit)
+			live = "61955861dfacdf040630e82d"
+			trello move-card @(card.card_id) @(live)
+		# should only happen once
+		return 0
+	return 0
+
+def main():
+	repo = pygit2.Repository('.git')
+
+	rev = "HEAD"
+	if len(sys.argv) >= 2:
+		rev = sys.argv[1]
+
+	if rev == "--pre-push-hook":
+		res = run_prepush_hook(repo)
+		sys.exit(res)
+
+	commit = repo.revparse_single(rev)
+
+	card = ensure_trello_card(commit)
+	done = "619c40300f9488095dbd9033"
+	trello move-card @(card.card_id) @(done)
+	print(card)
+
+
+if __name__ == '__main__':
+	main()

@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+board=${TRELLO_BOARD:-Sprint}
+
+all=$(cat <<\EOS
+/^[^*]/ {
+	list=""
+	for(i=6;i<=NF;i++) {
+		list = list" "$i
+	}
+}
+
+/^\*/ {
+	print list " " $0
+}
+EOS
+)
+
+stripansi() {
+	sed 's/\x1b\[[0-9;]*m//g'
+}
+
+go() {
+	trello show-cards -b $board | stripansi | awk "$all"
+}
+
+if [ -t 1 ]; then
+	go | fuzzer "$1"
+else
+	go
+fi

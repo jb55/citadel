@@ -10,7 +10,7 @@ typ=$(awkp 2 <<<"$res")
 opener="open"
 
 if [[ $typ =~ "@blog" ]]; then
-	opener="plainweb"
+	opener="pandocweb-open epub"
 elif [[ $typ =~ "@pod" ]]; then
 	opener="mpv"
 elif [[ $typ =~ "@yt" ]]; then

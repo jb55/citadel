@@ -1,10 +1,17 @@
 #!/usr/bin/env bash
-SKELETON_CLOSET=${SKELETON_CLOSET:-$HOME/dotfiles/skeletons}
+SKELETON_CLOSET=${SKELETON_CLOSET:-"$HOME/dotfiles/skeletons"}
+
 if [ -z "$1" ]; then
-	printf "usage: skel <skeleton>\n\n"
-	printf "skeletons\n\n"
-	ls -1 $SKELETON_CLOSET | sed 's,^,    ,'
-	printf "\n"
-	exit 0
+    echo "usage: skel <skeleton>"
+    echo
+    echo "skeletons in closet:"
+    ls -1 "$SKELETON_CLOSET" | sed 's/^/    /'
+    exit 0
 fi
-exec cp -vr --no-clobber "$SKELETON_CLOSET/$1"/. .
+
+if [ ! -d "$SKELETON_CLOSET/$1" ]; then
+    echo "error: skeleton '$1' not found in the closet." >&2
+    exit 1
+fi
+
+cp -vr --no-clobber "$SKELETON_CLOSET/$1"/. .

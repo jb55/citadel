@@ -38,6 +38,7 @@ wget \
      --restrict-file-names=windows \
      --domains "$hostname" \
      --no-parent \
+     --reject-regex '(\.js(\?.*)?$|\.css(\?.*)?$|\.map(\?.*)?$|\.woff2?(\?.*)?$|\.ttf(\?.*)?$|\.eot(\?.*)?$|\.ico(\?.*)?$)' \
      "$url" || :
 
 printf "finding html file... \n" 1>&2

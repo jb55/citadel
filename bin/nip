@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+mkdir -p ~/var/nips
+n=$(printf "%02d\n" "$1")
+curl -sL "https://raw.githubusercontent.com/nostr-protocol/nips/master/$n.md" | pandoc -s -f markdown -t man - > ~/var/nips/$n.1
+man ~/var/nips/$n.1

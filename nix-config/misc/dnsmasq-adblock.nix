@@ -15,6 +15,9 @@ in
   services.dnsmasq.servers = ["8.8.8.8" "1.1.1.1"];
   services.dnsmasq.extraConfig = ''
     addn-hosts=${adblock-hosts}
+    dns-forward-max=5096
+    min-cache-ttl=300
+    rebind-domain-ok=
     conf-file=${dnsmasq-adblock}
   '';
 }

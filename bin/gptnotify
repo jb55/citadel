@@ -1,0 +1,225 @@
+#!/nix/store/jckbxm67fpw9hvxm5a8g00hhs6psnfah-python3-3.13.5-env/bin/python3
+"""
+A safer rewrite of your shell script in Python.
+
+Environment variables (same names as your script):
+- OPENAI_API_KEY  (required)
+- DEFAULT_PROMPT  (optional, becomes a system message)
+- PROMPT_CMD      (default: 'dmenu -p 4o'; if missing, read from stdin)
+- MAX_TOKENS      (default: 1000)
+- MODEL           (default: 'gpt-4o')
+- HISTORY_FILE    (default: '/home/jb55/var/gpt-history')
+- MAX_HISTORY     (default: 10)
+"""
+
+import json
+import os
+import shutil
+import subprocess
+import sys
+from pathlib import Path
+from typing import List, Dict
+
+# --- Utilities ---------------------------------------------------------------
+
+def getenv_int(name: str, default: int) -> int:
+    try:
+        return int(os.getenv(name, str(default)))
+    except ValueError:
+        return default
+
+def run_cmd_capture(cmd: str) -> str:
+    """Run a shell command and return stdout (trimmed)."""
+    res = subprocess.run(cmd, shell=True, check=False,
+                         stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    if res.returncode != 0:
+        raise RuntimeError(f"Command failed: {cmd}\n{res.stderr.strip()}")
+    return res.stdout.strip()
+
+class Notifier:
+    """
+    Simple wrapper for notify-send that supports replacement.
+    Uses -p to capture the notification ID and -r to update it.
+    If notify-send isn't available, this becomes a no-op.
+    """
+    def __init__(self, app_name: str = "gptmenu"):
+        self.app_name = app_name
+        self.has_notify = shutil.which("notify-send") is not None
+        self._id = None
+
+    def update(self, title: str, body: str) -> None:
+        if not self.has_notify:
+            return
+        if self._id is None:
+            # First call: create and capture an ID
+            proc = subprocess.run(
+                ["notify-send", "-p", "-a", self.app_name, title, body],
+                stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True
+            )
+            if proc.returncode == 0:
+                self._id = proc.stdout.strip()
+        else:
+            # Subsequent calls: replace notification with the same ID
+            subprocess.run(
+                ["notify-send", "-r", str(self._id), "-a", self.app_name, title, body],
+                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, text=True
+            )
+
+class History:
+    """
+    JSONL history: one message dict per line.
+    Allows tailing the last N messages safely.
+    """
+    def __init__(self, path: Path, max_history: int):
+        self.path = path
+        self.max_history = max_history
+        if self.path:
+            self.path.parent.mkdir(parents=True, exist_ok=True)
+            self.path.touch(exist_ok=True)
+
+    def read_tail(self) -> List[Dict]:
+        if not self.path or not self.path.exists():
+            return []
+        try:
+            lines = self.path.read_text(encoding="utf-8", errors="ignore").splitlines()
+        except Exception:
+            return []
+        msgs = []
+        for line in lines[-self.max_history:]:
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                msgs.append(json.loads(line))
+            except json.JSONDecodeError:
+                # Skip any corrupt line; we don't want one bad line to kill the run.
+                continue
+        return msgs
+
+    def append(self, msg: Dict) -> None:
+        if not self.path:
+            return
+        with self.path.open("a", encoding="utf-8") as f:
+            f.write(json.dumps(msg, ensure_ascii=False) + "\n")
+
+def get_prompt(prompt_cmd: str | None) -> str:
+    # Try dmenu (or any command), fall back to stdin
+    if prompt_cmd:
+        try:
+            out = run_cmd_capture(prompt_cmd)
+            if out:
+                return out
+        except Exception as e:
+            print(f"[warn] PROMPT_CMD failed: {e}", file=sys.stderr)
+    if not sys.stdin.isatty():
+        return sys.stdin.read().strip()
+    return input("Prompt: ").strip()
+
+# --- OpenAI streaming chat ---------------------------------------------------
+
+def stream_chat(messages: List[Dict], model: str, max_tokens: int, api_key: str) -> str:
+    """
+    Stream assistant content and return the full final text.
+    Uses the official OpenAI Python SDK chat.completions streaming.
+    """
+    from openai import OpenAI
+    client = OpenAI(api_key=api_key)
+
+    full_text = []
+    # Chat Completions streaming yields chunks with choices[0].delta.content
+    # (append each delta as it arrives).
+    stream = client.chat.completions.create(
+        model=model,
+        messages=messages,
+        max_tokens=max_tokens,
+        stream=True,
+    )
+    for chunk in stream:
+        try:
+            delta = chunk.choices[0].delta
+        except Exception:
+            delta = None
+        if delta and getattr(delta, "content", None):
+            full_text.append(delta.content)
+            # Caller can display partials if desired; we return the full text.
+    return "".join(full_text)
+
+# --- Main --------------------------------------------------------------------
+
+def main():
+    # Required key (SDK reads OPENAI_API_KEY by default, but we also validate)
+    api_key = os.getenv("OPENAI_API_KEY")
+    if not api_key:
+        print("error: OPENAI_API_KEY is not set.", file=sys.stderr)
+        sys.exit(1)
+
+    default_prompt = os.getenv("DEFAULT_PROMPT", "").strip()
+    prompt_cmd = os.getenv("PROMPT_CMD", "dmenu -p 4o")
+    max_tokens = getenv_int("MAX_TOKENS", 1000)
+    model = os.getenv("MODEL", "gpt-4o")
+    history_file = os.getenv("HISTORY_FILE", "/home/jb55/var/gpt-history").strip()
+    max_history = getenv_int("MAX_HISTORY", 10)
+
+    prompt = get_prompt(prompt_cmd)
+    if not prompt:
+        print("No prompt provided; exiting.", file=sys.stderr)
+        sys.exit(0)
+
+    notifier = Notifier(app_name="gptmenu")
+    notifier.update(prompt, " ")
+
+    hist = History(Path(history_file) if history_file else None, max_history)
+    messages: List[Dict] = []
+    if default_prompt:
+        messages.append({"role": "system", "content": default_prompt})
+    messages.extend(hist.read_tail())
+    messages.append({"role": "user", "content": prompt})
+
+    # Stream and update desktop notification as tokens arrive
+    assistant_text = ""
+    try:
+        from openai import OpenAI  # import early to fail fast if not installed
+    except Exception:
+        print("error: `openai` package is not installed. Run: pip install openai", file=sys.stderr)
+        sys.exit(1)
+
+    try:
+        # We want live updates; do a small wrapper that yields partials
+        from openai import OpenAI
+        client = OpenAI(api_key=api_key)
+        stream = client.chat.completions.create(
+            model=model,
+            messages=messages,
+            max_tokens=max_tokens,
+            stream=True,
+        )
+
+        for chunk in stream:
+            try:
+                delta = chunk.choices[0].delta
+                piece = delta.content or ""
+            except Exception:
+                piece = ""
+            if piece:
+                assistant_text += piece
+                # Update one persistent notification; if notify-send is missing, this is a no-op.
+                notifier.update(prompt, assistant_text)
+                # Also mirror to stdout so the script is useful in a terminal pipeline.
+                print(piece, end="", flush=True)
+
+        print()  # final newline after streaming
+    except KeyboardInterrupt:
+        print("\n[interrupted]", file=sys.stderr)
+        # fall through and still write whatever we have
+    except Exception as e:
+        print(f"\nerror during streaming: {e}", file=sys.stderr)
+
+    # Persist history (JSONL: one message per line)
+    try:
+        hist.append({"role": "user", "content": prompt})
+        hist.append({"role": "assistant", "content": assistant_text})
+    except Exception as e:
+        print(f"[warn] could not write history: {e}", file=sys.stderr)
+
+if __name__ == "__main__":
+    main()

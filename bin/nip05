@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+set -eou pipefail
+
+name=$(cut -f1 -d@ <<<"$1")
+host=$(cut -f2 -d@ <<<"$1")
+
+curl -sL "https://$host/.well-known/nostr.json?user=$name" | jq

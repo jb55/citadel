@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+bech32 -d "$1" | xxd -c1000 -p

@@ -1,0 +1,375 @@
+#!/usr/bin/env python3
+import xml.etree.ElementTree as ET
+import argparse
+import sys
+import datetime
+import re
+import os
+from urllib.request import urlopen
+
+def clean_html(text):
+    """Remove HTML tags from text"""
+    if text is None:
+        return ""
+    return re.sub(r'<.*?>', '', text)
+
+def format_duration(duration_str):
+    """Format duration string into a readable format"""
+    if not duration_str:
+        return "Unknown duration"
+
+    # Check if duration is in HH:MM:SS format
+    if ":" in duration_str:
+        parts = duration_str.split(":")
+        if len(parts) == 3:
+            return f"{parts[0]}h {parts[1]}m {parts[2]}s"
+        elif len(parts) == 2:
+            return f"{parts[0]}m {parts[1]}s"
+        else:
+            return duration_str
+    
+    # Try to parse as seconds
+    try:
+        seconds = int(duration_str)
+        minutes, seconds = divmod(seconds, 60)
+        hours, minutes = divmod(minutes, 60)
+        
+        if hours > 0:
+            return f"{hours}h {minutes}m {seconds}s"
+        else:
+            return f"{minutes}m {seconds}s"
+    except ValueError:
+        return duration_str
+
+def format_pubdate(date_str):
+    """Format publication date into a readable format"""
+    if not date_str:
+        return "Unknown date"
+    
+    try:
+        # Handle various date formats found in podcast feeds
+        for fmt in ["%a, %d %b %Y %H:%M:%S %z", "%a, %d %b %Y %H:%M:%S", "%Y-%m-%dT%H:%M:%S%z"]:
+            try:
+                dt = datetime.datetime.strptime(date_str, fmt)
+                return dt.strftime("%Y-%m-%d")
+            except ValueError:
+                continue
+        
+        # If we couldn't parse the date with specific formats, try a generic approach
+        return date_str.split(",")[1].strip() if "," in date_str else date_str
+    except Exception:
+        return date_str
+
+def estimate_duration_from_filesize(filesize_str):
+    """Estimate audio duration based on file size (very rough estimate)"""
+    try:
+        # Assuming average bitrate of 128kbps for MP3
+        # 128 kbps = 16 KB/s
+        filesize = int(filesize_str)
+        seconds = filesize / (16 * 1024)
+        minutes, seconds = divmod(seconds, 60)
+        hours, minutes = divmod(minutes, 60)
+        
+        if hours > 0:
+            return f"~{int(hours)}h {int(minutes)}m"
+        else:
+            return f"~{int(minutes)}m"
+    except (ValueError, TypeError):
+        return "Unknown duration"
+
+def parse_podcast_feed(xml_source):
+    """Parse podcast RSS feed and return channel info and episode list"""
+    
+    # Define XML namespaces commonly used in podcast feeds
+    namespaces = {
+        'itunes': 'http://www.itunes.com/dtds/podcast-1.0.dtd',
+        'content': 'http://purl.org/rss/1.0/modules/content/',
+        'atom': 'http://www.w3.org/2005/Atom',
+        'googleplay': 'http://www.google.com/schemas/play-podcasts/1.0',
+        'podcast': 'https://podcastindex.org/namespace/1.0'
+    }
+
+    try:
+        # Parse XML
+        if isinstance(xml_source, str) and xml_source.startswith(('http://', 'https://')):
+            # It's a URL
+            with urlopen(xml_source) as response:
+                tree = ET.parse(response)
+                root = tree.getroot()
+        else:
+            # Assume it's a local file or string content
+            try:
+                # Try as file
+                tree = ET.parse(xml_source)
+                root = tree.getroot()
+            except:
+                # Try as string content
+                root = ET.fromstring(xml_source)
+        
+        channel = root.find('channel')
+        if channel is None:
+            print("Error: Invalid podcast feed format (no channel element found)")
+            return None, None
+        
+        # Extract channel info
+        podcast_info = {
+            'title': channel.findtext('title') or "Unknown Title",
+            'description': clean_html(channel.findtext('description')) or "No description available",
+            'link': channel.findtext('link') or "",
+            'language': channel.findtext('language') or "Unknown",
+            'author': channel.findtext('itunes:author', namespaces=namespaces) or "Unknown Author",
+            'image': None,
+            'category': []
+        }
+        
+        # Handle image differently to avoid attribute errors
+        itunes_image = channel.find('itunes:image', namespaces=namespaces)
+        if itunes_image is not None and 'href' in itunes_image.attrib:
+            podcast_info['image'] = itunes_image.attrib['href']
+        
+        # Handle categories safely
+        for cat in channel.findall('itunes:category', namespaces=namespaces):
+            if 'text' in cat.attrib:
+                podcast_info['category'].append(cat.attrib['text'])
+        
+        # Extract episodes
+        items = channel.findall('item')
+        episodes = []
+        
+        for idx, item in enumerate(items, 1):
+            episode = {
+                'index': idx,
+                'title': item.findtext('title') or f"Episode {idx}",
+                'pubDate': format_pubdate(item.findtext('pubDate')),
+                'description': clean_html(item.findtext('description') or item.findtext('itunes:summary', namespaces=namespaces) or "No description"),
+                'link': item.findtext('link') or "",
+                'episode_number': item.findtext('itunes:episode', namespaces=namespaces) or "",
+                'season_number': item.findtext('itunes:season', namespaces=namespaces) or "",
+                'explicit': item.findtext('itunes:explicit', namespaces=namespaces) or "unknown",
+                'duration': "Unknown duration",
+                'audio_url': "",
+                'file_size': "Unknown",
+                'mime_type': "Unknown"
+            }
+            
+            # Get duration safely
+            duration = item.findtext('itunes:duration', namespaces=namespaces)
+            if duration:
+                episode['duration'] = format_duration(duration)
+            
+            # Get enclosure (the actual media file) safely
+            enclosure = item.find('enclosure')
+            if enclosure is not None:
+                if 'url' in enclosure.attrib:
+                    episode['audio_url'] = enclosure.attrib['url']
+                if 'length' in enclosure.attrib:
+                    episode['file_size'] = enclosure.attrib['length']
+                    # If no duration provided, estimate from file size
+                    if episode['duration'] == "Unknown duration":
+                        episode['duration'] = estimate_duration_from_filesize(episode['file_size'])
+                if 'type' in enclosure.attrib:
+                    episode['mime_type'] = enclosure.attrib['type']
+            
+            episodes.append(episode)
+        
+        return podcast_info, episodes
+    
+    except ET.ParseError as e:
+        print(f"Error parsing XML: {e}")
+        return None, None
+    except Exception as e:
+        print(f"Error processing podcast feed: {e}")
+        import traceback
+        traceback.print_exc()
+        return None, None
+
+def print_podcast_info(podcast_info, episodes, verbose=False, media_links=False):
+    """Print podcast information and episodes in a readable format"""
+    
+    if podcast_info is None or episodes is None:
+        return
+    
+    # Print podcast information
+    print("\n" + "="*80)
+    print(f"PODCAST: {podcast_info['title']}")
+    print("="*80)
+    
+    if verbose:
+        print(f"Author: {podcast_info['author']}")
+        print(f"Language: {podcast_info['language']}")
+        if podcast_info['category']:
+            print(f"Categories: {', '.join(cat for cat in podcast_info['category'] if cat)}")
+        print(f"Website: {podcast_info['link']}")
+        if podcast_info['image']:
+            print(f"Cover Image: {podcast_info['image']}")
+        print("\nDescription:")
+        print(f"{podcast_info['description'][:300]}..." if len(podcast_info['description']) > 300 else podcast_info['description'])
+    
+    # Print episodes
+    print("\nEPISODES:")
+    print("-"*80)
+    
+    for episode in episodes:
+        season_ep = ""
+        if episode['season_number'] and episode['episode_number']:
+            season_ep = f" (S{episode['season_number']}E{episode['episode_number']})"
+        elif episode['episode_number']:
+            season_ep = f" (EP{episode['episode_number']})"
+        
+        print(f"{episode['index']}. {episode['title']}{season_ep} - {episode['pubDate']} - {episode['duration']}")
+        
+        if media_links and episode['audio_url']:
+            print(f"   [MEDIA] {episode['audio_url']}")
+        
+        if verbose:
+            print(f"   Explicit: {episode['explicit']}")
+            if episode['audio_url']:
+                print(f"   Audio: {episode['audio_url']}")
+                print(f"   File Size: {episode['file_size']} bytes ({episode['mime_type']})")
+            description = episode['description']
+            if len(description) > 200:
+                description = description[:197] + "..."
+            print(f"   Description: {description}")
+            print("-"*80)
+
+def export_media_links(podcast_info, episodes, output_format='text', output_file=None):
+    """Export media links to a file in the specified format"""
+    
+    if not episodes:
+        print("No episodes to export.")
+        return
+    
+    links = []
+    
+    for episode in episodes:
+        if episode['audio_url']:
+            episode_info = {
+                'title': episode['title'],
+                'url': episode['audio_url'],
+                'date': episode['pubDate'],
+                'duration': episode['duration'],
+                'index': episode['index']
+            }
+            
+            if episode['season_number'] and episode['episode_number']:
+                episode_info['season_episode'] = f"S{episode['season_number']}E{episode['episode_number']}"
+            elif episode['episode_number']:
+                episode_info['season_episode'] = f"EP{episode['episode_number']}"
+            else:
+                episode_info['season_episode'] = ""
+                
+            links.append(episode_info)
+    
+    if not output_file:
+        output_file = f"{re.sub(r'[^\w]', '_', podcast_info['title'])}_media_links"
+    
+    if output_format == 'text':
+        output_file = f"{output_file}.txt"
+        with open(output_file, 'w', encoding='utf-8') as f:
+            f.write(f"Media Links for {podcast_info['title']}\n")
+            f.write("="*80 + "\n\n")
+            
+            for link in links:
+                f.write(f"{link['index']}. {link['title']}")
+                if link['season_episode']:
+                    f.write(f" ({link['season_episode']})")
+                f.write(f" - {link['date']} - {link['duration']}\n")
+                f.write(f"   {link['url']}\n\n")
+    
+    elif output_format == 'csv':
+        import csv
+        output_file = f"{output_file}.csv"
+        with open(output_file, 'w', encoding='utf-8', newline='') as f:
+            fieldnames = ['index', 'title', 'season_episode', 'date', 'duration', 'url']
+            writer = csv.DictWriter(f, fieldnames=fieldnames)
+            writer.writeheader()
+            for link in links:
+                writer.writerow(link)
+    
+    elif output_format == 'm3u':
+        output_file = f"{output_file}.m3u"
+        with open(output_file, 'w', encoding='utf-8') as f:
+            f.write("#EXTM3U\n")
+            
+            for link in links:
+                title = link['title']
+                if link['season_episode']:
+                    title = f"{title} ({link['season_episode']})"
+                
+                # Convert duration to seconds for EXTINF
+                duration_seconds = 0
+                duration = link['duration']
+                if 'h' in duration and 'm' in duration and 's' in duration:
+                    parts = duration.replace('h', ' ').replace('m', ' ').replace('s', '').split()
+                    if len(parts) >= 3:
+                        try:
+                            duration_seconds = int(parts[0]) * 3600 + int(parts[1]) * 60 + int(parts[2])
+                        except ValueError:
+                            pass
+                elif 'm' in duration and 's' in duration:
+                    parts = duration.replace('m', ' ').replace('s', '').split()
+                    if len(parts) >= 2:
+                        try:
+                            duration_seconds = int(parts[0]) * 60 + int(parts[1])
+                        except ValueError:
+                            pass
+                
+                f.write(f"#EXTINF:{duration_seconds},{title}\n")
+                f.write(f"{link['url']}\n")
+    
+    elif output_format == 'json':
+        import json
+        output_file = f"{output_file}.json"
+        with open(output_file, 'w', encoding='utf-8') as f:
+            json.dump(links, f, indent=2)
+    
+    else:
+        print(f"Unsupported output format: {output_format}")
+        return
+    
+    print(f"\nMedia links exported to: {output_file}")
+    return output_file
+
+def main():
+    parser = argparse.ArgumentParser(description='Parse and display podcast feed information')
+    parser.add_argument('source', help='URL or local path to podcast XML/RSS feed')
+    parser.add_argument('-v', '--verbose', action='store_true', help='Display detailed information')
+    parser.add_argument('--input-file', action='store_true', help='Read XML from an input file instead of URL')
+    parser.add_argument('--media-links', action='store_true', help='Display media links for each episode')
+    
+    # Media export options
+    parser.add_argument('--export', action='store_true', help='Export media links to a file')
+    parser.add_argument('--format', choices=['text', 'csv', 'm3u', 'json'], default='text',
+                        help='Export format (default: text)')
+    parser.add_argument('--output', help='Output file name (without extension)')
+    
+    args = parser.parse_args()
+    
+    source = args.source
+    print(f"Parsing podcast feed from: {source}")
+    
+    # If reading from file
+    if args.input_file:
+        try:
+            with open(source, 'r', encoding='utf-8') as f:
+                xml_content = f.read()
+            podcast_info, episodes = parse_podcast_feed(xml_content)
+        except Exception as e:
+            print(f"Error reading file: {e}")
+            sys.exit(1)
+    else:
+        podcast_info, episodes = parse_podcast_feed(source)
+    
+    if podcast_info and episodes:
+        print_podcast_info(podcast_info, episodes, args.verbose, args.media_links)
+        print(f"\nTotal episodes: {len(episodes)}")
+        
+        # Export media links if requested
+        if args.export:
+            export_media_links(podcast_info, episodes, args.format, args.output)
+    else:
+        print("Failed to parse podcast feed.")
+        sys.exit(1)
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+LN_NODE=03f3c108ccd536b8526841f0a5c58212bb9e6584a1eb493080e7c1cc34f82dad71
+LN_HOST=24.86.66.39:9735
+
+/home/jb55/bin/lnrpc_ $LN_NODE $LN_HOST $LN_TOKEN "$@" | jq '.result // .'

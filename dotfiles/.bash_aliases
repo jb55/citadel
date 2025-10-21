@@ -74,7 +74,7 @@ function run_fuzzer() {
 }
 
 alias C="pcal list"
-alias m="neomutt"
+#alias m="neomutt"
 alias mq="msmtp-queue"
 alias s="general-status"
 alias t="todo.sh"

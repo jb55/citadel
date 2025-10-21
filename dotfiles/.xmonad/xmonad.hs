@@ -20,6 +20,7 @@ import XMonad
 import XMonad.Actions.CycleWS
 import XMonad.Actions.SpawnOn (shellPromptHere, manageSpawn)
 import XMonad.Actions.UpdatePointer
+import XMonad.Actions.MostRecentlyUsed
 import XMonad.Hooks.EwmhDesktops (ewmh)
 --import XMonad.Hooks.EwmhDesktops (ewmhFullscreen)
 import XMonad.Hooks.ManageDocks
@@ -170,8 +171,9 @@ baseLayout =
         tall = ResizableTall 1 (3/100) (1/2) []
     in
         --D.Dwindle D.R D.CW 1.5 1.1 |||
-            D.Squeeze D.R 1.38 1.1
-        ||| D.Spiral D.R D.CW 0.8 1.1
+            --D.Squeeze D.R 1.38 1.1
+        -- ||| D.Spiral D.R D.CW 0.8 1.1
+        D.Spiral D.R D.CW 0.8 1.1
         --S.spiral (4/3) |||
         --Mirror tall --S.spiralWithDir S.South S.CW (4/3)
 
@@ -278,6 +280,7 @@ myKeys theme = [
   , ("M-c", toggleCenter)
   , ("M-b", toggleMirror)
   , ("M-g", toggleGaps)
+  , ("M-s", scratchpadSpawnActionTerminal termName)
   --, ("M-s", scratchpadSpawnActionTerminal termName)
   -- , ("M-r", toggleFull)
   , ("M-v", sendKey shiftMask xK_Insert)

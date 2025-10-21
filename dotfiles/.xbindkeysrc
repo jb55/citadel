@@ -41,11 +41,3 @@
 "toggle-mic"
     m:0x0 + c:198
     XF86AudioMicMute
-
-"fletch"
-    m:0x0 + c:179
-    XF86Tools
-
-"fletch-pagedown"
-    m:0x0 + c:76
-    F10

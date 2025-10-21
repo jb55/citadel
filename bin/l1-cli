@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+./cli/lightning-cli --lightning-dir=/tmp/l1-regtest "$@"

@@ -32,11 +32,16 @@ dir="$dest/$repo"
 [ -d "$dir" ] && already_exists "$owner/$repo" "$dir"
 
 mkdir -p "$dest"
+
 cd "$dest"
+
 git clone "$@" "gh:$owner/$repo"
 
 cd "$dir"
 
-git config --add remote.origin.fetch '+refs/pull/*/head:refs/remotes/pr/*'
+git remote rename origin github
 
-printf "%s\n" "$dest/$repo"
+git config \
+    --add remote.github.fetch '+refs/pull/*/head:refs/remotes/pr/*'
+
+printf "%s\n" "$dir"

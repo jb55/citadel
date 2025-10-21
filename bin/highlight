@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+nostril --envelope --sec $JB55_SEC --kind 9802 --content "$1" --tag r "$2"

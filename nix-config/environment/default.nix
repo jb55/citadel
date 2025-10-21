@@ -24,7 +24,7 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
     ];
 
     minimal-pkgs = with pkgs; [
-      git-tools
+      git
       fzf
       ripgrep
     ];
@@ -33,10 +33,12 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
       yq
       tut
 
+      curlHTTP3
       python3Packages.num2words
       #python3Packages.howdoi
       tree
       #xsv
+      b4
       datefmt
       #nostril
       nncp
@@ -55,7 +57,7 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
       du-dust
       file
       fzf
-      git-tools
+      git
       gnumake
       gnupg
       groff
@@ -77,8 +79,7 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
       vim-full
       ffmpeg
       btop
-      b4
-      rustup
+      playerctl
       nethack
       network-tools
       nix-direnv 

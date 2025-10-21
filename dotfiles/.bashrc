@@ -23,15 +23,16 @@ IN_NIX=""
 if [ -n "$IN_NIX_SHELL" ]; then
 	IN_NIX="-nix"
 fi
-export PS1='$(printf "\x01\033[30;1m\x02%3.*s\x01\033[0m\x02 %s%s> \x01\033[33m\x02" $? $? $HOST $IN_NIX)'
-export PS0='\033[0m'
+#export PS1='$(printf "\x01\033[30;1m\x02%3.*s\x01\033[0m\x02 %s%s> \x01\033[33m\x02" $? $? $HOST $IN_NIX)'
+export PS1='\[\033[30;1m\]$(printf "%3.*s" $? $?)\[\033[0m\] \h\[\033[33m\]> \[\033[0m\]'
+#export PS0='\033[0m'
 
 #export PS1='$(printf "\x01\033[30;1m\x02%3.*s\x01\033[0m\x02> " $? $?)'
 
 # don't put duplicate lines in the history. See bash(1) for more options
 #export HISTCONTROL=ignoredups
 # ... and ignore same sucessive entries.
-export HISTCONTROL=ignoreboth
+export HISTCONTROL=erasedups
 export HISTSIZE=50000
 
 # check the window size after each command and, if necessary,
@@ -74,9 +75,12 @@ export GOPHERCLIENT=vf1
 export GEMINICLIENT=av98
 export GOPHER=$GOPHERCLIENT
 export GNUPGHOME="$HOME/.gnupg"
-export SHAREFILE_HOST='charon:/www/cdn.jb55.com/s/'
-export SHAREFILE_URL='https://cdn.jb55.com/s/'
+#export SHAREFILE_HOST='charon:/www/cdn.jb55.com/s/'
+#export SHAREFILE_URL='https://cdn.jb55.com/s/'
+export SHAREFILE_HOST='charon:public/s/'
+export SHAREFILE_URL='https://jb55.com/s/'
 export SHARE_SS_DIR="$HOME/var/img/ss"
+export OLLAMA_HOST=http://ollama.jb55.com
 export DOTFILES=${DOTFILES:-$HOME/dotfiles}
 export VI_MODE=1
 export XZ=pxz
@@ -97,6 +101,7 @@ export GOPATH=$HOME/dev/gocode
 export PATH=$HOME/bin:$PATH
 export PATH=$HOME/.local/bin:$PATH
 export PATH=$HOME/.npm/bin:$PATH
+export PATH=$HOME/.cargo/bin:$PATH
 export PATH=$GOPATH/bin:$PATH
 export PATH=$HOME/.cargo/bin:$PATH
 export PATH=$HOME/.modular/bin:$PATH
@@ -134,6 +139,7 @@ alias jcu="journalctl --user -u"
 alias jsonpp="python -mjson.tool"
 alias ls="ls --color"
 alias m="neomutt"
+alias mw="neomutt -f work"
 alias mq="msmtp-queue"
 alias mt="f nt query:today"
 alias myipaddress=myip
@@ -142,6 +148,7 @@ alias noder="env NODE_NO_READLINE=1 rlwrap node"
 alias nr="npm run"
 alias ns="nix-shell -p"
 alias page=$PAGER
+alias ntr=notmuch-thread-reader
 alias prettyjson=jsonpp
 alias qud="steam-run ~/.local/share/Steam/steamapps/common/Caves\ of\ Qud/CoQ.x86_64"
 alias scs="systemctl status"
@@ -160,6 +167,10 @@ alias xclip="xclip -selection clipboard"
 
 ghclone () {
   cd "$(gh-clone "$@")"
+}
+
+glclone () {
+  cd "$(gitlab-clone "$@")"
 }
 
 srhtclone () {

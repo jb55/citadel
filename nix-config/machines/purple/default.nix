@@ -3,7 +3,7 @@ extra:
   imports = [
     ./hardware
     ./networking
-    #(import ./nginx extra)
+    (import ./nginx extra)
     #(import ./sheetzen extra)
     #(import ./vidstats extra)
   ];

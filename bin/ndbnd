@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+ndb -d ~/.local/share/notedeck/db "$@"

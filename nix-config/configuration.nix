@@ -23,7 +23,7 @@ let machine = extra.private.machine;
     caches = [ "https://cache.nixos.org" ];
     composeKey = if machine == "quiver" then "ralt" else "prsc";
     home = "/home/jb55";
-    isDark = false;
+    isDark = true;
     bash = "${pkgs.bashInteractive}/bin/bash";
     theme = if isDark then {
       package = pkgs.theme-vertex;
@@ -70,6 +70,20 @@ in {
   # Use the GRUB 2 boot loader.
   boot.loader.grub.enable = true;
   #environment.ld-linux = false;
+  #systemd.extraConfig = ''
+  #  DefaultTimeoutStopSec=10s
+  #  DefaultTimeoutStartSec=20s
+  #'';
+
+  #i18n.inputMethod = {
+  #  enabled = "fcitx5";
+  #  fcitx5.addons = with pkgs; [
+  #    fcitx5-gtk
+  #    fcitx5-chinese-addons
+  #    fcitx5-mozc
+  #    fcitx5-nord
+  #  ];
+  #};
 
   i18n.extraLocaleSettings = {
     LC_TIME="en_DK.UTF-8";
@@ -80,17 +94,22 @@ in {
   #documentation.man.generateCaches = true; # list manpages
 
   programs.ssh.startAgent = true;
+  services.gnome.gcr-ssh-agent.enable = false;
 
   time.timeZone = "America/Vancouver";
   #time.timeZone = "Atlantic/Madeira";
   #time.timeZone = "Europe/Madrid";
   #time.timeZone = "America/Chicago";
+  #system.stateVersion = "24.11";
 
   nixpkgs.config = import ./nixpkgs/config.nix;
 
   nix.useSandbox = machine != "charon";
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nix.trustedUsers = [ "root" "jb55" ];
+
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.trusted-substituters = ["https://ai.cachix.org"];
+  nix.settings.trusted-public-keys = ["ai.cachix.org-1:N9dzRK+alWwoKXQlnn0H6aUx0lU/mspIoz8hMvGvbbc="];
 
   boot.blacklistedKernelModules = [ "pcspkr" ]; # STOP THE BEEPING
 
@@ -103,5 +122,7 @@ in {
   console.useXkbConfig = true;
 
   programs.zsh.enable = false;
+  programs.direnv.enable = true;
+  programs.direnv.nix-direnv.enable = true;
 
 }

@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+xclip -selection primary -o | vipe > /tmp/vipeclip
+</tmp/vipeclip xclip -selection primary
+</tmp/vipeclip xclip -selection secondary
+</tmp/vipeclip xclip -selection clipboard
+rm /tmp/vipeclip
+sleep 0.6

@@ -1,0 +1,3 @@
+#!/usr/bin/env sh
+relays="$(git config nostr.relays)"
+nostril query "$@" | nostcat --unique $relays

@@ -1,6 +1,32 @@
 3blue1brown	@yt	https://www.youtube.com/feeds/videos.xml?channel_id=UCYO_jab_esuFRV4b17AJtAw
+bitcoinmagazine	@yt	https://bitcointv.com/feeds/videos.xml?videoChannelId=13
+blackpenredpen	@yt	https://www.youtube.com/feeds/videos.xml?channel_id=UC_SvYP0k05UKiJ_2ndB02IA
+brian-keating	@yt	https://www.youtube.com/feeds/videos.xml?channel_id=UCmXH_moPhfkqCk6S3b9RWuw
+citadeldispatch	@yt	https://bitcointv.com/feeds/videos.xml?videoChannelId=2
+clownworldtoday	@blog	https://benkaufman.substack.com/feed
 codyslab	@yt	https://www.youtube.com/feeds/videos.xml?channel_id=UCu6mSoMNzHQiBIOCkHUa2Aw
+commaai	@yt	https://www.youtube.com/feeds/videos.xml?channel_id=UCwgKmJM4ZJQRJ-U5NjvR2dg
 drewdevault	@blog	https://drewdevault.com/blog/index.xml
+hackernews	@busy	https://news.ycombinator.com/rss
+inferencereview	@blog	https://inference-review.com/feeds/rss
+lesswrong	@blog,@busy	http://lesserwrong.com/feed.xml
+lexfridman	@yt	https://www.youtube.com/feeds/videos.xml?channel_id=UCSHZKyawb77ixDdsGog4iWA
+lobsters	@busy	https://lobste.rs/rss
+mittechreview	@blog,@busy	https://www.technologyreview.com/feed
+mit-tokamak	@yt	https://www.youtube.com/feeds/videos.xml?channel_id=UCMFsHceLUJNkXMiCMFNnvkA
+nature	@blog,@busy	http://feeds.nature.com/nature/rss/current
+nileblue	@yt	https://www.youtube.com/feeds/videos.xml?channel_id=UC1D3yD4wlPMico0dss264XA
+nilered	@yt	https://www.youtube.com/feeds/videos.xml?channel_id=UCFhXFikryT4aFcLkLw2LBLA
+noagenda	@pod	http://feed.nashownotes.com/rss.xml
+peakpropsperity	@blog,@busy	https://feeds.feedburner.com/PeakProsperity
+portal	@pod	https://www.omnycontent.com/d/playlist/9b7dacdf-a925-4f95-84dc-ac46003451ff/1713c520-edb6-43a3-b1b9-acb8002fdae7/58e33a0c-f86b-41c5-a11c-acb8002fdaf5/podcast.rss
+quanta	@blog	https://api.quantamagazine.org/feed/
+samharris	@pod	https://wakingup.libsyn.com/rss
+shitcoinchron	@blog	https://chainfail.substack.com/feed
+squarebitcoin	@blog	https://squareselfcustody.substack.com/feed.xml
+stackernews	@busy	https://stacker.news/rss
+thedrive	@pod	https://peterattiadrive.libsyn.com/rss
+veritasium	@yt	https://www.youtube.com/feeds/videos.xml?channel_id=UCHnyfMqiRRG1u-2MsSQLbXA
 susskind	@arxiv @physics	'http://export.arxiv.org/api/query?search_query=au:susskind_l&sortBy=lastUpdatedDate&sortOrder=descending'
 witten	@arxiv @physics	'http://export.arxiv.org/api/query?search_query=au:witten_e&sortBy=lastUpdatedDate&sortOrder=descending'
 zvibern	@arxiv @physics	'http://export.arxiv.org/api/query?search_query=au:bern_zvi&sortBy=lastUpdatedDate&sortOrder=descending'
@@ -9,7 +35,10 @@ maldacena	@arxiv @physics	'http://export.arxiv.org/api/query?search_query=au:mal
 harlow	@arxiv @physics	'http://export.arxiv.org/api/query?search_query=au:harlow_d&sortBy=lastUpdatedDate&sortOrder=descending'
 bousso	@arxiv @physics	'http://export.arxiv.org/api/query?search_query=au:bousso_r&sortBy=lastUpdatedDate&sortOrder=descending'
 scott-aaronson	@blog @physics	https://scottaaronson.blog/?feed=rss2
+dietterich-labs	@yt	https://www.youtube.com/feeds/videos.xml?channel_id=UCd02pSRrecAVFOPjB-bfv-Q
+allen-farrington	@blog	https://medium.com/feed/@allenfarrington
 woit	@blog	https://www.math.columbia.edu/~woit/wordpress/?feed=rss2
-stabilityai	@blog @ai	https://stability.ai/research?format=rss
+stabilityai	@blog @ai	https://stability.ai/blog?format=rss
 algorithmic-bridge	@blog @ai	https://thealgorithmicbridge.substack.com/feed
-lobstrs-ai	@blog @ai	https://lobste.rs/t/ai.rss
+will-ai-pod	@pod	http://podcast.jb55.com/podcast.xml
+baez	@blog	https://johncarlosbaez.wordpress.com/feed/

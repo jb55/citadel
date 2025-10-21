@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+notmuch show --format=raw subject:invoice and from:daniel and tag:inbox |
+grep -A1000 "Content-Type: application/octet-stream" - |
+grep -v -e "^--" -e "Content-" |
+base64 -d |
+gpg -d |
+gpg -d 

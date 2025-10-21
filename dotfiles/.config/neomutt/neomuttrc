@@ -33,7 +33,8 @@ virtual-mailboxes \
   "today" "notmuch://?query=date:today" \
   "damus-prs" "notmuch://?query=query:damusp" \
   "damus-issues" "notmuch://?query=query:damusi" \
-  "work" "notmuch://?query=query:work"
+  "work" "notmuch://?query=query:work" \
+  "notwork" "notmuch://?query=query:notwork"
 
 macro index,pager a "<modify-labels>-unread -inbox<enter>"
 macro index,pager i "<modify-labels>+inbox<enter>"
@@ -42,8 +43,8 @@ macro index,pager + "<modify-labels>+"
 macro index C "<collapse-all>" "Collapse all threads"
 macro index c "<collapse-thread>" "Collapse thread"
 macro index T "<tag-thread>" "Tag thread"
-macro index = "<mark-message>z<enter><change-folder>^<enter>'z"
 macro index \\\\ "<vfolder-from-query>" "Search mailbox"
+macro index = "<mark-message>z<enter><change-folder>^<enter>'z"
 macro pager p "|delta --paging always<enter>"
 macro pager d "<next-page>"
 macro pager u "<previous-page>"

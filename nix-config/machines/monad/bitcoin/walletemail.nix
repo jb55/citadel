@@ -29,7 +29,7 @@ export GNUPGHOME=/zbig/bitcoin/gpg
 msg="$(printf "txid: %s\n\naddress: %s\n\namount: %s\n\nconfirmations: %d\n\nwallet: %s\n\ntime: %s\n\nreceived: %s\n\nkeypath: %s\n\n%s\n" \
               "$txid" "$address" "$amount" "$confs" "$wallet" "$time" "$received" "$keypath" "$details" )"
 
-${nostril}/bin/nostril --sec ${private.wallet-nostr} --envelope -p 32e1827635450ebb3c5a7d12c1f8e7b2b514439ac10a67eef3d9fd9c5c68e245 --content "$msg" | ${pkgs.websocat}/bin/websocat ws://127.0.0.1:8080
+${nostril}/bin/nostril --sec ${private.wallet-nostr} --envelope -p 32e1827635450ebb3c5a7d12c1f8e7b2b514439ac10a67eef3d9fd9c5c68e245 --content "$msg" | ${pkgs.nostcat}/bin/nostcat ws://127.0.0.1:8080 wss://notify.damus.io
 
 enctx="$(printf "Content-Type: text/plain\n\n%s\n" "$msg" | ${pkgs.gnupg}/bin/gpg --yes --always-trust --encrypt --armor $keys)"
 
