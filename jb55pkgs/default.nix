@@ -14,6 +14,11 @@ let callPackage = pkgs.callPackage;
       url = "https://git.sr.ht/~jb55/${args.repo}";
       inherit (args) sha256 rev;
     })) {};
+
+    fetch-gh = args: callPackage (pkgs.fetchFromGitHub ({
+      inherit (args) rev repo sha256 fetchSubmodules;
+      owner = "jb55";
+    })) {};
 in rec {
   curlc       = callPackage ./pkgs/curlc {};
   csv-delim   = callPackage ./pkgs/csv-delim { };
@@ -40,10 +45,11 @@ in rec {
     sha256 = "10qx30s0c6gcinfgdlb3c8rxkv4j25m29jsl923k44bbh3jpdnak";
   };
 
-  nostril = fetch-jb55 {
+  nostril = fetch-gh {
     repo = "nostril";
-    rev = "251031f5a5d098d02c5e74556942d3dd706b5ce4";
-    sha256 = "sha256-qLqRxdLDos3akNKbKQ0yIbIIovssK1Q40EzJ8hb6hag=";
+    rev = "c8e67cd6411d73ce42c321a238be09acfec9b257";
+    sha256 = "sha256-+w/tZuoj/WG2c4kbg6JqMeufV/caoq3wEb/AFDazEP0=";
+    fetchSubmodules = true;
   };
 
   git-email-contacts = fetch-jb55 {
