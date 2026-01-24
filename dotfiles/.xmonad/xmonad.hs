@@ -143,6 +143,9 @@ mkTabTheme (BasicTheme _ active inactive) =
 darkTheme :: OurTheme
 darkTheme = BasicTheme DarkTheme "#282C34" "#323742"
 
+darkThemeOled :: OurTheme
+darkThemeOled = BasicTheme DarkTheme "#000000" "#111111"
+
 
 --darkTheme :: OurTheme
 --darkTheme = FullTheme {
@@ -191,7 +194,7 @@ getTheme = do
   themePath <- readSymbolicLink "/home/jb55/.Xresources.d/themes/current"
   case takeBaseName themePath of
     "light" -> return lightTheme
-    _       -> return darkTheme
+    _       -> return darkThemeOled
 
 
 myStartupHook :: Layout Window -> X ()
@@ -280,7 +283,7 @@ myKeys theme = [
   , ("M-c", toggleCenter)
   , ("M-b", toggleMirror)
   , ("M-g", toggleGaps)
-  , ("M-s", scratchpadSpawnActionTerminal termName)
+  --, ("M-s", scratchpadSpawnActionTerminal termName)
   --, ("M-s", scratchpadSpawnActionTerminal termName)
   -- , ("M-r", toggleFull)
   , ("M-v", sendKey shiftMask xK_Insert)

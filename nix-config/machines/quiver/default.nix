@@ -17,8 +17,6 @@ extra:
 
   documentation.nixos.enable = false;
 
-  programs.adb.enable = true;
-
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
   boot.extraModprobeConfig = ''

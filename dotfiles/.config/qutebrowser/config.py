@@ -5,6 +5,9 @@ hostname = socket.gethostname()
 
 config.load_autoconfig(False)
 
+#passthrough for certain domains
+config.set("input.mode_override", "passthrough", "linear.app")
+
 # Uncomment this to still load settings configured via autoconfig.yml
 # config.load_autoconfig()
 
@@ -49,7 +52,7 @@ else:
 # `{line0}`: Same as `{line}`, but starting from index 0. * `{column0}`:
 # Same as `{column}`, but starting from index 0.
 # Type: ShellCommand
-c.editor.command = ['edit-gui', '{file}', '+{line}']
+c.editor.command = ['/home/jb55/bin/edit-gui', '{file}', '+{line}']
 
 # This setting can be used to map keys to other keys. When the key used
 # as dictionary-key is pressed, the binding for the key used as

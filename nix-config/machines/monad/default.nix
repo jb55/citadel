@@ -35,7 +35,7 @@ in
 {
   imports = [
     ./hardware
-    (import ./rocksmith.nix)
+    #(import ./rocksmith.nix)
     # ./contracts/commit
     # ./contracts/plastiq
 
@@ -414,7 +414,7 @@ in
 
   programs.mosh.enable = false;
   programs.kdeconnect.enable = false;
-  programs.adb.enable = true;
+  programs.adb.enable = false;
 
   documentation.nixos.enable = false;
 

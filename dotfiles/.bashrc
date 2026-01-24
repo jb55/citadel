@@ -335,6 +335,4 @@ bind '"\C-e": "!!\C-x\C-e"'
 bind -m vi-command '"\C-e": "i\C-e"'
 bind '"\C-l":clear-screen'
 
-
-
 export PATH="$PATH:/home/jb55/.modular/bin"

@@ -1,4 +1,4 @@
-{ pkgs }:
+{ pkgs, lib }:
 let #monstercatPkgs = import <monstercatpkgs> { inherit pkgs; };
     #haskellOverrides = import ./haskell-overrides { inherit monstercatPkgs; };
     jb55pkgs = import <jb55pkgs> { inherit pkgs; };
@@ -18,6 +18,11 @@ in {
   cudaSupport = false;
   rocmSupport = false;
   #android_sdk.accept_license = true;
+
+  # needed for hwi, CVE-2024-23342 not relevant to hww wallets
+  permittedInsecurePackages = [
+    "python3.13-ecdsa-0.19.1"
+  ];
 
   packageOverrides = super: rec {
     qutebrowser = super.qutebrowser.override {

@@ -15,12 +15,12 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
        csv-scripts
        extname
        mandown
-       ratio
+       #ratio
        samp
        sharefile
        zebra
        define
-       nixpkgs-ml-tools
+       #nixpkgs-ml-tools
     ];
 
     minimal-pkgs = with pkgs; [
@@ -54,7 +54,7 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
       cp437
       dateutils
       direnv
-      du-dust
+      dust
       file
       fzf
       git

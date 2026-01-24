@@ -1,2 +1,2 @@
 #!/bin/sh
-exec sudoedit /etc/wpa_supplicant.conf
+exec sudoedit /etc/wpa_supplicant/imperative.conf

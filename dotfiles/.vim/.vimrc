@@ -16,7 +16,7 @@ set hidden
 set wrap
 set rnu nu
 
-hi ColorColumn ctermbg=8
+"hi ColorColumn ctermbg=6
 
 map Y y$
 map Z zz
@@ -110,6 +110,7 @@ function! RustFormat()
     let l:view = winsaveview()
     silent! mkview
     silent! %!fmtsafe fmtrust
+    call winrestview(l:view)
 endfunction
 
 function! ClangFormat()

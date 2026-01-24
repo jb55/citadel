@@ -3,8 +3,8 @@
 
 set -e
 
-BROWSER=chromium
-#BROWSER=qutebrowser
+#BROWSER=chromium
+BROWSER=qutebrowser
 #BROWSER_ARGS="--enable-webengine-inspector"
 export EDITOR=/home/jb55/bin/edit-gui
 

@@ -14,7 +14,7 @@ in
 {
   imports = [
     (import ./networking extra)
-    (import ./rocksmith.nix)
+    #(import ./rocksmith.nix)
   ];
 
   services.hoogle = {
@@ -116,20 +116,6 @@ in
         git push -u origin master
       '';
     };
-  };
-
-  services.mpd = {
-    enable = false;
-    dataDir = "/home/jb55/mpd";
-    user = "jb55";
-    group = "users";
-    extraConfig = ''
-      audio_output {
-        type     "pulse"
-        name     "Local MPD"
-        server   "127.0.0.1"
-      }
-    '';
   };
 
   services.xserver = {

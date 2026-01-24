@@ -1,2 +1,2 @@
 #!/bin/sh
-urxvtc -e sh -c "/home/jb55/bin/edit "$@""
+/run/current-system/sw/bin/urxvt -e /bin/sh -c "/home/jb55/bin/edit "$@""

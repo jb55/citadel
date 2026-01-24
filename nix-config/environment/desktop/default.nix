@@ -9,12 +9,17 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
 
     jbpkgs = with jb55pkgs; [
        snap
-       cmdtree
-       zoom-link-opener
+       #cmdtree
+       #zoom-link-opener
        x11-rename
        #hoogle-zen
-       viscal
+       #viscal
     ];
+    
+    aitools = [];
+    #aitools = (with inputs.llm-agents.packages.${pkgs.system}; [
+    #  claude-code
+    #]);
 
     df = pkgs.dwarf-fortress-packages.dwarf-fortress-full.override {
        #dfVersion = "0.44.11";
@@ -41,22 +46,22 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
       gtk-engine-murrine
       hwi
       lagrange
-      #lastpass-cli
+      lastpass-cli
       libnotify
       mpv
       msmtp
       muchsync
       neomutt
       notmuch
-      oathToolkit
+      oath-toolkit
       obs-studio
       pamixer
       pandoc
       pavucontrol
-      pinentry
+      pinentry-gnome3
       postgresql # psql
       qalculate-gtk
-      #qutebrowser
+      qutebrowser
       rxvt-unicode
       recoll
       signal-desktop
@@ -73,7 +78,7 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
       xbindkeys
       xclip
       xdotool
-      xdragon
+      dragon-drop
       xorg.xev
       xorg.xmodmap
       xorg.xset
@@ -88,7 +93,7 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
       #steam
       #wine
       #df
-    ]) ++ jbpkgs;
+    ]) ++ jbpkgs ++ aitools;
 
 in {
 
@@ -110,7 +115,7 @@ in {
     #GTK_PATH = "${theme.package}:${pkgs.gtk3.out}";
     #GTK_THEME = "${theme.name}";
     QT_STYLE_OVERRIDE = "GTK+";
-    VK_ICD_FILENAMES = "/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json"; # radv
+    #VK_ICD_FILENAMES = "/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json"; # radv
   };
 
   programs.steam.enable = true;

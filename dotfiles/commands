@@ -2,6 +2,9 @@ acar	app > cargo apk run --release 	echo cargo apk run --release
 acbd	app > cargo build	echo cargo build
 acbr	app > cargo build --release	echo cargo build --release
 acbrp	app > cargo build --release profiling	echo cargo build --release --features puffin
+acbna	app > cargo build notedeck-all	echo cargo build --release --features notebook,messages,clndash,dashboard
+acbnd	app > cargo build notedeck-dashboard	echo cargo build --release --features dashboard
+acbnn	app > cargo build notedeck-notebook	echo cargo build --release --features notebook
 acr 	app > cargo run	echo cargo run
 acrr	app > cargo run --release	echo cargo run --release
 act 	app > cargo test	echo cargo test
@@ -29,23 +32,24 @@ co	compile open vim	echo vim -c \"":cfile build.log | copen | wincmd k\""
 cR	compile repeat error	fuzz-compile-repeat-error
 cr	compile repeat	fuzz-compile-repeat
 cs	compile show build	echo less .build-result
-ea	edit mail aliases	echo edit ~/.mail_aliases
-ebc	edit build command	echo edit .buildcmd
-ecc	edit vdirsyncer config	echo edit ~/.config/vdirsyncer/config
 eC	edit Cargo.toml	echo edit Cargo.toml
-ec	edit commands	fuzz-edit-scripts
-ed	edit default.nix	echo edit default.nix
-eenv	edit envrc	echo edit .envrc
 eFc	edit fuzz command	fuzz-edit-command
 eFl	edit fuzz command list	fuzz-edit-command-list
-egc	edit git config	echo edit ~/.gitconfig
 eG	edit gemmarks	echo edit ~/dotfiles/gemmarks
-elf	edit last files	fuzz-last-files edit
 eM	edit mimi	echo edit ~/.config/mimi/mime.conf
+ea	edit mail aliases	echo edit ~/.mail_aliases
+ebc	edit build command	echo edit .buildcmd
+ec	edit commands	fuzz-edit-scripts
+ecc	edit vdirsyncer config	echo edit ~/.config/vdirsyncer/config
+ed	edit default.nix	echo edit default.nix
+eenv	edit envrc	echo edit .envrc
+egc	edit git config	echo edit ~/.gitconfig
+elf	edit last files	fuzz-last-files edit
 em	edit mutt config	echo edit ~/.config/neomutt/neomuttrc
 es	edit shell.nix	echo edit shell.nix
 et	edit todo	echo edit ~/docs/todo/todo.txt
 ev	edit vim config	echo edit ~/.vimrc
+ew	edit wezterm config	echo edit ~/.wezterm.lua
 ff	create file	echo fuzz-create-file
 gb	git branches	echo git bvr
 gb	git branches	git bvr --no-merged

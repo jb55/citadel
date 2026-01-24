@@ -24,7 +24,7 @@ let
     "nixos-fw -s 192.168.87.1/24 -p tcp --dport ${toString ports.webdev} -j nixos-fw-accept"
     "nixos-fw -s 10.100.0.1/24 -p tcp --dport ${toString ports.synergy} -j nixos-fw-accept"
     "nixos-fw -s 172.24.0.1/24 -p tcp --dport 9050 -j nixos-fw-accept"
-    "nixos-fw -s 239.0.0.0/8 -p udp -j nixos-fw-accept"
+    "nixos-fw -d 239.0.0.0/8 -p udp -j nixos-fw-accept"
     "nixos-fw -s 192.168.100.163/24 -p udp -j nixos-fw-accept"
     "nixos-fw -p igmp -j nixos-fw-accept"
   ];
@@ -35,6 +35,8 @@ let
   extraStopCommands = lib.concatStringsSep "\n" (map rmRule firewallRules);
 in
 {
+  networking.wireless.allowAuxiliaryImperativeNetworks = true;
+
   networking.extraHosts = ''
     10.0.9.1         secure.datavalet.io.
     172.24.242.111   securitycam.home.
@@ -76,8 +78,9 @@ in
           #allowedIPs = [ "0.0.0.0/0" "::/0" ];
           allowedIPs = [ "10.100.0.1/32" ];
           #endpoint = "127.0.0.1:3333";
-          endpoint = "24.86.66.39:51820";
           #endpoint = "24.86.66.39:51820";
+          #endpoint = "24.86.66.39:51820";
+          endpoint = "monad.endpoint.jb55.com:51820";
           #persistentKeepalive = 25;
         }
         { # quiver

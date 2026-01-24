@@ -16,9 +16,8 @@ let callPackage = pkgs.callPackage;
     })) {};
 
     fetch-gh = args: callPackage (pkgs.fetchFromGitHub ({
-      inherit (args) rev repo sha256 fetchSubmodules;
       owner = "jb55";
-    })) {};
+    } // args)) {};
 in rec {
   curlc       = callPackage ./pkgs/curlc {};
   csv-delim   = callPackage ./pkgs/csv-delim { };
@@ -33,7 +32,7 @@ in rec {
   x11-rename = callPackage ./pkgs/x11-rename { };
   hoogle-zen = callPackage ./pkgs/hoogle-zen { };
 
-  sharefile = fetch-jb55  { 
+  sharefile = fetch-gh  { 
     repo = "sharefile";
     rev  = "9a6b16f13d94833cd1801d5d7a926d5422054d74";
     sha256 = "sha256-zIZ+lyjvBI72AQMCjWw/pRE1gWR1BZeg5Y/2kqo61kY=";
@@ -64,7 +63,7 @@ in rec {
     sha256 = "0wnp2wis28iplln9h7yips835bhmcchmp373pvw0say35hn3rd36";
   };
 
-  imap-notify = fetch-jb55 {
+  imap-notify = fetch-gh {
     repo = "imap-notify";
     rev  = "11d8f9b544531a27cbe0fc49ab5c1d4b26d3fba4";
     sha256 = "1nnc50plrg9m1dbw8a1hla0d1f86s0bmpy8majq8vicdhf6qxbja";

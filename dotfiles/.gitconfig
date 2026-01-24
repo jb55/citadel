@@ -15,10 +15,10 @@
   #dark = true
   paging = always
 [interactive]
-  diffFilter = delta --color-only
+  diffFilter = delta --color-only 
 [merge]
   conflictstyle = zdiff3
-  pager = delta --paging=always --navigate
+  pager = delta --paging=always --navigate --dark
 [sendemail]
   smtpServer=/home/jb55/bin/sendmail
   ccCmd = git-contacts

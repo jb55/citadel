@@ -6,9 +6,7 @@
 
 config_version: 2
 settings:
+  content.desktop_capture:
+    https://meet.jit.si: true
   content.media.audio_capture:
     https://meet.jit.si: true
-  content.media.video_capture:
-    https://meet.jit.si: true
-  colors.webpage.darkmode.enabled:
-    global: true
