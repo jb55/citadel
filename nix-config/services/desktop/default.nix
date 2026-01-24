@@ -200,6 +200,14 @@ in
     serviceConfig.ExecStart = "${pkgs.xautolock}/bin/xautolock -time 10 -locker ${pkgs.slock}/bin/slock";
   };
 
+  systemd.user.services.alttab = {
+    enable      = true;
+    description = "alttab";
+    wantedBy    = [ "graphical-session.target" ];
+    after       = [ "graphical-session.target" ];
+    serviceConfig.ExecStart = "${pkgs.alttab}/bin/alttab -d 1";
+  };
+
   services.clipmenu.enable = true;
 
   #environment.systemPackages = [pkgs.phonectl];
