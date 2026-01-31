@@ -84,7 +84,7 @@ function notify_when_long_running_commands_finish_install() {
                 echo "$__udm_last_window" > $HOME/var/cmd_last_window
                 local time_taken=$(( $now - $__udm_last_command_started ))
                 local longtimeout="$(((time_taken / 3) * 1000))"
-                local timeout="$(btcs -t 15000 $longtimeout min)"
+                local timeout=15000
                 local time_taken_human=$(sec_to_human $time_taken)
                 local appname=$(basename "${__udm_last_command%% *}")
                 if [[ $time_taken -gt $LONG_RUNNING_COMMAND_TIMEOUT ]] &&

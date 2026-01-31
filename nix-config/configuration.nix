@@ -14,7 +14,7 @@ let machine = extra.private.machine;
     };
     extra = {
       is-minimal = false;
-      git-server = import ./misc/git-server.nix;
+      #git-server = import ./misc/git-server.nix;
       util       = import ./misc/util.nix { inherit pkgs; };
       private    = import ./private.nix { inherit pkgs; };
       machine    = machineConfig;
@@ -70,10 +70,10 @@ in {
   # Use the GRUB 2 boot loader.
   boot.loader.grub.enable = true;
   #environment.ld-linux = false;
-  systemd.extraConfig = ''
-    DefaultTimeoutStopSec=10s
-    DefaultTimeoutStartSec=20s
-  '';
+  #systemd.extraConfig = ''
+  #  DefaultTimeoutStopSec=10s
+  #  DefaultTimeoutStartSec=20s
+  #'';
 
   documentation.nixos.enable = false;
   documentation.dev.enable = true;

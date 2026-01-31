@@ -8,19 +8,19 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
       sha256 = "0xd86s2smjvlc7rlb6rkgx2hj3c3sbcz3gs8rf93x69jqdvwb6rr";
     }) {};
     myPackages = with jb55pkgs; [
-       rsslink
-       bcalc
-       btcs
-       csv-delim
-       csv-scripts
-       datefmt
-       extname
-       mandown
-       ratio
-       samp
-       sharefile
-       zebra
-       define
+       #rsslink
+       #bcalc
+       #btcs
+       #csv-delim
+       #csv-scripts
+       #datefmt
+       #extname
+       #mandown
+       #ratio
+       #samp
+       #sharefile
+       #zebra
+       #define
        #nixpkgs-ml-tools
     ];
     myHaskellPackages = with pkgs.haskellPackages; [
@@ -38,7 +38,7 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
       aspellDicts.en
       aspellDicts.en-computers
       aspellDicts.en-science
-      awscli
+      #awscli
       bat
       bc
       binutils
@@ -52,27 +52,27 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
       gnumake
       gnupg
       groff
-      hashcash
-      haskellPackages.una
+      #hashcash
+      #haskellPackages.una
       htop
       imagemagick
       jq
       lesspipe
-      libbitcoin-explorer
+      #libbitcoin-explorer
       libqalculate
       linuxPackages.bpftrace
-      linuxPackages.perf
+      perf
       lsof
       mailutils
-      manpages
+      man-pages
       mdcat
-      minisign
+      #minisign
       neovim
       nethack
       network-tools
       nix-direnv 
       nodejs
-      opentimestamps-client
+      #opentimestamps-client
       par
       parallel
       patchelf
@@ -82,11 +82,11 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
       rsync
       scdoc
       screen
-      shellcheck
+      #shellcheck
       universal-ctags
       unixtools.xxd
       unzip
-      weechat
+      #weechat
       wget
       xonsh
       zip

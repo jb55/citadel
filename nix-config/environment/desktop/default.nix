@@ -58,7 +58,7 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
       neomutt
       notmuch
       oathToolkit
-      pandoc
+      #pandoc
       pavucontrol
       pinentry
       postgresql # psql

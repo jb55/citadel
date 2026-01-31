@@ -11,12 +11,12 @@ let gitExtra = {
     #   rev = "376de0e37bba505ba5f23c46435277bb74603acd";
     #   sha256 = "1x9d98z6zbs22x38xwxjnb6mwladbah9xajyl7kk8bm418l8wac4";
     # }) { nodejs = pkgs.nodejs; }).package;
-    npmrepo = (import (pkgs.fetchFromGitHub {
-      owner  = "jb55";
-      repo   = "npm-repo-proxy";
-      rev    = "5bb651689c9e74299094ac989125685c810ee9b2";
-      sha256 = "16cjcz2cakrgl3crn63s5w1k4h4y51h8v0326v5bim8r1hxrpq4n";
-    }) {}).package;
+    #npmrepo = (import (pkgs.fetchFromGitHub {
+    #  owner  = "jb55";
+    #  repo   = "npm-repo-proxy";
+    #  rev    = "f52bd5ea9c53a2306d5385865dd7c7b53a2adf40";
+    #  sha256 = "sha256-iWuF+9fzinacC4WZXdRllD70DilPiOXWtPIqnRtCqSk=";
+    #}) { }).package;
 
     lnurl-commando = (import (pkgs.fetchFromGitHub {
       owner  = "jb55";
@@ -28,17 +28,17 @@ let gitExtra = {
     ln-proxy-port = "8777";
     sendsats-port = "8193";
 
-    ln-ws-proxy = (import (pkgs.fetchFromGitHub {
-      owner = "jb55";
-      repo  = "ln-ws-proxy";
-      rev   = "d201ba9f4f8a7c55e97c2c718837cccca7e50338";
-      sha256 = "1j43mzm0g0051n5lb231vmkxg75v0bdx0pqprix24xav5jw2a19c";
-    }) {}).package;
+    #ln-ws-proxy = (import (pkgs.fetchFromGitHub {
+    #  owner = "jb55";
+    #  repo  = "ln-ws-proxy";
+    #  rev   = "8c5763c54abee0c20b75a2f24b5b530cc015de03";
+    #  sha256 = "sha256-+0KoaNbb6BhS6Lxa9hx4hEFAi75U82lqqZGYzVqti58=";
+    #}) {}).package;
     
-    sendsatslol = (import (pkgs.fetchzip {
-      url = "https://jb55.com/s/sendsatslol-1.2.3.tar.gz";
-      sha256 = "0dhidndp59332kmnfrrz64lnvsczbddsfabh1c8gglzl7l5yv4vd";
-    }) {}).package;
+    #sendsatslol = (import (pkgs.fetchzip {
+    #  url = "https://jb55.com/s/sendsatslol-1.2.3.tar.gz";
+    #  sha256 = "0dhidndp59332kmnfrrz64lnvsczbddsfabh1c8gglzl7l5yv4vd";
+    #}) { nodejs = pkgs.nodejs_16; }).package;
 
     pgpkeys = pkgs.fetchurl {
       url = "https://jb55.com/s/329bdbb1552cf060.pub";
@@ -59,6 +59,7 @@ let gitExtra = {
         "clightning": "9630f464cca6a5147aa8a35f0bcdd3ce485324e732fd39e09233b1d848238f31",
         "minebot": "6cad545430904b84a8101c5783b65043f19ae29d2da1076b8fc3e64892736f03",
         "gpt3": "5c10ed0678805156d39ef1ef6d46110fe1e7e590ae04986ccf48ba1299cb53e2",
+        "dave": "5c10ed0678805156d39ef1ef6d46110fe1e7e590ae04986ccf48ba1299cb53e2",
         "_": "32e1827635450ebb3c5a7d12c1f8e7b2b514439ac10a67eef3d9fd9c5c68e245"
       },
 
@@ -174,7 +175,7 @@ in
     git.gid = config.ids.gids.git;
   };
 
-  services.radicale.enable = true;
+  services.radicale.enable = false;
 
   services.radicale.settings.storage.filesystem_folder = "/var/radicale/data";
   services.radicale.settings.auth.type = "htpasswd";
@@ -197,6 +198,13 @@ in
     #postRun = "systemctl restart prosody";
     email = myemail;
   };
+
+  #security.acme.certs."esplora.jb55.com" = {
+  #  webroot = "/var/www/challenges";
+  #  group = "jb55cert";
+  #  #postRun = "systemctl restart prosody";
+  #  email = myemail;
+  #};
 
   security.acme.certs."cln.jb55.com" = {
     webroot = "/var/www/challenges";
@@ -236,7 +244,11 @@ in
     users = {
       jb55 = {
         password = "$6$KHmFLeDBaXBE1Jkg$eEN8HM3LpZ4muDK/JWC25qW9xSZq0AqsF4tlzEan7yctROJ9A/lSqz6gN1b1GtwE7efroXGHtDi2FEJ2ujDAl0";
-        aliases = [ "postmaster" "bill" "will" "william" "me" "jb" "guestdaddy" ];
+        aliases = [ "postmaster" "bill" "will" "william" "me" "jb" ];
+      };
+
+      jex0 = {
+        password = "$6$QkFC7K9lg3Tcfi/W$vdDDNMkK7Vz/NwKNuQ2fA.NMOmakDf8081fblHJ8UWtZSc130RGYVmQLTo4aBynJ3lyPlBvE6BOcG67VPaKDx/";
       };
 
     };
@@ -290,60 +302,60 @@ in
     #'';
   };
 
-  systemd.services.sendsatslol = {
-    description = "sendsatslol";
+  #systemd.services.sendsatslol = {
+  #  description = "sendsatslol";
 
-    wantedBy = [ "multi-user.target" ];
+  #  wantedBy = [ "multi-user.target" ];
 
-    environment = {
-      PORT = sendsats-port;
-    };
+  #  environment = {
+  #    PORT = sendsats-port;
+  #  };
 
-    serviceConfig.Restart = "always";
-    serviceConfig.WorkingDirectory = "/www/sendsats.lol";
-    serviceConfig.Type = "simple";
-    serviceConfig.ExecStart = "${sendsatslol}/lib/node_modules/sendsats.lol/sendsats";
-  };
+  #  serviceConfig.Restart = "always";
+  #  serviceConfig.WorkingDirectory = "/www/sendsats.lol";
+  #  serviceConfig.Type = "simple";
+  #  serviceConfig.ExecStart = "${sendsatslol}/lib/node_modules/sendsats.lol/sendsats";
+  #};
 
-  systemd.services.ln-ws-proxy = {
-    description = "ln-ws-proxy";
+  #systemd.services.ln-ws-proxy = {
+  #  description = "ln-ws-proxy";
 
-    wantedBy = [ "multi-user.target" ];
+  #  wantedBy = [ "multi-user.target" ];
 
-    environment = {
-      PORT = ln-proxy-port;
-    };
+  #  environment = {
+  #    PORT = ln-proxy-port;
+  #  };
 
-    serviceConfig.Restart = "always";
-    serviceConfig.Type = "simple";
-    serviceConfig.ExecStart = "${ln-ws-proxy}/lib/node_modules/ln-ws-proxy/ln-ws-proxy";
-  };
+  #  serviceConfig.Restart = "always";
+  #  serviceConfig.Type = "simple";
+  #  serviceConfig.ExecStart = "${ln-ws-proxy}/lib/node_modules/ln-ws-proxy/ln-ws-proxy";
+  #};
 
-  systemd.services.lnurl-commando = {
-    description = "lnurl-commando";
+  #systemd.services.lnurl-commando = {
+  #  description = "lnurl-commando";
 
-    wantedBy = [ "multi-user.target" ];
+  #  wantedBy = [ "multi-user.target" ];
 
-    serviceConfig.Type = "simple";
-    serviceConfig.ExecStart = ''
-    ${lnurl-commando}/lib/node_modules/lnurl-commando/lnurl-commando --nodeid 03f3c108ccd536b8526841f0a5c58212bb9e6584a1eb493080e7c1cc34f82dad71 --host 24.84.152.187:443 --rune 'CFZ1H1X34ZjHYEciNUNeFLSLlz-KM6jTJF4UpejtQZM9MTEmbWV0aG9kPWludm9pY2U=' --callback 'https://jb55.com/pr' --description "jb55's lightning address" --longDescription "Welcome to my clightning-powered lightning address. Any donation is greatly appreciated!" --thumbnail ${laser-eyes} --identifier "jb55@jb55.com" 
-    '';
-  };
+  #  serviceConfig.Type = "simple";
+  #  serviceConfig.ExecStart = ''
+  #  ${lnurl-commando}/lib/node_modules/lnurl-commando/lnurl-commando --nodeid 03f3c108ccd536b8526841f0a5c58212bb9e6584a1eb493080e7c1cc34f82dad71 --host 24.84.152.187:443 --rune 'CFZ1H1X34ZjHYEciNUNeFLSLlz-KM6jTJF4UpejtQZM9MTEmbWV0aG9kPWludm9pY2U=' --callback 'https://jb55.com/pr' --description "jb55's lightning address" --longDescription "Welcome to my clightning-powered lightning address. Any donation is greatly appreciated!" --thumbnail ${laser-eyes} --identifier "jb55@jb55.com" 
+  #  '';
+  #};
 
-  systemd.services.npmrepo = {
-    description = "npmrepo.com";
+  #systemd.services.npmrepo = {
+  #  description = "npmrepo.com";
 
-    wantedBy = [ "multi-user.target" ];
+  #  wantedBy = [ "multi-user.target" ];
 
-    serviceConfig.Type = "simple";
-    serviceConfig.ExecStart = "${npmrepo}/bin/npm-repo-proxy";
-  };
+  #  serviceConfig.Type = "simple";
+  #  serviceConfig.ExecStart = "${npmrepo}/bin/npm-repo-proxy";
+  #};
 
-  services.fcgiwrap.enable = true;
+  #services.fcgiwrap.enable = false;
 
   services.nginx.httpConfig = ''
     limit_req_zone $binary_remote_addr zone=email_form:10m rate=3r/m;
-    limit_req_zone $binary_remote_addr zone=payreq:10m rate=10r/m;
+    limit_req_zone $binary_remote_addr zone=payreq:10m rate=6r/m;
 
     server {
       listen 443 ssl;
@@ -360,21 +372,64 @@ in
         try_files $uri $uri/ =404;
       }
 
-      location /email {
-        limit_req zone=email_form;
-        gzip off;
-        # fcgiwrap is set up to listen on this host:port
-        fastcgi_pass                  unix:${config.services.fcgiwrap.socketAddress};
-        include                       ${pkgs.nginx}/conf/fastcgi_params;
-        fastcgi_param SCRIPT_FILENAME /www/bitcoinwizard.net/emailform.py;
+    }
 
-        client_max_body_size 512;
+    server {
+        listen 8081;
+        location / {
+            add_header X-Upstream blocks.jb55.com;
+            proxy_pass http://blocks.jb55.com;
+            proxy_set_header Host blocks.jb55.com;
+        }
+    }
 
-        # export all repositories under GIT_PROJECT_ROOT
+    server {
+        listen 8082;
+        location / {
+            add_header X-Upstream blockstream.info;
+            proxy_pass https://blockstream.info;
+            proxy_set_header Host blockstream.info;
+        }
+    }
 
-        fastcgi_param PATH_INFO           $uri;
+    server {
+        listen 8083;
+        location / {
+            add_header X-Upstream mempool.space;
+            proxy_pass https://mempool.space;
+            proxy_set_header Host mempool.space;
+        }
+    }
+
+    upstream esplora {
+      server 127.0.0.1:8081;
+      server 127.0.0.1:8082 backup; #mempool.space
+      server 127.0.0.1:8083 backup; #blockstream.info
+    }
+
+    server {
+      listen 80;
+      listen [::]:80;
+
+      server_name esplora.jb55.com;
+
+      location /.well-known/acme-challenge {
+        root /var/www/challenges;
       }
 
+      location / {
+        proxy_pass http://esplora;
+        #proxy_redirect off;
+        proxy_connect_timeout 1s;
+        proxy_send_timeout 2s;
+        proxy_read_timeout 2s;
+        proxy_next_upstream error timeout invalid_header http_500 http_502 http_503 http_504;
+
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+      }
     }
 
     server {
@@ -427,21 +482,6 @@ in
         proxy_pass http://localhost:3111;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
-      }
-
-      location /email {
-        limit_req zone=email_form;
-        gzip off;
-        # fcgiwrap is set up to listen on this host:port
-        fastcgi_pass                  unix:${config.services.fcgiwrap.socketAddress};
-        include                       ${pkgs.nginx}/conf/fastcgi_params;
-        fastcgi_param SCRIPT_FILENAME /www/damus.io/emailform.py;
-
-        client_max_body_size 512;
-
-        # export all repositories under GIT_PROJECT_ROOT
-
-        fastcgi_param PATH_INFO           $uri;
       }
 
       location /appstore {
@@ -652,16 +692,18 @@ in
         proxy_pass http://127.0.0.1:${sendsats-port}$request_uri;
       }
 
-      location /tips/jb55 {
+      location ~ /@ {
+        limit_req zone=payreq;
+
+        add_header 'Access-Control-Allow-Origin' '*' always;
+        add_header 'Access-Control-Expose-Headers' 'Content-Length' always;
+
         proxy_set_header Host $host;
         proxy_redirect off;
         proxy_pass http://127.0.0.1:${sendsats-port}$request_uri;
       }
 
-      location ~ /@ {
-        add_header 'Access-Control-Allow-Origin' '*' always;
-        add_header 'Access-Control-Expose-Headers' 'Content-Length' always;
-
+      location /tips/jb55 {
         proxy_set_header Host $host;
         proxy_redirect off;
         proxy_pass http://127.0.0.1:${sendsats-port}$request_uri;
@@ -695,12 +737,32 @@ in
       rewrite ^/pkgs.tar.gz$ https://github.com/jb55/jb55pkgs/archive/master.tar.gz permanent;
       rewrite ^/pkgs/?$ https://github.com/jb55/jb55pkgs/archive/master.tar.gz permanent;
 
+      location /github-hook {
+        proxy_pass http://localhost:3111;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+      }
+
       location /.well-known/acme-challenge {
         root /var/www/challenges;
       }
 
-      location /.well-known/lnurlp/jb55 {
-        return 302 https://sendsats.lol/.well-known/lnurlp/jb55;
+      location /.well-known/lnurlp {
+        add_header 'Access-Control-Allow-Origin' '*' always;
+        add_header 'Access-Control-Expose-Headers' 'Content-Length' always;
+
+        proxy_set_header Host $host;
+        proxy_redirect off;
+        proxy_pass http://127.0.0.1:${sendsats-port}$request_uri;
+      }
+
+      location ~ /@ {
+        add_header 'Access-Control-Allow-Origin' '*' always;
+        add_header 'Access-Control-Expose-Headers' 'Content-Length' always;
+
+        proxy_set_header Host $host;
+        proxy_redirect off;
+        proxy_pass http://127.0.0.1:${sendsats-port}$request_uri;
       }
 
       location /pr/ {
