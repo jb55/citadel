@@ -52,6 +52,7 @@ ev	edit vim config	echo edit ~/.vimrc
 ew	edit wezterm config	echo edit ~/.wezterm.lua
 ff	create file	echo fuzz-create-file
 gb	git branches	echo git bvr
+gwtb	git worktree branches	fuzz-git-wtb
 gb	git branches	git bvr --no-merged
 gcp	github cherry-pick	echo git cherry-pick
 G	gemini	gemmark

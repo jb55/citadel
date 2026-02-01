@@ -177,6 +177,7 @@ baseLayout =
             --D.Squeeze D.R 1.38 1.1
         -- ||| D.Spiral D.R D.CW 0.8 1.1
         D.Spiral D.R D.CW 0.8 1.1
+        ||| Grid
         --S.spiral (4/3) |||
         --Mirror tall --S.spiralWithDir S.South S.CW (4/3)
 

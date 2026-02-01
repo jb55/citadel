@@ -7,6 +7,7 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
       rev = "0.2.1";
       sha256 = "0xd86s2smjvlc7rlb6rkgx2hj3c3sbcz3gs8rf93x69jqdvwb6rr";
     }) {};
+
     myPackages = with jb55pkgs; [
        rsslink
        #bcalc
@@ -105,6 +106,7 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
       zip
       zstd
     ];
+
 in {
   environment.systemPackages = if extra.is-minimal then minimal-pkgs else mypkgs;
 

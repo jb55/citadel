@@ -1,2 +1,0 @@
-#!/usr/bin/env bash
-nix run github:numtide/llm-agents.nix#claude-code -- "$@"
