@@ -56,7 +56,6 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
       oath-toolkit
       obs-studio
       pamixer
-      pandoc
       pavucontrol
       pinentry-gnome3
       postgresql # psql

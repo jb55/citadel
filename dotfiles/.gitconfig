@@ -18,7 +18,7 @@
   diffFilter = delta --color-only 
 [merge]
   conflictstyle = zdiff3
-  pager = delta --paging=always --navigate --dark
+  pager = delta --hunk-header-style=plain --file-style=box --paging=always
 [sendemail]
   smtpServer=/home/jb55/bin/sendmail
   ccCmd = git-contacts
@@ -141,3 +141,5 @@
 [maintenance]
 	repo = /home/jb55/nixpkgs
 	repo = /home/jb55/dev/linux
+[safe]
+	directory = /var/git-public/repos/ratio

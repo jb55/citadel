@@ -1,4 +1,3 @@
-
 { config, lib, pkgs, ... }:
 
 with lib;
@@ -120,27 +119,29 @@ in
 
       users = mkOption {
         default = { };
-        type = types.loaOf types.optionSet;
+
         description = ''
           Attribute set of users.
         '';
 
-        options = {
-          password = mkOption {
-            type = types.str;
-            description = ''
-              The user password, generated with
-              <literal>smtpctl encrypt</literal>.
-            '';
-          };
+        type = types.attrsOf (types.submodule {
+          options = {
+            password = mkOption {
+              type = types.str;
+              description = ''
+                The user password, generated with
+                <literal>smtpctl encrypt</literal>.
+              '';
+            };
 
-          aliases = mkOption {
-            type = types.listOf types.str;
-            default = [ ];
-            example = [ "postmaster" ];
-            description = "A list of aliases for this user.";
+            aliases = mkOption {
+              type = types.listOf types.str;
+              default = [ ];
+              example = [ "postmaster" ];
+              description = "A list of aliases for this user.";
+            };
           };
-        };
+        });
 
         example = {
           "foo" = {
@@ -160,7 +161,7 @@ in
     system.activationScripts.mailz = ''
       # Make sure SpamAssassin database is present
       #if ! [ -d /etc/spamassassin ]; then
-        #cp -r ${pkgs.spamassassin}/share/spamassassin /etc
+        #cp -r $\{pkgs.spamassassin}/share/spamassassin /etc
       #fi
 
       # Make sure a DKIM private key exist
@@ -196,7 +197,7 @@ in
         match from any auth for any action "outbound"
         match for any action "outbound"
       '';
-      procPackages = [ pkgs.opensmtpd-extras ];
+      procPackages = [ ];
     };
 
     services.dovecot2 = {
@@ -206,20 +207,23 @@ in
       mailLocation = "maildir:/var/spool/mail/%n";
       mailUser = cfg.user;
       mailGroup = cfg.group;
-      modules = [ pkgs.dovecot_pigeonhole ];
+      #modules = [ pkgs.dovecot_pigeonhole ];
       sslServerCert = "/var/lib/acme/${cfg.domain}/fullchain.pem";
       sslServerKey = "/var/lib/acme/${cfg.domain}/key.pem";
       enablePAM = false;
-      sieveScripts = {
-        before = files.spamassassinSieve;
-        before2 = pkgs.writeText "sieves" cfg.sieves;
-      };
+      #sieveScripts = {
+      #  before = files.spamassassinSieve;
+      #  before2 = pkgs.writeText "sieves" cfg.sieves;
+      #};
       extraConfig = ''
      	disable_plaintext_auth = no
         postmaster_address = postmaster@${cfg.domain}
         mail_attribute_dict = file:/var/spool/mail/%n/dovecot-attributes
 
         service lmtp {
+          user = vmail
+          group = vmail
+
           inet_listener lmtp {
             address = 127.0.0.1 ::1
             port = 24
@@ -279,34 +283,12 @@ in
 
           ${mailbox "Alerts"}
           ${mailbox "Bulk"}
-          ${mailbox "RSS"}
           ${mailbox "GitHub"}
           ${mailbox "Lists"}
-          ${mailbox "YouTube"}
-          ${mailbox "Lists.ats"}
-          ${mailbox "Arxiv"}
-          ${mailbox "Reddit"}
-          ${mailbox "Lists.lobsters"}
-          ${mailbox "Lists.icn"}
-          ${mailbox "HackerNews"}
-          ${mailbox "Lists.craigslist"}
-          ${mailbox "Lists.bitcoin"}
-          ${mailbox "Lists.elm"}
-          ${mailbox "Lists.emacs"}
-          ${mailbox "Lists.guix"}
-          ${mailbox "Lists.haskell"}
-          ${mailbox "Lists.lkml"}
-          ${mailbox "Lists.nix"}
-          ${mailbox "Lists.nixpkgs"}
-          ${mailbox "Lists.shen"}
-          ${mailbox "Lists.spacemacs"}
-          ${mailbox "Monstercat"}
-          ${mailbox "Updates"}
-
         }
 
         protocol lmtp {
-          mail_plugins = $mail_plugins sieve notify push_notification
+          mail_plugins = $mail_plugins notify push_notification
         }
 
         protocol imap {

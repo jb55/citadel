@@ -48,7 +48,7 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
       aspellDicts.en
       aspellDicts.en-computers
       aspellDicts.en-science
-      awscli
+      #awscli
       bat
       bc
       binutils
@@ -62,8 +62,8 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
       gnumake
       gnupg
       groff
-      hashcash
-      haskellPackages.una
+      #hashcash
+      #haskellPackages.una
       htop
       imagemagick
       jq
@@ -72,20 +72,22 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
       libqalculate
       #linuxPackages.bpftrace
       linuxPackages.perf
+      linuxPackages.bpftrace
+      perf
       lsof
-      #mailutils
-      man-pages
-      mdcat
+      mailutils
+      manpages
       minisign
       vim-full
       ffmpeg
       btop
       playerctl
+      neovim
       nethack
       network-tools
       nix-direnv 
       nodejs
-      opentimestamps-client
+      #opentimestamps-client
       par
       parallel
       patchelf
@@ -95,12 +97,11 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
       rsync
       scdoc
       screen
-      shellcheck
+      #shellcheck
       universal-ctags
       unixtools.xxd
       unzip
       #weechat
-      websocat
       wget
       xonsh
       zip
