@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+set -eou pipefail
+dir="$(git wtb | fzf | awkp 2)"
+
+echo "cd \"$dir\""

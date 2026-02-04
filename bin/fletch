@@ -1,0 +1,7 @@
+xdotool click 1
+sleep 0.05
+xdotool mousemove_relative --sync -- 0 35
+sleep 0.05
+xdotool click 1
+sleep 0.05
+xdotool mousemove_relative --sync -- 0 -35

@@ -38,23 +38,29 @@ $(build_coverletter "$PATCHES/0001")
 file="$PATCHES"/0000
 msgid=$(new_msgid "$file")
 threadid=$msgid
+
+# Get the name of the last patch file
+last_file="$(ls -1 "$PATCHES/"* | tail -n 1)"
+
 for file in "$PATCHES/"*
 do
 	# mailsplit introduces linebreaks from some reason
-	awk '
-	  /^Subject:/ { subj = 1; printf "%s", $0; next }
-	  subj && !/^$/ { printf " %s", $0; next }
-	  /^$/ && subj { subj = 0; print ""; next }
-	  { print }
-	' < "$file" > "$file".2
-	mv "$file".2 "$file"
+	#awk '
+	#  /^Subject:/ { subj = 1; printf "%s", $0; next }
+	#  subj && !/^$/ { printf " %s", $0; next }
+	#  /^$/ && subj { subj = 0; print ""; next }
+	#  { print }
+	#' < "$file" > "$file".2
+	#mv "$file".2 "$file"
 
 	if [ -n "$replyto" ]; then
 		sed -i"" "1 a Bcc: $replyto" "$file" 
 	fi
 
-	if [ -n "$prlink" ]; then
-		sed -i"" "0,/^---/{s@^---@\nCloses: $prlink\n---@}" "$file" 
+	if [ "$file" == "$last_file" ]; then
+		if [ -n "$prlink"  ]; then
+			sed -i"" "0,/^---/{s@^---@\nCloses: $prlink\n---@}" "$file" 
+		fi
 	fi
 
 	if [ -n "$target" ]; then
@@ -72,7 +78,7 @@ do
 	sed -i"" "1 a In-Reply-To: $threadid" "$file" 
 	sed -i"" "1 a References: $threadid" "$file" 
 
-	notmuch insert +inbox < "$file"
+	notmuch insert +work +inbox < "$file"
 
 	msgid=$(new_msgid "$file")
 done

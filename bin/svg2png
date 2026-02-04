@@ -9,4 +9,4 @@ usage () {
 png="${1%.svg}.png"
 [ -z "$1" ] || [ -z "$2" ] && usage
 height=${3:-$2}
-inkscape -z -e "$png" -w "$2" -h "$height" "$1"
+inkscape -w "$2" -h "$height" "$1" -o output.png

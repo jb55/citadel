@@ -20,7 +20,8 @@ if [[ $FORCE -eq 1 ]] || [[ ! -f "$HURL" ]]; then
 	#w3m -header "$USER_AGENT" -dump "$1" > "$HURL"
 	#w3m -dump "$1" | par -w$(tput cols) > "$HURL"
 	w3m -dump "$1" > "$HURL"
-	#<"$HURL" par -w$(tput cols) > "$HURL.par"
+	<"$HURL" par -w$(tput cols) > "$HURL.par"
+	mv "$HURL.par" "$HURL"
 fi
 
 lessr "$HURL"

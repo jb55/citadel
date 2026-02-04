@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+# Run the game
+cd /home/jb55/dev/github/HarbourMasters/Shipwright/build-cmake/soh
+./soh.elf
+
+# Go to save directory
+cd ~/.local/share/oot
+
+# Stage updates to tracked files
+git add -A
+
+# Check if anything is staged; if not, exit
+git diff --cached --quiet && exit 0
+
+# Commit if there are changes
+git commit -m "snapshot-$(date +%Y%m%d-%H%M%S)"

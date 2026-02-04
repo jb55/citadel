@@ -16,10 +16,17 @@ in {
   checkMeta = true;
   zathura.useMupdf = true;
   #android_sdk.accept_license = true;
+  cudaSupport = false;
+  rocmSupport = false;
+
+  # needed for hwi, CVE-2024-23342 not relevant to hww wallets
+  permittedInsecurePackages = [
+    "python3.13-ecdsa-0.19.1"
+  ];
 
   packageOverrides = super: rec {
-    qemu = super.qemu.override {
-      smbdSupport = true;
+    qutebrowser = super.qutebrowser.override {
+      enableWideVine = true;
     };
 
     #mpv = pkgs.wrapMpv pkgs.mpv-unwrapped {
@@ -28,6 +35,7 @@ in {
 
     # /run/current-system/sw/bin/ls $HOME/.emacs.d/elpa | sed 's/-[[:digit:]].*//g;s/\+$/-plus/g' | sort -u
     #emacs = super.emacsHead;
+
     nur = import (builtins.fetchTarball {
       url = "https://github.com/nix-community/NUR/archive/cff4dfbe6d6f4ab14560234fcf2d73332ee3ecc1.tar.gz";
       sha256 = "01yxz6w820vryirrwkmsnxkmvp35dncjp1n8fdfsq4n0r28nw31a";
@@ -44,11 +52,11 @@ in {
       ];
     });
 
-    neomutt = pkgs.lib.overrideDerivation super.neomutt (attrs: {
-      postConfigure = ''
-        sed -i '/HAVE_CURS_SET 1/d' config.h
-      '';
-    });
+    #neomutt = pkgs.lib.overrideDerivation super.neomutt (attrs: {
+    #  postConfigure = ''
+    #    sed -i '/HAVE_CURS_SET 1/d' config.h
+    #  '';
+    #});
 
     #weechat = super.weechat.override {configure = {availablePlugins, ...}: {
     #    scripts = with super.weechatScripts; [ wee-slack weechat-matrix ];
@@ -89,37 +97,6 @@ in {
     #});
 
     ds4ctl = super.callPackage ./scripts/ds4ctl { };
-
-    haskellEnvHoogle = haskellEnvFun {
-      name = "haskellEnvHoogle";
-      #compiler = "ghc821";
-      withHoogle = true;
-    };
-
-    haskellEnv = haskellEnvFun {
-      name = "haskellEnv";
-      #compiler = "ghc821";
-      withHoogle = false;
-    };
-
-    haskell-tools = super.buildEnv {
-      name = "haskell-tools";
-      paths = haskellTools super.haskellPackages;
-    };
-
-    jb55-tools-env = pkgs.buildEnv {
-      name = "jb55-tools";
-      paths = with jb55pkgs; [
-        csv-delim
-        csv-scripts
-        dbopen
-        extname
-        mandown
-        snap
-        sharefile
-        samp
-      ];
-    };
 
     jvm-tools-env = pkgs.buildEnv {
       name = "jvm-tools";
@@ -217,214 +194,5 @@ in {
       ];
     };
 
-    haskellEnvFun = { withHoogle ? false, compiler ? null, name }:
-      let hp = if compiler != null
-                 then super.haskell.packages.${compiler}
-                 else super.haskellPackages;
-
-          ghcWith = if withHoogle
-                      then hp.ghcWithHoogle
-                      else hp.ghcWithPackages;
-
-      in super.buildEnv {
-        name = name;
-        paths = [(ghcWith myHaskellPackages)];
-      };
-
-    haskellTools = hp: with hp; [
-      alex
-      cabal-install
-      cabal2nix
-      #stack2nix
-      hpack
-      ghc-core
-      happy
-      (dontCheck hasktags)
-      hindent
-      hlint
-      structured-haskell-mode
-      haskell-ci
-    ];
-
-    myHaskellPackages = hp: with hp; [
-      Boolean
-      Decimal
-      HTTP
-      HUnit
-      MissingH
-      QuickCheck
-      SafeSemaphore
-      aeson
-      aeson-qq
-      async
-      attoparsec
-      base32string
-      base58-bytestring
-      bifunctors
-      unliftio
-      blaze-builder
-      blaze-builder-conduit
-      blaze-html
-      blaze-markup
-      cased
-      cassava
-      cereal
-      colour
-      comonad
-      comonad-transformers
-      directory
-      dlist
-      dlist-instances
-      doctest
-      either
-      elm-export
-      elm-export-persistent
-      exceptions
-      filepath
-      fingertree
-      foldl
-      formatting
-      free
-      generics-sop
-      hamlet
-      hashable
-      hashids
-      here
-      heroku
-      hedgehog
-      hspec
-      hspec-expectations
-      html
-      http-client
-      http-date
-      http-types
-      inline-c
-      io-memoize
-      io-storage
-      keys
-      language-c
-      language-javascript
-      lens
-      lens-action
-      lens-aeson
-      lens-datetime
-      lens-family
-      lens-family-core
-      lifted-async
-      lifted-base
-      linear
-      list-extras
-      logict
-      mbox
-      mime-mail
-      mime-types
-      mmorph
-      monad-control
-      monad-coroutine
-      monad-loops
-      monad-par
-      monad-par-extras
-      monad-stm
-      monadloc
-      neat-interpolation
-      network
-      newtype
-      numbers
-      options
-      optparse-applicative
-      optparse-generic
-      pandoc
-      parsec
-      megaparsec
-      parsers
-      pcg-random
-      persistent
-      persistent-postgresql
-      persistent-template
-      posix-paths
-      postgresql-simple
-      pretty-show
-      probability
-      profunctors
-      pwstore-fast
-      quickcheck-instances
-      random
-      reducers
-      reflection
-      regex-applicative
-      regex-base
-      regex-compat
-      regex-posix
-      relational-record
-      resourcet
-      retry
-      rex
-      s3-signer
-      safe
-      scotty
-      sqlite-simple
-      lucid
-      semigroupoids
-      semigroups
-      shake
-      shakespeare
-      shqq
-      simple-reflect
-      split
-      spoon
-      stache
-      stm
-      stm-chans
-      store
-      stache
-      streaming
-      smtp-mail
-      streaming-bytestring
-      streaming-wai
-      strict
-      stringsearch
-      strptime
-      syb
-      system-fileio
-      system-filepath
-      tagged
-      taggy
-      taggy-lens
-      tar
-      tardis
-      tasty
-      tasty-hspec
-      tasty-hunit
-      tasty-quickcheck
-      tasty-smallcheck
-      temporary
-      test-framework
-      test-framework-hunit
-      text
-      text-regex-replace
-      thyme
-      time
-      time-units
-      transformers
-      transformers-base
-      turtle
-      unagi-chan
-      uniplate
-      unix-compat
-      unordered-containers
-      uuid
-      vector
-      void
-      wai
-      wai-middleware-static
-      wai-extra
-      warp
-      wreq
-      xhtml
-      xml-lens
-      yaml
-      zippers
-      zlib
-    ];
   };
 }

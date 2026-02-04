@@ -6,7 +6,9 @@
 
 config_version: 2
 settings:
-  content.media.audio_capture:
-    https://meet.jit.si: true
   content.media.audio_video_capture:
+    https://meet.jit.si: true
+  content.desktop_capture:
+    https://meet.jit.si: true
+  content.media.audio_capture:
     https://meet.jit.si: true

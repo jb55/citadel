@@ -14,6 +14,7 @@ in
 {
   imports = [
     (import ./networking extra)
+    #(import ./rocksmith.nix)
   ];
 
   services.hoogle = {
@@ -24,7 +25,7 @@ in
   };
 
   services.pcscd.enable = true;
-  services.gnome.gnome-keyring.enable = if extra.is-minimal then false else true;
+  services.gnome.gnome-keyring.enable = false;
 
   services.trezord.enable = true;
 
@@ -80,7 +81,7 @@ in
   };
 
   systemd.user.services.udp-notify-daemon = {
-    enable = true;
+    enable = false;
     description = "udp notification daemon";
     wantedBy = [ "default.target" ];
     after    = [ "default.target" ];
@@ -115,13 +116,6 @@ in
         git push -u origin master
       '';
     };
-  };
-
-  services.mpd = {
-    enable = false;
-    dataDir = "/home/jb55/mpd";
-    user = "jb55";
-    group = "users";
   };
 
   services.xserver = {
@@ -183,7 +177,7 @@ in
     wantedBy = [ "graphical-session.target" ];
     after    = [ "graphical-session.target" ];
     serviceConfig.ExecStart = "${pkgs.libnotify}/bin/notify-send -u critical standup";
-    startAt = "Mon..Fri *-*-* 15:58:00";
+    startAt = "Mon..Fri *-*-* 7:57:00";
   };
 
   systemd.user.services.urxvtd = {
@@ -204,6 +198,14 @@ in
     wantedBy    = [ "graphical-session.target" ];
     after       = [ "graphical-session.target" ];
     serviceConfig.ExecStart = "${pkgs.xautolock}/bin/xautolock -time 10 -locker ${pkgs.slock}/bin/slock";
+  };
+
+  systemd.user.services.alttab = {
+    enable      = true;
+    description = "alttab";
+    wantedBy    = [ "graphical-session.target" ];
+    after       = [ "graphical-session.target" ];
+    serviceConfig.ExecStart = "${pkgs.alttab}/bin/alttab -d 1";
   };
 
   services.clipmenu.enable = true;

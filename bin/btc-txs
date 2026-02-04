@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
 set -eou pipefail
 btc-txs-raw | 
-	datefmt --after $(date +%s -d 2009-01-01) --before $(date +%s -d 2030-01-01) '%F'
+tac |
+datefmt --after $(date +%s -d 2009-01-01) --before $(date +%s -d 2030-01-01) '%F' |
+ct |
+zebra "$@" |
+less -S

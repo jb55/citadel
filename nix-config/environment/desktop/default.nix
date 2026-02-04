@@ -3,14 +3,6 @@
 let gtk2rc = pkgs.writeText "gtk2rc" ''
       gtk-icon-theme-name = "${icon-theme.name}"
       gtk-theme-name = "${theme.name}"
-
-      binding "gtk-binding-menu" {
-        bind "j" { "move-current" (next) }
-        bind "k" { "move-current" (prev) }
-        bind "h" { "move-current" (parent) }
-        bind "l" { "move-current" (child) }
-      }
-      class "GtkMenuShell" binding "gtk-binding-menu"
     '';
 
     mytexlive =  pkgs.texlive.combine {
@@ -22,11 +14,16 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
     jbpkgs = with jb55pkgs; [
        snap
        #cmdtree
-       zoom-link-opener
+       #zoom-link-opener
        x11-rename
        #hoogle-zen
        #viscal
     ];
+    
+    aitools = [];
+    #aitools = (with inputs.llm-agents.packages.${pkgs.system}; [
+    #  claude-code
+    #]);
 
     df = pkgs.dwarf-fortress-packages.dwarf-fortress-full.override {
        #dfVersion = "0.44.11";
@@ -38,12 +35,13 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
     };
 
     mypkgs = (with pkgs; [
-      obs-studio
+      #blender
       clipmenu
+      xcolor
+      chromium
       #colorpicker
       dasht
       dmenu
-      dragon-drop
       dunst
       dynamic-colors
       feh
@@ -60,18 +58,18 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
       neomutt
       notmuch
       oath-toolkit
-      pandoc
-      pavucontrol
+      obs-studio
       pamixer
+      pavucontrol
       pinentry-gnome3
       postgresql # psql
       qalculate-gtk
       qutebrowser
       rxvt-unicode
+      recoll
       signal-desktop
       simplescreenrecorder
       slock
-      spotify
       sxiv
       todo-txt-cli
       #tdesktop
@@ -83,6 +81,7 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
       xbindkeys
       xclip
       xdotool
+      dragon-drop
       xorg.xev
       xorg.xmodmap
       xorg.xset
@@ -100,7 +99,7 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
       #steam
       #wine
       #df
-    ]) ++ jbpkgs;
+    ]) ++ jbpkgs ++ aitools;
 
 in {
 
@@ -115,17 +114,18 @@ in {
   environment.variables = lib.mkIf (!extra.is-minimal) {
     LC_TIME="en_DK.UTF-8";
     GDK_PIXBUF_MODULE_FILE = "${pkgs.librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache";
-    GTK2_RC_FILES = "${gtk2rc}:${theme.package}/share/themes/${theme.name}/gtk-2.0/gtkrc:$GTK2_RC_FILES";
-    GTK_DATA_PREFIX = "${theme.package}";
-    GTK_EXEC_PREFIX = "${theme.package}";
-    GTK_IM_MODULE = "xim";
-    GTK_PATH = "${theme.package}:${pkgs.gtk3.out}";
-    GTK_THEME = "${theme.name}";
+    #GTK2_RC_FILES = "${gtk2rc}:${theme.package}/share/themes/${theme.name}/gtk-2.0/gtkrc:$GTK2_RC_FILES";
+    #GTK_DATA_PREFIX = "${theme.package}";
+    #GTK_EXEC_PREFIX = "${theme.package}";
+    #GTK_IM_MODULE = "xim";
+    #GTK_PATH = "${theme.package}:${pkgs.gtk3.out}";
+    #GTK_THEME = "${theme.name}";
     QT_STYLE_OVERRIDE = "GTK+";
-    VK_ICD_FILENAMES = "/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json"; # radv
+    #VK_ICD_FILENAMES = "/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json"; # radv
   };
 
   programs.steam.enable = true;
+  programs.steam.extraPackages = [ pkgs.xorg.libXScrnSaver ];
   programs.gamemode.enable = true;
 
   environment.systemPackages = if extra.is-minimal then (with pkgs; [
@@ -133,7 +133,7 @@ in {
     #steam-run
     #wine
     
-    lastpass-cli
+    #lastpass-cli
     rxvt-unicode
   ]) else mypkgs;
 

@@ -7,6 +7,7 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
       rev = "0.2.1";
       sha256 = "0xd86s2smjvlc7rlb6rkgx2hj3c3sbcz3gs8rf93x69jqdvwb6rr";
     }) {};
+
     myPackages = with jb55pkgs; [
        rsslink
        #bcalc
@@ -24,7 +25,7 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
     ];
 
     minimal-pkgs = with pkgs; [
-      git-tools
+      git
       fzf
       ripgrep
     ];
@@ -34,9 +35,10 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
       tut
 
       python3Packages.num2words
-      python3Packages.howdoi
+      #python3Packages.howdoi
       tree
       #xsv
+      b4
       datefmt
       #nostril
       nncp
@@ -45,7 +47,7 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
       aspellDicts.en
       aspellDicts.en-computers
       aspellDicts.en-science
-      awscli
+      #awscli
       bat
       bc
       binutils
@@ -55,12 +57,12 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
       dust
       file
       fzf
-      git-tools
+      git
       gnumake
       gnupg
       groff
       fastgron
-      hashcash
+      #hashcash
       haskellPackages.una
       htop
       imagemagick
@@ -68,19 +70,24 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
       lesspipe
       #libbitcoin-explorer
       libqalculate
-      linuxPackages.bpftrace
+      #linuxPackages.bpftrace
       linuxPackages.perf
+      linuxPackages.bpftrace
+      perf
       lsof
-      #mailutils
-      man-pages
-      mdcat
+      mailutils
+      manpages
       minisign
+      vim-full
+      ffmpeg
+      btop
+      playerctl
       neovim
       nethack
       network-tools
       nix-direnv 
       nodejs
-      opentimestamps-client
+      #opentimestamps-client
       par
       parallel
       patchelf
@@ -90,17 +97,17 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
       rsync
       scdoc
       screen
-      shellcheck
+      #shellcheck
       universal-ctags
       unixtools.xxd
       unzip
       #weechat
-      websocat
       wget
       xonsh
       zip
       zstd
     ];
+
 in {
   environment.systemPackages = if extra.is-minimal then minimal-pkgs else mypkgs;
 

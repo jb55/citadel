@@ -2,6 +2,14 @@ extra:
 { config, lib, pkgs, ... }:
 let util = extra.util;
     nix-serve = extra.machine.nix-serve;
+    open-webui-port = 8090;
+    ollama-port = 11234;
+    prefect-port = 4200;
+    n8n-port = 5678;
+    explorer-port = 5000;
+    electrs-rest-port = 4555;
+    nostr-relay-port = 8080;
+    notepush-port = 8766;
     zenstates = pkgs.fetchFromGitHub {
       owner  = "r4m0n";
       repo   = "ZenStates-Linux";
@@ -27,6 +35,7 @@ in
 {
   imports = [
     ./hardware
+    #(import ./rocksmith.nix)
     # ./contracts/commit
     # ./contracts/plastiq
 
@@ -38,12 +47,45 @@ in
 
   #hardware.steam-hardware.enable = true;
 
-  boot.zfs.enableUnstable = true;
+  #boot.zfs.enableUnstable = true;
   boot.zfs.removeLinuxDRM = true;
-  boot.kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+  #boot.kernelPackages = pkgs.linuxPackagesFor (pkgs.linuxKernel.kernels.linux_6_15.override {
+  #  argsOverride = rec {
+  #    src = pkgs.fetchurl {
+  #          url = "mirror://kernel/linux/kernel/v${lib.versions.major version}.x/linux-${version}.tar.xz";
+  #          sha256 = "0ibayrvrnw2lw7si78vdqnr20mm1d3z0g6a0ykndvgn5vdax5x9z";
+  #    };
+  #    version = "6.15.3";
+  #    modDirVersion = "6.15.3";
+  #  };
+  #});
+
+  # ai
+  #services.comfyui.enable = false;
+  #services.comfyui.rocmSupport = true;
+  #services.comfyui.dataPath = "/titan/ai/comfyui";
+  services.ollama = {
+    enable = false;
+    host = "127.0.0.1";
+    port = ollama-port;
+    acceleration = "rocm";
+    environmentVariables = {
+      HCC_AMDGPU_TARGET = "gfx1010"; # used to be necessary, but doesn't seem to anymore
+    };
+    rocmOverrideGfx = "10.1.0";
+  };
+
+  services.n8n.enable = true;
+  services.n8n.webhookUrl = "http://n8n.jb55.com/";
 
   services.ofono.enable = false;
   services.ofono.plugins = with pkgs; [ ofono-phonesim ];
+
+  services.open-webui.enable = false;
+  services.open-webui.port = open-webui-port;
+  services.open-webui.url = "http://ai.jb55.com";
+  services.open-webui.host = "127.0.0.1";
 
   services.prometheus.enable = false;
   # services.prometheus.dataDir = "/zbig/data/prometheus";
@@ -58,7 +100,7 @@ in
   ];
 
   # services.guix.enable = true;
-  services.synergy.client.enable = if extra.is-minimal then false else true;
+  services.synergy.client.enable = false; #if extra.is-minimal then false else false;
   services.synergy.client.autoStart = true;
   services.synergy.client.serverAddress = "10.100.0.2";
   services.synergy.client.screenName = "monad";
@@ -106,13 +148,15 @@ in
   };
 
   services.dnsmasq.enable = true;
-  services.dnsmasq.resolveLocalQueries = true;
+  services.dnsmasq.resolveLocalQueries = false;
   #services.dnsmasq.servers = ["127.0.0.1#43"];
   # services.dnsmasq.servers = ["127.0.0.1#43" "1.1.1.1" "8.8.8.8"];
   services.dnsmasq.settings.server = ["8.8.8.8" "8.8.4.4" ];
   services.dnsmasq.settings.conf-file = "/var/dnsmasq-hosts";
   services.dnsmasq.settings.addn-hosts = "/var/hosts";
-  services.dnsmasq.settings.dns-forward-max = 1024;
+  services.dnsmasq.settings.dns-forward-max = 12000;
+  services.dnsmasq.settings.min-cache-ttl = 300;
+  services.dnsmasq.settings.rebind-domain-ok = "";
 
   services.bitlbee.plugins = with pkgs; [
     bitlbee-mastodon
@@ -120,6 +164,26 @@ in
 
   # shitcoin vendor
   services.keybase.enable = false;
+
+  systemd.services.ds4ctl = {
+    description = "DS4 battery helper";
+    path = with pkgs; [ ds4ctl ];
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = util.writeBash "ds4ctl" ''
+        ${pkgs.ds4ctl}/bin/ds4ctl
+      '';
+    };
+  };
+
+  systemd.timers.ds4ctl = {
+    wantedBy = [ "timers.target" ];
+    timerConfig = {
+      OnBootSec = "1min";
+      OnUnitActiveSec = "1min";
+      Unit = "ds4ctl.service";
+    };
+  };
 
   systemd.services.block-distracting-hosts = {
     description = "Block Distracting Hosts";
@@ -132,7 +196,6 @@ in
 
       # crude way to clear the cache...
       systemctl restart dnsmasq
-      pkill qutebrowser
     '';
 
     startAt = "Mon..Fri *-*-* 09:00:00";
@@ -198,7 +261,7 @@ in
     startAt = "Mon..Fri *-*-* 17:00:00";
   };
 
-  virtualisation.docker.enable = if extra.is-minimal then false else true;
+  #virtualisation.docker.enable = if extra.is-minimal then false else true;
 
   boot.kernelPatches = [
     #{ # pci acs hack, not really safe or a good idea
@@ -212,30 +275,96 @@ in
 
   #boot.kernelParams = [ "pcie_acs_override=downstream" ];
 
-  systemd.user.services.clightning-rpc-tunnel = {
-    description = "clightning mainnet rpc tunnel";
-    wantedBy = [ "default.target" ];
-    after    = [ "default.target" ];
+  #systemd.user.services.clightning-rpc-tunnel = {
+  #  description = "clightning mainnet rpc tunnel";
+  #  wantedBy = [ "default.target" ];
+  #  after    = [ "default.target" ];
 
-    serviceConfig.ExecStart = extra.util.writeBash "lightning-tunnel" ''
-      ${pkgs.socat}/bin/socat -d -d TCP-LISTEN:7878,fork,reuseaddr,range=10.100.0.2/32 UNIX-CONNECT:/home/jb55/.lightning/bitcoin/lightning-rpc
+  #  serviceConfig.ExecStart = extra.util.writeBash "lightning-tunnel" ''
+  #    ${pkgs.socat}/bin/socat -d -d TCP-LISTEN:7878,fork,reuseaddr,range=10.100.0.2/32 UNIX-CONNECT:/home/jb55/.lightning/bitcoin/lightning-rpc
+  #  '';
+  #};
+
+  virtualisation.libvirtd = {
+    enable = false;
+    qemu = {
+      package = pkgs.qemu_kvm;
+      runAsRoot = true;
+      swtpm.enable = true;
+      ovmf = {
+        enable = false;
+        #packages = [(pkgs.OVMF.override {
+        #  secureBoot = true;
+        #  tpmSupport = true;
+        #}).fd];
+      };
+    };
+  };
+
+  systemd.user.services.strfry = {
+    enable = if extra.is-minimal then false else true;
+    path   = with pkgs; [ ];
+    description = "strfry";
+
+    wantedBy = [ "default.target" ];
+
+    serviceConfig.Restart = "always";
+    serviceConfig.Type = "simple";
+
+    serviceConfig.ExecStart = util.writeBash "" ''
+      cd /home/jb55/dev/github/hoytech/strfry
+      ./strfry relay
     '';
   };
 
-  #virtualisation.libvirtd.enable = false;
-  #virtualisation.libvirtd.qemuOvmf = false;
-  #virtualisation.libvirtd.qemuVerbatimConfig = ''
-  #  user = "jb55"
-  #  group = "kvm"
-  #  cgroup_device_acl = [
-  #    "/dev/input/by-id/usb-Topre_Corporation_Realforce-event-kbd",
-  #    "/dev/input/by-id/usb-Razer_Razer_DeathAdder_2013-event-mouse",
-  #    "/dev/null", "/dev/full", "/dev/zero",
-  #    "/dev/random", "/dev/urandom",
-  #    "/dev/ptmx", "/dev/kvm", "/dev/kqemu",
-  #    "/dev/rtc","/dev/hpet", "/dev/sev"
-  #  ]
-  #'';
+  systemd.user.services.prefect = {
+    enable = if extra.is-minimal then false else true;
+    path   = with pkgs; [ direnv ];
+    description = "prefect";
+
+    serviceConfig.Restart = "always";
+    serviceConfig.Type = "simple";
+
+    serviceConfig.ExecStart = util.writeBash "" ''
+      cd /home/jb55/src/python/prefect
+      prefect server start
+    '';
+  };
+
+  systemd.user.services.zaps = {
+    enable   = if extra.is-minimal then false else true;
+    path = with pkgs; [ nodejs clightning ];
+    description = "zaps";
+    wantedBy = [ "clightning.service" ];
+    after    = [ "clightning.service" ];
+    environment = {
+      NOSTR_KEY = extra.private.nostr.zapper-sec;
+    };
+
+    serviceConfig.Restart = "always";
+    serviceConfig.Type = "simple";
+
+    serviceConfig.ExecStart = util.writeBash "" ''
+      cd /home/jb55/src/js/nostr-tip
+      node index.js
+    '';
+  };
+
+  systemd.user.services.clightning = {
+    enable   = if extra.is-minimal then false else true;
+    description = "clightning node";
+    wantedBy = [ "bitcoind-mainnet.service" ];
+    after    = [ "bitcoind-mainnet.service" ];
+    path = with pkgs; [ python3 nodejs bitcoin ];
+
+    serviceConfig.Restart = "always";
+    serviceConfig.Type = "simple";
+
+    serviceConfig.ExecStart = util.writeBash "" ''
+      cd /home/jb55/dev/github/ElementsProject/lightning
+      ./lightningd/lightningd --log-level=debug --lightning-dir=/home/jb55/.lightning-bitcoin --conf=mainnet.conf
+    '';
+  };
 
   systemd.user.services.btc-ban-aws = {
     enable   = if extra.is-minimal then false else true;
@@ -252,7 +381,7 @@ in
     startAt = "*-*-* *:00:00"; #hourly
   };
 
-  environment.systemPackages = [ pkgs.virt-manager ];
+  environment.systemPackages = with pkgs; [ corectrl mangohud ];
 
   services.minecraft-server.enable = false;
   services.minecraft-server.eula = true;
@@ -274,7 +403,7 @@ in
   virtualisation.virtualbox.host.enableHardening = false;
   #virtualization.virtualbox.host.enableExtensionPack = true;
 
-  users.extraUsers.jb55.extraGroups = [ "vboxusers" "bitcoin" "kvm" "input" ];
+  users.extraUsers.jb55.extraGroups = [ "vboxusers" "bitcoin" "kvm" "qemu-libvirtd" "libvirtd" "input" ];
 
   services.xserver.videoDrivers = [ ];
 
@@ -284,7 +413,8 @@ in
   users.extraGroups.transmission.members = [ "nginx" "jb55" ];
 
   programs.mosh.enable = false;
-  programs.adb.enable = true;
+  programs.kdeconnect.enable = false;
+  programs.adb.enable = false;
 
   documentation.nixos.enable = false;
 
@@ -305,14 +435,12 @@ in
   services.tor.client.enable = true;
   services.tor.settings = extra.private.tor.settings;
 
-  services.fcgiwrap.enable = if extra.is-minimal then false else true;
-
   services.nix-serve.enable = false;
   services.nix-serve.bindAddress = nix-serve.bindAddress;
   services.nix-serve.port = nix-serve.port;
 
   services.xserver.screenSection = ''
-    Option "metamodes" "1920x1080_144 +0+0"
+    Option "metamodes" "2560x1440_240 +0+0"
     Option "dpi" "96 x 96"
   '';
 
@@ -322,21 +450,99 @@ in
       server {
         listen 80 default_server;
         listen ${extra.machine.ztip}:80 default_server;
-        listen 192.168.87.26 default_server;
+        listen ${extra.machine.ip} default_server;
 
         server_name monad.jb55.com;
 
         location / {
           root                  /var/www/public;
           autoindex on;
+          disable_symlinks off;
           index index.html;
         }
       }
 
       server {
+          listen 80;
+          listen ${extra.machine.ztip}:80;
+          listen ${extra.machine.ip};
+          server_name blocks.jb55.com;
+  
+          location / {
+            proxy_pass http://127.0.0.1:${toString electrs-rest-port};
+  
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+          }
+      }
+
+      server {
+          listen 80;
+          listen ${extra.machine.ztip}:80;
+          listen ${extra.machine.ip};
+          server_name explorer.jb55.com;
+  
+          location / {
+            proxy_pass http://127.0.0.1:${toString explorer-port};
+  
+            # Required for WebSocket support
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection "upgrade";
+  
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+          }
+      }
+
+      server {
+          listen 80;
+          listen ${extra.machine.ztip}:80;
+          listen ${extra.machine.ip};
+          server_name podcast.jb55.com;
+
+          # Try static files first, then proxy to app
+          location / {
+              # First attempt to serve static files
+              root /var/www/podcast/;
+              try_files $uri $uri/ @app;
+          }
+
+          # Proxy to FastAPI only if no static file is found
+          location @app {
+              # Proxy headers
+              proxy_http_version 1.1;
+              proxy_set_header Host $host;
+              proxy_set_header X-Real-IP $remote_addr;
+              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+              proxy_set_header X-Forwarded-Proto $scheme;
+
+              # Websocket support
+              proxy_set_header Upgrade $http_upgrade;
+              proxy_set_header Connection "upgrade";
+
+              # Upload size limit (adjust as needed)
+              client_max_body_size 100M;
+
+              proxy_pass http://127.0.0.1:5188;
+          }
+
+          # Static files
+          location /static/ {
+              alias /var/www/podcast/;
+              expires 1h;
+              add_header Cache-Control "public, no-transform";
+          }
+      }
+
+      server {
         listen 80;
         listen ${extra.machine.ztip}:80;
-        listen 192.168.87.26;
+        listen ${extra.machine.ip};
 
 	server_name notes.jb55.com;
 
@@ -357,6 +563,142 @@ in
 	}
       }
 
+      server {
+        listen 80;
+        listen ${extra.machine.ztip}:80;
+        listen ${extra.machine.ip};
+
+        server_name notify.jb55.com;
+
+        location / {
+          proxy_pass http://127.0.0.1:${toString notepush-port};
+
+          # Required for WebSocket support
+          proxy_http_version 1.1;
+          proxy_set_header Upgrade $http_upgrade;
+          proxy_set_header Connection "upgrade";
+
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+        }
+      }
+
+      server {
+        listen 80;
+        listen ${extra.machine.ztip}:80;
+        listen ${extra.machine.ip};
+
+        server_name relay.jb55.com;
+
+        location / {
+          proxy_pass http://127.0.0.1:${toString nostr-relay-port};
+
+          # Required for WebSocket support
+          proxy_http_version 1.1;
+          proxy_set_header Upgrade $http_upgrade;
+          proxy_set_header Connection "upgrade";
+
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+        }
+      }
+
+      server {
+        listen 80;
+        listen ${extra.machine.ztip}:80;
+        listen ${extra.machine.ip};
+
+        server_name n8n.jb55.com;
+
+        location / {
+          proxy_pass http://localhost:${toString n8n-port};
+
+          # Required for WebSocket support
+          proxy_http_version 1.1;
+          proxy_set_header Upgrade $http_upgrade;
+          proxy_set_header Connection "upgrade";
+
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+        }
+      }
+
+      server {
+        listen 80;
+        listen ${extra.machine.ztip}:80;
+        listen ${extra.machine.ip};
+
+        server_name ai.jb55.com;
+
+        location / {
+          proxy_pass http://localhost:${toString open-webui-port};
+
+          client_max_body_size 0;
+
+          # Required for WebSocket support
+          proxy_http_version 1.1;
+          proxy_set_header Upgrade $http_upgrade;
+          proxy_set_header Connection "upgrade";
+
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+        }
+      }
+
+      server {
+        listen 80;
+        listen ${extra.machine.ztip}:80;
+        listen ${extra.machine.ip};
+
+        server_name prefect.jb55.com;
+
+        location / {
+          proxy_pass http://127.0.0.1:${toString prefect-port};
+
+          # Required for WebSocket support
+          proxy_http_version 1.1;
+          proxy_set_header Upgrade $http_upgrade;
+          proxy_set_header Connection "upgrade";
+
+          #proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+        }
+      }
+
+      server {
+        listen 80;
+        listen ${extra.machine.ztip}:80;
+        listen ${extra.machine.ip};
+
+        server_name ollama.jb55.com;
+
+        location / {
+          proxy_pass http://localhost:${toString ollama-port};
+
+          # Required for WebSocket support
+          proxy_http_version 1.1;
+          proxy_set_header Upgrade $http_upgrade;
+          proxy_set_header Connection "upgrade";
+
+          #proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+        }
+      }
+
+
+
     '' + (if config.services.nix-serve.enable then ''
       server {
         listen ${nix-serve.bindAddress}:80;
@@ -373,12 +715,6 @@ in
         }
       }
     '' else "") + (if config.services.tor.enable then extra.private.tor.nginx else "");
-
-  # services.footswitch = {
-  #   enable = false;
-  #   enable-led = true;
-  #   led = "input5::numlock";
-  # };
 
   systemd.services.disable-c6 = {
     description = "Ryzen Disable C6 State";
@@ -429,12 +765,12 @@ in
   # };
 
   # for kmsgrab streaming
-  security.wrappers.ffmpeg = {
-    source = "${pkgs.ffmpeg}/bin/ffmpeg";
-    capabilities = "cap_sys_admin+ep";
-    owner = "root";
-    group = "root";
-  };
+  #security.wrappers.ffmpeg = {
+  #  source = "${pkgs.ffmpeg}/bin/ffmpeg";
+  #  capabilities = "cap_sys_admin+ep";
+  #  owner = "root";
+  #  group = "root";
+  #};
 
   # security.pam.u2f = {
   #   enable = true;

@@ -1,0 +1,2 @@
+#!/usr/bin/env sh
+sed -En 's,.*\* ([^ ]+).*,\1,p'

@@ -2,12 +2,10 @@
 bitcoinmagazine	@yt	https://bitcointv.com/feeds/videos.xml?videoChannelId=13
 blackpenredpen	@yt	https://www.youtube.com/feeds/videos.xml?channel_id=UC_SvYP0k05UKiJ_2ndB02IA
 brian-keating	@yt	https://www.youtube.com/feeds/videos.xml?channel_id=UCmXH_moPhfkqCk6S3b9RWuw
-brownstone	@blog,@busy	https://brownstone.org/feed/
 citadeldispatch	@yt	https://bitcointv.com/feeds/videos.xml?videoChannelId=2
 clownworldtoday	@blog	https://benkaufman.substack.com/feed
 codyslab	@yt	https://www.youtube.com/feeds/videos.xml?channel_id=UCu6mSoMNzHQiBIOCkHUa2Aw
 commaai	@yt	https://www.youtube.com/feeds/videos.xml?channel_id=UCwgKmJM4ZJQRJ-U5NjvR2dg
-darkhorse	@pod	https://feeds.buzzsprout.com/424075.rss
 drewdevault	@blog	https://drewdevault.com/blog/index.xml
 hackernews	@busy	https://news.ycombinator.com/rss
 inferencereview	@blog	https://inference-review.com/feeds/rss
@@ -22,7 +20,6 @@ noagenda	@pod	http://feed.nashownotes.com/rss.xml
 peakpropsperity	@blog,@busy	https://feeds.feedburner.com/PeakProsperity
 portal	@pod	https://www.omnycontent.com/d/playlist/9b7dacdf-a925-4f95-84dc-ac46003451ff/1713c520-edb6-43a3-b1b9-acb8002fdae7/58e33a0c-f86b-41c5-a11c-acb8002fdaf5/podcast.rss
 quanta	@blog	https://api.quantamagazine.org/feed/
-sabine	@yt	https://www.youtube.com/feeds/videos.xml?channel_id=UC1yNl2E66ZzKApQdRuTQ4tw
 samharris	@pod	https://wakingup.libsyn.com/rss
 shitcoinchron	@blog	https://chainfail.substack.com/feed
 squarebitcoin	@blog	https://squareselfcustody.substack.com/feed.xml
@@ -44,3 +41,4 @@ woit	@arxiv @physics	'http://export.arxiv.org/api/query?search_query=au:woit_p&s
 stabilityai	@blog @ai	https://stability.ai/blog?format=rss
 algorithmic-bridge	@blog @ai	https://thealgorithmicbridge.substack.com/feed
 macrumors	@blog @busy	https://feeds.macrumors.com/MacRumors-All
+baez	@blog	https://johncarlosbaez.wordpress.com/feed/

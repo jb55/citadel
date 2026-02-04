@@ -67,7 +67,7 @@ in
   services.xserver.config = ''
     Section "InputClass"
       Identifier "Logitech M705"
-      MatchIsPointer "yes"
+      MatchIsPointer "on"
       Option "AccelerationProfile" "-1"
       Option "ConstantDeceleration" "5"
       Option "AccelerationScheme" "none"
@@ -75,8 +75,16 @@ in
     EndSection
 
     Section "InputClass"
-      Identifier "Razer Razer DeathAdder 2013"
-      MatchIsPointer "yes"
+      Identifier "Lenovo ThinkPad Compact USB Keyboard with TrackPoint"
+      MatchProduct "TrackPoint"
+      MatchIsPointer "on"
+      Driver "libinput"
+      Option "AccelSpeed" "0.1"
+    EndSection
+
+    Section "InputClass"
+      Identifier "DeathAdder"
+      MatchIsPointer "on"
       Option "AccelerationProfile" "-1"
       Option "ConstantDeceleration" "5"
       Option "AccelerationScheme" "none"
@@ -109,6 +117,16 @@ in
 
   hardware = {
     bluetooth.enable = true;
-    opengl.driSupport32Bit = true;
+    #opengl.driSupport32Bit = true;
+
+    graphics = {
+        enable = true;
+        enable32Bit = true;
+    };
+
+    #amdgpu.amdvlk = {
+    #    enable = true;
+    #    support32Bit.enable = true;
+    #};
   };
 }

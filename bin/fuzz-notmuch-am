@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 #set -eou pipefail
 
-notmuch am -s --am -f "subject:PATCH and tag:inbox"
+#notmuch am -s --am -f "subject:PATCH and tag:inbox"
 
+echo B4AM_ARGS=\"-t\" notmuch am -s --am -f ${1:-'"subject:PATCH and tag:inbox"'}

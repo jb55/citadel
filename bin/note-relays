@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+ndbnd note-relays $(nak decode "$1" | jq -r .id)

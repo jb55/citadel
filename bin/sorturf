@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+sort | uniq -c | sort -nr "$@"

@@ -37,8 +37,9 @@ in rec {
 
   nostril = fetch {
     repo = "nostril";
-    rev = "251031f5a5d098d02c5e74556942d3dd706b5ce4";
-    sha256 = "sha256-qLqRxdLDos3akNKbKQ0yIbIIovssK1Q40EzJ8hb6hag=";
+    rev = "c8e67cd6411d73ce42c321a238be09acfec9b257";
+    sha256 = "sha256-+w/tZuoj/WG2c4kbg6JqMeufV/caoq3wEb/AFDazEP0=";
+    fetchSubmodules = true;
   };
 
   git-email-contacts = fetch {

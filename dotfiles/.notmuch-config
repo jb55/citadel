@@ -65,7 +65,7 @@ ignore=
 #
 
 [search]
-exclude_tags=deleted;spam;
+exclude_tags=deleted;
 
 # Maildir compatibility configuration
 #
@@ -117,3 +117,5 @@ patches=subject:PATCH and tag:inbox
 damusp=(subject:PR or subject:PATCH) and subject:damus and tag:inbox
 designs=tag:design and tag:inbox
 damusi=subject:Issue and subject:damus-io and tag:inbox
+work=tag:work and tag:inbox
+notwork=not tag:work and tag:inbox and not tag:filed

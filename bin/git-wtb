@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+git for-each-ref refs/heads --format='%(refname:short)	%(worktreepath)' | awk -F'\t' '$2!=""{print}'

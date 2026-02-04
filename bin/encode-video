@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+input="$1"
+shift
+
+#ffmpeg -i "$input" -vf "format=yuv420p,scale=iw*0.75:ih*0.75" -movflags faststart -c:v libx264 -profile:v baseline -crf 23 "$@"
+ffmpeg -i "$input" -vf "format=yuv420p" -movflags faststart -c:v libx264 -profile:v baseline -crf 23 "$@"
+#ffmpeg -i "$input" -vf "format=yuv420p" -movflags faststart -vsync 2 -c:v libx264 -profile:v baseline -crf 23 "$@"

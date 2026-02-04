@@ -9,11 +9,19 @@ do
 	bcli -rpcwallet="$wallet" getbalance
 done
 
-summary=$(lcli summary)
-if [ -n "$summary" ]
+channel_msat=$(lcli listfunds | jq  '.channels[].our_amount_msat' | paste -sd+ | bc)
+onchain_msat=$(lcli listfunds | jq '.outputs[].amount_msat' | paste -sd+ | bc)
+
+if [ -n "$channel_msat" ]
 then
-	echo -n "cln-availout "
-	<<<"$summary" grep avail_out | cut -d= -f2 | cut -d" " -f1 | xargs printf '%s to btc\n' | bcalc -n
+	echo -n "cln-channels "
+	printf '%s msat to btc\n' "$channel_msat" | bcalc -n
+fi
+
+if [ -n "$onchain_msat" ]
+then
+	echo -n "cln-onchain "
+	printf '%s msat to btc\n' "$onchain_msat" | bcalc -n
 fi
 
 #if [ -n "$1" ]; then

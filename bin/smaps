@@ -1,0 +1,102 @@
+#!/usr/bin/env python3
+import os
+import re
+import sys
+
+def is_file_backed(header_line):
+    """
+    Determine if the mapping is file-backed based on the header line.
+    Typically, file-backed mappings have a filename in the sixth column,
+    whereas anonymous mappings either have no filename or a name in square brackets.
+    """
+    parts = header_line.strip().split()
+    if len(parts) >= 6:
+        path = parts[5]
+        # Mappings like [heap], [stack], etc. are not file-backed
+        return not path.startswith('[')
+    return False
+
+def parse_smaps(pid):
+    """
+    Parse /proc/[pid]/smaps to sum up:
+      - Total resident set size (RSS) in kB.
+      - Claimable pages (clean pages from file-backed mappings), in kB.
+    
+    Returns:
+      (total_rss, claimable)
+    """
+    smaps_path = f"/proc/{pid}/smaps"
+    total_rss = 0
+    claimable = 0
+
+    current_header = None
+    current_mapping = {}
+
+    try:
+        with open(smaps_path) as f:
+            for line in f:
+                line = line.strip()
+                if not line:
+                    continue
+
+                # A new mapping header is detected by a line starting with an address range.
+                if re.match(r'^[0-9a-fA-F]+-[0-9a-fA-F]+', line):
+                    # Process the previous mapping (if any)
+                    if current_header is not None:
+                        rss = current_mapping.get('Rss', 0)
+                        total_rss += rss
+
+                        # For file-backed mappings, count clean pages as claimable.
+                        if is_file_backed(current_header):
+                            priv_clean = current_mapping.get('Private_Clean', 0)
+                            shared_clean = current_mapping.get('Shared_Clean', 0)
+                            claimable += (priv_clean + shared_clean)
+
+                    # Start a new mapping block.
+                    current_header = line
+                    current_mapping = {}
+                else:
+                    # Parse key: value lines, e.g., "Rss:                4 kB"
+                    if ':' in line:
+                        key, value_part = line.split(':', 1)
+                        try:
+                            # We only need the numeric part.
+                            value = int(value_part.split()[0])
+                            current_mapping[key] = value
+                        except (ValueError, IndexError):
+                            continue
+
+            # Process the last mapping block
+            if current_header is not None:
+                rss = current_mapping.get('Rss', 0)
+                total_rss += rss
+                if is_file_backed(current_header):
+                    priv_clean = current_mapping.get('Private_Clean', 0)
+                    shared_clean = current_mapping.get('Shared_Clean', 0)
+                    claimable += (priv_clean + shared_clean)
+    except FileNotFoundError:
+        sys.exit(f"Error: Cannot open {smaps_path}. Make sure PID {pid} exists and you have permission.")
+
+    return total_rss, claimable
+
+def kb_to_mib(kb):
+    # smaps "kB" values are in KiB, so MiB = KiB / 1024
+    return kb / 1024.0
+
+def main():
+    # Use the PID provided as an argument, or default to the current process.
+    pid = sys.argv[1] if len(sys.argv) > 1 else str(os.getpid())
+    total_rss, claimable = parse_smaps(pid)
+    effective = total_rss - claimable
+
+    total_rss_mib = kb_to_mib(total_rss)
+    claimable_mib = kb_to_mib(claimable)
+    effective_mib = kb_to_mib(effective)
+
+    print(f"PID: {pid}")
+    print(f"Total RSS: {total_rss_mib:.2f} MiB")
+    print(f"Claimable (file-backed, clean pages): {claimable_mib:.2f} MiB")
+    print(f"Effective memory usage (RSS - claimable): {effective_mib:.2f} MiB")
+
+if __name__ == '__main__':
+    main()

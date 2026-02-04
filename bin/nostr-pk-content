@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+N=${1:-50}
+jq -rc "[.pubkey, (.content | if length > $N then .[:$N] + \"...\" else . end)]|@tsv"

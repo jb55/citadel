@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+export HOME=/home/jb55
+sudo nixos-rebuild switch -j14 -I nixos-config=$HOME/citadel/nix-config/configuration.nix -I dotfiles=$HOME/citadel/dotfiles -I nixpkgs=$HOME/nixpkgs -I jb55pkgs=$HOME/citadel/jb55pkgs --show-trace
+

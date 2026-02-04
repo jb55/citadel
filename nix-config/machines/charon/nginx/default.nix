@@ -1,29 +1,29 @@
 extra:
 { config, lib, pkgs, ... }:
-let sites = [./sites/jb55.com
-             ./sites/npmrepo.com
+let sites = [ ./sites/jb55.com
+              ./sites/npmrepo.com
              ./sites/wineparty.xyz
              ./sites/hearpress.com
             ];
     logDir = "/var/log/nginx";
 in {
-  services.logrotate.config = ''
-    ${logDir}/*.log {
-      daily
-      missingok
-      rotate 52
-      compress
-      delaycompress
-      notifempty
-      # 20MB
-      minsize 20971520
-      create 640 root adm
-      sharedscripts
-      postrotate
-              ${pkgs.procps}/bin/pkill -USR1 nginx
-      endscript
-    }
-  '';
+  #services.logrotate.config = ''
+  #  ${logDir}/*.log {
+  #    daily
+  #    missingok
+  #    rotate 52
+  #    compress
+  #    delaycompress
+  #    notifempty
+  #    # 20MB
+  #    minsize 20971520
+  #    create 640 root adm
+  #    sharedscripts
+  #    postrotate
+  #            ${pkgs.procps}/bin/pkill -USR1 nginx
+  #    endscript
+  #  }
+  #'';
 
   services.nginx = {
     enable = true;
@@ -50,7 +50,6 @@ in {
       tcp_nopush on;
       tcp_nodelay on;
       keepalive_timeout 65;
-      types_hash_max_size 2048;
       # server_tokens off;
       proxy_buffering off;
       proxy_read_timeout 300s;

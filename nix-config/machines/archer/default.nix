@@ -124,8 +124,6 @@ in {
     authPass = private.gmail-pass;
   };
 
-  services.fcgiwrap.enable = true;
-
   systemd.services.postgresql.after = [ "zerotierone.service" ];
 
   services.postgresql = {

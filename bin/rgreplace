@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+set -e
+
+search="$1"
+replace="$2"
+
+rg --files-with-matches "$search" | xargs sed -i "s,$search,$replace,g"

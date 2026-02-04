@@ -9,10 +9,12 @@ fi
 
 export LESSHISTFILE="$dir/.$base.hst"
 touch $LESSHISTFILE || :
+printf "lesshistfile '%s'\n" "$LESSHISTFILE" >&2
 
 # use a fallback dir if it's not writable
 if [ ! -w "$LESSHISTFILE" ]
 then
+	printf "using lesshistfile fallback\n" >&2
     dir="$HOME/var/marks"
     mkdir -p "$dir"
     export LESSHISTFILE="$dir/.$base.hst"

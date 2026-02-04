@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+DEATHADDR=$(xinput list | grep -i deathadd | grep pointer | grep -i -v keyboard | awkp 7 | cut -d= -f2)
+xinput set-prop "$DEATHADDR" "libinput Accel Speed" 0.0
+echo "set deathaddr device $DEATHADDR accel 0.0"
+
+for device in $(xinput list | grep TrackPoint | grep pointer | awkp 10 | cut -d= -f2)
+do
+	echo "setting TrackPoint device $device accel 0.1"
+	xinput set-prop "$device" "libinput Accel Speed" 0.1
+done

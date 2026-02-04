@@ -12,6 +12,7 @@ import Data.List
 --import Data.Default (def)
 import Control.Monad (when)
 import System.IO.Unsafe (unsafePerformIO)
+import XMonad.Actions.UpdatePointer
 import System.Posix.Files (readSymbolicLink)
 import System.Posix.Signals (installHandler, sigUSR1, Handler(CatchOnce))
 import System.FilePath.Posix (takeBaseName)
@@ -19,14 +20,16 @@ import XMonad
 import XMonad.Actions.CycleWS
 import XMonad.Actions.SpawnOn (shellPromptHere, manageSpawn)
 import XMonad.Actions.UpdatePointer
+import XMonad.Actions.MostRecentlyUsed
 import XMonad.Hooks.EwmhDesktops (ewmh)
+--import XMonad.Hooks.EwmhDesktops (ewmhFullscreen)
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.SetWMName
 import XMonad.Hooks.UrgencyHook
 import XMonad.Layout.Gaps
 import XMonad.Layout.Grid
-import XMonad.Util.Scratchpad
+--import XMonad.Util.Scratchpad
 import XMonad.Layout.LayoutModifier
 import XMonad.Layout.Maximize
 import XMonad.Layout.MultiToggle
@@ -35,7 +38,8 @@ import XMonad.Layout.NoBorders
 import XMonad.Layout.ResizableTile
 import XMonad.Layout.ResizeScreen
 import XMonad.Layout.Spacing
-import XMonad.Layout.Spiral as S
+--import XMonad.Layout.Spiral as S
+import XMonad.Layout.Dwindle as D
 import XMonad.Layout.Tabbed
 import XMonad.Layout.ToggleLayouts (ToggleLayout(ToggleLayout))
 import XMonad.Prompt
@@ -49,6 +53,20 @@ import XMonad.Util.Image
 import qualified XMonad.Layout.HintedTile as HT
 
 import qualified XMonad.StackSet as W
+import qualified Data.IORef as IORef
+
+trackMousePosition :: IORef.IORef (Int, Int) -> X ()
+trackMousePosition posRef = withDisplay $ \dpy -> do
+    rootw <- asks theRoot
+    (_, _, _, x, y, _, _, _) <- io $ queryPointer dpy rootw
+    io $ IORef.writeIORef posRef (fi x, fi y)
+
+moveToLastPosition :: IORef.IORef (Int, Int) -> X ()
+moveToLastPosition posRef = do
+    (x, y) <- io $ IORef.readIORef posRef
+    withDisplay $ \dpy -> do
+        rootw <- asks theRoot
+        io $ warpPointer dpy none rootw 0 0 0 0 (fi x) (fi y)
 
 data LibNotifyUrgencyHook = LibNotifyUrgencyHook deriving (Read, Show)
 
@@ -125,6 +143,9 @@ mkTabTheme (BasicTheme _ active inactive) =
 darkTheme :: OurTheme
 darkTheme = BasicTheme DarkTheme "#282C34" "#323742"
 
+darkThemeOled :: OurTheme
+darkThemeOled = BasicTheme DarkTheme "#000000" "#111111"
+
 
 --darkTheme :: OurTheme
 --darkTheme = FullTheme {
@@ -152,7 +173,13 @@ baseLayout =
     let
         tall = ResizableTall 1 (3/100) (1/2) []
     in
-        Mirror tall ||| S.spiral (4/3) --S.spiralWithDir S.South S.CW (4/3)
+        --D.Dwindle D.R D.CW 1.5 1.1 |||
+            --D.Squeeze D.R 1.38 1.1
+        -- ||| D.Spiral D.R D.CW 0.8 1.1
+        D.Spiral D.R D.CW 0.8 1.1
+        ||| Grid
+        --S.spiral (4/3) |||
+        --Mirror tall --S.spiralWithDir S.South S.CW (4/3)
 
 layout theme
     = smartBorders
@@ -168,7 +195,7 @@ getTheme = do
   themePath <- readSymbolicLink "/home/jb55/.Xresources.d/themes/current"
   case takeBaseName themePath of
     "light" -> return lightTheme
-    _       -> return darkTheme
+    _       -> return darkThemeOled
 
 
 myStartupHook :: Layout Window -> X ()
@@ -194,8 +221,13 @@ shouldFloat = do
   name <- appName
   return (fs && not (shouldntFloat name))
 
-scratchHook = scratchpadManageHook (W.RationalRect 0.1 0.1 0.6 0.6)
-myManageHook = scratchHook <+> (shouldFloat --> doFullFloat)
+--scratchHook = scratchpadManageHook (W.RationalRect 0.1 0.1 0.6 0.6)
+--myManageHook = scratchHook <+> (shouldFloat --> doFullFloat)
+myManageHook = composeAll [ 
+	shouldFloat --> doFullFloat
+      , className =? "Steam" --> doFloat
+      , className =? "steam" --> doFullFloat
+      ]
 
 myConfig theme =
   let lout = layout theme
@@ -203,6 +235,7 @@ myConfig theme =
                 terminal           = termName
               , modMask            = mod4Mask
               , layoutHook         = lout
+              , logHook            = updatePointer (0.5, 0.5) (0, 0)
               , startupHook        = myStartupHook (Layout lout)
               , manageHook         = myManageHook
               , normalBorderColor  = "#222"
@@ -251,10 +284,12 @@ myKeys theme = [
   , ("M-c", toggleCenter)
   , ("M-b", toggleMirror)
   , ("M-g", toggleGaps)
-  , ("M-s", scratchpadSpawnActionTerminal termName)
+  --, ("M-s", scratchpadSpawnActionTerminal termName)
+  --, ("M-s", scratchpadSpawnActionTerminal termName)
   -- , ("M-r", toggleFull)
   , ("M-v", sendKey shiftMask xK_Insert)
   ]
+
 
 
 

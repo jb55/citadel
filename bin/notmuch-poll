@@ -2,11 +2,14 @@
 
 notmuchcmd () {
   echo "notmuch" "$@"
-  $(notmuch "$@")
+  notmuch "$@"
 }
 
 # bulk bs
 notmuchcmd tag +filed +bulk 'folder:".Bulk"'
+
+# work
+notmuchcmd tag +work tag:inbox and '(from:daniel@daquino.me or from:jb55@jb55.com or from:kieran or from:sedgwick or from:"Daniel D’Aquino" or from:vanessa@damus.io or from:kernelkind)'
 
 # sent
 notmuchcmd tag +sent tag:inbox and not tag:sent and folder:".Sent"
@@ -19,15 +22,22 @@ notmuchcmd tag +sent tag:inbox and not tag:sent and folder:".Sent"
 notmuchcmd tag +flagged -busy -filed tag:inbox and '(tag:list and tag:to-me) or to:mention@noreply.github.com or author@noreply.github.com or to:ci_activity@noreply.github.com or to:review_requested@noreply.github.com or to:comment@noreply.github.com or (subject:jb55 and tag:github) or ((usdt or ebpf or bpf or tracepoints) and bitcoin)'
 
 # don't really need this in my inbox
-notmuchcmd tag +filed to:push@noreply.github.com
+notmuchcmd tag +filed tag:inbox and 'to:push@noreply.github.com or subject:damus-io'
 
 # spam
-notmuchcmd tag -inbox from:Giveaway or 'from:"BOOM OF SALES"' or 'from:Ray Ban' or from:.lat or from:163.com or from:.homes or from:.bio or from:.biz or from:.world or from:.boats or from:.bond or from:.cfd or from:.xyz or from:.pro or from:.beauty or from:.fun or from:.shop or from:.yeah.net or from:.sbs or from:.one or from:.bet or from:.best or from:.info or from:.online or from:.ltd or from:.live or from:.club or from:.life or from:.top or from:126.com or from:.wiki or from:.monster or from:.ru or from:.mom or from:.us or from:.click or from:.today or from:.autos or from:.co or from:.buzz or from:.quest or 'from:Home Depot' or from:resistthemainstream.com or from:sugarmat or 'from:Malware Alert' or 'from:Lowes' or from:IServiced and tag:inbox
+notmuchcmd tag +spam -inbox from:Giveaway or 'from:"BOOM OF SALES"' or 'from:Ray Ban' or from:.lat or from:163.com or from:.homes or from:.bio or from:.biz or from:za.com or from:sa.com or from:.world or from:.boats or from:.bond or from:.cfd or from:.xyz or from:.pro or from:.beauty or from:.fun or from:.shop or from:.yeah.net or from:.sbs or from:.one or from:.bet or from:.best or from:.info or from:.online or from:.ltd or from:.live or from:.club or from:.life or from:.top or from:126.com or from:.wiki or from:.monster or from:.ru or from:.mom or from:.us or from:.click or from:.today or from:.autos or from:.co or from:.buzz or from:.quest or 'from:Home Depot' or from:resistthemainstream.com or from:sugarmat or 'from:Malware Alert' or 'from:Lowes' or from:IServiced and tag:inbox
 
 # not spam
 notmuchcmd tag +inbox -spam +flagged "bitcoin wizard" and tag:spam
 
 # phone mail
 notmuchcmd tag -inbox tag:inbox and '(folder:".Archive" or folder:".Trash" or folder:".Archives")'
+ 
+# move stuff out of inbox when it's missing inbox tag
+echo "moving messages out of inbox"
+notmuch search --output=files not tag:inbox and \(path:cur or path:new\) | xargs -I{} mv -f {} /var/spool/mail/jb55/.Archive/cur
 
-printf "notmuch tagging done.\n"
+echo "fixing permissions"
+find /var/spool/mail/jb55 -not -group vmail -exec chgrp vmail {} + -or -group vmail -not -perm /g+r -exec chmod g+r {} +
+ 
+printf "notmuch sync script done.\n"

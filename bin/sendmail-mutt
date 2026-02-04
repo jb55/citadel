@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+
+file="$(mktemp)"
+cat > "$file"
+sendmail-bg "$file" "$@" & disown
+
+exit 0

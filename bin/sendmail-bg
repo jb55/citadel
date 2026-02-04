@@ -3,16 +3,16 @@
 export EMAIL_CUSTOM_CONN_TEST=/home/jb55/bin/email-conn-test
 export EMAIL_CONN_TEST=c
 
-src="$1"
+file="$1"
 shift
-file=$(mktemp)
 
-from_email=$(<"$src" grep '^From:' | sed -n 's,.*<\([^>]\+\)>.*,\1,p')
-from_email=${from_email:-"jb55@jb55.com"}
+#from_email=$(<"$file" grep '^From:' | sed -n 's,.*<\([^>]\+\)>.*,\1,p')
+#from_email=${from_email:-"jb55@jb55.com"}
 
-<"$src" /home/jb55/bin/hashcash-mail "$from_email" > "$file"
+#<"$file" /home/jb55/bin/hashcash-mail "$from_email" > "$file2"
 
 # pass all params to msmtpq & redirect output
+notmuch insert +inbox < "$file"
 output=$(<"$file" msmtpq "$@" 2> /tmp/msmtp.err)
 echo "$output" >> /tmp/msmtp.log
 
@@ -23,7 +23,7 @@ then
 	fi
 fi
 
-rm -f "$src" "$file"
+rm -f "$file" "$file2"
 
 # always succeed, even on connection/mail failure
 # we'll simply queue the mail in our outbox

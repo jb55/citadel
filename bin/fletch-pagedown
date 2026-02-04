@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+xdotool mousemove_relative --sync -- -1400 0
+sleep 0.1
+xdotool key Shift+j
+sleep 0.1
+xdotool mousemove_relative --sync -- 1400 0

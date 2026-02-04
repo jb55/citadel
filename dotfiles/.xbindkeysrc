@@ -1,3 +1,4 @@
+
 "lock"
   XF86Display
 
@@ -16,6 +17,10 @@
 "xbacklight -dec 5"
   XF86MonBrightnessDown
 
+"playerctl play-pause"
+  m:0x0 + c:208
+  XF86AudioPlay
+
 "toggle-mute"
   XF86AudioMute
 
@@ -25,3 +30,14 @@
 "snap"
   Control + Print
 
+"pactl set-sink-volume @DEFAULT_SINK@ -5%"
+    m:0x0 + c:122
+    XF86AudioLowerVolume
+
+"pactl set-sink-volume @DEFAULT_SINK@ +5%"
+    m:0x0 + c:123
+    XF86AudioRaiseVolume
+
+"toggle-mic"
+    m:0x0 + c:198
+    XF86AudioMicMute

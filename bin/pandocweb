@@ -34,9 +34,11 @@ wget \
      --adjust-extension \
      --span-hosts \
      --convert-links \
+     --user-agent 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)' \
      --restrict-file-names=windows \
      --domains "$hostname" \
      --no-parent \
+     --reject-regex '(\.js(\?.*)?$|\.css(\?.*)?$|\.map(\?.*)?$|\.woff2?(\?.*)?$|\.ttf(\?.*)?$|\.eot(\?.*)?$|\.ico(\?.*)?$)' \
      "$url" || :
 
 printf "finding html file... \n" 1>&2
@@ -48,7 +50,8 @@ cd "$(dirname "$target")"
 printf "converting %s ... " "$file" 1>&2
 $PANDOC "$file" -o "$out_name" 1>&2
 printf "done. saved as:\n" "$out_name" 1>&2
+printf "%s\n" "$tmpdir"
 printf "%s\n" "$out_name"
 
 cd
-rm -rf "$tmpdir"
+#rm -rf "$tmpdir"

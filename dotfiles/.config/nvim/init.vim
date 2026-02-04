@@ -11,7 +11,7 @@ set colorcolumn=80
 set nowrap
 set hidden
 set rnu nu
-set wrap
+"set wrap
 
 
 " set this when theme is dark
@@ -21,6 +21,10 @@ set wrap
 "hi ColorColumn ctermbg=255
 
 hi StatusLine ctermbg=254
+
+"hi ColorColumn ctermbg=237
+"hi ColorColumn ctermbg=254
+"hi StatusLine ctermbg=254
 
 map Y y$
 
@@ -37,6 +41,8 @@ nmap <C-x> :x<CR>
 nmap <C-s> ^D
 nmap <C-n> :tn<CR>
 nmap <C-p> :tp<CR>
+nmap <C-N> :cn<CR>
+nmap <C-P> :cp<CR>
 
 " autoparens
 "ino " ""<left>
@@ -82,9 +88,32 @@ autocmd VimEnter * call SetColorColumn()
 
 autocmd FileType go autocmd BufWritePre <buffer> execute "normal! mz:mkview\<esc>:%!fmtsafe gofmt\<esc>:loadview\<esc>`z"
 autocmd FileType go set wrap
+"autocmd FileType rust autocmd BufWritePre <buffer> execute "normal! mz:mkview\<esc>:%!fmtsafe rustfmt\<esc>:loadview\<esc>`z"
 autocmd FileType rust autocmd BufWritePre <buffer> execute "normal! mz:mkview\<esc>:%!fmtsafe rustfmt\<esc>:loadview\<esc>`z"
+
+augroup Rust
+    autocmd!
+    "autocmd FileType rust autocmd BufWritePre <buffer> execute "normal! mz:mkview\<esc>:%!fmtsafe rustfmt\<esc>:loadview\<esc>`z"
+    "autocmd FileType rust nnoremap <buffer> <leader>f :mkview<CR>:%!fmtsafe rustfmt<CR>:loadview<CR>
+    "autocmd FileType rust nnoremap <buffer> <leader>f :execute 'mkview | %!fmtsafe rustfmt | loadview'<CR>
+    "autocmd FileType rust nnoremap <buffer> <leader>f :%!fmtsafe rustfmt<CR>
+    autocmd FileType rust nnoremap <buffer> <leader>f :call RustFormat()<CR>
+    autocmd FileType rust CompilerSet errorformat=
+            \%-G,%
+            \%-Gerror:\ aborting\ %.%#,%
+            \%-Gerror:\ Could\ not\ compile\ %.%#,%
+            \%Eerror:\ %m,%
+            \%Eerror[E%n]:\ %m,%
+            \%Wwarning:\ %m,%
+            \%Inote:\ %m,%
+            \%C\ %#-->\ %f:%l:%c,%
+            \%E\ \ left:%m,%C\ right:%m\ %f:%l:%c,%Z
+augroup END
+
 "autocmd FileType javascript autocmd BufWritePre <buffer> execute "normal! mz:mkview\<esc>:%!fmtsafe jsfmt\<esc>:loadview\<esc>`z"
-"autocmd BufEnter,BufNew *.js set sw=2 ts=2 expandtab
+autocmd BufEnter,BufNew *.js set sw=2 ts=2 expandtab
+
+autocmd FileType rust nnoremap <buffer> <leader>f :call RustFormat()<CR>
 
 "autocmd filetype html set sw=2 ts=2 expandtab
 
@@ -93,7 +122,16 @@ autocmd BufEnter,BufNew *.gmi set wrap linebreak
 
 au BufWritePost,FileWritePost ~/.Xdefaults,~/.Xresources silent! !xrdb -load % >/dev/null 2>&1
 
+" Automatically move the cursor to the last editing position in a file when you open it, provided that position is valid.
 if has("autocmd")
   au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
     \| exe "normal! g'\"" | endif
 endif
+
+function! RustFormat()                                                          
+    let l:view = winsaveview()                                                  
+    silent! mkview                                                              
+    silent! %!fmtsafe rustfmt                                                   
+    call winrestview(l:view)                                                    
+endfunction                                                                     
+

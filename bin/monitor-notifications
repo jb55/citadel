@@ -1,0 +1,49 @@
+#!/usr/bin/env nix-shell
+#!nix-shell -p python3Packages.dbus-python python3Packages.pygobject3
+#!nix-shell -i xonsh
+
+# insert commands to be run here
+
+import dbus
+from gi.repository import GLib as gobject
+from dbus.mainloop.glib import DBusGMainLoop
+import sys
+
+$NOTIFY_KEY
+$NOTIFY_PK
+
+def parse_urgency(b):
+    if b == 0:
+        return "low"
+    elif b == 1:
+        return "normal"
+    elif b == 2:
+        return "critical"
+    return "low"
+
+def msg_cb(bus, msg):
+    args = msg.get_args_list()
+    source = args[0]
+    title = args[3]
+    body = args[4]
+    data = args[6]
+    urgency = parse_urgency(data["urgency"])
+
+    if urgency == "critical":
+        content = "**{}**\n{}".format(title, body).strip()
+        nostril --envelope --sec $NOTIFY_KEY --content @(content) -p $NOTIFY_PK | nostcat ws://relay.jb55.com wss://notify.damus.io
+    else:
+        content = "{}\n{}".format(title, body).strip()
+        nostril --envelope --sec $NOTIFY_KEY -p $NOTIFY_PK --content @(content) | nostcat wss://notify.damus.io
+
+if __name__ == '__main__':
+    DBusGMainLoop(set_as_default=True)
+    bus = dbus.SessionBus()
+
+    #string = "interface='org.freedesktop.Notifications',member='Notify'"
+    string = "interface='org.freedesktop.Notifications',member='Notify',eavesdrop='true'"
+    bus.add_match_string(string)
+    bus.add_message_filter(msg_cb)
+
+    mainloop = gobject.MainLoop ()
+    mainloop.run ()
