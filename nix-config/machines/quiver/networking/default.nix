@@ -40,17 +40,18 @@ in
 
   networking.wireguard.interfaces = {
     # "wg0" is the network interface name. You can name the interface arbitrarily.
-    rcx0 = {
-      ips = [ "10.200.0.5/32" ];
+    wgtb = {
+     # Determines the IP address and subnet of the server's end of the tunnel interface.
+     ips = [ "10.101.0.2/32" ];
 
-      privateKeyFile = "/home/jb55/.wg/private";
+     privateKeyFile = "/home/jb55/.wg/agent/private";
 
-      peers = [
-        { publicKey = "wC+mEE9/PJDuIfr7DFZWnM8HbQz5fSOFHmmzQRxULzM=";
-          allowedIPs = [ "10.200.0.1/32" ];
-          endpoint = "159.89.143.225:53";
-        }
-      ];
+     peers = [
+       { publicKey = "6TVcGaxkc/vUNyND3GTLY3dXvrWNzCjw94llB6/kdyI="; # winvm
+         allowedIPs = [ "10.101.0.13/32" ];
+         endpoint = "65.7.8.70:51821";
+       }
+     ];
     };
 
     wg0 = {
@@ -68,13 +69,13 @@ in
 
       peers = [
         # For a client configuration, one peer entry for the server will suffice.
-        {
+        { # monad
           publicKey = "TbGgpOqD6teLon0ksZKS8zvvjHtkOGKNWPpHZxhVFWA=";
           #allowedIPs = [ "0.0.0.0/0" "::/0" ];
           allowedIPs = [ "10.100.0.1/32" ];
           #endpoint = "127.0.0.1:3333";
           #endpoint = "24.84.152.187:51820";
-          endpoint = "24.86.66.39:51820";
+          endpoint = "65.7.8.70:51820";
 
           persistentKeepalive = 25;
         }
@@ -84,7 +85,7 @@ in
           endpoint = "45.79.91.128:51820";
           persistentKeepalive = 25;
         }
-        {
+        { # ??
           publicKey = "vIh3IQgP92OhHaC9XBiJVDLlrs3GVcR6hlXaapjTiA0=";
 
           allowedIPs = [ "10.100.0.3/32" ];

@@ -9,13 +9,13 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
     }) {};
     myPackages = with jb55pkgs; [
        rsslink
-       bcalc
+       #bcalc
        btcs
        csv-delim
        csv-scripts
        extname
        mandown
-       ratio
+       #ratio
        samp
        sharefile
        zebra
@@ -36,9 +36,9 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
       python3Packages.num2words
       python3Packages.howdoi
       tree
-      xsv
+      #xsv
       datefmt
-      nostril
+      #nostril
       nncp
       asciinema
       aspell
@@ -52,7 +52,7 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
       cp437
       dateutils
       direnv
-      du-dust
+      dust
       file
       fzf
       git-tools
@@ -66,7 +66,7 @@ let jb55pkgs = import <jb55pkgs> { inherit pkgs; };
       imagemagick
       jq
       lesspipe
-      libbitcoin-explorer
+      #libbitcoin-explorer
       libqalculate
       linuxPackages.bpftrace
       linuxPackages.perf

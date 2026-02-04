@@ -21,11 +21,11 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
 
     jbpkgs = with jb55pkgs; [
        snap
-       cmdtree
+       #cmdtree
        zoom-link-opener
        x11-rename
        #hoogle-zen
-       viscal
+       #viscal
     ];
 
     df = pkgs.dwarf-fortress-packages.dwarf-fortress-full.override {
@@ -40,17 +40,17 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
     mypkgs = (with pkgs; [
       obs-studio
       clipmenu
-      colorpicker
+      #colorpicker
       dasht
       dmenu
-      xdragon
+      dragon-drop
       dunst
       dynamic-colors
       feh
       getmail6 # for getmail-gmail-xoauth-tokens
-      gnome.gnome-calculator
+      gnome-calculator
       gtk-engine-murrine
-      hwi
+      #hwi
       lagrange
       lastpass-cli
       libnotify
@@ -59,11 +59,11 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
       muchsync
       neomutt
       notmuch
-      oathToolkit
+      oath-toolkit
       pandoc
       pavucontrol
       pamixer
-      pinentry
+      pinentry-gnome3
       postgresql # psql
       qalculate-gtk
       qutebrowser
@@ -74,7 +74,7 @@ let gtk2rc = pkgs.writeText "gtk2rc" ''
       spotify
       sxiv
       todo-txt-cli
-      tdesktop
+      #tdesktop
       userConfig
       vdirsyncer
       w3m

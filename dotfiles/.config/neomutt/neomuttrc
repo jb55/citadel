@@ -1,7 +1,8 @@
 set realname='William Casarin'
 set nm_default_uri="notmuch:///home/jb55/mail/personal"
 set sendmail="/home/jb55/bin/sendmail"
-set virtual_spoolfile=yes
+set spool_file="notmuch://?query=query:inbox"
+set virtual_spoolfile="notmuch://?query=query:inbox"
 set folder="/home/jb55/mail/personal"
 set beep=no
 set wait_key=no

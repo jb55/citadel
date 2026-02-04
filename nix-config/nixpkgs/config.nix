@@ -1,4 +1,4 @@
-{ pkgs }:
+{ pkgs, lib }:
 let #monstercatPkgs = import <monstercatpkgs> { inherit pkgs; };
     #haskellOverrides = import ./haskell-overrides { inherit monstercatPkgs; };
     jb55pkgs = import <jb55pkgs> { inherit pkgs; };
@@ -22,9 +22,9 @@ in {
       smbdSupport = true;
     };
 
-    mpv = pkgs.wrapMpv pkgs.mpv-unwrapped {
-      scripts = [ pkgs.mpvScripts.mpris ];
-    };
+    #mpv = pkgs.wrapMpv pkgs.mpv-unwrapped {
+    #  scripts = [ pkgs.mpvScripts.mpris ];
+    #};
 
     # /run/current-system/sw/bin/ls $HOME/.emacs.d/elpa | sed 's/-[[:digit:]].*//g;s/\+$/-plus/g' | sort -u
     #emacs = super.emacsHead;
@@ -207,10 +207,10 @@ in {
         diffutils
         gist
         git-series
-        gitAndTools.git-extras
-        gitAndTools.git-absorb
-        gitAndTools.delta
-        gitAndTools.gitFull
+        git-extras
+        git-absorb
+        delta
+        gitFull
         github-release
         patch
         patchutils

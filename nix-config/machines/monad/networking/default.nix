@@ -131,22 +131,16 @@ in
       ];
     };
 
-    rcx0 = {
+    wgtb = {
      # Determines the IP address and subnet of the server's end of the tunnel interface.
-     ips = [ "10.200.0.2/32" ];
+     ips = [ "10.101.0.2/32" ];
 
      privateKeyFile = "/home/jb55/.wg/rcx/private";
 
      peers = [
-       { publicKey = "wC+mEE9/PJDuIfr7DFZWnM8HbQz5fSOFHmmzQRxULzM="; # server
-         allowedIPs = [ "10.200.0.1/32" ];
-         endpoint = "159.89.143.225:53";
-         persistentKeepalive = 25;
-       }
-       { publicKey = "vrKDdLPXAXAPP7XuuQl/dsD+z3dV/Z0uhgc+yjJ4Nys="; # winvm
-         allowedIPs = [ "10.200.0.3/32" ];
-         endpoint = "192.168.122.218:51820";
-         persistentKeepalive = 25;
+       { publicKey = "6TVcGaxkc/vUNyND3GTLY3dXvrWNzCjw94llB6/kdyI="; # winvm
+         allowedIPs = [ "10.101.0.13/32" ];
+         endpoint = "65.7.8.70:51821";
        }
      ];
     };

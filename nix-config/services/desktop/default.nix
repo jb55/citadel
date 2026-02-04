@@ -46,7 +46,7 @@ in
   '';
 
   programs.gnupg.agent.enable = true;
-  programs.gnupg.agent.pinentryFlavor = "gtk2";
+  #programs.gnupg.agent.pinentryFlavor = "gtk2";
 
   # programs.gnupg.trezor-agent = {
   #   enable = if extra.is-minimal then false else true;
@@ -122,13 +122,6 @@ in
     dataDir = "/home/jb55/mpd";
     user = "jb55";
     group = "users";
-    extraConfig = ''
-      audio_output {
-        type     "pulse"
-        name     "Local MPD"
-        server   "127.0.0.1"
-      }
-    '';
   };
 
   services.xserver = {

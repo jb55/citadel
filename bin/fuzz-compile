@@ -13,13 +13,12 @@ then
 	cmd="npm run $target"
 elif [ -f Cargo.toml ]
 then
-	target=$(printf "check\nbuild\ntest\n" | fuzzer "$@")
-	cmd="cargo $target --color=always 2>&1| sed -E '/^.*(warning|error).*:/N;s/\n//;s/-->//g'"
+	target=$(printf "check\nbuild\ntest\nclippy\nlint\n" | fuzzer "$@")
+	cmd="cargo $target"
 else
 	target=$(fuzz-make "$@")
 	cmd="make -j $target"
 fi
 
-fullcmd="$cmd 2>&1| tee $tmp; mv $tmp .build-result"
-
+fullcmd="$cmd 2>&1| tee $tmp; mv $tmp build.log"
 <<<"$fullcmd" tee .buildcmd

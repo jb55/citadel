@@ -8,7 +8,7 @@ in
 
   services.udev.extraRules = ''
     # coldcard
-    KERNEL=="hidraw*", ATTRS{idVendor}=="d13e", ATTRS{idProduct}=="cc10", GROUP="plugdev", MODE="0666", SYMLINK+="coldcard
+    KERNEL=="hidraw*", ATTRS{idVendor}=="d13e", ATTRS{idProduct}=="cc10", GROUP="plugdev", MODE="0666", SYMLINK+="coldcard"
 
     # yubikey neo
     KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="1050", ATTRS{idProduct}=="0116", MODE="0666", SYMLINK+="yubikey-neo"
@@ -100,7 +100,7 @@ in
     };
 
 
-  hardware.pulseaudio.enable = true;
+  hardware.pulseaudio.enable = false;
   hardware.pulseaudio.support32Bit = true;
   hardware.pulseaudio.package = if extra.is-minimal then pkgs.pulseaudio else pkgs.pulseaudioFull;
   hardware.pulseaudio.daemon.config = {
@@ -110,6 +110,5 @@ in
   hardware = {
     bluetooth.enable = true;
     opengl.driSupport32Bit = true;
-    opengl.driSupport = true;
   };
 }

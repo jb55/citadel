@@ -70,11 +70,6 @@ in {
   # Use the GRUB 2 boot loader.
   boot.loader.grub.enable = true;
   #environment.ld-linux = false;
-  systemd.extraConfig = ''
-    DefaultTimeoutStopSec=10s
-    DefaultTimeoutStartSec=20s
-  '';
-
   i18n.extraLocaleSettings = {
     LC_TIME="en_DK.UTF-8";
   };
@@ -83,7 +78,7 @@ in {
   documentation.dev.enable = true;
   #documentation.man.generateCaches = true; # list manpages
 
-  programs.ssh.startAgent = true;
+  programs.ssh.startAgent = false;
 
   time.timeZone = "America/Vancouver";
 

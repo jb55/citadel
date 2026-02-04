@@ -5,11 +5,6 @@ let callPackage = pkgs.callPackage;
       owner = "jb55";
     } // args)) {};
 
-    fetch-jb55 = args: callPackage (pkgs.fetchgit ({
-      url = "git://jb55.com/${args.repo}";
-      inherit (args) sha256 rev;
-    })) {};
-
     fetch-srht = args: callPackage (pkgs.fetchgit ({
       url = "https://git.sr.ht/~jb55/${args.repo}";
       inherit (args) sha256 rev;
@@ -28,43 +23,43 @@ in rec {
   x11-rename = callPackage ./pkgs/x11-rename { };
   hoogle-zen = callPackage ./pkgs/hoogle-zen { };
 
-  sharefile = fetch-jb55  { 
+  sharefile = fetch  { 
     repo = "sharefile";
     rev  = "9a6b16f13d94833cd1801d5d7a926d5422054d74";
     sha256 = "sha256-zIZ+lyjvBI72AQMCjWw/pRE1gWR1BZeg5Y/2kqo61kY=";
   };
 
-  ratio = fetch-jb55 {
+  ratio = fetch {
     repo = "ratio";
     rev  = "4ae6e67712946aba70df992cdeafcc03301c6c76";
     sha256 = "10qx30s0c6gcinfgdlb3c8rxkv4j25m29jsl923k44bbh3jpdnak";
   };
 
-  nostril = fetch-jb55 {
+  nostril = fetch {
     repo = "nostril";
     rev = "251031f5a5d098d02c5e74556942d3dd706b5ce4";
     sha256 = "sha256-qLqRxdLDos3akNKbKQ0yIbIIovssK1Q40EzJ8hb6hag=";
   };
 
-  git-email-contacts = fetch-jb55 {
+  git-email-contacts = fetch {
     repo = "git-email-contacts";
     rev  = "7301d727cf09157497cbe72b9174a63b98b9e287";
     sha256 = "1y36k3cl94k10s7q6rfx4lni81d30w2kv8n14idjhbbr9ck4jv06";
   };
 
-  cmdtree = fetch-jb55 {
+  cmdtree = fetch {
     repo = "cmdtree";
     rev  = "9ff1b9d375385210ea2221b4b0e55408453dbd0b"; # use my config
     sha256 = "0wnp2wis28iplln9h7yips835bhmcchmp373pvw0say35hn3rd36";
   };
 
-  imap-notify = fetch-jb55 {
+  imap-notify = fetch {
     repo = "imap-notify";
     rev  = "11d8f9b544531a27cbe0fc49ab5c1d4b26d3fba4";
     sha256 = "1nnc50plrg9m1dbw8a1hla0d1f86s0bmpy8majq8vicdhf6qxbja";
   };
 
-  nixpkgs-ml-tools = fetch-jb55 {
+  nixpkgs-ml-tools = fetch {
     repo = "nixpkgs-ml-tools";
     rev  = "3d62d22c3c33d885d62418344acba029fe41f541"; # use my config
     sha256 = "03ql84sf3rc4ixnmn88hxjgs1cgilzf41aw31iwzfg3sk1pqxdkv";
@@ -82,7 +77,7 @@ in rec {
     sha256 = "1l7rfjwnjc28zszbrzjqsgyp47hkl355is8zshfgv3wacb7n6424";
   };
 
-  viscal = fetch-jb55 {
+  viscal = fetch {
     repo = "viscal";
     rev  = "b93b651522ca684e46603316df88b2c7241afecd";
     sha256 = "sha256-iOR3vztBqq+/7+tGDcRuU4HfsBuCLjPKKAflzAAsqOM=";
@@ -106,7 +101,7 @@ in rec {
     sha256 = "0x5531qyimpah48ijx2bad0mq1gjbpjacymwl3gm08lm0zl0xr09";
   };
 
-  bcalc = fetch-jb55 {
+  bcalc = fetch {
     repo   = "bcalc";
     rev    = "607c4d562178f4aecee008012e9e83871d2a4f5c";
     sha256 = "sha256-WD85Ypx0ZbSBj5+1OZcwPRz4V6dbPeK5foB/gn+romc=";

@@ -94,14 +94,14 @@ in
       libertinus
       ibm-plex
       noto-fonts
-      noto-fonts-emoji
+      noto-fonts-color-emoji
       open-sans
       raleway
       profont
       terminus_font
       paratype-pt-mono
       source-code-pro
-      ubuntu_font_family
+      ubuntu-classic
       proggyfonts
     ] ++ myfonts);
   };
